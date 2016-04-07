@@ -106,7 +106,7 @@ namespace small_n_stats_WPF.ViewModels
 
         private void ViewClosed()
         {
-            small_n_stats_WPF.Properties.Settings.Default.Save();
+            Properties.Settings.Default.Save();
         }
 
         private void ViewLoaded()
@@ -181,12 +181,19 @@ namespace small_n_stats_WPF.ViewModels
             }, Cursors.Cross);
         }
 
-        /* For clarify sake, so no multiple red fields */
-
         private void DefaultFieldsToWhite()
         {
-            BaselineBackGround = Brushes.White;
-            InterventionBackGround = Brushes.White;
+            if (BaselineRangeString.Length < 1 || BaselineRangeString.ToLower().Contains("spreadsheet"))
+            {
+                BaselineBackGround = Brushes.LightGray;
+                BaselineRangeString = string.Empty;
+            }
+
+            if (InterventionRangeString.Length < 1 || InterventionRangeString.ToLower().Contains("spreadsheet"))
+            {
+                InterventionBackGround = Brushes.LightGray;
+                InterventionRangeString = string.Empty;
+            }
         }
 
         private async void ScoreNap()
