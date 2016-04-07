@@ -1,0 +1,130 @@
+﻿<Window x:Class="small_n_stats_WPF.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:small_n_stats_WPF"
+        xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"    
+        xmlns:ReoGrid="clr-namespace:unvell.ReoGrid;assembly=unvell.ReoGrid" 
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        mc:Ignorable="d"
+        Title="Small n Stats - New File" 
+>
+
+    <!--
+        Height="{Binding Source={x:Static settings:Settings.Default}, Path=MainHeight, Mode=TwoWay}"
+        Width="{Binding Source={x:Static settings:Settings.Default}, Path=MainWidth, Mode=TwoWay}"
+        Top="{Binding Source={x:Static settings:Settings.Default}, Path=MainTop, Mode=TwoWay}" 
+        Left="{Binding Source={x:Static settings:Settings.Default}, Path=MainLeft, Mode=TwoWay}"    
+    -->
+    
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ViewLoadedCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ViewClosingCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding FileSaveCommand}" />
+    </Window.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0"
+                   Grid.RowSpan="3">
+
+            <Menu DockPanel.Dock="Top"
+                  Background="LightGray"
+                  Padding="5,0,5,0">
+
+                <MenuItem Header="_File">
+                    <MenuItem Header="_New" 
+                              x:Name="newMenuItem" 
+                              Command="{Binding FileNewCommand}"/>
+                    <Separator />
+                    <MenuItem Header="_Open" 
+                              x:Name="openMenuItem" 
+                              Command="{Binding FileOpenCommand}"/>
+                    <Separator />
+                    <MenuItem Header="_Save" 
+                              x:Name="saveMenuItem" 
+                              Command="{Binding FileSaveCommand}"/>
+                    <MenuItem Header="_Save As" 
+                              x:Name="saveAsMenuItem" 
+                              Command="{Binding FileSaveAsCommand}"/>
+                    <Separator />
+                    <MenuItem Header="_Close" 
+                              x:Name="closeMenuItem" 
+                              Command="{Binding FileCloseCommand}"/>
+                </MenuItem>
+
+                <MenuItem Header="_Analyses">
+                    <MenuItem Header="_General Overlap Indices">
+                        <MenuItem Header="_Non-Overlap Calculations" 
+                                  Command="{Binding NonOverlapWindowCommand}"/>
+                    </MenuItem>
+                    <MenuItem Header="_Area-based Overlap Indices">
+                        <MenuItem Header="_NAP/ROC Module" Name="nap" 
+                                  Command="{Binding NAPWindowCommand}"/>
+                        <MenuItem Header="_Tau-U (Single and Omnibus)" 
+                                  Command="{Binding OmnibusTauWindowCommand}"/>
+                    </MenuItem>
+                    <MenuItem Header="_Parametric Measures">
+                        <MenuItem Header="_Theil-Sen Slope Difference" 
+                                  Command="{Binding TheilSenWindowCommand}"/>
+                    </MenuItem>
+
+                </MenuItem>
+
+                <MenuItem Header="_Logs">
+                    <!-- 
+                    <MenuItem Header="_Save Log Output" x:Name="saveLogs" Click="saveLogs_Click"/>
+                    <MenuItem Header="_Clear Logs" x:Name="clearLogs" Click="clearLogs_Click"/>
+                    -->
+                </MenuItem>
+
+                <MenuItem Header="_Information">
+                    <MenuItem Header="_Credits" 
+                              x:Name="credits" 
+                              Command="{Binding InformationWindowCommand}"/>
+                </MenuItem>
+            </Menu>
+
+            <ReoGrid:ReoGridControl Name="spreadSheetView"
+                                    x:FieldModifier="public"
+                                    DockPanel.Dock="Left"
+                                    HorizontalAlignment="Stretch" 
+                                    VerticalAlignment="Stretch"/>
+        </DockPanel>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                      VerticalScrollBarVisibility="Auto" 
+                      x:Name="Scroller"
+                      Grid.Row="3">
+
+            <RichTextBox x:Name="outputWindow" 
+                         IsReadOnly="True"
+                         BorderBrush="Transparent"
+                         BorderThickness="0"
+                         Width="{Binding ElementName=Scroller, Path=ViewportWidth}">
+                <RichTextBox.Resources>
+                    <Style TargetType="{x:Type Paragraph}">
+                        <Setter Property="Margin" 
+                                Value="0"/>
+                        <Setter Property="Padding" 
+                                Value="0"/>
+                    </Style>
+                </RichTextBox.Resources>
+            </RichTextBox>
+        </ScrollViewer>
+    </Grid>
+</Window>
