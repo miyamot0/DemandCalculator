@@ -241,12 +241,9 @@ namespace small_n_stats_WPF.Mathematics
 
             int over = overlaps.BaselineOverlaps + overlaps.TreatmentOverlaps;
 
-            System.Console.WriteLine("bl: " + overlaps.BaselineOverlaps);
-            System.Console.WriteLine("tx: " + overlaps.TreatmentOverlaps);
-
             int totalPoints = blN + txN;
 
-            return (((totalPoints - over) / totalPoints) * 100);
+            return ((((double) totalPoints - (double) over) / (double) totalPoints) * 100);
         }
 
         /* Association index, using overlap measures to construct a rebalanced (robust) chi square */
