@@ -9,14 +9,10 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="Small n Stats - New File" 
->
-
-    <!--
         Height="{Binding Source={x:Static settings:Settings.Default}, Path=MainHeight, Mode=TwoWay}"
         Width="{Binding Source={x:Static settings:Settings.Default}, Path=MainWidth, Mode=TwoWay}"
         Top="{Binding Source={x:Static settings:Settings.Default}, Path=MainTop, Mode=TwoWay}" 
-        Left="{Binding Source={x:Static settings:Settings.Default}, Path=MainLeft, Mode=TwoWay}"    
-    -->
+        Left="{Binding Source={x:Static settings:Settings.Default}, Path=MainLeft, Mode=TwoWay}">
     
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -86,10 +82,8 @@
                 </MenuItem>
 
                 <MenuItem Header="_Logs">
-                    <!-- 
                     <MenuItem Header="_Save Log Output" x:Name="saveLogs" Click="saveLogs_Click"/>
                     <MenuItem Header="_Clear Logs" x:Name="clearLogs" Click="clearLogs_Click"/>
-                    -->
                 </MenuItem>
 
                 <MenuItem Header="_Information">

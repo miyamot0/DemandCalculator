@@ -1,0 +1,106 @@
+﻿<Window x:Class="small_n_stats_WPF.Views.InformationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:small_n_stats_WPF.Views"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        mc:Ignorable="d"
+        Title="Information" 
+        ResizeMode="NoResize"
+        Height="450" 
+        Width="450">
+    <Grid>
+        <FlowDocumentScrollViewer>
+            <FlowDocument>
+                <Paragraph>
+                    <Image Source="/Resources/SNS.png" Width="90" Height="90" Margin="0,0,30,0" />
+                    <Run 
+                        FontSize="30"
+                        BaselineAlignment="Center">Small n Stats</Run> 
+                </Paragraph>
+
+                <Paragraph>
+                    <Bold>
+                        <Hyperlink NavigateUri="http://www.smallnstats.com/" 
+                       RequestNavigate="Hyperlink_RequestNavigate">Small n Stats
+                        </Hyperlink>
+                    </Bold>,
+                    is part of a project developed and maintained by Shawn P. Gilroy and currently utilizes 
+                    several open source components.
+                </Paragraph>
+
+                <Paragraph>
+                    These works and components include the following:
+                </Paragraph>
+
+                <Paragraph>
+                    <Bold>Credits and Acknowledgments:</Bold>
+                </Paragraph>
+
+                <List>
+                    <ListItem>
+                        <Paragraph>
+                            <Hyperlink NavigateUri="https://reogrid.net/license/" 
+                                RequestNavigate="Hyperlink_RequestNavigate">
+                                Reogrid (Spreadsheet Control).
+                            </Hyperlink>
+                            Copyright (c) 2012-2015 unvell.com, 
+                                all rights reserved. BSD License for free (current) version.
+                            <LineBreak />
+                        </Paragraph>
+                    </ListItem>
+
+                    <ListItem>
+                        <Paragraph>
+                            <Hyperlink NavigateUri="http://www.singlecaseresearch.org/papers/ParkerVannest2009-The%20Improvement%20Rate%20Difference%20for%20Single%20Case%20Research.pdf"
+                                RequestNavigate="Hyperlink_RequestNavigate">
+                                Parker, R. I., Vannest, K. J. and Brown, L. (2009).
+                            </Hyperlink>
+                            The Improvement Rate Difference for 
+                                Single Case Research. Exceptional Children. 75:2, 135-150
+                            <LineBreak />
+                            <Hyperlink NavigateUri="http://www.singlecaseresearch.org/calculators/ird" 
+                                RequestNavigate="Hyperlink_RequestNavigate">
+                                Web tool.
+                            </Hyperlink>
+                            <LineBreak />
+                        </Paragraph>
+                    </ListItem>
+
+                    <ListItem>
+                        <Paragraph>
+                            <Hyperlink NavigateUri="http://tartarus.ed.utah.edu/users/robert.o'neill/SPED7020EDPS7410/readings/parkervannest2009.pdf"
+                                RequestNavigate="Hyperlink_RequestNavigate">
+                                Parker, R. I. and Vannest, K. J. (2009).
+                            </Hyperlink>
+                            An improved effect size for single case research: Non-overlap of all pairs (NAP). Behavior Therapy. 40(4), 357-367.
+                            <LineBreak />
+                            <Hyperlink NavigateUri="http://www.singlecaseresearch.org/calculators/nap" 
+                                RequestNavigate="Hyperlink_RequestNavigate">
+                                Web tool.
+                            </Hyperlink>
+                            <LineBreak />
+                        </Paragraph>
+                    </ListItem>
+
+                    <ListItem>
+                        <Paragraph>
+                            <Hyperlink NavigateUri="http://www.singlecaseresearch.org/papers/Tau%20-%20U%20-%20Behavior%20Therapy%20-%202011.pdf"
+                                RequestNavigate="Hyperlink_RequestNavigate">
+                                Parker, R.I., Vannest, K.J., Davis, J.L. and Sauber, S.B. (2010).
+                            </Hyperlink>
+                            Combining non-overlap and trend for single case research: Tau-U. Behavior Therapy. 42, 284–299.
+                            <LineBreak />
+                            <Hyperlink NavigateUri="http://www.singlecaseresearch.org/calculators/tau-u" 
+                                RequestNavigate="Hyperlink_RequestNavigate">
+                                Web tool.
+                            </Hyperlink>
+                            <LineBreak />
+                        </Paragraph>
+                    </ListItem>
+                </List>
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+    </Grid>
+</Window>

@@ -1,6 +1,7 @@
 ﻿using small_n_stats_WPF.Interfaces;
 using small_n_stats_WPF.Utilities;
 using small_n_stats_WPF.Views;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
@@ -76,10 +77,7 @@ namespace small_n_stats_WPF.ViewModels
 
             InformationWindowCommand = new RelayCommand(param => OpenInformationWindow(), param => true);
 
-
-
             /* End Menu Items */
-
         }
 
         private void ViewLoaded()
@@ -98,7 +96,6 @@ namespace small_n_stats_WPF.ViewModels
 
         private void OpenNonOverlapWindow()
         {
-            /*
             var mWin = new NonOverlapWindow();
             mWin.Owner = MainWindow;
             mWin.Topmost = true;
@@ -109,23 +106,19 @@ namespace small_n_stats_WPF.ViewModels
                 windowRef = mWin
             };
             mWin.Show();
-            */
         }
 
         private void OpenInformationWindow()
         {
-            /*
             var mWin = new InformationWindow();
             mWin.Owner = MainWindow;
             mWin.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             mWin.Topmost = true;
             mWin.Show();
-            */
         }
 
         private void OpenNAPWindow()
         {
-            /*
             var mWin = new NAPWindow();
             mWin.Owner = MainWindow;
             mWin.Topmost = true;
@@ -136,12 +129,10 @@ namespace small_n_stats_WPF.ViewModels
                 windowRef = mWin
             };
             mWin.Show();
-            */
         }
 
         private void OpenOmnibusTauWindow()
         {
-            /*
             var mWin = new OmnibusTauWindow();
             mWin.Owner = MainWindow;
             mWin.Topmost = true;
@@ -152,12 +143,10 @@ namespace small_n_stats_WPF.ViewModels
                 windowRef = mWin
             };
             mWin.Show();
-            */
         }
 
         private void OpenTheilSenWindow()
         {
-            /*
             var mWin = new TheilSenWindow();
             mWin.Owner = MainWindow;
             mWin.Topmost = true;
@@ -168,7 +157,6 @@ namespace small_n_stats_WPF.ViewModels
                 windowRef = mWin
             };
             mWin.Show();
-            */
         }
 
         /*
