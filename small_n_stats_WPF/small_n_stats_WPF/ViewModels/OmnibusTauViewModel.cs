@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using unvell.ReoGrid;
 
 namespace small_n_stats_WPF.ViewModels
 {
@@ -152,44 +153,80 @@ namespace small_n_stats_WPF.ViewModels
 
         private void LoadBaselineData()
         {
-            DefaultFieldsToWhite();
+            DefaultFieldsToGray();
 
-            BaselineBackGround = Brushes.Red;
+            if (BaselineRangeString.Length > 0 && !BaselineRangeString.ToLower().Contains("spreadsheet"))
+            {
+                /* Restore past ranges to white */
+                mWindow.spreadSheetView.CurrentWorksheet.SetRangeStyles(mWindow.spreadSheetView.CurrentWorksheet.Ranges[BaselineRangeString], new WorksheetRangeStyle
+                {
+                    Flag = PlainStyleFlag.BackColor,
+                    BackColor = Colors.Transparent,
+                });
+            }
+
+            BaselineBackGround = Brushes.Yellow;
+            BaselineRangeString = "Select delays on spreadsheet";
 
             mWindow.spreadSheetView.PickRange((inst, range) =>
             {
                 if (range.Rows > 1 && range.Cols > 1)
                 {
-                    BaselineBackGround = Brushes.White;
+                    DefaultFieldsToGray();
                     MessageBox.Show("Please select single row or single column selections");
                     return true;
                 }
 
+                BaselineBackGround = Brushes.LightBlue;
                 BaselineRangeString = range.ToString();
-                BaselineBackGround = Brushes.White;
+
+                mWindow.spreadSheetView.CurrentWorksheet.SetRangeStyles(range, new WorksheetRangeStyle
+                {
+                    Flag = PlainStyleFlag.BackColor,
+                    BackColor = Colors.LightBlue,
+                });
 
                 return true;
 
             }, Cursors.Cross);
+
         }
 
         private void LoadInterventionData()
         {
-            DefaultFieldsToWhite();
+            DefaultFieldsToGray();
 
-            InterventionBackGround = Brushes.Red;
+            if (InterventionRangeString.Length > 0 && !InterventionRangeString.ToLower().Contains("spreadsheet"))
+            {
+                /* Restore past ranges to white */
+                mWindow.spreadSheetView.CurrentWorksheet.SetRangeStyles(mWindow.spreadSheetView.CurrentWorksheet.Ranges[InterventionRangeString], new WorksheetRangeStyle
+                {
+                    Flag = PlainStyleFlag.BackColor,
+                    BackColor = Colors.Transparent,
+                });
+            }
+
+            InterventionBackGround = Brushes.Yellow;
+            InterventionRangeString = "Select delays on spreadsheet";
 
             mWindow.spreadSheetView.PickRange((inst, range) =>
             {
                 if (range.Rows > 1 && range.Cols > 1)
                 {
-                    InterventionBackGround = Brushes.White;
+                    DefaultFieldsToGray();
                     MessageBox.Show("Please select single row or single column selections");
                     return true;
                 }
 
+                InterventionBackGround = Brushes.LightGreen;
                 InterventionRangeString = range.ToString();
-                InterventionBackGround = Brushes.White;
+
+                mWindow.spreadSheetView.CurrentWorksheet.SetRangeStyles(range, new WorksheetRangeStyle
+                {
+                    Flag = PlainStyleFlag.BackColor,
+                    BackColor = Colors.LightGreen,
+                });
+
                 return true;
 
             }, Cursors.Cross);
@@ -232,8 +269,8 @@ namespace small_n_stats_WPF.ViewModels
             mInterface.SendMessageToOutput("Comparisons of {" + BaselineRangeString + "} and {" + InterventionRangeString + "} Corrected: " + CorrectBaseline);
 
             mInterface.SendMessageToOutput(string.Format("S: {0}, Pairs: {1}, Tau: {2}, TauB: {3}, P: {4}",
-                mTau.S.ToString("0.000"),
-                mTau.Pairs.ToString("0.000"),
+                mTau.S.ToString("0"),
+                mTau.Pairs.ToString("0"),
                 mTau.TAU.ToString("0.000"),
                 mTau.TAUB.ToString("0.000"),
                 mTau.PValue.ToString("0.000")));
@@ -253,6 +290,20 @@ namespace small_n_stats_WPF.ViewModels
             TauUHolder.Add(mTau);
 
             CorrectBaseline = false;
+
+            /* Restore BaselineRangeString ranges to white */
+            mWindow.spreadSheetView.CurrentWorksheet.SetRangeStyles(mWindow.spreadSheetView.CurrentWorksheet.Ranges[BaselineRangeString], new WorksheetRangeStyle
+            {
+                Flag = PlainStyleFlag.BackColor,
+                BackColor = Colors.Transparent,
+            });
+
+            /* Restore InterventionRangeString ranges to white */
+            mWindow.spreadSheetView.CurrentWorksheet.SetRangeStyles(mWindow.spreadSheetView.CurrentWorksheet.Ranges[InterventionRangeString], new WorksheetRangeStyle
+            {
+                Flag = PlainStyleFlag.BackColor,
+                BackColor = Colors.Transparent,
+            });
 
             BaselineRangeString = "";
             InterventionRangeString = "";
@@ -323,8 +374,8 @@ namespace small_n_stats_WPF.ViewModels
             mInterface.SendMessageToOutput("Omnibus comparison created: ");
 
             mInterface.SendMessageToOutput(string.Format("Omnibus ES --- S: {0}, Pairs: {1}, Tau: {2}, TauB: {3}, P: {4}",
-                omniTau.S.ToString("0.000"),
-                omniTau.Pairs.ToString("0.000"),
+                omniTau.S.ToString("0"),
+                omniTau.Pairs.ToString("0"),
                 omniTau.TAU.ToString("0.000"),
                 omniTau.TAUB.ToString("0.000"),
                 omniTau.PValue.ToString("0.000")));
@@ -347,7 +398,7 @@ namespace small_n_stats_WPF.ViewModels
             InterventionRangeString = "";
         }
 
-        private void DefaultFieldsToWhite()
+        private void DefaultFieldsToGray()
         {
             if (BaselineRangeString.Length < 1 || BaselineRangeString.ToLower().Contains("spreadsheet"))
             {

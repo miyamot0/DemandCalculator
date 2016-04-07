@@ -155,6 +155,7 @@ namespace small_n_stats_WPF.Mathematics
         }
 
         /* Inverse of normal distribution.  Limited but can get a Z from alpha parameter */
+        /* Credit Abramowitz and Stegun (1965). Handbook of Mathematical Functions */
         private double NormInverse(double q)
         {
             if (q == 0.5 || (q.ToString() == "0.5"))
@@ -239,6 +240,10 @@ namespace small_n_stats_WPF.Mathematics
             }
 
             int over = overlaps.BaselineOverlaps + overlaps.TreatmentOverlaps;
+
+            System.Console.WriteLine("bl: " + overlaps.BaselineOverlaps);
+            System.Console.WriteLine("tx: " + overlaps.TreatmentOverlaps);
+
             int totalPoints = blN + txN;
 
             return (((totalPoints - over) / totalPoints) * 100);

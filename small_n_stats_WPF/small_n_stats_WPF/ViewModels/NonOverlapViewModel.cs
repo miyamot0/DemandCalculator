@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using unvell.ReoGrid;
 
 namespace small_n_stats_WPF.ViewModels
 {
@@ -162,50 +163,86 @@ namespace small_n_stats_WPF.ViewModels
 
         private void LoadBaselineData()
         {
-            DefaultFieldsToWhite();
+            DefaultFieldsToGray();
 
-            BaselineBackGround = Brushes.Red;
+            if (BaselineRangeString.Length > 0 && !BaselineRangeString.ToLower().Contains("spreadsheet"))
+            {
+                /* Restore past ranges to white */
+                mWindow.spreadSheetView.CurrentWorksheet.SetRangeStyles(mWindow.spreadSheetView.CurrentWorksheet.Ranges[BaselineRangeString], new WorksheetRangeStyle
+                {
+                    Flag = PlainStyleFlag.BackColor,
+                    BackColor = Colors.Transparent,
+                });
+            }
+
+            BaselineBackGround = Brushes.Yellow;
+            BaselineRangeString = "Select delays on spreadsheet";
 
             mWindow.spreadSheetView.PickRange((inst, range) =>
             {
                 if (range.Rows > 1 && range.Cols > 1)
                 {
-                    BaselineBackGround = Brushes.White;
+                    DefaultFieldsToGray();
                     MessageBox.Show("Please select single row or single column selections");
                     return true;
                 }
 
+                BaselineBackGround = Brushes.LightBlue;
                 BaselineRangeString = range.ToString();
-                BaselineBackGround = Brushes.White;
+
+                mWindow.spreadSheetView.CurrentWorksheet.SetRangeStyles(range, new WorksheetRangeStyle
+                {
+                    Flag = PlainStyleFlag.BackColor,
+                    BackColor = Colors.LightBlue,
+                });
 
                 return true;
 
             }, Cursors.Cross);
+
         }
 
         private void LoadInterventionData()
         {
-            DefaultFieldsToWhite();
+            DefaultFieldsToGray();
 
-            InterventionBackGround = Brushes.Red;
+            if (InterventionRangeString.Length > 0 && !InterventionRangeString.ToLower().Contains("spreadsheet"))
+            {
+                /* Restore past ranges to white */
+                mWindow.spreadSheetView.CurrentWorksheet.SetRangeStyles(mWindow.spreadSheetView.CurrentWorksheet.Ranges[InterventionRangeString], new WorksheetRangeStyle
+                {
+                    Flag = PlainStyleFlag.BackColor,
+                    BackColor = Colors.Transparent,
+                });
+            }
+
+            InterventionBackGround = Brushes.Yellow;
+            InterventionRangeString = "Select delays on spreadsheet";
 
             mWindow.spreadSheetView.PickRange((inst, range) =>
             {
                 if (range.Rows > 1 && range.Cols > 1)
                 {
-                    InterventionBackGround = Brushes.White;
+                    DefaultFieldsToGray();
                     MessageBox.Show("Please select single row or single column selections");
                     return true;
                 }
 
+                InterventionBackGround = Brushes.LightGreen;
                 InterventionRangeString = range.ToString();
-                InterventionBackGround = Brushes.White;
+
+                mWindow.spreadSheetView.CurrentWorksheet.SetRangeStyles(range, new WorksheetRangeStyle
+                {
+                    Flag = PlainStyleFlag.BackColor,
+                    BackColor = Colors.LightGreen,
+                });
+
                 return true;
 
             }, Cursors.Cross);
         }
 
-        private void DefaultFieldsToWhite()
+        private void DefaultFieldsToGray()
         {
             if (BaselineRangeString.Length < 1 || BaselineRangeString.ToLower().Contains("spreadsheet"))
             {
