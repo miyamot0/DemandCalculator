@@ -327,6 +327,8 @@ namespace small_n_stats_WPF.ViewModels
             BaselineRangeString = "";
             InterventionRangeString = "";
             TauName = "";
+
+            DefaultFieldsToGray();
         }
 
         private void CalculateOmnibus()

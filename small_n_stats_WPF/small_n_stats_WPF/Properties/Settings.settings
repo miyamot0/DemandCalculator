@@ -20,5 +20,23 @@
     <Setting Name="OmnibusTauLeft" Type="System.Double" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
+    <Setting Name="NonOverlapTop" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="NonOverlapLeft" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="NapTop" Type="System.String" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="NapLeft" Type="System.String" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="SenTop" Type="System.String" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="SenLeft" Type="System.String" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

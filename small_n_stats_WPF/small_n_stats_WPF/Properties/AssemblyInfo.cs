@@ -5,12 +5,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("small_n_stats_WPF")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Effect Size Calculator")]
+[assembly: AssemblyDescription("Tool for Computing Small-n Effect Measures")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("small_n_stats_WPF")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("Small N Stats")]
+[assembly: AssemblyProduct("Effect Size Calculator")]
+[assembly: AssemblyCopyright("Copyright ©  Shawn Gilroy  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

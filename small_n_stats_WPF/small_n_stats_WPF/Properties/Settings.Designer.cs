@@ -94,5 +94,77 @@ namespace small_n_stats_WPF.Properties {
                 this["OmnibusTauLeft"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double NonOverlapTop {
+            get {
+                return ((double)(this["NonOverlapTop"]));
+            }
+            set {
+                this["NonOverlapTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double NonOverlapLeft {
+            get {
+                return ((double)(this["NonOverlapLeft"]));
+            }
+            set {
+                this["NonOverlapLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public string NapTop {
+            get {
+                return ((string)(this["NapTop"]));
+            }
+            set {
+                this["NapTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public string NapLeft {
+            get {
+                return ((string)(this["NapLeft"]));
+            }
+            set {
+                this["NapLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public string SenTop {
+            get {
+                return ((string)(this["SenTop"]));
+            }
+            set {
+                this["SenTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public string SenLeft {
+            get {
+                return ((string)(this["SenLeft"]));
+            }
+            set {
+                this["SenLeft"] = value;
+            }
+        }
     }
 }

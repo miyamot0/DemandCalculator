@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="NAP/ROC Scoring" 
         Height="350" 
+        ResizeMode="NoResize"
         Width="300"
         xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"    
         Top="{Binding Source={x:Static settings:Settings.Default}, Path=NapTop, Mode=TwoWay}" 
