@@ -548,6 +548,7 @@ namespace small_n_stats_WPF.Mathematics
                 StandardError = se80,
                 LowerBound = tau - se80,
                 TauA = tau,
+                N = n,
                 UpperBound = tau + se80
             };
 
@@ -558,6 +559,7 @@ namespace small_n_stats_WPF.Mathematics
                 StandardError = se85,
                 LowerBound = tau - se85,
                 TauA = tau,
+                N = n,
                 UpperBound = tau + se85
             };
 
@@ -568,6 +570,7 @@ namespace small_n_stats_WPF.Mathematics
                 StandardError = se90,
                 LowerBound = tau - z90,
                 TauA = tau,
+                N = n,
                 UpperBound = tau + z90
             };
 
@@ -578,6 +581,7 @@ namespace small_n_stats_WPF.Mathematics
                 StandardError = se95,
                 LowerBound = tau - z95,
                 TauA = tau,
+                N = n,
                 UpperBound = tau + z95
             };
 
@@ -635,6 +639,7 @@ namespace small_n_stats_WPF.Mathematics
                 StandardError = se80,
                 LowerBound = tau - se80,
                 TauB = tau,
+                N = n,
                 UpperBound = tau + se80
             };
 
@@ -645,6 +650,7 @@ namespace small_n_stats_WPF.Mathematics
                 StandardError = se85,
                 LowerBound = tau - se85,
                 TauB = tau,
+                N = n,
                 UpperBound = tau + se85
             };
 
@@ -655,6 +661,7 @@ namespace small_n_stats_WPF.Mathematics
                 StandardError = se90,
                 LowerBound = tau - z90,
                 TauB = tau,
+                N = n,
                 UpperBound = tau + z90
             };
 
@@ -665,6 +672,7 @@ namespace small_n_stats_WPF.Mathematics
                 StandardError = se95,
                 LowerBound = tau - z95,
                 TauB = tau,
+                N = n,
                 UpperBound = tau + z95
             };
 

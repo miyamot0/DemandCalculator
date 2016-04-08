@@ -53,6 +53,10 @@ namespace small_n_stats_WPF.ViewModels
 
         public RelayCommand TestCommand { get; set; }
 
+        public static int DS_MIN = 8;
+        public static int DS_MAX = 72;
+        public static double DS_POW = 0.5;
+
         /* ^^^ ^^^ ^^^ */
 
         public MainWindowViewModel()
@@ -87,6 +91,7 @@ namespace small_n_stats_WPF.ViewModels
             SendMessageToOutput("---------------------------------------------------");
             SendMessageToOutput("Loading core libraries...");
             SendMessageToOutput("Core libraries loaded.");
+
         }
 
         private void ViewClosed()

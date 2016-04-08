@@ -14,5 +14,11 @@
     <Setting Name="MainLeft" Type="System.Double" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
+    <Setting Name="OmnibusTauTop" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="OmnibusTauLeft" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

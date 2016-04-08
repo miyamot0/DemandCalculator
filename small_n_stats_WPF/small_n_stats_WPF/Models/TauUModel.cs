@@ -3,6 +3,7 @@
     class TauUModel
     {
         public string Name { get; set; }
+        public string OutputName { get; set; }
         public string Range { get; set; }
         public bool IsChecked { get; set; }
         public bool IsCorrected { get; set; }
@@ -12,6 +13,7 @@
         */
 
         public bool Reflective { get; set; }
+        public int N { get; set; }
         public double S { get; set; }
         public double Pairs { get; set; }
         public double Ties { get; set; }

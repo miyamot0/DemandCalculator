@@ -70,5 +70,29 @@ namespace small_n_stats_WPF.Properties {
                 this["MainLeft"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double OmnibusTauTop {
+            get {
+                return ((double)(this["OmnibusTauTop"]));
+            }
+            set {
+                this["OmnibusTauTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double OmnibusTauLeft {
+            get {
+                return ((double)(this["OmnibusTauLeft"]));
+            }
+            set {
+                this["OmnibusTauLeft"] = value;
+            }
+        }
     }
 }

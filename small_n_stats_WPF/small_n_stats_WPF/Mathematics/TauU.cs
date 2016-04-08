@@ -157,6 +157,7 @@ namespace small_n_stats_WPF.Mathematics
                 {
                     Reflective = true,
                     S = S,
+                    N = blCopy.Count + txCopy.Count,
                     Pairs = pairs,
                     Ties = ties,
                     TAU = (double)S / (double)pairs,
@@ -236,6 +237,7 @@ namespace small_n_stats_WPF.Mathematics
                 {
                     Reflective = true,
                     S = S,
+                    N = blCopy.Count + txCopy.Count,
                     SD = System.Math.Sqrt(Vars),
                     TAU = (double)S / (double)pairs,
                     Pairs = pairs,

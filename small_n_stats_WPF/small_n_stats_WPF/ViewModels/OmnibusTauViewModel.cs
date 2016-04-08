@@ -9,6 +9,9 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using unvell.ReoGrid;
+using small_n_stats_WPF.Graphics;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.Linq;
 
 namespace small_n_stats_WPF.ViewModels
 {
@@ -55,6 +58,17 @@ namespace small_n_stats_WPF.ViewModels
         }
 
         /* String binds */
+
+        private string tauName = "";
+        public string TauName
+        {
+            get { return tauName; }
+            set
+            {
+                tauName = value;
+                OnPropertyChanged("TauName");
+            }
+        }
 
         private string baselineRangeString = "";
         public string BaselineRangeString
@@ -112,6 +126,10 @@ namespace small_n_stats_WPF.ViewModels
         /* Math */
 
         TauU mTauMethods;
+
+        public static int DS_MIN = 8;
+        public static int DS_MAX = 72;
+        public static double DS_POW = 0.5;
 
         public OmnibusTauViewModel()
         {
@@ -261,7 +279,8 @@ namespace small_n_stats_WPF.ViewModels
 
             TauUModel mTau = mTauMethods.BaselineTrend(phase1, phase2, CorrectBaseline);
 
-            mTau.Name = "Comparisons of {" + BaselineRangeString + "} and {" + InterventionRangeString + "} Corrected: " + CorrectBaseline;
+            mTau.Name = "Name: " + tauName + " - {" + BaselineRangeString + "} and {" + InterventionRangeString + "} Corrected: " + CorrectBaseline;
+            mTau.OutputName = tauName;
             mTau.IsCorrected = CorrectBaseline;
             mTau.Range = BaselineRangeString;
             mTau.IsChecked = false;
@@ -307,6 +326,7 @@ namespace small_n_stats_WPF.ViewModels
 
             BaselineRangeString = "";
             InterventionRangeString = "";
+            TauName = "";
         }
 
         private void CalculateOmnibus()
@@ -396,6 +416,76 @@ namespace small_n_stats_WPF.ViewModels
 
             BaselineRangeString = "";
             InterventionRangeString = "";
+
+            int seriesCount = tempHolder.Count + 1;
+
+            var chartWin = new ChartingWindow();
+            Chart chart = chartWin.FindName("MyWinformChart") as Chart;
+            chart.Series.Clear();
+
+            chart.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            chart.ChartAreas[0].AxisX.Minimum = 0;
+            chart.ChartAreas[0].AxisX.Title = "Tau-U";
+            chart.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+            chart.ChartAreas[0].AxisY.Minimum = 0;
+            chart.ChartAreas[0].AxisY.Maximum = seriesCount + 0.5f;
+            chart.ChartAreas[0].AxisY.MinorTickMark.TickMarkStyle = TickMarkStyle.None;
+            chart.ChartAreas[0].AxisY.MajorTickMark.TickMarkStyle = TickMarkStyle.None;
+            chart.ChartAreas[0].AxisY.Title = "";
+            chart.Titles.Add(new Title {
+                Text = "Tau-U Forrest Plot",
+                Font = new System.Drawing.Font("Arial", 14f)
+            });
+
+            var series = new Series();
+
+            var low = tempHolder.OrderBy(t => t.N).First();
+
+            for (int i = 0; i < seriesCount - 1; i++)
+            {
+                series = new Series
+                {
+                    Name = tempHolder[i].OutputName,
+                    Color = System.Drawing.Color.Black,
+                    IsVisibleInLegend = false,
+                    IsXValueIndexed = false,
+                    ChartType = SeriesChartType.Line,
+                    MarkerStyle = MarkerStyle.Square
+                };
+
+                chart.Series.Add(series);
+                chart.Series[i].Points.AddXY(tempHolder[i].CI_85[0], seriesCount - i);
+                chart.Series[i].Points.AddXY(tempHolder[i].TAU, seriesCount - i);
+                chart.Series[i].Points.AddXY(tempHolder[i].CI_85[1], seriesCount - i);
+                chart.Series[i].Points[0].MarkerStyle = MarkerStyle.None;
+                chart.Series[i].Points[1].MarkerSize = (int)System.Math.Exp(System.Math.Log(DS_MIN) + DS_POW * System.Math.Log((double)(tempHolder[i].N / low.N)));
+                chart.Series[i].Points[2].MarkerStyle = MarkerStyle.None;
+
+                chart.ChartAreas[0].AxisY.CustomLabels.Add((seriesCount - i) - 0.25, (seriesCount - i) + 0.25, series.Name);
+            }
+
+
+            series = new Series
+            {
+                Name = "Tau Omni",
+                Color = System.Drawing.Color.Black,
+                IsVisibleInLegend = false,
+                IsXValueIndexed = false,
+                ChartType = SeriesChartType.Line,
+                MarkerStyle = MarkerStyle.None
+            };
+
+            chart.Series.Add(series);
+
+            chart.Series[seriesCount - 1].Points.AddXY(omniTau.CI_85[0], 1);
+            chart.Series[seriesCount - 1].Points.AddXY(omniTau.TAU, 1.25);
+            chart.Series[seriesCount - 1].Points.AddXY(omniTau.CI_85[1], 1);
+            chart.Series[seriesCount - 1].Points.AddXY(omniTau.TAU, 0.75);
+            chart.Series[seriesCount - 1].Points.AddXY(omniTau.CI_85[0], 1);
+
+            chart.ChartAreas[0].AxisY.CustomLabels.Add(0.5, 1.5, "Omnibus");
+
+            chartWin.Show();
         }
 
         private void DefaultFieldsToGray()

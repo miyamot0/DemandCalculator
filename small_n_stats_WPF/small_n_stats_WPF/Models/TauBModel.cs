@@ -8,6 +8,7 @@
             public double StandardError { get; set; }
             public double LowerBound { get; set; }
             public double TauB { get; set; }
+            public int N { get; set; }
             public double UpperBound { get; set; }
         }
 
