@@ -455,7 +455,6 @@ namespace small_n_stats_WPF.ViewModels
             chart.ChartAreas[0].AxisY2.LineColor = System.Drawing.Color.Transparent;
             chart.ChartAreas[0].AxisY2.Title = "";
 
-
             chart.Titles.Add(new Title {
                 Text = "Tau-U Forrest Plot",
                 Font = new System.Drawing.Font("Arial", 14f)
@@ -531,13 +530,13 @@ namespace small_n_stats_WPF.ViewModels
 
         private void DefaultFieldsToGray()
         {
-            if (BaselineRangeString.Length < 1 || BaselineRangeString.ToLower().Contains("spreadsheet"))
+            if (BaselineRangeString.Length < 1 || BaselineRangeString.ToLower().Contains("sheet"))
             {
                 BaselineBackGround = Brushes.LightGray;
                 BaselineRangeString = string.Empty;
             }
 
-            if (InterventionRangeString.Length < 1 || InterventionRangeString.ToLower().Contains("spreadsheet"))
+            if (InterventionRangeString.Length < 1 || InterventionRangeString.ToLower().Contains("sheet"))
             {
                 InterventionBackGround = Brushes.LightGray;
                 InterventionRangeString = string.Empty;
