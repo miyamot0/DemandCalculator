@@ -210,6 +210,7 @@
     </None>
     <AppDesigner Include="Properties\" />
     <None Include="small_n_stats_WPF_TemporaryKey.pfx" />
+    <None Include="Source\small-n-stats-WPF-master-e73fd4c3a57571d634ae08c83f588852883873d9.zip" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Graphics\ChartingWindow.xaml">
