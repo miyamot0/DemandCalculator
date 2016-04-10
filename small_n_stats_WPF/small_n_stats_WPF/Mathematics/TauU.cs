@@ -1,4 +1,15 @@
-﻿using small_n_stats_WPF.Models;
+﻿/*
+ * Shawn Gilroy, Copyright 2016. Licensed under GPL-2.
+ * Small n Stats Application
+ * Modeled from conceptual work developed by Richard Parker (non-parametric statistics in time series)
+ * 
+ * Library for computing a range of single-case metrics
+ * 
+ * Tau-U calculations based on earlier conceptual work by Richard Parker and source code from Ozgur Gonen
+ * 
+ */
+
+using small_n_stats_WPF.Models;
 using System.Collections.Generic;
 using System.Linq;
 

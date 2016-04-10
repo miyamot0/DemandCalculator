@@ -1,4 +1,17 @@
-﻿using small_n_stats_WPF.Models;
+﻿/*
+ * Shawn Gilroy, Copyright 2016. Licensed under GPL-2.
+ * Small n Stats Application
+ * Modeled from conceptual work developed by Richard Parker (non-parametric statistics in time series)
+ * 
+ * Library for computing Theil-Sen estimates of slope
+ * 
+ * Slope estimates based on earlier conceptual work by Richard Parker and source code from Ozgur Gonen
+ * 
+ * P-value estimates from standard distribution are credited to Ben Tilly Ben Tilly <btilly@gmail.com>. Copyright 2008 Ben Tilly.
+ * 
+ */
+
+using small_n_stats_WPF.Models;
 using System.Collections.Generic;
 
 namespace small_n_stats_WPF.Mathematics
@@ -21,40 +34,36 @@ namespace small_n_stats_WPF.Mathematics
         public SenSlopeModel ComputeTheilSen(List<double> data)
         {
             List<double> data1 = new List<double>(data);
-
             List<double> senSlopes = new List<double>();
 
-            var N = data.Count;
             var senPairs = 0;
 
-            double xDeltaTotal = 0.0, yDeltaTotal = 0.0;
-            int p = 0, n = 0, t = 0;
+            double xResidualSum = 0.0;
+            double yResidualSum = 0.0;
 
-            for (int i = 0; i < N - 1; i++)
+            int over = 0, under = 0;
+
+            for (int i = 0; i < data.Count - 1; i++)
             {
-                for (int j = i + 1; j < N; j++)
+                for (int j = i + 1; j < data.Count; j++)
                 {
                     var yDelta = (data[j] - data[i]);
                     var xDelta = j - i;
 
                     senSlopes.Add(yDelta / xDelta);
 
-                    xDeltaTotal += xDelta;
-                    yDeltaTotal += yDelta;
+                    xResidualSum += xDelta;
+                    yResidualSum += yDelta;
 
                     senPairs++;
 
                     if (yDelta > 0)
                     {
-                        p++;
-                    }
-                    else if (yDelta < 0)
-                    {
-                        n++;
+                        over++;
                     }
                     else
                     {
-                        t++;
+                        under++;
                     }
                 }
             }
@@ -62,31 +71,28 @@ namespace small_n_stats_WPF.Mathematics
             senSlopes.Sort();
 
             double medianSenSlope = GetMedian(senSlopes);
-            double S = (p - n);
-            double POS = p;
-            double TAU = S / ((double) senPairs);
+            double kenTau = (over - under) / ((double) senPairs);
 
             /* Approximation of normal distribution (mean zero, no variance) */
-            double senVariance = (2.0 * (2.0 * N + 5)) / ((9 * N) * (N - 1));
+            double senVariance = (2.0 * (2.0 * (double) data.Count + 5)) / ((9 * (double) data.Count) * ( (double) data.Count - 1));
             double SDTau = System.Math.Sqrt(senVariance);
 
-            double senZScore = (TAU / SDTau);
+            double senZScore = (kenTau / SDTau);
 
             double PVal = GetPValueFromUDistribution(System.Math.Abs(senZScore), true);
 
-            double SDts = (SDTau / TAU) * medianSenSlope;
+            double SDts = (SDTau / kenTau) * medianSenSlope;
             double VARts = SDts * SDts;
-            double PAIRS = senPairs;
 
             return new SenSlopeModel
             {
                 Observations = data,
                 Length = data.Count,
                 Sen = medianSenSlope,
-                SenSD = (SDTau / TAU) * medianSenSlope,
+                SenSD = (SDTau / kenTau) * medianSenSlope,
                 SenVariance = SDts * SDts,
                 Zscore = senZScore,
-                Tau = TAU,
+                Tau = kenTau,
                 TauSD = SDTau,
                 P = PVal,
                 TS85 = new double[] { medianSenSlope - 1.44 * SDts, medianSenSlope + 1.44 * SDts },
@@ -127,6 +133,9 @@ namespace small_n_stats_WPF.Mathematics
 
             current.MedianX = GetMedian(mx);
             current.MedianY = GetMedian(my);
+
+            /* Terms re-arranged and solved for */
+
             current.ConoverIntercept = current.MedianY - current.Sen * current.MedianX;
 
             return current;
@@ -152,6 +161,9 @@ namespace small_n_stats_WPF.Mathematics
 
             current.MedianX = GetMedian(mx);
             current.MedianY = GetMedian(my);
+
+            /* Terms re-arranged and solved for */
+
             current.ConoverIntercept = current.MedianY - current.Sen * current.MedianX;
 
             return current;

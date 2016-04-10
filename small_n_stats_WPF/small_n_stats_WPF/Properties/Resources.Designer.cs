@@ -61,6 +61,60 @@ namespace small_n_stats_WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This work is licenced under the Creative Commons Attribution-Share Alike 3.0
+        ///United States License. To view a copy of this licence, visit
+        ///http://creativecommons.org/licenses/by-sa/3.0/ or send a letter to Creative
+        ///Commons, 171 Second Street, Suite 300, San Francisco, California 94105, USA.
+        ///
+        ///When attributing the artwork, using &quot;GNOME Project&quot; is enough. 
+        ///Please link to http://www.gnome.org where available.
+        ///.
+        /// </summary>
+        internal static string COPYING_CCBYSA3 {
+            get {
+                return ResourceManager.GetString("COPYING_CCBYSA3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 		    GNU GENERAL PUBLIC LICENSE
+        ///		       Version 2, June 1991
+        ///
+        /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+        ///                       59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+        /// Everyone is permitted to copy and distribute verbatim copies
+        /// of this license document, but changing it is not allowed.
+        ///
+        ///			    Preamble
+        ///
+        ///  The licenses for most software are designed to take away your
+        ///freedom to share and change it.  By contrast, the GNU General Public
+        ///License is intended to guara [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string License_Ben_Tilly {
+            get {
+                return ResourceManager.GetString("License_Ben_Tilly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ReoGrid - .NET Spreadsheet Control
+        ///https://reogrid.net/
+        ///
+        ///This code and information is provided &quot;as is&quot; without warranty of any
+        ///kind, either expressed or implied, including but not limited to the
+        ///implied warranties of merchantability and/or fitness for a particular
+        ///purpose.
+        ///
+        ///Copyright (c) 2012-2015 unvell.com, all rights reserved..
+        /// </summary>
+        internal static string License_ReogridSpreadsheet {
+            get {
+                return ResourceManager.GetString("License_ReogridSpreadsheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap SNS {

@@ -1,7 +1,7 @@
 ﻿/*
- * Shawn Gilroy, 2016
+ * Shawn Gilroy, Copyright 2016. Licensed under GPL-2.
  * Small n Stats Application
- * Based on conceptual work developed by Richard Parker (non-parametric statistics in time series)
+ * Modeled from conceptual work developed by Richard Parker (non-parametric statistics in time series)
  * 
  */
 
@@ -43,6 +43,11 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand NonOverlapWindowCommand { get; set; }
 
         public RelayCommand InformationWindowCommand { get; set; }
+
+
+        public RelayCommand ReogridLicenseWindowCommand { get; set; }
+        public RelayCommand GnomeIconLicenseWindowCommand { get; set; }
+        public RelayCommand TillyLicenseWindowCommand { get; set; }
 
         /* End Menu Items */
 
@@ -87,6 +92,9 @@ namespace small_n_stats_WPF.ViewModels
             NonOverlapWindowCommand = new RelayCommand(param => OpenNonOverlapWindow(), param => true);
 
             InformationWindowCommand = new RelayCommand(param => OpenInformationWindow(), param => true);
+            ReogridLicenseWindowCommand = new RelayCommand(param => ReogridLicenseInformationWindow(), param => true);
+            GnomeIconLicenseWindowCommand = new RelayCommand(param => GnomeIconLicenseInformationWindow(), param => true);
+            TillyLicenseWindowCommand = new RelayCommand(param => BenTillyLicenseInformationWindow(), param => true);
 
             /* End Menu Items */
         }
@@ -96,14 +104,56 @@ namespace small_n_stats_WPF.ViewModels
             mTextBox = MainWindow.outputWindow;
             sv = MainWindow.Scroller;
             SendMessageToOutput("---------------------------------------------------");
-            SendMessageToOutput("Loading core libraries...");
-            SendMessageToOutput("Core libraries loaded.");
+            SendMessageToOutput("Welcome to the Small n Stats - Effect Size Calculator");
+            SendMessageToOutput("The Effect Size Calculator utilizes several licensed components for its interface and design.");
 
+            SendMessageToOutput("");
+            SendMessageToOutput("These works include:");
+            SendMessageToOutput("");
+            SendMessageToOutput("Reogrid WPF Spreadsheet controls. Copyright (c) 2012-2015 unvell.com, all rights reserved. Licensed under FREE license.");
+            SendMessageToOutput("GNOME Icon Theme. Copyright (c) 2012-2015 GNOME Project, all rights reserved. Licensed under CCbySA 3.0.  No modifications performed.");
+            SendMessageToOutput("GetPValueFromUDistribution. Copyright (c) 2008 Ben Tilly <btilly@gmail.com>, all rights reserved. Original Perl version by Michael Kospach <mike.perl@gmx.at> Nice formating, simplification and bug repair by Matthias Trautner Kromann <mtk@id.cbs.dk>.  Licensed under GPLv1+");
+            SendMessageToOutput("Rich Parker, Kim Vannest and Ozgur Gonen of Single Case Research. Functionality modeled around earlier work using www.SingleCaseResearch.org online calculators.");
+            SendMessageToOutput("");
+            SendMessageToOutput("Respective licenses available under Information > Licenses.");
         }
 
         private void ViewClosed()
         {
             Properties.Settings.Default.Save();
+        }
+
+        private void ReogridLicenseInformationWindow()
+        {
+            var window = new License();
+            window.DataContext = new ViewModelLicense
+            {
+                licenseTitle = "License - Reogrid",
+                licenseText = Properties.Resources.License_ReogridSpreadsheet
+            };
+            window.Show();
+        }
+
+        private void GnomeIconLicenseInformationWindow()
+        {
+            var window = new License();
+            window.DataContext = new ViewModelLicense
+            {
+                licenseTitle = "License - Gnome Icons (CC by SA 3.0)",
+                licenseText = Properties.Resources.COPYING_CCBYSA3
+            };
+            window.Show();
+        }
+
+        private void BenTillyLicenseInformationWindow()
+        {
+            var window = new License();
+            window.DataContext = new ViewModelLicense
+            {
+                licenseTitle = "License - Ben Tilly (GPLv2)",
+                licenseText = Properties.Resources.License_Ben_Tilly
+            };
+            window.Show();
         }
 
         private void OpenNonOverlapWindow()
