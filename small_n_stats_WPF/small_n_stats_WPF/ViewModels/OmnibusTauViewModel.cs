@@ -433,14 +433,29 @@ namespace small_n_stats_WPF.ViewModels
             chart.Series.Clear();
 
             chart.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
-            chart.ChartAreas[0].AxisX.Minimum = 0;
+            chart.ChartAreas[0].AxisX.Minimum = -1.5;
+            chart.ChartAreas[0].AxisX.Maximum = 1.5;
+            chart.ChartAreas[0].AxisX.Interval = 0.25;
             chart.ChartAreas[0].AxisX.Title = "Tau-U";
+
             chart.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
             chart.ChartAreas[0].AxisY.Minimum = 0;
             chart.ChartAreas[0].AxisY.Maximum = seriesCount + 0.5f;
             chart.ChartAreas[0].AxisY.MinorTickMark.TickMarkStyle = TickMarkStyle.None;
             chart.ChartAreas[0].AxisY.MajorTickMark.TickMarkStyle = TickMarkStyle.None;
+            chart.ChartAreas[0].AxisY.LineColor = System.Drawing.Color.Transparent;
             chart.ChartAreas[0].AxisY.Title = "";
+
+            chart.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
+            chart.ChartAreas[0].AxisY2.MajorGrid.Enabled = false;
+            chart.ChartAreas[0].AxisY2.Minimum = 0;
+            chart.ChartAreas[0].AxisY2.Maximum = seriesCount + 0.5f;
+            chart.ChartAreas[0].AxisY2.MinorTickMark.TickMarkStyle = TickMarkStyle.None;
+            chart.ChartAreas[0].AxisY2.MajorTickMark.TickMarkStyle = TickMarkStyle.None;
+            chart.ChartAreas[0].AxisY2.LineColor = System.Drawing.Color.Transparent;
+            chart.ChartAreas[0].AxisY2.Title = "";
+
+
             chart.Titles.Add(new Title {
                 Text = "Tau-U Forrest Plot",
                 Font = new System.Drawing.Font("Arial", 14f)
@@ -471,8 +486,8 @@ namespace small_n_stats_WPF.ViewModels
                 chart.Series[i].Points[2].MarkerStyle = MarkerStyle.None;
 
                 chart.ChartAreas[0].AxisY.CustomLabels.Add((seriesCount - i) - 0.25, (seriesCount - i) + 0.25, series.Name);
+                chart.ChartAreas[0].AxisY2.CustomLabels.Add((seriesCount - i) - 0.25, (seriesCount - i) + 0.25, "" + tempHolder[i].TAU.ToString("0.00") + " [" + tempHolder[i].CI_85[0].ToString("0.00") + " - " + tempHolder[i].CI_85[1].ToString("0.00") + "]");
             }
-
 
             series = new Series
             {
@@ -493,6 +508,23 @@ namespace small_n_stats_WPF.ViewModels
             chart.Series[seriesCount - 1].Points.AddXY(omniTau.CI_85[0], 1);
 
             chart.ChartAreas[0].AxisY.CustomLabels.Add(0.5, 1.5, "Omnibus");
+            chart.ChartAreas[0].AxisY2.CustomLabels.Add(0.5, 1.5, "" + omniTau.TAU.ToString("0.00") + " [" + omniTau.CI_85[0].ToString("0.00") + " - " + omniTau.CI_85[1].ToString("0.00") + "]");
+
+            series = new Series
+            {
+                Name = "Line",
+                Color = System.Drawing.Color.Black,
+                IsVisibleInLegend = false,
+                IsXValueIndexed = false,
+                ChartType = SeriesChartType.Line,
+                MarkerStyle = MarkerStyle.None,
+                BorderDashStyle = ChartDashStyle.Dash
+            };
+
+            chart.Series.Add(series);
+
+            chart.Series[seriesCount].Points.AddXY(0, 0);
+            chart.Series[seriesCount].Points.AddXY(0, seriesCount + 0.5f);
 
             chartWin.Show();
         }
