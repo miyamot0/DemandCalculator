@@ -31,7 +31,7 @@
     <SuiteName>Single Case Effect Sizes</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -259,6 +259,19 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="SNS.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\application-exit.png" />
+    <Resource Include="Images\applications-other.png" />
+    <Resource Include="Images\applications-science.png" />
+    <Resource Include="Images\document-new.png" />
+    <Resource Include="Images\document-open.png" />
+    <Resource Include="Images\document-save-as.png" />
+    <Resource Include="Images\document-save.png" />
+    <Resource Include="Images\edit-clear.png" />
+    <Resource Include="Images\edit-copy.png" />
+    <Resource Include="Images\text-x-preview.png" />
+    <Resource Include="Images\x-office-address-book.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

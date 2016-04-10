@@ -6,6 +6,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:small_n_stats_WPF"
         mc:Ignorable="d"
+        Icon="/Images/applications-science.png"
         Title="NAP/ROC Scoring" 
         Height="350" 
         ResizeMode="NoResize"

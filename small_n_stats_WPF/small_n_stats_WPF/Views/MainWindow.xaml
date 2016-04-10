@@ -44,52 +44,113 @@
 
                 <MenuItem Header="_File">
                     <MenuItem Header="_New" 
-                              x:Name="newMenuItem" 
-                              Command="{Binding FileNewCommand}"/>
+						x:Name="newMenuItem" 
+						Command="{Binding FileNewCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/document-new.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator />
                     <MenuItem Header="_Open" 
-                              x:Name="openMenuItem" 
-                              Command="{Binding FileOpenCommand}"/>
+						x:Name="openMenuItem" 
+						Command="{Binding FileOpenCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/document-open.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator />
                     <MenuItem Header="_Save" 
-                              x:Name="saveMenuItem" 
-                              Command="{Binding FileSaveCommand}"/>
+						x:Name="saveMenuItem" 
+						Command="{Binding FileSaveCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/document-save.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Header="_Save As" 
-                              x:Name="saveAsMenuItem" 
-                              Command="{Binding FileSaveAsCommand}"/>
+						x:Name="saveAsMenuItem" 
+						Command="{Binding FileSaveAsCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/document-save-as.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator />
                     <MenuItem Header="_Close" 
-                              x:Name="closeMenuItem" 
-                              Command="{Binding FileCloseCommand}"/>
+						x:Name="closeMenuItem" 
+						Command="{Binding FileCloseCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/application-exit.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
 
                 <MenuItem Header="_Analyses">
                     <MenuItem Header="_General Overlap Indices">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/applications-other.png" />
+                        </MenuItem.Icon>
                         <MenuItem Header="_Non-Overlap Calculations" 
-                                  Command="{Binding NonOverlapWindowCommand}"/>
+                                  Command="{Binding NonOverlapWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/applications-science.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                     <MenuItem Header="_Area-based Overlap Indices">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/applications-other.png" />
+                        </MenuItem.Icon>
                         <MenuItem Header="_NAP/ROC Module" Name="nap" 
-                                  Command="{Binding NAPWindowCommand}"/>
+                                  Command="{Binding NAPWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/applications-science.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <MenuItem Header="_Tau-U (Single and Omnibus)" 
-                                  Command="{Binding OmnibusTauWindowCommand}"/>
+                                  Command="{Binding OmnibusTauWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/applications-science.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                     <MenuItem Header="_Parametric Measures">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/applications-other.png" />
+                        </MenuItem.Icon>
                         <MenuItem Header="_Theil-Sen Slope Difference" 
-                                  Command="{Binding TheilSenWindowCommand}"/>
+                                  Command="{Binding TheilSenWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/applications-science.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
 
                 </MenuItem>
 
                 <MenuItem Header="_Logs">
-                    <MenuItem Header="_Save Log Output" x:Name="saveLogs" Click="saveLogs_Click"/>
-                    <MenuItem Header="_Clear Logs" x:Name="clearLogs" Click="clearLogs_Click"/>
+                    <MenuItem Header="_Save Log Output" 
+                              x:Name="saveLogs" 
+                              Click="saveLogs_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/edit-copy.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="_Clear Logs" 
+                              x:Name="clearLogs" 
+                              Click="clearLogs_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/edit-clear.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
 
                 <MenuItem Header="_Information">
                     <MenuItem Header="_Credits" 
                               x:Name="credits" 
-                              Command="{Binding InformationWindowCommand}"/>
+                              Command="{Binding InformationWindowCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/x-office-address-book.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
             </Menu>
 

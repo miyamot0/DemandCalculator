@@ -6,6 +6,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:small_n_stats_WPF"
         ResizeMode="NoResize"
+        Icon="/Images/applications-science.png"
         mc:Ignorable="d"
         Title="Non-Overlap Indexer" 
         Height="400" 

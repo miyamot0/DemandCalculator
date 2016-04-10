@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:small_n_stats_WPF"
         ResizeMode="NoResize"
         mc:Ignorable="d"
+        Icon="/Images/applications-science.png"
         Title="Omnibus Tau-U Calculator" 
         Height="450" 
         Width="450"

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:small_n_stats_WPF.Views"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
+        Icon="/Images/x-office-address-book.png"
         Title="Information" 
         ResizeMode="NoResize"
         Height="450" 
