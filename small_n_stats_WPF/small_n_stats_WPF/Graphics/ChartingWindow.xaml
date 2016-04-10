@@ -4,27 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:small_n_stats_WPF.Graphics"
+        xmlns:winformchart="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         mc:Ignorable="d"
         ResizeMode="CanResizeWithGrip"
-        xmlns:winformchart="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         Title="ChartingWindow" 
-        Height="300" 
-        Width="300">
+        Height="500" 
+        Width="400">
     <Grid>
-
         <WindowsFormsHost x:Name="host" >
             <winformchart:Chart x:Name="MyWinformChart" >
-                <winformchart:Chart.Legends>
-                    <winformchart:Legend Docking="Bottom"/>
-                </winformchart:Chart.Legends>
-                <winformchart:Chart.Series>
-                    <winformchart:Series Name="series" ChartType="Line"/>
-                </winformchart:Chart.Series>
                 <winformchart:Chart.ChartAreas>
                     <winformchart:ChartArea/>
                 </winformchart:Chart.ChartAreas>
             </winformchart:Chart>
-
         </WindowsFormsHost>
     </Grid>
 </Window>

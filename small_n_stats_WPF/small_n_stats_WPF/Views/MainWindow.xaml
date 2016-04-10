@@ -144,6 +144,14 @@
                 </MenuItem>
 
                 <MenuItem Header="_Information">
+                    <MenuItem Header="_Licenses">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/text-x-preview.png" />
+                        </MenuItem.Icon>
+                        <MenuItem Header="Reogrid Spreadsheet License">
+                            
+                        </MenuItem>
+                    </MenuItem>
                     <MenuItem Header="_Credits" 
                               x:Name="credits" 
                               Command="{Binding InformationWindowCommand}">

@@ -1,4 +1,11 @@
-﻿using Microsoft.Win32;
+﻿/*
+ * Shawn Gilroy, 2016
+ * Small n Stats Application
+ * Based on conceptual work developed by Richard Parker (non-parametric statistics in time series)
+ * 
+ */
+
+using Microsoft.Win32;
 using small_n_stats_WPF.Interfaces;
 using System;
 using System.Collections.Generic;

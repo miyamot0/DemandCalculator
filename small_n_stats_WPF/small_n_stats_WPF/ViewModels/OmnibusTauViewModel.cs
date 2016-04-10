@@ -1,4 +1,11 @@
-﻿using small_n_stats_WPF.Mathematics;
+﻿/*
+ * Shawn Gilroy, 2016
+ * Small n Stats Application
+ * Based on conceptual work developed by Richard Parker (non-parametric statistics in time series)
+ * 
+ */
+
+using small_n_stats_WPF.Mathematics;
 using small_n_stats_WPF.Models;
 using small_n_stats_WPF.Views;
 using small_n_stats_WPF.Interfaces;
