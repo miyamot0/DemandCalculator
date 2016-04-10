@@ -118,13 +118,11 @@ namespace small_n_stats_WPF.Mathematics
                 int pos = 0, neg = 0, ties = 0;
                 var pairs = 0;
 
-                var inc = 0;
+                var increment = 0;
 
-                int trend_off = 1;
-
-                for (var i = 0; i < blCopy.Count - trend_off; i++)
+                for (var i = 0; i < blCopy.Count - 1; i++)
                 {
-                    for (var j = trend_off + inc; j < txCopy.Count; j++)
+                    for (var j = 1 + increment; j < txCopy.Count; j++)
                     {
                         var diff = (txCopy[j] - blCopy[i]);
 
@@ -145,7 +143,7 @@ namespace small_n_stats_WPF.Mathematics
                         pairs++;
                     }
 
-                    inc++;
+                    increment++;
                 }
 
                 var S = pos - neg;
@@ -174,21 +172,14 @@ namespace small_n_stats_WPF.Mathematics
             }
             else
             {
-                // Phases have differing elements
                 var pos = 0;
                 var neg = 0;
                 var ties = 0;
                 var pairs = 0;
 
-                var istrend = false;
-                var trend_off = 0;
-                var inc = 0;
-                var n = blCopy.Count;
-                var m = txCopy.Count;
-
-                for (var i = 0; i < n - trend_off; i++)
+                for (var i = 0; i < blCopy.Count; i++)
                 {
-                    for (var j = trend_off + inc; j < m; j++)
+                    for (var j = 0; j < txCopy.Count; j++)
                     {
                         var diff = (txCopy[j] - blCopy[i]);
 
@@ -207,25 +198,10 @@ namespace small_n_stats_WPF.Mathematics
 
                         pairs++;
                     }
-
-                    if (istrend)
-                    {
-                        inc++;
-                    }
                 }
 
                 var S = pos - neg;
-                var Vars = 0.0;
-
-                if (istrend)
-                {
-                    /* Variance as Defined by two-tailed Mann-Kendall test */
-                    Vars = n * (n - 1.0) * (2.0 * n + 5.0) / 18.0;
-                }
-                else
-                {
-                    Vars = n * m * (n + m + 1) / 3.0;
-                }
+                var Vars = blCopy.Count * txCopy.Count * (blCopy.Count + txCopy.Count + 1) / 3.0;
 
                 if (lessBaselineTrend)
                 {

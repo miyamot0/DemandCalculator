@@ -277,6 +277,13 @@ namespace small_n_stats_WPF.ViewModels
                 return;
             }
 
+            if (TauUHolder.Any(tau => tau.OutputName == tauName) && tauName.Length > 0)
+            {
+                mInterface.SendMessageToOutput("Cannot duplicate names!.");
+                MessageBox.Show("The name for each series must be unique.");
+                return;
+            }
+
             TauUModel mTau = mTauMethods.BaselineTrend(phase1, phase2, CorrectBaseline);
 
             mTau.Name = "Name: " + tauName + " - {" + BaselineRangeString + "} and {" + InterventionRangeString + "} Corrected: " + CorrectBaseline;
