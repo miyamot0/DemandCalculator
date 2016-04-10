@@ -134,14 +134,14 @@ namespace small_n_stats_WPF.ViewModels
             }
 
             BaselineBackGround = Brushes.Yellow;
-            BaselineRangeString = "Select delays on spreadsheet";
+            BaselineRangeString = "Select baseline data on sheet";
 
             mWindow.spreadSheetView.PickRange((inst, range) =>
             {
-                if (range.Rows > 1 && range.Cols > 1)
+                if (range.Cols > 1)
                 {
                     DefaultFieldsToGray();
-                    MessageBox.Show("Please select single row or single column selections");
+                    MessageBox.Show("Please select a single column of data");
                     return true;
                 }
 
@@ -175,14 +175,14 @@ namespace small_n_stats_WPF.ViewModels
             }
 
             InterventionBackGround = Brushes.Yellow;
-            InterventionRangeString = "Select delays on spreadsheet";
+            InterventionRangeString = "Select intervention data on sheet";
 
             mWindow.spreadSheetView.PickRange((inst, range) =>
             {
-                if (range.Rows > 1 && range.Cols > 1)
+                if (range.Cols > 1)
                 {
                     DefaultFieldsToGray();
-                    MessageBox.Show("Please select single row or single column selections");
+                    MessageBox.Show("Please select a single column of data");
                     return true;
                 }
 

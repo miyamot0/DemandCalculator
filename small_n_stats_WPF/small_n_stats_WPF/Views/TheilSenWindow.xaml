@@ -9,8 +9,8 @@
         mc:Ignorable="d"
         Icon="/Images/applications-science.png"
         Title="Theil-Sen Slope Estimator" 
-        Height="350" 
-        Width="300"
+        Height="400" 
+        Width="400"
         xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"    
         Top="{Binding Source={x:Static settings:Settings.Default}, Path=SenTop, Mode=TwoWay}" 
         Left="{Binding Source={x:Static settings:Settings.Default}, Path=SenLeft, Mode=TwoWay}">
@@ -30,7 +30,8 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -58,7 +59,7 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Margin="10"
-                Content="Baseline"
+                Content="Select Baseline Points"
                 Command="{Binding LoadBaselineDataCommand}">
         </Button>
 
@@ -69,6 +70,9 @@
             Grid.ColumnSpan="2"
             IsReadOnly="True"
             Margin="10"
+            Focusable="False"
+            AcceptsTab="False"
+            ToolTip="Click button to select baseline points"
             Background="{Binding BaselineBackGround}"
             Text="{Binding BaselineRangeString}">
         </TextBox>
@@ -78,7 +82,7 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Margin="10"
-                Content="Intervention"
+                Content="Select Intervention Points"
                 Command="{Binding LoadInterventionDataCommand}">
         </Button>
 
@@ -89,36 +93,61 @@
             Grid.ColumnSpan="2"
             IsReadOnly="True"
             Margin="10"
+            Focusable="False"
+            AcceptsTab="False"
+            ToolTip="Click button to select intervention points"
             Background="{Binding InterventionBackGround}"
             Text="{Binding InterventionRangeString}">
         </TextBox>
 
-        <Label
+        <Label Content="Sen Slopes Display?"
             Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             VerticalAlignment="Center"
             HorizontalAlignment="Right"
-            FontSize="12"
-            Margin="0,0,5,0"
-            Content="Sen Slopes Display:">
-
+            Margin="0,0,15,0">
         </Label>
 
         <CheckBox
             Grid.Row="3"
             Grid.Column="2"
             Grid.ColumnSpan="2"
-            HorizontalAlignment="Center"
+            HorizontalAlignment="Left"
             VerticalAlignment="Center"
-            Margin="5"
+            Margin="5,0,0,0"
             Content="Output Chart"
             IsChecked="{Binding ChartFlag}">
-
         </CheckBox>
 
+        <FlowDocumentScrollViewer
+            Grid.Column="0"
+            Grid.ColumnSpan="4"
+            Grid.Row="4"
+            Grid.RowSpan="2"
+            IsSelectionEnabled="False"
+            VerticalScrollBarVisibility="Hidden">
+            <FlowDocument>
+                <FlowDocument.Resources>
+                    <Style TargetType="{x:Type Paragraph}">
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Padding" Value="0"/>
+                    </Style>
+                </FlowDocument.Resources>
+                <Paragraph FontSize="12" FontFamily="Segoe UI">
+                    <Bold>Directions:</Bold>
+                </Paragraph>
+                <Paragraph FontSize="12" FontFamily="Segoe UI" Padding="0,5,0,0">
+                    Sen slopes can be fitted to data by selecting ranges of baseline 
+                    data points (Vertical data, top to bottom) and intervention data
+                    points (Vertical data, top to bottom).  All data will be assumed to
+                    be sequential and equally spaced in calculations.
+                </Paragraph>
+            </FlowDocument>
+        </FlowDocumentScrollViewer>        
+        
         <Button Name="calculateButton" 
-                Grid.Row="5" 
+                Grid.Row="6" 
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
                 Margin="10"

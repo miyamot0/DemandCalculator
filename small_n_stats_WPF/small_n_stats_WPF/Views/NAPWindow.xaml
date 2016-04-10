@@ -8,9 +8,9 @@
         mc:Ignorable="d"
         Icon="/Images/applications-science.png"
         Title="NAP/ROC Scoring" 
-        Height="350" 
+        Height="400" 
         ResizeMode="NoResize"
-        Width="300"
+        Width="400"
         xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"    
         Top="{Binding Source={x:Static settings:Settings.Default}, Path=NapTop, Mode=TwoWay}" 
         Left="{Binding Source={x:Static settings:Settings.Default}, Path=NapLeft, Mode=TwoWay}">
@@ -30,7 +30,8 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -58,7 +59,7 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Margin="10"
-                Content="Baseline"
+                Content="Select Baseline Points"
                 Command="{Binding LoadBaselineDataCommand}">
         </Button>
 
@@ -70,9 +71,10 @@
             IsReadOnly="True"
             Margin="10"
             Focusable="False"
-            ToolTip="Press button to select a range"
-            Text="{Binding BaselineRangeString}"
-            Background="{Binding BaselineBackGround}">
+            AcceptsTab="False"
+            ToolTip="Click button to select baseline points"
+            Background="{Binding BaselineBackGround}"
+            Text="{Binding BaselineRangeString}">
         </TextBox>
 
         <Button Name="interventionButton" 
@@ -80,7 +82,7 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Margin="10"
-                Content="Intervention"
+                Content="Select Intervention Points"
                 Command="{Binding LoadInterventionDataCommand}">
         </Button>
 
@@ -90,11 +92,12 @@
             Grid.Column="2"
             Grid.ColumnSpan="2"
             IsReadOnly="True"
-            Focusable="False"
-            ToolTip="Press button to select a range"
             Margin="10"
-            Text="{Binding InterventionRangeString}"
-            Background="{Binding InterventionBackGround}">
+            Focusable="False"
+            AcceptsTab="False"
+            ToolTip="Click button to select intervention points"
+            Background="{Binding InterventionBackGround}"
+            Text="{Binding InterventionRangeString}">
         </TextBox>
 
         <Label
@@ -103,9 +106,8 @@
             Grid.ColumnSpan="2"
             VerticalAlignment="Center"
             HorizontalAlignment="Right"
-            FontSize="12"
-            Margin="0,0,5,0"
-            Content="Ordinal Dominance:">
+            Margin="0,0,15,0"
+            Content="Dominance Curve Display?">
 
         </Label>
 
@@ -113,15 +115,41 @@
             Grid.Row="3"
             Grid.Column="2"
             Grid.ColumnSpan="2"
-            HorizontalAlignment="Center"
+            HorizontalAlignment="Left"
             VerticalAlignment="Center"
-            Content="Show Chart"
-            Margin="5"
+            Margin="5,0,0,0"
+            Content="Output Chart"
             IsChecked="{Binding ChartROC, Mode=TwoWay}">
         </CheckBox>
 
+        <FlowDocumentScrollViewer
+            Grid.Column="0"
+            Grid.ColumnSpan="4"
+            Grid.Row="4"
+            Grid.RowSpan="2"
+            IsSelectionEnabled="False"
+            VerticalScrollBarVisibility="Hidden">
+            <FlowDocument>
+                <FlowDocument.Resources>
+                    <Style TargetType="{x:Type Paragraph}">
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Padding" Value="0"/>
+                    </Style>
+                </FlowDocument.Resources>
+                <Paragraph FontSize="12" FontFamily="Segoe UI">
+                    <Bold>Directions:</Bold>
+                </Paragraph>
+                <Paragraph FontSize="12" FontFamily="Segoe UI" Padding="0,5,0,0">
+                    Non-overlap of All Pairs can be calculated by selecting ranges of baseline 
+                    data points (Vertical data, top to bottom) and intervention data
+                    points (Vertical data, top to bottom).  Optionally, a visual depicting ordinal
+                    dominance is available based on these data.
+                </Paragraph>
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+
         <Button Name="calculateButton" 
-                Grid.Row="5" 
+                Grid.Row="6" 
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
                 Margin="10"
