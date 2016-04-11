@@ -1,7 +1,7 @@
 ﻿/*
- * Shawn Gilroy, Copyright 2016. Licensed under GPL-2.
+ * Shawn Gilroy, Copyright 2016. Licensed under New BSD License.
  * Small n Stats Application
- * Modeled from conceptual work developed by Richard Parker (non-parametric statistics in time series)
+ * Modeled from conceptual work developed by Richard Parker (non-parametric statistics in time series) and new BSD-licensed coded from Ozgur Monen
  * 
  * Library for computing a range of single-case metrics
  * 
@@ -93,22 +93,20 @@ namespace small_n_stats_WPF.Mathematics
         }
 
         /* Test of Single Proportions - Binomial distribution (for PEM) - Permits CI's for PEM */
+        /* Level C Confidence interval */
         private PercentExceedingMedianModel.PEM getSingleProportionsConfidence(double value, int total, double confidenceLevel)
         {
-            double proportion = value / (double)total;
-            double z = confidenceLevel;
-            double inner = (z * (1.0 - z)) / total;
-            inner = System.Math.Abs(inner);
-            double stdErr = System.Math.Sqrt(inner);
-            double chunk = (z * stdErr);
+            double proportion = value / (double) total;
+            double stdVar = (confidenceLevel * (1.0 - confidenceLevel)) / total;
+            double stdErr = System.Math.Sqrt(System.Math.Abs(stdVar));
 
             return new PercentExceedingMedianModel.PEM
             {
                 ConfidenceLevel = confidenceLevel,
                 StandardError = stdErr,
-                LowerBound = (proportion - chunk) * 100,
+                LowerBound = (proportion - (confidenceLevel * stdErr)) * 100,
                 PercentExceedingMedian = proportion * 100,
-                UpperBound = (proportion + chunk) * 100
+                UpperBound = (proportion + (confidenceLevel * stdErr)) * 100
             };
         }
 
@@ -121,9 +119,6 @@ namespace small_n_stats_WPF.Mathematics
             bool isAscending = isChangeAscending();
             OverlapOutputModel overlaps;
 
-            int blN = blCopy.Count;
-            int txN = txCopy.Count;
-
             if (isAscending)
             {
                 overlaps = getAscendingOverlap();
@@ -135,31 +130,31 @@ namespace small_n_stats_WPF.Mathematics
 
             ImprovementRateDifferenceModel returnValue = new ImprovementRateDifferenceModel();
             returnValue.IRD80 = getIndependentProportionsConfidence(
-            (txN - overlaps.TreatmentOverlaps),
-            txN,
+            (txCopy.Count - overlaps.TreatmentOverlaps),
+            txCopy.Count,
             overlaps.BaselineOverlaps,
-            blN,
+            blCopy.Count,
             z80);
 
             returnValue.IRD85 = getIndependentProportionsConfidence(
-            (txN - overlaps.TreatmentOverlaps),
-            txN,
+            (txCopy.Count - overlaps.TreatmentOverlaps),
+            txCopy.Count,
             overlaps.BaselineOverlaps,
-            blN,
+            blCopy.Count,
             z85);
 
             returnValue.IRD90 = getIndependentProportionsConfidence(
-            (txN - overlaps.TreatmentOverlaps),
-            txN,
+            (txCopy.Count - overlaps.TreatmentOverlaps),
+            txCopy.Count,
             overlaps.BaselineOverlaps,
-            blN,
+            blCopy.Count,
             z90);
 
             returnValue.IRD95 = getIndependentProportionsConfidence(
-            (txN - overlaps.TreatmentOverlaps),
-            txN,
+            (txCopy.Count - overlaps.TreatmentOverlaps),
+            txCopy.Count,
             overlaps.BaselineOverlaps,
-            blN,
+            blCopy.Count,
             z95);
 
             return returnValue;
@@ -313,127 +308,50 @@ namespace small_n_stats_WPF.Mathematics
         }
 
         /* Test of Two Independent Proportions, Two sets are calculated, since dependent on the larger proportion for comparison (phi version) */
-        // TODO modify
         private PearsonPhiModel.Phi getIndependentProportionsConfidencePhi(int measureOne, int n1, int measureTwo, int n2, double mZ)
         {
-            double p1 = (double)measureOne / (double)n1;
-            double p2 = (double)measureTwo / (double)n2;
+            double ProportionOne = (double)measureOne / (double)n1;
+            double ProportionTwo = (double)measureTwo / (double)n2;
 
-            double invP1 = 1.0 - p1;
-            double invP2 = 1.0 - p2;
+            double invertedProportionOne = 1.0 - ProportionOne;
+            double invertedProportionTwo = 1.0 - ProportionTwo;
 
-            double propDiffs = p1 - p2;
+            double ProportionDifference = ProportionOne - ProportionTwo;
 
-            double z2 = System.Math.Pow(mZ, 2);
+            double zSquared = mZ * mZ;
 
-            double lowerXa =
-                ((2.0 * n1 * p1)
-                + z2
-                - (mZ *
-                    System.Math.Sqrt(z2 + (4.0 * n1 * p1 * invP1))));
+            double lower1 = (1 / (2 * (n1 + zSquared))) * (2 * n1 * ProportionOne + zSquared - mZ * System.Math.Pow((zSquared + 4 * n1 * ProportionOne * invertedProportionOne), 0.5));
+            double upper1 = (1 / (2 * (n1 + zSquared))) * (2 * n1 * ProportionOne + zSquared + mZ * System.Math.Pow((zSquared + 4 * n1 * ProportionOne * invertedProportionOne), 0.5));
 
-            lowerXa = lowerXa / (2.0 * (n1 + z2));      
+            double lower2 = (1 / (2 * (n2 + zSquared))) * (2 * n2 * ProportionTwo + zSquared - mZ * System.Math.Pow((zSquared + 4 * n2 * ProportionTwo * invertedProportionTwo), 0.5));
+            double upper2 = (1 / (2 * (n2 + zSquared))) * (2 * n2 * ProportionTwo + zSquared + mZ * System.Math.Pow((zSquared + 4 * n2 * ProportionTwo * invertedProportionTwo), 0.5));
 
-            double upperXa =
-                ((2.0 * n1 * p1)
-                + z2
-                + (mZ * System.Math.Sqrt(z2
-                    + (4.0 * n1 * p1 * invP1))));
-            upperXa = upperXa / (2.0 * (n1 + z2));  
-
-            double lowerYa =
-                ((2.0 * n1 * p1) + z2 - 1.0 - (mZ *
-                    System.Math.Sqrt((z2 - 2.0 - (1.0 / n1) + 4 * p1 * ((n1 * invP1) + 1.0)))));
-
-            lowerYa = lowerYa / (2.0 * (n1 + z2)); 
-
-
-            double upperYa = ((2.0 * n1 * p1) + z2 + 1.0
-                + (mZ * System.Math.Sqrt(
-                    z2 - 2.0 - (1.0 / n1)
-                    + 4.0 * p1
-                   * ((n1 * invP1) + 1.0))));
-            upperYa /= (2.0 * (n1 + z2)); 
-
-
-            double lowerXb = ((2.0 * n2 * p2) + z2 -
-                (mZ * System.Math.Sqrt(z2 + (4.0 * n2 * p2 * invP2))));
-
-            lowerXb /= (2.0 * (n2 + z2));  
-
-            double upperXb = ((2.0 * n2 * p2) + z2 +
-                (mZ * System.Math.Sqrt(z2 + (4.0 * n2 * p2 * invP2))));
-
-            upperXb /= (2.0 * (n2 + z2));  
-
-            double lowerYb = ((2.0 * n2 * p2) + z2 - 1.0 - (mZ *
-                    System.Math.Sqrt((z2 - 2.0 - (1.0 / n2) + 4.0 * p2 * ((n2 * invP2) + 1.0)))));
-
-            lowerYb /= (2.0 * (n2 + z2));  
-
-            double upperYb = ((2.0 * n2 * p2) + z2 - 1.0 - (mZ *
-                System.Math.Sqrt(z2 - 2.0 - (1.0 / n2) + 4.0 * p2 * ((n2 * invP2) + 1.0))));
-
-            upperYb /= (2.0 * (n2 + z2)); 
-
-            double propOneHold;
-            double propTwoHold;
-            double lower1;
-            double lower2;
-            double upper1;
-            double upper2;
-
-            if (p2 > p1)
-            {
-                propOneHold = p2;
-                propTwoHold = p1;
-                lower1 = lowerXb;
-                upper1 = upperXb;
-                lower2 = lowerXa;
-                upper2 = upperXa;
-            }
-            else
-            {
-                propOneHold = p1;
-                propTwoHold = p2;
-                lower1 = lowerXa;
-                upper1 = upperXa;
-                lower2 = lowerXb;
-                upper2 = upperXb;
-            }
-
-            double lowerBound = System.Math.Pow((propOneHold - lower1), 2) + ((upper2 - propTwoHold) * (upper2 - propTwoHold));
-            lowerBound = System.Math.Sqrt(lowerBound);
-
-            double higherBound = System.Math.Pow((upper1 - propOneHold), 2) + ((propTwoHold - lower2) * (propTwoHold - lower2));
-            higherBound = System.Math.Sqrt(higherBound);
-
-            double difference = System.Math.Abs(p1 - p2);
+            double preLower = System.Math.Sqrt(System.Math.Abs((lower1 * (1 - lower1) / n1) + (upper2 * (1 - upper2) / n2)));
+            double preUpper = System.Math.Sqrt(System.Math.Abs((upper1 * (1 - upper1) / n1) + (lower2 * (1 - lower2) / n2)));
 
             return new PearsonPhiModel.Phi
             {
                 ConfidenceLevel = mZ,
-                LowerBound = difference - System.Math.Abs(lowerBound),
-                PearsonPhi = propDiffs,
-                UpperBound = difference + System.Math.Abs(higherBound)
-            };
+                LowerBound = ProportionDifference - (mZ * preLower),
+                PearsonPhi = ProportionDifference,
+                UpperBound = ProportionDifference + (mZ * preUpper)
+            };            
         }
 
         /* Pair-based association index, essentially a ROC module rigged to determine ordinal dominance (Phase 1 v Phase 2) rather than Sensitivity v Specificity */
+        /* Standard errors and CI's are based on Kendall's Tau, as per earlier work on SingleCaseResearch.org */
         public NonoverlapAllPairsModel getNAP()
         {
             List<double> blCopy = new List<double>(baselineArray);
             List<double> txCopy = new List<double>(treatmentArray);
 
-            int blN = blCopy.Count;
-            int txN = txCopy.Count;
-
-            int n = blN + txN;
-
-            int pairs = blN * txN;
-            int over = 0;
-            int under = 0;
-            int same = 0;
+            int blN = blCopy.Count,
+                txN = txCopy.Count,
+                n = blN + txN,
+                pairs = blN * txN,
+                over = 0,
+                under = 0,
+                same = 0;
 
             double comparer;
 
@@ -447,7 +365,7 @@ namespace small_n_stats_WPF.Mathematics
                     {
                         over++;
                     }
-                    else if (comparer == 0)
+                    else if (comparer == 0 || txCopy[j].ToString() == blCopy[i].ToString())
                     {
                         same++;
                     }
@@ -460,237 +378,48 @@ namespace small_n_stats_WPF.Mathematics
 
             double NAP = ((double)over + ((double)same * 0.5)) / (double)pairs;
 
-            // Credit to Parker and folks for this
-            double variance = (double)pairs * ((double)blN + (double)txN + 1.0) / 3.0;
+            // Credit SingleCaseResearch.org for this
+            // Adjusted from value 12 --> 3 to account for smaller samples (Orig. Pooled SE MW-U) 
+            double variance = blCopy.Count * txCopy.Count * (blCopy.Count + txCopy.Count + 1) / 3.0;
 
             NonoverlapAllPairsModel returnValue = new NonoverlapAllPairsModel();
 
-            double se80 = (System.Math.Sqrt(variance) / (double)pairs) * z80 * z80;
             returnValue.NAP80 = new NonoverlapAllPairsModel.NAP
             {
                 ConfidenceLevel = z80,
-                StandardError = se80,
-                LowerBound = NAP - se80,
+                LowerBound = ((double) over - under) / (double)pairs - z80 * (System.Math.Sqrt(variance) / (double)pairs),
                 NonoverlapAllPairs = NAP,
-                UpperBound = NAP + se80
+                UpperBound = ((double) over - under) / (double)pairs + z80 * (System.Math.Sqrt(variance) / (double)pairs)
             };
 
-            double se85 = (System.Math.Sqrt(variance) / (double)pairs) * z85 * z85;
             returnValue.NAP85 = new NonoverlapAllPairsModel.NAP
             {
                 ConfidenceLevel = z85,
-                StandardError = se85,
-                LowerBound = NAP - se85,
+                LowerBound = ((double) over - under) / (double)pairs - z85 * (System.Math.Sqrt(variance) / (double)pairs),
                 NonoverlapAllPairs = NAP,
-                UpperBound = NAP + se85
+                UpperBound = ((double) over - under) / (double)pairs + z85 * (System.Math.Sqrt(variance) / (double)pairs)
             };
 
-            double se90 = (System.Math.Sqrt(variance) / (double)pairs) * z90 * z90;
             returnValue.NAP90 = new NonoverlapAllPairsModel.NAP
             {
                 ConfidenceLevel = z90,
-                StandardError = se90,
-                LowerBound = NAP - z90,
+                LowerBound = ((double) over - under) / (double)pairs - z90 * (System.Math.Sqrt(variance) / (double)pairs),
                 NonoverlapAllPairs = NAP,
-                UpperBound = NAP + z90
+                UpperBound = ((double) over - under) / (double)pairs + z90 * (System.Math.Sqrt(variance) / (double)pairs)
             };
 
-            double se95 = (System.Math.Sqrt(variance) / (double)pairs) * z95 * z95;
             returnValue.NAP95 = new NonoverlapAllPairsModel.NAP
             {
                 ConfidenceLevel = z95,
-                StandardError = se95,
-                LowerBound = NAP - z95,
+                LowerBound = ((double) over - under) / (double)pairs - z95 * (System.Math.Sqrt(variance) / (double)pairs),
                 NonoverlapAllPairs = NAP,
-                UpperBound = NAP + z95
+                UpperBound = ((double) over - under) / (double)pairs + z95 * (System.Math.Sqrt(variance) / (double)pairs)
             };
 
             return returnValue;
         }
-
-        /* Tau-A, unadjusted for trend */
-        public TauAModel getTauA()
-        {
-            List<double> blCopy = new List<double>(baselineArray);
-            List<double> txCopy = new List<double>(treatmentArray);
-
-            int blN = blCopy.Count;
-            int txN = txCopy.Count;
-
-            int n = blN + txN;
-
-            int pairs = blN * txN;
-            int over = 0;
-            int under = 0;
-            int same = 0;
-
-            double comparer;
-
-            for (int i = 0; i < blN; i++)
-            {
-                for (int j = 0; j < txN; j++)
-                {
-                    comparer = txCopy[j] - blCopy[i];
-
-                    if (comparer > 0)
-                    {
-                        over++;
-                    }
-                    else if (comparer == 0 || (txCopy[j].ToString() == blCopy[i].ToString()))
-                    {
-                        same++;
-                    }
-                    else
-                    {
-                        under++;
-                    }
-                }
-            }
-
-            double tau = ((double)over - (double)under) / (double)pairs;
-            double variance = (double)pairs * (double)(blN + txN + 1.0) / 3.0;
-
-            TauAModel returnValue = new TauAModel();
-
-            double se80 = (System.Math.Sqrt(variance) / (double)pairs) * z80 * z80;
-            returnValue.TAU80 = new TauAModel.Tau
-            {
-                ConfidenceLevel = z80,
-                StandardError = se80,
-                LowerBound = tau - se80,
-                TauA = tau,
-                N = n,
-                UpperBound = tau + se80
-            };
-
-            double se85 = (System.Math.Sqrt(variance) / (double)pairs) * z85 * z85;
-            returnValue.TAU85 = new TauAModel.Tau
-            {
-                ConfidenceLevel = z85,
-                StandardError = se85,
-                LowerBound = tau - se85,
-                TauA = tau,
-                N = n,
-                UpperBound = tau + se85
-            };
-
-            double se90 = (System.Math.Sqrt(variance) / (double)pairs) * z90 * z90;
-            returnValue.TAU90 = new TauAModel.Tau
-            {
-                ConfidenceLevel = z90,
-                StandardError = se90,
-                LowerBound = tau - z90,
-                TauA = tau,
-                N = n,
-                UpperBound = tau + z90
-            };
-
-            double se95 = (System.Math.Sqrt(variance) / (double)pairs) * z95 * z95;
-            returnValue.TAU95 = new TauAModel.Tau
-            {
-                ConfidenceLevel = z95,
-                StandardError = se95,
-                LowerBound = tau - z95,
-                TauA = tau,
-                N = n,
-                UpperBound = tau + z95
-            };
-
-            return returnValue;
-        }
-
-        /* Tau-B, unadjusted for trend */
-        public TauBModel getTauB()
-        {
-            List<double> blCopy = new List<double>(baselineArray);
-            List<double> txCopy = new List<double>(treatmentArray);
-
-            int blN = blCopy.Count;
-            int txN = txCopy.Count;
-
-            int n = blN + txN;
-
-            int pairs = blN * txN;
-            int over = 0;
-            int under = 0;
-            int same = 0;
-
-            double comparer;
-
-            for (int i = 0; i < blN; i++)
-            {
-                for (int j = 0; j < txN; j++)
-                {
-                    comparer = txCopy[j] - blCopy[i];
-
-                    if (comparer > 0)
-                    {
-                        over++;
-                    }
-                    else if (comparer == 0 || (txCopy[j].ToString() == blCopy[i].ToString()))
-                    {
-                        same++;
-                    }
-                    else
-                    {
-                        under++;
-                    }
-                }
-            }
-
-            double tau = ((double)over - (double)under) / (pairs - (0.5 * same));
-            double variance = (double)pairs * (double)(blN + txN + 1.0) / 3.0;
-
-            TauBModel returnValue = new TauBModel();
-
-            double se80 = (System.Math.Sqrt(variance) / (double)pairs) * z80 * z80;
-            returnValue.TAU80 = new TauBModel.Tau
-            {
-                ConfidenceLevel = z80,
-                StandardError = se80,
-                LowerBound = tau - se80,
-                TauB = tau,
-                N = n,
-                UpperBound = tau + se80
-            };
-
-            double se85 = (System.Math.Sqrt(variance) / (double)pairs) * z85 * z85;
-            returnValue.TAU85 = new TauBModel.Tau
-            {
-                ConfidenceLevel = z85,
-                StandardError = se85,
-                LowerBound = tau - se85,
-                TauB = tau,
-                N = n,
-                UpperBound = tau + se85
-            };
-
-            double se90 = (System.Math.Sqrt(variance) / (double)pairs) * z90 * z90;
-            returnValue.TAU90 = new TauBModel.Tau
-            {
-                ConfidenceLevel = z90,
-                StandardError = se90,
-                LowerBound = tau - z90,
-                TauB = tau,
-                N = n,
-                UpperBound = tau + z90
-            };
-
-            double se95 = (System.Math.Sqrt(variance) / (double)pairs) * z95 * z95;
-            returnValue.TAU95 = new TauBModel.Tau
-            {
-                ConfidenceLevel = z95,
-                StandardError = se95,
-                LowerBound = tau - z95,
-                TauB = tau,
-                N = n,
-                UpperBound = tau + z95
-            };
-
-            return returnValue;
-        }
-
-        /* Overlap helper, detect trending based on median comparisons */
+        
+        /* Overlap helper, detect trending based on median comparisons.  Averages unreliable with short series, due to outliers */
         private bool isChangeAscending()
         {
             List<double> blCopy = new List<double>(baselineArray);
@@ -702,14 +431,7 @@ namespace small_n_stats_WPF.Mathematics
             double medianBl = getMedian(blCopy);
             double medianTx = getMedian(txCopy);
 
-            if (medianTx > medianBl)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (medianTx > medianBl) ? true : false;
         }
 
         /* Overlap object, retain both baseline and intervention separations */
@@ -719,43 +441,47 @@ namespace small_n_stats_WPF.Mathematics
             List<double> txCopy = new List<double>(treatmentArray);
 
             blCopy.Sort();
-            txCopy = txCopy.OrderByDescending(x => x).ToList();
+            txCopy.Sort();
 
-            int firstPhaseCount = 0;
-            int secondPhaseCount;
-            int blHold = 0;
-            int txHold = 0;
-            double ceiling = 9999999999;
-            int hold;
+            List<double> blClone, txClone;
 
-            for (int firstIterator = blCopy.Count - 1; firstIterator != (System.Math.Floor((double)blCopy.Count / 2.0) - 1); firstIterator--)
+            int blRemoved = int.MaxValue, 
+                txRemoved = int.MaxValue,
+                comparison = int.MaxValue;
+
+            for (int i = 0; i < txCopy.Count; i++)
             {
-                secondPhaseCount = 0;
+                blClone = new List<double>(blCopy);
+                txClone = new List<double>(txCopy);
 
-                for (int secondIterator = 0; secondIterator < txCopy.Count; secondIterator++)
+                txClone = txClone.Skip(i).ToList();
+
+                for (int j = blClone.Count; j > 0; j--)
                 {
-                    if (blCopy[firstIterator] >= txCopy[secondIterator])
+                    blClone = blClone.GetRange(0, j);
+
+                    var intersections = txClone.Where(
+                            value => value <= blClone.Max()
+                        );
+
+                    if (intersections.Count() == 0)
                     {
-                        secondPhaseCount++;
+                        if ((i+(blCopy.Count - j)) < comparison)
+                        {
+                            comparison = i + (blCopy.Count - j);
+
+                            blRemoved = (blCopy.Count - j);
+                            txRemoved = i;
+                        }
+                        break;
                     }
                 }
-
-                hold = firstPhaseCount + secondPhaseCount;
-
-                if (hold < ceiling)
-                {
-                    ceiling = firstPhaseCount + secondPhaseCount;
-                    blHold = firstPhaseCount;
-                    txHold = secondPhaseCount;
-                }
-
-                firstPhaseCount++;
             }
 
             return new OverlapOutputModel
             {
-                BaselineOverlaps = blHold,
-                TreatmentOverlaps = txHold
+                BaselineOverlaps = blCopy.Skip(blCopy.Count - blRemoved).ToList().Count,
+                TreatmentOverlaps = txCopy.Take(txRemoved).ToList().Count
             };
         }
 
@@ -768,41 +494,48 @@ namespace small_n_stats_WPF.Mathematics
             blCopy.Sort();
             txCopy.Sort();
 
-            int firstPhaseCount = 0;
-            int secondPhaseCount;
-            int blHold = 0;
-            int txHold = 0;
-            double ceiling = 9999999999;
-            int hold;
+            blCopy.Reverse();
+            txCopy.Reverse();
 
-            for (int firstIterator = 0; firstIterator != (System.Math.Floor((double)blCopy.Count / 2.0)); firstIterator++)
+            List<double> blClone, txClone;
+
+            int blRemoved = int.MaxValue,
+                txRemoved = int.MaxValue,
+                comparison = int.MaxValue;
+
+            for (int i = 0; i < txCopy.Count; i++)
             {
-                secondPhaseCount = 0;
+                blClone = new List<double>(blCopy);
+                txClone = new List<double>(txCopy);
 
-                for (int secondIterator = 0; secondIterator < txCopy.Count; secondIterator++)
+                txClone = txClone.Skip(i).ToList();
+
+                for (int j = blClone.Count; j > 0; j--)
                 {
-                    if (blCopy[firstIterator] <= txCopy[secondIterator])
+                    blClone = blClone.GetRange(0, j);
+
+                    var intersections = txClone.Where(
+                            value => value >= blClone.Min()
+                        );
+
+                    if (intersections.Count() == 0)
                     {
-                        secondPhaseCount++;
+                        if ((i + (blCopy.Count - j)) < comparison)
+                        {
+                            comparison = i + (blCopy.Count - j);
+
+                            blRemoved = (blCopy.Count - j);
+                            txRemoved = i;
+                        }
+                        break;
                     }
                 }
-
-                hold = firstPhaseCount + secondPhaseCount;
-
-                if (hold < ceiling)
-                {
-                    ceiling = firstPhaseCount + secondPhaseCount;
-                    blHold = firstPhaseCount;
-                    txHold = secondPhaseCount;
-                }
-
-                firstPhaseCount++;
             }
 
             return new OverlapOutputModel
             {
-                BaselineOverlaps = blHold,
-                TreatmentOverlaps = txHold
+                BaselineOverlaps = blCopy.Skip(blCopy.Count - blRemoved).ToList().Count,
+                TreatmentOverlaps = txCopy.Take(txRemoved).ToList().Count
             };
         }
 
@@ -810,8 +543,8 @@ namespace small_n_stats_WPF.Mathematics
         private double getMedian(List<double> arr)
         {
             int count = arr.Count();
-            int middleval = (int)System.Math.Floor((count - 1.0) / 2.0);
-            double median, low, high;
+            int middleval = (int) System.Math.Floor((count - 1.0) / 2.0);
+            double median;
 
             if (count % 2 == 1)
             {
@@ -819,8 +552,8 @@ namespace small_n_stats_WPF.Mathematics
             }
             else
             {
-                low = arr[middleval];
-                high = arr[middleval + 1];
+                double low = arr[middleval];
+                double high = arr[middleval + 1];
                 median = ((low + high) / 2);
             }
 

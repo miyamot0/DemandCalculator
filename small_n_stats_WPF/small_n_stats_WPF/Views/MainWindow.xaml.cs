@@ -74,7 +74,7 @@ namespace small_n_stats_WPF.Views
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
             saveFileDialog1.FileName = title;
-            saveFileDialog1.Filter = "Excel file (*.xls)|*.xls|All files (*.*)|*.*";
+            saveFileDialog1.Filter = "Excel file (*.xlsx)|*.xlsx|All files (*.*)|*.*";
 
             if (saveFileDialog1.ShowDialog() == true)
             {
@@ -100,7 +100,7 @@ namespace small_n_stats_WPF.Views
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
             saveFileDialog1.FileName = title;
-            saveFileDialog1.Filter = "Excel file (*.xls)|*.xls|All files (*.*)|*.*";
+            saveFileDialog1.Filter = "Excel file (*.xlsx)|*.xlsx|All files (*.*)|*.*";
 
             if (saveFileDialog1.ShowDialog() == true)
             {

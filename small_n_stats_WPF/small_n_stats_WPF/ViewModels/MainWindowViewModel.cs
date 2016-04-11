@@ -6,8 +6,10 @@
  */
 
 using small_n_stats_WPF.Interfaces;
+using small_n_stats_WPF.Mathematics;
 using small_n_stats_WPF.Utilities;
 using small_n_stats_WPF.Views;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -65,10 +67,6 @@ namespace small_n_stats_WPF.ViewModels
 
         public RelayCommand TestCommand { get; set; }
 
-        public static int DS_MIN = 8;
-        public static int DS_MAX = 72;
-        public static double DS_POW = 0.5;
-
         /* ^^^ ^^^ ^^^ */
 
         public MainWindowViewModel()
@@ -116,6 +114,16 @@ namespace small_n_stats_WPF.ViewModels
             SendMessageToOutput("Rich Parker, Kim Vannest and Ozgur Gonen of Single Case Research. Functionality modeled around earlier work using www.SingleCaseResearch.org online calculators.");
             SendMessageToOutput("");
             SendMessageToOutput("Respective licenses available under Information > Licenses.");
+            
+            List<double> xRange = new List<double> { 3, 5, 6, 4, 3, 5, 6, 7, 5, 6, 9 };
+            List<double> yRange = new List<double> { 4,4,6,7,8,6,5,8,9,9,9,9,9,9 };
+            SingleCaseMetrics mSingleCase = new SingleCaseMetrics();
+            mSingleCase.baselineArray = yRange;
+            mSingleCase.treatmentArray = xRange;
+
+            var output = mSingleCase.getIRD();
+
+
         }
 
         private void ViewClosed()
