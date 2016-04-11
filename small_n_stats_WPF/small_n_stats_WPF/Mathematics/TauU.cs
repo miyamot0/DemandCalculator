@@ -29,41 +29,6 @@ namespace small_n_stats_WPF.Mathematics
                 InterventionObservations = new List<double>();
         }
 
-        public void OutputMetrics()
-        {
-            List<double> blCopy = new List<double>(BaselineObservations);
-            List<double> txCopy = new List<double>(InterventionObservations);
-
-            int over = 0, under = 0, same = 0;
-
-            double comparer;
-
-            for (int i = 0; i < blCopy.Count; i++)
-            {
-                for (int j = 0; j < txCopy.Count; j++)
-                {
-                    comparer = txCopy[j] - blCopy[i];
-
-                    if (comparer > 0)
-                    {
-                        over++;
-                    }
-                    else if (comparer == 0 || (txCopy[j].ToString() == blCopy[i].ToString()))
-                    {
-                        /* Hackish comparison to permit more reliably floating point value comparisons */
-                        same++;
-                    }
-                    else
-                    {
-                        under++;
-                    }
-                }
-            }
-
-            double tau = ((double)over - (double)under) / (double)(blCopy.Count * txCopy.Count);
-            double variance = (double)(blCopy.Count * txCopy.Count) * (double)(blCopy.Count + txCopy.Count + 1) / 3.0;
-        }
-
         public double GetPValueFromUDistribution(double x, bool isTwoTailed)
         {
              /* ORIGINAL AUTHOR
@@ -114,22 +79,23 @@ namespace small_n_stats_WPF.Mathematics
             return p;
         }
 
-        public TauUModel BaselineTrend(List<double> phase1, List<double> phase2, bool lessBaselineTrend)
+        public TauUModel CalculateTauU(List<double> phase1, List<double> phase2, bool lessBaselineTrend)
         {
             List<double> blCopy = new List<double>(phase1);
             List<double> txCopy = new List<double>(phase2);
 
             var blNotTx = blCopy.Except(txCopy).ToList();
+            /* BlNotTx is LINQ except list.  If n = 0, both supplied are identical */
 
             if (blNotTx.Count < 1)
             {
-                /* BlNotTx is LINQ except list.  If n = 0, both supplied are identical */
                 // Both Phases supplied have same elements!
 
-                int pos = 0, neg = 0, ties = 0;
-                var pairs = 0;
-
-                var increment = 0;
+                int uU = 0, 
+                    uL = 0, 
+                    uT = 0,
+                    uPairs = 0,
+                    increment = 0;
 
                 for (var i = 0; i < blCopy.Count - 1; i++)
                 {
@@ -137,27 +103,26 @@ namespace small_n_stats_WPF.Mathematics
                     {
                         var diff = (txCopy[j] - blCopy[i]);
 
-                        if (diff == 0 || (txCopy[j].ToString() == blCopy[i].ToString()))
+                        if (diff > 0)
                         {
-                            /* Hackish workaround for odd floating point comparisons */
-                            ties++;
+                            uU++;
                         }
-                        else if (diff > 0)
+                        else if (diff < 0)
                         {
-                            pos++;
+                            uL++;
                         }
                         else
                         {
-                            neg++;
+                            uT++;
                         }
 
-                        pairs++;
+                        uPairs++;
                     }
 
                     increment++;
                 }
 
-                var S = pos - neg;
+                var S = uU - uL;
 
                 /* Variance as Defined by two-tailed Mann-Kendall test */
                 double Vars = blCopy.Count * (blCopy.Count - 1.0) * (2.0 * blCopy.Count + 5.0) / 18.0;
@@ -167,26 +132,26 @@ namespace small_n_stats_WPF.Mathematics
                     Reflective = true,
                     S = S,
                     N = blCopy.Count + txCopy.Count,
-                    Pairs = pairs,
-                    Ties = ties,
-                    TAU = (double)S / (double)pairs,
-                    TAUB = (S / (pairs * 1.0 - ties * 0.5)),
+                    Pairs = uPairs,
+                    Ties = uT,
+                    TAU = (double)S / (double)uPairs,
+                    TAUB = (S / (uPairs * 1.0 - uT * 0.5)),
                     VARs = Vars,
                     SD = System.Math.Sqrt(Vars),
-                    SDtau = (System.Math.Sqrt(Vars) / pairs),
-                    Z = ((S / (double)pairs) / (System.Math.Sqrt(Vars) / (double)pairs)),
-                    PValue = GetPValueFromUDistribution(System.Math.Abs(((S / (double)pairs) / (System.Math.Sqrt(Vars) / (double)pairs))), true),
-                    CI_85 = new double[] { ((double)S / (double)pairs - 1.44 * (System.Math.Sqrt(Vars) / (double)pairs)), ((double)S / (double)pairs + 1.44 * (System.Math.Sqrt(Vars) / (double)pairs)) },
-                    CI_90 = new double[] { ((double)S / (double)pairs - 1.645 * (System.Math.Sqrt(Vars) / (double)pairs)), ((double)S / (double)pairs + 1.645 * (System.Math.Sqrt(Vars) / (double)pairs)) },
-                    CI_95 = new double[] { ((double)S / (double)pairs - 1.96 * (System.Math.Sqrt(Vars) / (double)pairs)), ((double)S / (double)pairs + 1.96 * (System.Math.Sqrt(Vars) / (double)pairs)) }
+                    SDtau = (System.Math.Sqrt(Vars) / uPairs),
+                    Z = ((S / (double)uPairs) / (System.Math.Sqrt(Vars) / (double)uPairs)),
+                    PValue = GetPValueFromUDistribution(System.Math.Abs(((S / (double)uPairs) / (System.Math.Sqrt(Vars) / (double)uPairs))), true),
+                    CI_85 = new double[] { ((double)S / (double)uPairs - 1.44 * (System.Math.Sqrt(Vars) / (double)uPairs)), ((double)S / (double)uPairs + 1.44 * (System.Math.Sqrt(Vars) / (double)uPairs)) },
+                    CI_90 = new double[] { ((double)S / (double)uPairs - 1.645 * (System.Math.Sqrt(Vars) / (double)uPairs)), ((double)S / (double)uPairs + 1.645 * (System.Math.Sqrt(Vars) / (double)uPairs)) },
+                    CI_95 = new double[] { ((double)S / (double)uPairs - 1.96 * (System.Math.Sqrt(Vars) / (double)uPairs)), ((double)S / (double)uPairs + 1.96 * (System.Math.Sqrt(Vars) / (double)uPairs)) }
                 };
             }
             else
             {
-                var pos = 0;
-                var neg = 0;
-                var ties = 0;
-                var pairs = 0;
+                int uU = 0,
+                    uL = 0,
+                    uT = 0,
+                    uPairs = 0;
 
                 for (var i = 0; i < blCopy.Count; i++)
                 {
@@ -194,29 +159,30 @@ namespace small_n_stats_WPF.Mathematics
                     {
                         var diff = (txCopy[j] - blCopy[i]);
 
-                        if (diff == 0 || (txCopy[j].ToString() == blCopy[i].ToString()))
+                        if (diff > 0)
                         {
-                            ties++;
+                            uU++;
                         }
-                        else if (diff > 0)
+                        else if ( diff < 0)
                         {
-                            pos++;
+                            uL++;
                         }
                         else
                         {
-                            neg++;
+                            uT++;
                         }
 
-                        pairs++;
+                        uPairs++;
                     }
                 }
 
-                var S = pos - neg;
+                var S = uU - uL;
+
                 var Vars = blCopy.Count * txCopy.Count * (blCopy.Count + txCopy.Count + 1) / 3.0;
 
                 if (lessBaselineTrend)
                 {
-                    TauUModel mBl = BaselineTrend(phase1, phase1, false);
+                    TauUModel mBl = CalculateTauU(phase1, phase1, false);
                     S -= (int) mBl.S;
                 }
 
@@ -226,17 +192,17 @@ namespace small_n_stats_WPF.Mathematics
                     S = S,
                     N = blCopy.Count + txCopy.Count,
                     SD = System.Math.Sqrt(Vars),
-                    TAU = (double)S / (double)pairs,
-                    Pairs = pairs,
-                    Ties = ties,
-                    TAUB = (S / (pairs * 1.0 - ties * 0.5)),
+                    TAU = (double)S / (double)uPairs,
+                    Pairs = uPairs,
+                    Ties = uT,
+                    TAUB = (S / (uPairs * 1.0 - uT * 0.5)),
                     VARs = Vars,
-                    SDtau = (System.Math.Sqrt(Vars) / pairs),
-                    Z = ((S / (double)pairs) / (System.Math.Sqrt(Vars) / (double)pairs)),
-                    PValue = GetPValueFromUDistribution(System.Math.Abs(((S / (double)pairs) / (System.Math.Sqrt(Vars) / (double)pairs))), true),
-                    CI_85 = new double[] { ((double)S / (double)pairs - 1.44 * (System.Math.Sqrt(Vars) / (double)pairs)), ((double)S / (double)pairs + 1.44 * (System.Math.Sqrt(Vars) / (double)pairs)) },
-                    CI_90 = new double[] { ((double)S / (double)pairs - 1.645 * (System.Math.Sqrt(Vars) / (double)pairs)), ((double)S / (double)pairs + 1.645 * (System.Math.Sqrt(Vars) / (double)pairs)) },
-                    CI_95 = new double[] { ((double)S / (double)pairs - 1.96 * (System.Math.Sqrt(Vars) / (double)pairs)), ((double)S / (double)pairs + 1.96 * (System.Math.Sqrt(Vars) / (double)pairs)) }
+                    SDtau = (System.Math.Sqrt(Vars) / uPairs),
+                    Z = ((S / (double)uPairs) / (System.Math.Sqrt(Vars) / (double)uPairs)),
+                    PValue = GetPValueFromUDistribution(System.Math.Abs(((S / (double)uPairs) / (System.Math.Sqrt(Vars) / (double)uPairs))), true),
+                    CI_85 = new double[] { ((double)S / (double)uPairs - 1.44 * (System.Math.Sqrt(Vars) / (double)uPairs)), ((double)S / (double)uPairs + 1.44 * (System.Math.Sqrt(Vars) / (double)uPairs)) },
+                    CI_90 = new double[] { ((double)S / (double)uPairs - 1.645 * (System.Math.Sqrt(Vars) / (double)uPairs)), ((double)S / (double)uPairs + 1.645 * (System.Math.Sqrt(Vars) / (double)uPairs)) },
+                    CI_95 = new double[] { ((double)S / (double)uPairs - 1.96 * (System.Math.Sqrt(Vars) / (double)uPairs)), ((double)S / (double)uPairs + 1.96 * (System.Math.Sqrt(Vars) / (double)uPairs)) }
                 };
             }
         }

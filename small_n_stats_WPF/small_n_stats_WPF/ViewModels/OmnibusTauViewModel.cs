@@ -260,7 +260,7 @@ namespace small_n_stats_WPF.ViewModels
         private void CheckBaseline()
         {
             List<double> phase1 = mWindow.ParseRange(baselineRangeString);
-            TauUModel mTau = mTauMethods.BaselineTrend(phase1, phase1, false);
+            TauUModel mTau = mTauMethods.CalculateTauU(phase1, phase1, false);
             mTau.Name = "Baseline: " + baselineRangeString;
             mTau.Range = baselineRangeString;
             mTau.IsChecked = false;
@@ -291,7 +291,7 @@ namespace small_n_stats_WPF.ViewModels
                 return;
             }
 
-            TauUModel mTau = mTauMethods.BaselineTrend(phase1, phase2, CorrectBaseline);
+            TauUModel mTau = mTauMethods.CalculateTauU(phase1, phase2, CorrectBaseline);
 
             mTau.Name = "Name: " + tauName + " - {" + BaselineRangeString + "} and {" + InterventionRangeString + "} Corrected: " + CorrectBaseline;
             mTau.OutputName = tauName;
