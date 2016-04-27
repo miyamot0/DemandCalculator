@@ -122,9 +122,9 @@ namespace small_n_stats_WPF.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("200")]
-        public string NapTop {
+        public double NapTop {
             get {
-                return ((string)(this["NapTop"]));
+                return ((double)(this["NapTop"]));
             }
             set {
                 this["NapTop"] = value;
@@ -134,9 +134,9 @@ namespace small_n_stats_WPF.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("200")]
-        public string NapLeft {
+        public double NapLeft {
             get {
-                return ((string)(this["NapLeft"]));
+                return ((double)(this["NapLeft"]));
             }
             set {
                 this["NapLeft"] = value;
@@ -146,9 +146,9 @@ namespace small_n_stats_WPF.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("200")]
-        public string SenTop {
+        public double SenTop {
             get {
-                return ((string)(this["SenTop"]));
+                return ((double)(this["SenTop"]));
             }
             set {
                 this["SenTop"] = value;
@@ -158,12 +158,108 @@ namespace small_n_stats_WPF.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("200")]
-        public string SenLeft {
+        public double SenLeft {
             get {
-                return ((string)(this["SenLeft"]));
+                return ((double)(this["SenLeft"]));
             }
             set {
                 this["SenLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double BatchDiscountTop {
+            get {
+                return ((double)(this["BatchDiscountTop"]));
+            }
+            set {
+                this["BatchDiscountTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double BatchDiscountLeft {
+            get {
+                return ((double)(this["BatchDiscountLeft"]));
+            }
+            set {
+                this["BatchDiscountLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double EscalationTop {
+            get {
+                return ((double)(this["EscalationTop"]));
+            }
+            set {
+                this["EscalationTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double EscalationLeft {
+            get {
+                return ((double)(this["EscalationLeft"]));
+            }
+            set {
+                this["EscalationLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double DiscountTop {
+            get {
+                return ((double)(this["DiscountTop"]));
+            }
+            set {
+                this["DiscountTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double DiscountLeft {
+            get {
+                return ((double)(this["DiscountLeft"]));
+            }
+            set {
+                this["DiscountLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double DemandTop {
+            get {
+                return ((double)(this["DemandTop"]));
+            }
+            set {
+                this["DemandTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public double DemandLeft {
+            get {
+                return ((double)(this["DemandLeft"]));
+            }
+            set {
+                this["DemandLeft"] = value;
             }
         }
     }

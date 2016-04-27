@@ -17,27 +17,24 @@
 
 */
 
-using small_n_stats_WPF.ViewModels;
-using small_n_stats_WPF.Views;
-using System.Windows;
-
-namespace small_n_stats_WPF
+namespace small_n_stats_WPF.Mathematics
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    class DemandFunctionSolvers
     {
-        protected override void OnStartup(StartupEventArgs e)
+        /// <summary>
+        /// Hursh & Silverburg's exponetial function is called from resources here (as string), for use in R function calls
+        /// </summary>
+        public static string GetExponentialDemandFunction()
         {
-            base.OnStartup(e);
-            MainWindow window = new MainWindow();
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            window.DataContext = new MainWindowViewModel()
-            {
-                MainWindow = window,
-            };
-            window.Show();
+            return Properties.Resources.ExponentialDemandFunctions;
+        }
+
+        /// <summary>
+        /// Koffarnus' exponentiated function is called from resources here (as string), for use in R function calls
+        /// </summary>
+        public static string GetExponentiatedDemandFunction()
+        {
+            return Properties.Resources.ExponentiatedDemandFunctions;
         }
     }
 }

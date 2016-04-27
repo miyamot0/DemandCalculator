@@ -4,16 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:small_n_stats_WPF"
-        xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"    
-        xmlns:ReoGrid="clr-namespace:unvell.ReoGrid;assembly=unvell.ReoGrid" 
+        xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"
+        xmlns:custom="clr-namespace:small_n_stats_WPF.Utilities"
+        xmlns:bx="clr-namespace:small_n_stats_WPF.Behaviors"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
-        Title="Small n Stats - New File" 
+        Title="{Binding Title}" 
         Height="{Binding Source={x:Static settings:Settings.Default}, Path=MainHeight, Mode=TwoWay}"
         Width="{Binding Source={x:Static settings:Settings.Default}, Path=MainWidth, Mode=TwoWay}"
         Top="{Binding Source={x:Static settings:Settings.Default}, Path=MainTop, Mode=TwoWay}" 
         Left="{Binding Source={x:Static settings:Settings.Default}, Path=MainLeft, Mode=TwoWay}">
-    
+
+    <i:Interaction.Behaviors>
+        <bx:ShutDownBehavior ShuttingDownFlag="{Binding ShuttingDown}" />
+    </i:Interaction.Behaviors>
+
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding ViewLoadedCommand}"/>
@@ -83,60 +88,36 @@
                     </MenuItem>
                 </MenuItem>
 
-                <MenuItem Header="_Analyses">
-                    <MenuItem Header="_General Overlap Indices">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/applications-other.png" />
-                        </MenuItem.Icon>
-                        <MenuItem Header="_Non-Overlap Calculations" 
-                                  Command="{Binding NonOverlapWindowCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Images/applications-science.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
-                    <MenuItem Header="_Area-based Overlap Indices">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/applications-other.png" />
-                        </MenuItem.Icon>
-                        <MenuItem Header="_NAP/ROC Module" Name="nap" 
-                                  Command="{Binding NAPWindowCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Images/applications-science.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="_Tau-U (Single and Omnibus)" 
-                                  Command="{Binding OmnibusTauWindowCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Images/applications-science.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
-                    <MenuItem Header="_Parametric Measures">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/applications-other.png" />
-                        </MenuItem.Icon>
-                        <MenuItem Header="_Theil-Sen Slope Difference" 
-                                  Command="{Binding TheilSenWindowCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Images/applications-science.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
+                <MenuItem Header="_Modeling">
 
+                    <MenuItem Header="Demand Analysis">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/applications-other.png" />
+                        </MenuItem.Icon>
+                        <MenuItem Header="_Demand Curve Fitting (Exponential)" 
+                              Command="{Binding DemandCurveWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/applications-science.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="_Batch Demand Curve Fitting (Exponential)" 
+                              Command="{Binding BatchDemandCurveWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/applications-science.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
                 </MenuItem>
-
+                
                 <MenuItem Header="_Logs">
                     <MenuItem Header="_Save Log Output" 
-                              x:Name="saveLogs" 
-                              Click="saveLogs_Click">
+                              Command="{Binding SaveLogsWindowCommand}">
                         <MenuItem.Icon>
                             <Image Source="/Images/edit-copy.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="_Clear Logs" 
-                              x:Name="clearLogs" 
-                              Click="clearLogs_Click">
+                              Command="{Binding ClearLogsWindowCommand}">
                         <MenuItem.Icon>
                             <Image Source="/Images/edit-clear.png" />
                         </MenuItem.Icon>
@@ -148,25 +129,51 @@
                         <MenuItem.Icon>
                             <Image Source="/Images/text-x-preview.png" />
                         </MenuItem.Icon>
-                        <MenuItem Header="Reogrid Spreadsheet License"
-                                  Command="{Binding ReogridLicenseWindowCommand}">
+                        
+                        <MenuItem Header="ggplot2 (GPL >= 2)"
+                                  Command="{Binding Ggplot2LicenseWindowCommand}">
                             <MenuItem.Icon>
                                 <Image Source="/Images/text-x-preview.png" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="GNOME Icon Theme"
+
+                        <MenuItem Header="GNOME Icon Theme (GPL >= 2)"
                                   Command="{Binding GnomeIconLicenseWindowCommand}">
                             <MenuItem.Icon>
                                 <Image Source="/Images/text-x-preview.png" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Ben Tilly's U Distribution License"
-                                  Command="{Binding TillyLicenseWindowCommand}">
+
+                        <MenuItem Header="nlmrt (GPL >= 2)"
+                                  Command="{Binding NlmrtLicenseWindowCommand}">
                             <MenuItem.Icon>
                                 <Image Source="/Images/text-x-preview.png" />
                             </MenuItem.Icon>
                         </MenuItem>
+
+                        <MenuItem Header="nlstools (GPL >= 2)"
+                                  Command="{Binding NlstoolsLicenseWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/text-x-preview.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Header="R.NET Community (BSD 2-Clause)"
+                                  Command="{Binding RLicenseWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/text-x-preview.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Header="Small n Stats (GPL 2)"
+                                  Command="{Binding LicenseWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/text-x-preview.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
                     </MenuItem>
+                    
                     <MenuItem Header="_Credits" 
                               x:Name="credits" 
                               Command="{Binding InformationWindowCommand}">
@@ -177,11 +184,59 @@
                 </MenuItem>
             </Menu>
 
-            <ReoGrid:ReoGridControl Name="spreadSheetView"
-                                    x:FieldModifier="public"
-                                    DockPanel.Dock="Left"
+            <custom:CustomDataGrid x:Name="dataGrid" 
                                     HorizontalAlignment="Stretch" 
-                                    VerticalAlignment="Stretch"/>
+                                    VerticalContentAlignment="Stretch"
+                                    SelectionUnit="Cell"
+                                    SelectionMode="Extended"
+                                    Grid.Row="0"
+                                    Grid.RowSpan="4"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="1"
+                                    CanUserReorderColumns="False"
+                                    CanUserSortColumns="False"
+                                    CanUserAddRows="True"
+                                    EnableRowVirtualization="False"
+                                    RowDetailsVisibilityMode="Visible"
+                                    ClipboardCopyMode="ExcludeHeader"
+                                    ItemsSource="{Binding RowViewModels}"
+                                    DisplayRowNumbers="True"
+                                    BorderThickness="0"
+                                    VerticalAlignment="Stretch">
+                <DataGrid.InputBindings>
+                    <KeyBinding Key="Delete" Command="{Binding DeleteSelectedCommand}" />
+                </DataGrid.InputBindings>
+
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="FontWeight"  Value="Bold" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="MinWidth" Value="100" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+
+                <DataGrid.RowHeaderStyle>
+                    <Style TargetType="{x:Type DataGridRowHeader}">
+                        <Setter Property="FontWeight"  Value="Bold" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="MinWidth" Value="25" />
+                    </Style>
+                </DataGrid.RowHeaderStyle>                
+                
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Setter Property="Background" Value="White"></Setter>
+                    </Style>
+                </DataGrid.CellStyle>
+
+                <DataGrid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                </DataGrid.Resources>
+            </custom:CustomDataGrid>
         </DockPanel>
 
         <ScrollViewer HorizontalScrollBarVisibility="Auto" 

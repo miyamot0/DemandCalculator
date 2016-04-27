@@ -27,8 +27,8 @@
                        RequestNavigate="Hyperlink_RequestNavigate">Small n Stats
                         </Hyperlink>
                     </Bold>,
-                    is part of a project developed and maintained by Shawn P. Gilroy and currently utilizes 
-                    several open source components.
+                    is part of a project developed and maintained by Shawn P. Gilroy and currently references
+                    several peer-reviewed works.
                 </Paragraph>
 
                 <Paragraph>
@@ -42,61 +42,24 @@
                 <List>
                     <ListItem>
                         <Paragraph>
-                            <Hyperlink NavigateUri="https://reogrid.net/license/" 
+                            <Hyperlink NavigateUri="http://psycnet.apa.org/psycinfo/2008-00265-008"
                                 RequestNavigate="Hyperlink_RequestNavigate">
-                                Reogrid (Spreadsheet Control).
+                                Hursh, S. R. and Silberberg, A. (2008).
                             </Hyperlink>
-                            Copyright (c) 2012-2015 unvell.com, 
-                                all rights reserved. BSD License for free (current) version.
+                            Economic demand and essential value. Psychological Review, 115, 186–198.
+
                             <LineBreak />
                         </Paragraph>
                     </ListItem>
 
                     <ListItem>
                         <Paragraph>
-                            <Hyperlink NavigateUri="http://www.singlecaseresearch.org/papers/ParkerVannest2009-The%20Improvement%20Rate%20Difference%20for%20Single%20Case%20Research.pdf"
+                            <Hyperlink NavigateUri="http://www.ncbi.nlm.nih.gov/pubmed/26280591"
                                 RequestNavigate="Hyperlink_RequestNavigate">
-                                Parker, R. I., Vannest, K. J. and Brown, L. (2009).
+                                Koffarnus, M. N., Franck, C. T., Stein, J. and Bickel, W. K. (2015).
                             </Hyperlink>
-                            The Improvement Rate Difference for 
-                                Single Case Research. Exceptional Children. 75:2, 135-150
-                            <LineBreak />
-                            <Hyperlink NavigateUri="http://www.singlecaseresearch.org/calculators/ird" 
-                                RequestNavigate="Hyperlink_RequestNavigate">
-                                Web tool.
-                            </Hyperlink>
-                            <LineBreak />
-                        </Paragraph>
-                    </ListItem>
-
-                    <ListItem>
-                        <Paragraph>
-                            <Hyperlink NavigateUri="http://tartarus.ed.utah.edu/users/robert.o'neill/SPED7020EDPS7410/readings/parkervannest2009.pdf"
-                                RequestNavigate="Hyperlink_RequestNavigate">
-                                Parker, R. I. and Vannest, K. J. (2009).
-                            </Hyperlink>
-                            An improved effect size for single case research: Non-overlap of all pairs (NAP). Behavior Therapy. 40(4), 357-367.
-                            <LineBreak />
-                            <Hyperlink NavigateUri="http://www.singlecaseresearch.org/calculators/nap" 
-                                RequestNavigate="Hyperlink_RequestNavigate">
-                                Web tool.
-                            </Hyperlink>
-                            <LineBreak />
-                        </Paragraph>
-                    </ListItem>
-
-                    <ListItem>
-                        <Paragraph>
-                            <Hyperlink NavigateUri="http://www.singlecaseresearch.org/papers/Tau%20-%20U%20-%20Behavior%20Therapy%20-%202011.pdf"
-                                RequestNavigate="Hyperlink_RequestNavigate">
-                                Parker, R.I., Vannest, K.J., Davis, J.L. and Sauber, S.B. (2010).
-                            </Hyperlink>
-                            Combining non-overlap and trend for single case research: Tau-U. Behavior Therapy. 42, 284–299.
-                            <LineBreak />
-                            <Hyperlink NavigateUri="http://www.singlecaseresearch.org/calculators/tau-u" 
-                                RequestNavigate="Hyperlink_RequestNavigate">
-                                Web tool.
-                            </Hyperlink>
+                            A modified exponential behavioral economic demand model to better describe consumption data. Experimental Clinical Psychopharmacology, 23, 504-512.
+                            
                             <LineBreak />
                         </Paragraph>
                     </ListItem>

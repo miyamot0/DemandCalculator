@@ -6,158 +6,39 @@
  */
 
 using Microsoft.Win32;
-using small_n_stats_WPF.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Documents;
-using unvell.ReoGrid.IO;
+using System.Windows.Input;
 
 namespace small_n_stats_WPF.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, SpreadsheetInterface
+    public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        public void GainFocus()
+        /// <summary>
+        ///  OutputEvents - Is passed a stirng value, subsequently passed to RichTextBox
+        /// </summary>
+        public void OutputEvents(string output)
         {
-            spreadSheetView.Focus();
+            Paragraph para = new Paragraph();
+            para.Inlines.Add(output);
+            outputWindow.Document.Blocks.Add(para);
+            outputWindow.ScrollToEnd();
+            Scroller.ScrollToEnd();
         }
 
-        public bool NewFile()
-        {
-            spreadSheetView.Reset();
-            Title = "Small n Stats - " + "New File";
-            return false;
-        }
-
-        public string[] OpenFile()
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.Filter = "XLSX Files|*.xlsx";
-            openFileDialog1.Title = "Select an Excel File";
-
-            if (openFileDialog1.ShowDialog() == true)
-            {
-                using (Stream myStream = openFileDialog1.OpenFile())
-                {
-                    spreadSheetView.Load(myStream, FileFormat.Excel2007);
-                    Title = "Small n Stats - " + openFileDialog1.SafeFileName;
-                }
-
-                return new string[] { openFileDialog1.SafeFileName, System.IO.Path.GetDirectoryName(openFileDialog1.FileName) };
-            }
-
-            return null;
-        }
-
-        public void SaveFile(string path, string title)
-        {
-            using (Stream myStream = new FileStream(System.IO.Path.Combine(path, title), FileMode.Create))
-            {
-                var workbook = spreadSheetView;
-                workbook.Save(myStream, FileFormat.Excel2007);
-                Title = "Small n Stats - " + title;
-            }
-        }
-
-        public string SaveFileWithDialog(string title)
-        {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-            saveFileDialog1.FileName = title;
-            saveFileDialog1.Filter = "Excel file (*.xlsx)|*.xlsx|All files (*.*)|*.*";
-
-            if (saveFileDialog1.ShowDialog() == true)
-            {
-                using (Stream myStream = saveFileDialog1.OpenFile())
-                {
-                    var workbook = spreadSheetView;
-                    workbook.Save(myStream, FileFormat.Excel2007);
-                    title = saveFileDialog1.SafeFileName;
-                    Title = "Small n Stats - " + saveFileDialog1.SafeFileName;
-                }
-
-                return saveFileDialog1.SafeFileName;
-            }
-            else
-            {
-                return null;
-            }
-
-        }
-
-        public string SaveFileAs(string title)
-        {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-            saveFileDialog1.FileName = title;
-            saveFileDialog1.Filter = "Excel file (*.xlsx)|*.xlsx|All files (*.*)|*.*";
-
-            if (saveFileDialog1.ShowDialog() == true)
-            {
-                using (Stream myStream = saveFileDialog1.OpenFile())
-                {
-                    var workbook = spreadSheetView;
-                    workbook.Save(myStream, FileFormat.Excel2007);
-                    title = saveFileDialog1.SafeFileName;
-                    Title = "Small n Stats - " + saveFileDialog1.SafeFileName;
-                }
-
-                return title;
-            }
-            else
-            {
-                return null;
-            }
-
-        }
-
-        public void ShutDown()
-        {
-            Close();
-        }
-
-        public void UpdateTitle(string _title)
-        {
-            Title = "Small n Stats - " + _title;
-        }
-
-        public List<double> ParseRange(string range)
-        {
-            List<double> mReturned = new List<double>();
-
-            try
-            {
-                var rangeReturned = spreadSheetView.Worksheets[0].Ranges[range];
-
-                spreadSheetView.Worksheets[0].IterateCells(rangeReturned, (row, col, cell) =>
-                {
-                    double num;
-                    if (double.TryParse(cell.Data.ToString(), out num))
-                    {
-                        mReturned.Add(num);
-                    }
-                    return true;
-                });
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-
-            return mReturned;
-        }
-
-        private void saveLogs_Click(object sender, System.Windows.RoutedEventArgs e)
+        /// <summary>
+        ///  SaveLogsEvent - Save contents of RichTextBox to .txt file
+        /// </summary>
+        public void SaveLogs()
         {
             SaveFileDialog sd = new SaveFileDialog();
             sd.FileName = "Logs";
@@ -173,9 +54,39 @@ namespace small_n_stats_WPF.Views
             }
         }
 
-        private void clearLogs_Click(object sender, System.Windows.RoutedEventArgs e)
+        /// <summary>
+        ///  ClearLogsEvent - Clear contents of RichTextBox
+        /// </summary>
+        public void ClearLogs()
         {
             outputWindow.Document.Blocks.Clear();
+        }
+
+        private void PART_CLOSE_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void PART_MINIMIZE_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = System.Windows.WindowState.Minimized;
+        }
+
+        private void PART_MAXIMIZE_RESTORE_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == System.Windows.WindowState.Normal)
+            {
+                this.WindowState = System.Windows.WindowState.Maximized;
+            }
+            else
+            {
+                this.WindowState = System.Windows.WindowState.Normal;
+            }
+        }
+
+        private void PART_TITLEBAR_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
         }
     }
 }

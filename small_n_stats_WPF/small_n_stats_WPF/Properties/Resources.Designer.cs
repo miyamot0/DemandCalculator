@@ -61,18 +61,150 @@ namespace small_n_stats_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This work is licenced under the Creative Commons Attribution-Share Alike 3.0
-        ///United States License. To view a copy of this licence, visit
-        ///http://creativecommons.org/licenses/by-sa/3.0/ or send a letter to Creative
-        ///Commons, 171 Second Street, Suite 300, San Francisco, California 94105, USA.
-        ///
-        ///When attributing the artwork, using &quot;GNOME Project&quot; is enough. 
-        ///Please link to http://www.gnome.org where available.
-        ///.
+        ///   Looks up a localized string similar to # 
+        ///#    Copyright 2016 Shawn Gilroy
+        ///#
+        ///#    This file is part of Small N Stats.
+        ///#
+        ///#    Small N Stats is free software: you can redistribute it and/or modify
+        ///#    it under the terms of the GNU General Public License as published by
+        ///#    the Free Software Foundation, version 2.
+        ///#
+        ///#    Small N Stats is distributed in the hope that it will be useful,
+        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///#    GNU General  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string COPYING_CCBYSA3 {
+        internal static string ExponentialDemandFunctions {
             get {
-                return ResourceManager.GetString("COPYING_CCBYSA3", resourceCulture);
+                return ResourceManager.GetString("ExponentialDemandFunctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # 
+        ///#    Copyright 2016 Shawn Gilroy
+        ///#
+        ///#    This file is part of Small N Stats.
+        ///#
+        ///#    Small N Stats is free software: you can redistribute it and/or modify
+        ///#    it under the terms of the GNU General Public License as published by
+        ///#    the Free Software Foundation, version 2.
+        ///#
+        ///#    Small N Stats is distributed in the hope that it will be useful,
+        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///#    GNU General  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ExponentiatedDemandFunctions {
+            get {
+                return ResourceManager.GetString("ExponentiatedDemandFunctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copyright 2016 Shawn Gilroy
+        ///
+        ///This file is part of Small N Stats.
+        ///
+        ///Small N Stats is free software: you can redistribute it and/or modify
+        ///it under the terms of the GNU General Public License as published by
+        ///the Free Software Foundation, version 2.
+        ///
+        ///Small N Stats is distributed in the hope that it will be useful,
+        ///but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///GNU General Public License for more details.
+        ///
+        ///You should have  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string LICENSE {
+            get {
+                return ResourceManager.GetString("LICENSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 		    GNU GENERAL PUBLIC LICENSE
+        ///		       Version 2, June 1991
+        ///
+        /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+        ///                       51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+        /// Everyone is permitted to copy and distribute verbatim copies
+        /// of this license document, but changing it is not allowed.
+        ///
+        ///			    Preamble
+        ///
+        ///  The licenses for most software are designed to take away your
+        ///freedom to share and change it.  By contrast, the GNU General Public
+        ///License is intended to guar [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string License_ggplot2 {
+            get {
+                return ResourceManager.GetString("License_ggplot2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 		    GNU GENERAL PUBLIC LICENSE
+        ///		       Version 2, June 1991
+        ///
+        /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+        ///                       51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+        /// Everyone is permitted to copy and distribute verbatim copies
+        /// of this license document, but changing it is not allowed.
+        ///
+        ///			    Preamble
+        ///
+        ///  The licenses for most software are designed to take away your
+        ///freedom to share and change it.  By contrast, the GNU General Public
+        ///License is intended to guar [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string License_GNOME_icons {
+            get {
+                return ResourceManager.GetString("License_GNOME_icons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 		    GNU GENERAL PUBLIC LICENSE
+        ///		       Version 2, June 1991
+        ///
+        /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+        ///                       51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+        /// Everyone is permitted to copy and distribute verbatim copies
+        /// of this license document, but changing it is not allowed.
+        ///
+        ///			    Preamble
+        ///
+        ///  The licenses for most software are designed to take away your
+        ///freedom to share and change it.  By contrast, the GNU General Public
+        ///License is intended to guar [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string License_nlmrt {
+            get {
+                return ResourceManager.GetString("License_nlmrt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 		    GNU GENERAL PUBLIC LICENSE
+        ///		       Version 2, June 1991
+        ///
+        /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+        ///                       51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+        /// Everyone is permitted to copy and distribute verbatim copies
+        /// of this license document, but changing it is not allowed.
+        ///
+        ///			    Preamble
+        ///
+        ///  The licenses for most software are designed to take away your
+        ///freedom to share and change it.  By contrast, the GNU General Public
+        ///License is intended to guar [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string License_nlstools {
+            get {
+                return ResourceManager.GetString("License_nlstools", resourceCulture);
             }
         }
         
@@ -91,26 +223,26 @@ namespace small_n_stats_WPF.Properties {
         ///freedom to share and change it.  By contrast, the GNU General Public
         ///License is intended to guara [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string License_Ben_Tilly {
+        internal static string License_R {
             get {
-                return ResourceManager.GetString("License_Ben_Tilly", resourceCulture);
+                return ResourceManager.GetString("License_R", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ReoGrid - .NET Spreadsheet Control
-        ///https://reogrid.net/
+        ///   Looks up a localized string similar to New BSD License (BSD)
+        ///Copyright (c) 2010, RecycleBin
+        ///All rights reserved.
         ///
-        ///This code and information is provided &quot;as is&quot; without warranty of any
-        ///kind, either expressed or implied, including but not limited to the
-        ///implied warranties of merchantability and/or fitness for a particular
-        ///purpose.
+        ///Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
         ///
-        ///Copyright (c) 2012-2015 unvell.com, all rights reserved..
+        ///* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+        ///
+        ///* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string License_ReogridSpreadsheet {
+        internal static string License_RdotNet {
             get {
-                return ResourceManager.GetString("License_ReogridSpreadsheet", resourceCulture);
+                return ResourceManager.GetString("License_RdotNet", resourceCulture);
             }
         }
         

@@ -1,0 +1,148 @@
+﻿<Window x:Class="small_n_stats_WPF.Views.BatchDemandCurveWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:small_n_stats_WPF.Views"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        mc:Ignorable="d"
+        Title="Batch Demand Curve Fitting" 
+        Height="425" 
+        Width="400"
+        ResizeMode="NoResize">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ViewLoadedCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ViewClosingCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock
+            x:Name="windowTitle"
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="4"
+            FontSize="18"
+            Text="Demand Curve Analysis"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+        </TextBlock>
+
+        <!-- Data Controls -->
+
+        <Button Name="timeButton" 
+                Grid.Row="1" 
+                Grid.Column="0"
+                Margin="10"
+                Content="Pricing"
+                Command="{Binding GetXRangeCommand}">
+        </Button>
+
+        <TextBox
+            Name="xRange"
+            Grid.Row="1" 
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            IsReadOnly="True"
+            Margin="10"
+            Text="{Binding XRangeValues}"
+            Background="{Binding Path=XBrush}">
+        </TextBox>
+
+        <Button Name="valueButton" 
+                Grid.Row="2" 
+                Grid.Column="0"
+                Margin="10"
+                Content="Consumption"
+                Command="{Binding GetYRangeCommand}">
+        </Button>
+
+        <TextBox
+            Name="yRange"
+            Grid.Row="2" 
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            IsReadOnly="True"
+            Margin="10"
+            Text="{Binding YRangeValues}"
+            Background="{Binding Path=YBrush}">
+        </TextBox>
+
+        <Label Grid.Row="3" 
+               Grid.Column="0"
+               Margin="10"
+               HorizontalAlignment="Center"
+               Content="K Scaling">
+        </Label>
+
+        <TextBox
+            Name="kValue"
+            Grid.Row="3" 
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            Margin="10"
+            Text="{Binding KValue}">
+        </TextBox>
+
+        <!-- Check Box Controls Left -->
+
+        <FlowDocumentScrollViewer
+            Grid.Column="0"
+            Grid.ColumnSpan="4"
+            Grid.Row="4"
+            Grid.RowSpan="3"
+            IsSelectionEnabled="False"
+            VerticalScrollBarVisibility="Hidden">
+            <FlowDocument>
+                <FlowDocument.Resources>
+                    <Style TargetType="{x:Type Paragraph}">
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Padding" Value="0"/>
+                    </Style>
+                </FlowDocument.Resources>
+                <Paragraph FontSize="12" FontFamily="Segoe UI">
+                    <Bold>Directions:</Bold>
+                </Paragraph>
+                <Paragraph FontSize="12" FontFamily="Segoe UI" Padding="0,5,0,0">
+                    The fitting of demand curves requires that users select a range of 
+                    Pricing Values (Vertical columns) that correspond with a range of 
+                    Consumption Values (Vertical columns).  Small n Stats can calculate
+                    both the Exponential Demand Function (Hursh &amp; Silverburg, 2008) 
+                    as well as the Exponentiated Demand Function (Koffarnus, Franck, Stein
+                    &amp; Bickel, 2015).  
+                </Paragraph>
+            </FlowDocument>
+        </FlowDocumentScrollViewer>        
+        
+        <Button Name="calculateButton" 
+                Grid.Row="7" 
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                Margin="10"
+                Content="Calculate"
+                Command="{Binding CalculateScoresCommand}">
+        </Button>
+    </Grid>
+</Window>

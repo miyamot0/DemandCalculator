@@ -17,27 +17,32 @@
 
 */
 
-using small_n_stats_WPF.ViewModels;
-using small_n_stats_WPF.Views;
-using System.Windows;
-
-namespace small_n_stats_WPF
+namespace small_n_stats_WPF.ViewModels
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    class LicenseViewModel : BaseViewModel
     {
-        protected override void OnStartup(StartupEventArgs e)
+        public string licenseTitle { get; set; }
+        public string LicenseTitle
         {
-            base.OnStartup(e);
-            MainWindow window = new MainWindow();
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            window.DataContext = new MainWindowViewModel()
+            get { return licenseTitle; }
+            set
             {
-                MainWindow = window,
-            };
-            window.Show();
+                licenseTitle = value;
+                OnPropertyChanged("LicenseTitle");
+            }
         }
+
+        public string licenseText { get; set; }
+        public string LicenseText
+        {
+            get { return licenseText; }
+            set
+            {
+                licenseText = value;
+                OnPropertyChanged("LicenseText");
+            }
+        }
+
+        public LicenseViewModel() { }
     }
 }

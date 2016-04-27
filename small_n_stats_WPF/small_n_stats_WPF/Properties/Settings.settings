@@ -26,16 +26,40 @@
     <Setting Name="NonOverlapLeft" Type="System.Double" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
-    <Setting Name="NapTop" Type="System.String" Scope="User">
+    <Setting Name="NapTop" Type="System.Double" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
-    <Setting Name="NapLeft" Type="System.String" Scope="User">
+    <Setting Name="NapLeft" Type="System.Double" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
-    <Setting Name="SenTop" Type="System.String" Scope="User">
+    <Setting Name="SenTop" Type="System.Double" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
-    <Setting Name="SenLeft" Type="System.String" Scope="User">
+    <Setting Name="SenLeft" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="BatchDiscountTop" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="BatchDiscountLeft" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="EscalationTop" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="EscalationLeft" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="DiscountTop" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="DiscountLeft" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="DemandTop" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="DemandLeft" Type="System.Double" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
   </Settings>

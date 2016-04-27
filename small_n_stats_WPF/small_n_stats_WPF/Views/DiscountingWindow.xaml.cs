@@ -17,27 +17,18 @@
 
 */
 
-using small_n_stats_WPF.ViewModels;
-using small_n_stats_WPF.Views;
 using System.Windows;
 
-namespace small_n_stats_WPF
+namespace small_n_stats_WPF.Views
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for DiscountingWindow.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class DiscountingWindow : Window
     {
-        protected override void OnStartup(StartupEventArgs e)
+        public DiscountingWindow()
         {
-            base.OnStartup(e);
-            MainWindow window = new MainWindow();
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            window.DataContext = new MainWindowViewModel()
-            {
-                MainWindow = window,
-            };
-            window.Show();
+            InitializeComponent();
         }
     }
 }

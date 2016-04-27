@@ -15,29 +15,20 @@
     You should have received a copy of the GNU General Public License
     along with Small N Stats.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
 
-*/
+ */
 
-using small_n_stats_WPF.ViewModels;
-using small_n_stats_WPF.Views;
 using System.Windows;
 
-namespace small_n_stats_WPF
+namespace small_n_stats_WPF.Views
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction logic for ResultsWindow.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class ResultsWindow : Window
     {
-        protected override void OnStartup(StartupEventArgs e)
+        public ResultsWindow()
         {
-            base.OnStartup(e);
-            MainWindow window = new MainWindow();
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            window.DataContext = new MainWindowViewModel()
-            {
-                MainWindow = window,
-            };
-            window.Show();
+            InitializeComponent();
         }
     }
 }

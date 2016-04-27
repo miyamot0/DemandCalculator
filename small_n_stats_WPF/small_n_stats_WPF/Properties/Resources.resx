@@ -118,16 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="COPYING_CCBYSA3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\COPYING_CCBYSA3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="License_ggplot2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\License_ggplot2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="License_Ben_Tilly" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\License_Ben_Tilly.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="License_GNOME_icons" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\License_GNOME_icons.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="License_ReogridSpreadsheet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\License_ReogridSpreadsheet.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="License_R" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\License_R.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="License_RdotNet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\License-RdotNet.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="SNS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SNS.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExponentialDemandFunctions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DemandFunctions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ExponentiatedDemandFunctions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExponentiatedDemandFunctions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="License_nlmrt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\License_nlmrt.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="License_nlstools" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\License_nlstools.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="LICENSE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LICENSE.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

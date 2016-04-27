@@ -1,14 +1,29 @@
-﻿/*
- * Shawn Gilroy, Copyright 2016. Licensed under GPL-2.
- * Small n Stats Application
- * Modeled from conceptual work developed by Richard Parker (non-parametric statistics in time series)
- * 
- */
+﻿/* 
+    Copyright 2016 Shawn Gilroy
 
-namespace small_n_stats_WPF.Utilities
+    This file is part of Small N Stats.
+
+    Small N Stats is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, version 2.
+
+    Small N Stats is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Small N Stats.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+
+*/
+
+namespace small_n_stats_WPF.Properties
 {
     internal sealed partial class Settings
     {
+        /// <summary>
+        /// Base settings access class
+        /// </summary>
         public Settings() { }
 
         private void SettingChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e) { }

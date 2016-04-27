@@ -1,0 +1,99 @@
+﻿<!--
+    Copyright 2016 Shawn Gilroy
+
+    This file is part of Small N Stats.
+
+    Small N Stats is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, version 2.
+
+    Small N Stats is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Small N Stats.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+-->
+
+<Window x:Class="small_n_stats_WPF.Views.ResultsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:small_n_stats_WPF.Views"
+        xmlns:custom="clr-namespace:small_n_stats_WPF.Utilities"
+        xmlns:bx="clr-namespace:small_n_stats_WPF.Behaviors"
+        mc:Ignorable="d"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        Title="ResultsWindow" 
+        Height="400" 
+        Width="400">
+
+    <i:Interaction.Behaviors>
+        <bx:ShutDownBehavior ShuttingDownFlag="{Binding ShuttingDown}" />
+    </i:Interaction.Behaviors>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <DockPanel 
+            Grid.Row="0"
+            Grid.RowSpan="3">
+
+            <Menu DockPanel.Dock="Top"
+				Margin="0,0,0,0">
+
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Save" 
+						x:Name="saveMenuItem" 
+						Command="{Binding FileSaveCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/document-save.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="_Close" 
+						x:Name="closeMenuItem" 
+						Command="{Binding FileCloseCommand}">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/application-exit.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+
+            <custom:CustomDataGrid x:Name="dataGrid" 
+                                    HorizontalAlignment="Stretch" 
+                                    VerticalContentAlignment="Stretch"
+                                    SelectionUnit="Cell"
+                                    SelectionMode="Extended"
+                                    Grid.Row="0"
+                                    Grid.RowSpan="4"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="1"
+                                    IsReadOnly="True"
+                                    EnableRowVirtualization="False"
+                                    RowDetailsVisibilityMode="Visible"
+                                    ClipboardCopyMode="ExcludeHeader"
+                                    ItemsSource="{Binding RowViewModels}"
+                                    DisplayRowNumbers="True"
+                                    BorderThickness="0"
+                                    VerticalAlignment="Stretch">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="FontWeight"  Value="Bold" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="MinWidth" Value="100" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+            </custom:CustomDataGrid>
+
+        </DockPanel>
+    </Grid>
+</Window>
