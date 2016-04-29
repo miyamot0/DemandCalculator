@@ -158,8 +158,15 @@
                             </MenuItem.Icon>
                         </MenuItem>
 
-                        <MenuItem Header="R.NET Community (BSD 2-Clause)"
+                        <MenuItem Header="R Statistical Package (GPL 2)"
                                   Command="{Binding RLicenseWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/text-x-preview.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Header="R.NET Community (BSD 2-Clause)"
+                                  Command="{Binding RDotNetLicenseWindowCommand}">
                             <MenuItem.Icon>
                                 <Image Source="/Images/text-x-preview.png" />
                             </MenuItem.Icon>

@@ -15,7 +15,7 @@
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <PublishUrl>ftp://ehub42.webhostinghub.com/public_html/effect_size_calculator/</PublishUrl>
+    <PublishUrl>ftp://ehub42.webhostinghub.com/public_html/demand_calculator/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -25,13 +25,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://www.smallnstats.com/effect_size_calculator/</InstallUrl>
-    <ProductName>Effect Size Calculator</ProductName>
+    <InstallUrl>http://www.smallnstats.com/demand_calculator/</InstallUrl>
+    <ProductName>Demand Calculator</ProductName>
     <PublisherName>Small N Stats</PublisherName>
-    <SuiteName>Single Case Effect Sizes</SuiteName>
+    <SuiteName>Small N Stats</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
-    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationRevision>10</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -201,6 +201,7 @@
     <None Include="Resources\License-RdotNet.txt" />
     <None Include="Resources\DemandFunctions.txt" />
     <None Include="Resources\ExponentiatedDemandFunctions.txt" />
+    <Content Include="Source\Small-N-Stats---Demand-Calculator-master.zip" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Utilities\ProgressBarDialog.xaml">
@@ -288,9 +289,7 @@
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\License_nlmrt.txt" />
   </ItemGroup>
