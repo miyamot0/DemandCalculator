@@ -104,6 +104,17 @@ namespace small_n_stats_WPF.ViewModels
 
         private double kValueDouble = 0;
 
+        private bool advancedMenu = false;
+        public bool AdvancedMenu
+        {
+            get { return advancedMenu; }
+            set
+            {
+                advancedMenu = value;
+                OnPropertyChanged("AdvancedMenu");
+            }
+        }
+
         private Brush xBrush = Brushes.White;
         public Brush XBrush
         {
@@ -123,6 +134,17 @@ namespace small_n_stats_WPF.ViewModels
             {
                 yBrush = value;
                 OnPropertyChanged("YBrush");
+            }
+        }
+
+        private string modelArraySelection;
+        public string ModelArraySelection
+        {
+            get { return modelArraySelection; }
+            set
+            {
+                modelArraySelection = value;
+                OnPropertyChanged("ModelArraySelection");
             }
         }
 
@@ -148,7 +170,9 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand ViewClosingCommand { get; set; }
         public RelayCommand GetXRangeCommand { get; set; }
         public RelayCommand GetYRangeCommand { get; set; }
+
         public RelayCommand CalculateScoresCommand { get; set; }
+        public RelayCommand AdvancedSettings { get; set; }
 
         public BatchDemandCurveExponentialViewModel()
         {
@@ -156,7 +180,11 @@ namespace small_n_stats_WPF.ViewModels
             ViewClosingCommand = new RelayCommand(param => ViewClosed(), param => true);
             GetXRangeCommand = new RelayCommand(param => GetXRange(), param => true);
             GetYRangeCommand = new RelayCommand(param => GetYRange(), param => true);
+
             CalculateScoresCommand = new RelayCommand(param => CalculateScores(), param => true);
+            AdvancedSettings = new RelayCommand(param => UpdateSettings(), param => true);
+
+            modelArraySelection = "Exponential";
         }
 
         private void ViewClosed()
@@ -201,6 +229,19 @@ namespace small_n_stats_WPF.ViewModels
             }
 
             DefaultFieldsToGray();
+
+        }
+
+        /// <summary>
+        /// Command-based update of UI logic in VM
+        /// </summary>
+        private void UpdateSettings()
+        {
+            if (!AdvancedMenu)
+            {
+                modelArraySelection = "Exponential";
+                AdvancedMenu = !AdvancedMenu;
+            }
 
         }
 
@@ -614,8 +655,14 @@ namespace small_n_stats_WPF.ViewModels
                     NumericVector kValues = engine.CreateNumericVector(kRange.ToArray());
                     engine.SetSymbol("kLoad", kValues);
 
-                    engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunction());
-
+                    if (modelArraySelection == "Exponential")
+                    {
+                        engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunction());
+                    }
+                    else if (modelArraySelection == "Exponentiated")
+                    {
+                        engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunction());
+                    }
 
                     if (mIndex == 0)
                     {
