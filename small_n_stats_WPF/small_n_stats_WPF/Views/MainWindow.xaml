@@ -94,13 +94,13 @@
                         <MenuItem.Icon>
                             <Image Source="/Images/applications-other.png" />
                         </MenuItem.Icon>
-                        <MenuItem Header="_Demand Curve Fitting (Exponential)" 
+                        <MenuItem Header="_Demand Curve Fitting" 
                               Command="{Binding DemandCurveWindowCommand}">
                             <MenuItem.Icon>
                                 <Image Source="/Images/applications-science.png" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="_Batch Demand Curve Fitting (Exponential)" 
+                        <MenuItem Header="_Batch Demand Curve Fitting" 
                               Command="{Binding BatchDemandCurveWindowCommand}">
                             <MenuItem.Icon>
                                 <Image Source="/Images/applications-science.png" />

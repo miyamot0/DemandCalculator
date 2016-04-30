@@ -31,7 +31,7 @@
     <SuiteName>Small N Stats</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
-    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationRevision>11</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -61,10 +61,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>FF46D46E27DA4AE8C65EA241E95F03DB63847B27</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>31E4A42AE9E52DE89D7CCB7DB74F32BAD82CF849</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>small_n_stats_WPF_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>small_n_stats_DEMAND_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>SNS.ico</ApplicationIcon>
@@ -132,6 +132,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ClipboardTools.cs" />
+    <Compile Include="Utilities\CustomConverter.cs" />
     <Compile Include="Utilities\CustomDataGrid.cs" />
     <Compile Include="Utilities\DataGridTools.cs" />
     <Compile Include="Utilities\OpenXMLHelper.cs" />
@@ -152,9 +153,6 @@
     </Compile>
     <Compile Include="Views\DemandCurveWindow.xaml.cs">
       <DependentUpon>DemandCurveWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\DiscountingWindow.xaml.cs">
-      <DependentUpon>DiscountingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\InformationWindow.xaml.cs">
       <DependentUpon>InformationWindow.xaml</DependentUpon>
@@ -194,6 +192,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="small_n_stats_DEMAND_TemporaryKey.pfx" />
     <None Include="small_n_stats_WPF_TemporaryKey.pfx" />
     <None Include="Resources\License_GNOME_icons.txt" />
     <None Include="Resources\License_ggplot2.txt" />
@@ -201,7 +200,9 @@
     <None Include="Resources\License-RdotNet.txt" />
     <None Include="Resources\DemandFunctions.txt" />
     <None Include="Resources\ExponentiatedDemandFunctions.txt" />
-    <Content Include="Source\Small-N-Stats---Demand-Calculator-master.zip" />
+    <Content Include="Source\Small-N-Stats---Demand-Calculator-master.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Utilities\ProgressBarDialog.xaml">
@@ -213,10 +214,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DemandCurveWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\DiscountingWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

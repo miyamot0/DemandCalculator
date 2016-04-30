@@ -356,6 +356,7 @@ namespace small_n_stats_WPF.ViewModels
                 SendMessageToOutput("");
                 SendMessageToOutput("");
             }
+
         }
 
         private void ViewClosed()
@@ -452,7 +453,7 @@ namespace small_n_stats_WPF.ViewModels
         {
             var mWin = new DemandCurveWindow();
             mWin.Owner = MainWindow;
-            mWin.windowTitle.Text = "Demand Curve Analysis (Exponential)";
+            mWin.windowTitle.Text = "Demand Curve Analysis";
             mWin.Topmost = true;
             mWin.DataContext = new DemandCurveExponentialViewModel
             {
@@ -466,7 +467,7 @@ namespace small_n_stats_WPF.ViewModels
         {
             var mWin = new BatchDemandCurveWindow();
             mWin.Owner = MainWindow;
-            mWin.windowTitle.Text = "Batch Demand Curve Analysis (Exponential)";
+            mWin.windowTitle.Text = "Batch Demand Curve Analysis";
             mWin.Topmost = true;
             mWin.DataContext = new BatchDemandCurveExponentialViewModel
             {

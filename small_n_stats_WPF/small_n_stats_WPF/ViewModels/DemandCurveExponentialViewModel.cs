@@ -23,6 +23,7 @@ using small_n_stats_WPF.Utilities;
 using small_n_stats_WPF.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -69,6 +70,17 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        private bool advancedMenu = false;
+        public bool AdvancedMenu
+        {
+            get { return advancedMenu; }
+            set
+            {
+                advancedMenu = value;
+                OnPropertyChanged("AdvancedMenu");
+            }
+        }
+
         private double kValueDouble = 0;
 
         private Brush xBrush = Brushes.White;
@@ -93,12 +105,24 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        private string modelArraySelection;
+        public string ModelArraySelection
+        {
+            get { return modelArraySelection; }
+            set
+            {
+                modelArraySelection = value;
+                OnPropertyChanged("ModelArraySelection");
+            }
+        }
+
         /* Math */
 
         REngine engine;
 
         private bool outputFigures = false;
-        private bool outputWorkbook = false;
+        private bool outputWorkbook = true;
+
         bool failed;
 
         int lowRowX = 0,
@@ -118,8 +142,9 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand GetXRangeCommand { get; set; }
         public RelayCommand GetYRangeCommand { get; set; }
         public RelayCommand CalculateScoresCommand { get; set; }
+
         public RelayCommand FigureOutput { get; set; }
-        public RelayCommand WorkbookOutput { get; set; }
+        public RelayCommand AdvancedSettings { get; set; }
 
         public DemandCurveExponentialViewModel()
         {
@@ -130,7 +155,9 @@ namespace small_n_stats_WPF.ViewModels
             CalculateScoresCommand = new RelayCommand(param => CalculateScores(), param => true);
 
             FigureOutput = new RelayCommand(param => UpdateFigureOutput(), param => true);
-            WorkbookOutput = new RelayCommand(param => UpdateWorkbookOutput(), param => true);
+            AdvancedSettings = new RelayCommand(param => UpdateSettings(), param => true);
+
+            modelArraySelection = "Exponential";
         }
 
         /// <summary>
@@ -144,9 +171,14 @@ namespace small_n_stats_WPF.ViewModels
         /// <summary>
         /// Command-based update of UI logic in VM
         /// </summary>
-        private void UpdateWorkbookOutput()
+        private void UpdateSettings()
         {
-            outputWorkbook = !outputWorkbook;
+            if (!AdvancedMenu)
+            {
+                modelArraySelection = "Exponential";
+                AdvancedMenu = !AdvancedMenu;
+            }
+
         }
 
         private void ViewClosed()
@@ -409,6 +441,16 @@ namespace small_n_stats_WPF.ViewModels
                 return;
             }
 
+            if (yRange == null)
+            {
+                System.Console.WriteLine("Null y");
+            }
+
+            if (xRange == null)
+            {
+                System.Console.WriteLine("Null x");
+            }
+
             mWindow.OutputEvents("---------------------------------------------------");
 
             engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
@@ -437,7 +479,14 @@ namespace small_n_stats_WPF.ViewModels
 
             try
             {
-                engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunction());
+                if (modelArraySelection == "Exponential")
+                {
+                    engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunction());
+                }
+                else if (modelArraySelection == "Exponentiated")
+                {
+                    engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunction());
+                }
 
                 var mWin = new ResultsWindow();
                 var mVM = new ResultsViewModel();

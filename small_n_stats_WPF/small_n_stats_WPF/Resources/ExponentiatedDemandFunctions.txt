@@ -60,8 +60,7 @@ for (i in 1:nSimulated)
   fitFrame[fitFrame$p==i,]$q0low <- confint2(fit)[1]
   fitFrame[fitFrame$p==i,]$q0high <- confint2(fit)[3]
   fitFrame[fitFrame$p==i,]$alow <- confint2(fit)[2]
-  fitFrame[fitFrame$p==i,]$ahigh <- confint2(fit)[4]
-  
+  fitFrame[fitFrame$p==i,]$ahigh <- confint2(fit)[4]  
 }
 
 xDraw <- seq(min(SourceFrame$x), max(SourceFrame$x), 0.01)
