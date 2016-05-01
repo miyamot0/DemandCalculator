@@ -91,6 +91,17 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        private string kRangeValues = "";
+        public string KRangeValues
+        {
+            get { return kRangeValues; }
+            set
+            {
+                kRangeValues = value;
+                OnPropertyChanged("KRangeValues");
+            }
+        }
+
         private string kValue = "";
         public string KValue
         {
@@ -137,6 +148,17 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        private Brush kBrush = Brushes.White;
+        public Brush KBrush
+        {
+            get { return kBrush; }
+            set
+            {
+                kBrush = value;
+                OnPropertyChanged("KBrush");
+            }
+        }
+
         private string modelArraySelection;
         public string ModelArraySelection
         {
@@ -164,12 +186,18 @@ namespace small_n_stats_WPF.ViewModels
             lowColY = 0,
             highColY = 0;
 
+        int lowRowK = 0,
+            highRowK = 0,
+            lowColK = 0,
+            highColK = 0;
+
         /* Commands */
 
         public RelayCommand ViewLoadedCommand { get; set; }
         public RelayCommand ViewClosingCommand { get; set; }
         public RelayCommand GetXRangeCommand { get; set; }
         public RelayCommand GetYRangeCommand { get; set; }
+        public RelayCommand GetKRangeCommand { get; set; }
 
         public RelayCommand CalculateScoresCommand { get; set; }
         public RelayCommand AdvancedSettings { get; set; }
@@ -180,6 +208,7 @@ namespace small_n_stats_WPF.ViewModels
             ViewClosingCommand = new RelayCommand(param => ViewClosed(), param => true);
             GetXRangeCommand = new RelayCommand(param => GetXRange(), param => true);
             GetYRangeCommand = new RelayCommand(param => GetYRange(), param => true);
+            GetKRangeCommand = new RelayCommand(param => GetKRange(), param => true);
 
             CalculateScoresCommand = new RelayCommand(param => CalculateScores(), param => true);
             AdvancedSettings = new RelayCommand(param => UpdateSettings(), param => true);
@@ -262,6 +291,74 @@ namespace small_n_stats_WPF.ViewModels
                 XBrush = Brushes.LightGray;
                 XRangeValues = string.Empty;
             }
+
+            if (KRangeValues.Length < 1 || KRangeValues.ToLower().Contains("spreadsheet"))
+            {
+                KBrush = Brushes.LightGray;
+                KRangeValues = string.Empty;
+            }
+        }
+
+        private void GetKRange()
+        {
+            DefaultFieldsToGray();
+
+            if (KRangeValues.Length > 0 && !KRangeValues.ToLower().Contains("spreadsheet"))
+            {
+                for (int i = lowRowK; i <= highRowK; i++)
+                {
+                    DataGridCell mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), lowColK);
+                    mCell.Background = Brushes.Transparent;
+                    mCell = null;
+                }
+            }
+
+            KBrush = Brushes.Yellow;
+            KRangeValues = "Select k values on spreadsheet";
+
+            mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_K;
+
+        }
+
+        private void DataGrid_PreviewMouseUp_K(object sender, MouseButtonEventArgs e)
+        {
+            List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
+
+            lowRowK = cells.Min(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
+            highRowK = cells.Max(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
+
+            lowColK = cells.Min(i => i.Column.DisplayIndex);
+            highColK = cells.Max(i => i.Column.DisplayIndex);
+
+            if ((highRowK - lowRowK) > 0)
+            {
+                DefaultFieldsToGray();
+
+                mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_K;
+
+                lowColK = -1;
+                lowRowK = -1;
+                highColK = -1;
+                highRowK = -1;
+                MessageBox.Show("Please select a single horizontal row.  You can have many columns, but just one row of them.");
+
+                return;
+            }
+
+            if (mWindow.dataGrid.SelectedCells.Count > 0)
+            {
+                foreach (System.Windows.Controls.DataGridCellInfo obj in mWindow.dataGrid.SelectedCells)
+                {
+                    ((DataGridCell)obj.Column.GetCellContent(obj.Item).Parent).Background = Brushes.LightSalmon;
+                }
+            }
+
+            mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_K;
+
+            KBrush = Brushes.LightSalmon;
+            KRangeValues = DataGridTools.GetColumnName(lowColK) + lowRowK.ToString() + ":" + DataGridTools.GetColumnName(highColK) + highRowK.ToString();
+
+            KValue = "";
         }
 
         private void GetXRange()
@@ -321,7 +418,7 @@ namespace small_n_stats_WPF.ViewModels
             mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_X;
 
             XBrush = Brushes.LightBlue;
-            XRangeValues = GetColumnName(lowColX) + lowRowX.ToString() + ":" + GetColumnName(highColX) + highRowX.ToString();
+            XRangeValues = DataGridTools.GetColumnName(lowColX) + lowRowX.ToString() + ":" + DataGridTools.GetColumnName(highColX) + highRowX.ToString();
         }
 
         private void GetYRange()
@@ -381,23 +478,7 @@ namespace small_n_stats_WPF.ViewModels
             mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_Y;
 
             YBrush = Brushes.LightGreen;
-            YRangeValues = GetColumnName(lowColY) + lowRowY.ToString() + ":" + GetColumnName(highColY) + highRowY.ToString();
-        }
-
-        private static string GetColumnName(int index)
-        {
-            string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-            var value = "";
-
-            if (index >= letters.Length)
-            {
-                value = value + letters[index / letters.Length - 1];
-            }
-
-            value = value + letters[index % letters.Length];
-
-            return value;
+            YRangeValues = DataGridTools.GetColumnName(lowColY) + lowRowY.ToString() + ":" + DataGridTools.GetColumnName(highColY) + highRowY.ToString();
         }
 
         private List<double> GetRangedValues(int startRow, int endRow, int column)
@@ -410,6 +491,30 @@ namespace small_n_stats_WPF.ViewModels
             for (int i = startRow; i <= endRow; i++)
             {
                 mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), column);
+
+                if (!Double.TryParse((((TextBlock)mCell.Content)).Text.ToString(), out test))
+                {
+                    return null;
+                }
+                else
+                {
+                    mRange.Add(test);
+                }
+            }
+
+            return mRange;
+        }
+
+        private List<double> GetRangedValuesHorizontal(int startCol, int endCol, int row)
+        {
+            List<double> mRange = new List<double>();
+
+            DataGridCell mCell;
+            double test;
+
+            for (int i = startCol; i <= endCol; i++)
+            {
+                mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, row), i);
 
                 if (!Double.TryParse((((TextBlock)mCell.Content)).Text.ToString(), out test))
                 {
@@ -548,16 +653,10 @@ namespace small_n_stats_WPF.ViewModels
         {
             if (failed) return;
 
+            bool customK = false;
+
             mWindow.OutputEvents("---------------------------------------------------");
             mWindow.OutputEvents("Checking user-supplied ranges and reference points.");
-
-            if (!double.TryParse(KValue, out kValueDouble))
-            {
-                mWindow.OutputEvents("Error in computing ranges, inputs must be equal in length.");
-                mWindow.OutputEvents("Scaling constant (k) was: " + kValueDouble);
-                MessageBox.Show("Hmm, check your ranges.  These don't seem paired up");
-                return;
-            }
             
             List<double> xRange = new List<double>();
             xRange = GetRangedValues(lowRowX, highRowX, lowColX);
@@ -598,6 +697,34 @@ namespace small_n_stats_WPF.ViewModels
                     xRangeShadow.Add(xRange[i]);
                 }
             }
+            
+            List<double> kRanges = GetRangedValuesHorizontal(lowColK, highColK, lowRowK);
+
+            if (kRanges != null && kRanges.Count() > 2)
+            {
+                customK = true;
+
+                foreach (double v in kRanges)
+                {
+                    System.Console.WriteLine("output: " + v.ToString());
+                }
+
+            }
+            else if ((kRanges.Count() != wholeRange.GetLength(1)))
+            {
+                mWindow.OutputEvents("Your custom k ranges don't match the # of columns. Column #=" + kRanges.Count() + "; Consumption Dim #=" + wholeRange.GetLength(1));
+                MessageBox.Show("Hmm, check your k range.  It doesn't seem paired up");
+                return;
+            }
+            else if (!double.TryParse(KValue, out kValueDouble) && (kValueDouble <= 0.0))
+            {
+                mWindow.OutputEvents("Error in computing ranges, inputs must be equal in length.");
+                mWindow.OutputEvents("Scaling constant (k) was: " + kValueDouble);
+                MessageBox.Show("Hmm, check your ranges.  These don't seem paired up");
+                return;
+            }
+
+
 
             mWindow.OutputEvents("All inputs passed verification.");
             mWindow.OutputEvents("---------------------------------------------------");
@@ -644,7 +771,15 @@ namespace small_n_stats_WPF.ViewModels
 
                     for (int i = 0; i < xRange.Count; i++)
                     {
-                        kRange.Add(kValueDouble);
+                        if (customK)
+                        {
+                            kRange.Add(kRanges[mIndex]);
+                        }
+                        else
+                        {
+                            kRange.Add(kValueDouble);
+                        }
+
                         pRange.Add(1);
                     }
 
@@ -689,7 +824,7 @@ namespace small_n_stats_WPF.ViewModels
                     }
 
                     mVM.RowViewModels[0].values[1 + mIndex] = "Series #" + (mIndex+1).ToString();
-                    mVM.RowViewModels[1].values[1 + mIndex] = kValueDouble.ToString();
+                    mVM.RowViewModels[1].values[1 + mIndex] = kRange.Min().ToString();
                     mVM.RowViewModels[3].values[1 + mIndex] = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0").AsVector().First().ToString();
                     mVM.RowViewModels[4].values[1 + mIndex] = engine.Evaluate("fitFrame[fitFrame$p==1,]$alpha").AsVector().First().ToString();
 

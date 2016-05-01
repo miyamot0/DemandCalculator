@@ -576,17 +576,6 @@ namespace small_n_stats_WPF.ViewModels
             {
                 Console.WriteLine(e.ToString());
             }
-
-
         }
-
-        /* Fields to be RED while picking ranges */
-
-        private void DefaultFieldsToWhite()
-        {
-            XBrush = Brushes.White;
-            YBrush = Brushes.White;
-        }
-
     }
 }

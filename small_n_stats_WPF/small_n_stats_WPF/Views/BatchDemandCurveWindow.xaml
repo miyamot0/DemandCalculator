@@ -8,7 +8,7 @@
         xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"
         mc:Ignorable="d"
         Title="Batch Demand Curve Fitting" 
-        Height="450"
+        Height="500"
         Top="{Binding Source={x:Static settings:Settings.Default}, 
                 Path=DemandTop, 
                 Mode=TwoWay}" 
@@ -105,6 +105,7 @@
                 Grid.ColumnSpan="3"
                 IsReadOnly="True"
                 Margin="10"
+                VerticalContentAlignment="Center"
                 Text="{Binding XRangeValues}"
                 Background="{Binding Path=XBrush}">
             </TextBox>
@@ -124,6 +125,7 @@
                 Grid.ColumnSpan="3"
                 IsReadOnly="True"
                 Margin="10"
+                VerticalContentAlignment="Center"
                 Text="{Binding YRangeValues}"
                 Background="{Binding Path=YBrush}">
             </TextBox>
@@ -141,6 +143,7 @@
                 Grid.Column="1"
                 Grid.ColumnSpan="3"
                 Margin="10"
+                VerticalContentAlignment="Center"
                 Text="{Binding KValue}">
             </TextBox>
 
@@ -237,8 +240,8 @@
             </Grid.Style>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+                <ColumnDefinition Width="50"></ColumnDefinition>
                 <ColumnDefinition Width="100"></ColumnDefinition>
                 <ColumnDefinition Width="100"></ColumnDefinition>
             </Grid.ColumnDefinitions>
@@ -265,11 +268,61 @@
                 VerticalAlignment="Center">
             </TextBlock>
 
+
+            <Button Name="kButton" 
+                    Grid.Row="1" 
+                    Grid.Column="0"
+                    Margin="25,10,25,10"
+                    Content="Set k Range"
+                    Command="{Binding GetKRangeCommand}">
+            </Button>
+
+            <TextBox
+                Name="kRange"
+                Grid.Row="1" 
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                IsReadOnly="True"
+                Margin="10"
+                VerticalContentAlignment="Center"
+                Text="{Binding KRangeValues}"
+                Background="{Binding Path=KBrush}">
+            </TextBox>
+
             <FlowDocumentScrollViewer
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
                 Grid.Row="2"
-                Grid.RowSpan="6"
+                Grid.RowSpan="2"
+                IsSelectionEnabled="False"
+                VerticalContentAlignment="Top"
+                VerticalScrollBarVisibility="Hidden">
+
+                <FlowDocument>
+                    <FlowDocument.Resources>
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="Padding" Value="0"/>
+                        </Style>
+                    </FlowDocument.Resources>
+                    <Paragraph FontSize="12" FontFamily="Segoe UI">
+                        <Bold>Individualize k values:</Bold>
+                    </Paragraph>
+                    <Paragraph 
+                        FontSize="12" 
+                        FontFamily="Segoe UI" 
+                        Padding="0,5,0,0">
+                        Small n Stats can calculate can incorporate individual k values for each analysis.  This
+                        is an alternative to selecting a single k value for all comparisons.
+                    </Paragraph>
+                </FlowDocument>
+            </FlowDocumentScrollViewer>
+
+            <FlowDocumentScrollViewer
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                Grid.Row="5"
+                Grid.RowSpan="4"
                 IsSelectionEnabled="False"
                 VerticalContentAlignment="Top"
                 VerticalScrollBarVisibility="Hidden">
@@ -314,7 +367,7 @@
             </FlowDocumentScrollViewer>
 
             <Label 
-               Grid.Row="1" 
+               Grid.Row="4" 
                Grid.Column="0"
                Margin="10"
                HorizontalAlignment="Center"
@@ -325,10 +378,11 @@
             <ComboBox Name="selectedModel"
                       SelectedValuePath="Content"
                       SelectedValue="{Binding ModelArraySelection}"
-                      Grid.Row="1" 
+                      Grid.Row="4" 
                       Grid.Column="1"
                       Grid.ColumnSpan="3"
                       Margin="10"
+                      VerticalContentAlignment="Center"
                       IsSynchronizedWithCurrentItem="True">
                 <ComboBoxItem IsSelected="True">Exponential</ComboBoxItem>
                 <ComboBoxItem>Exponentiated</ComboBoxItem>
