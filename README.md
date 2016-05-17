@@ -17,6 +17,7 @@ The Small N Stats Demand Calculator uses a number of open source projects to wor
 * nlmrt Package for R: Curve-fitting methods
 * nlstools: Bootstrapped confidence intervals
 * ggplot2 Package for R: Grammar of graphics charting methods
+* beezdemand Package for R
 
 
 ### Installation
