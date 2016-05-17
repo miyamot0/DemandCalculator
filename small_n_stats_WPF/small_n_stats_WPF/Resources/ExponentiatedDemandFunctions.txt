@@ -104,7 +104,7 @@ for (i in 1:nSimulated)
   ###
 
   fit <- NULL
-  try(fit <- wrapnls(data=SourceFrame[SourceFrame$p==i,], y ~ q0 * 10^(k * (exp(-alpha*q0*x)-1)), start=c(q0=3, alpha=0.000000001), control = list(maxiter = 1000)), silent=TRUE)
+  try(fit <- wrapnls(data=dataHolder, y ~ q0 * 10^(k * (exp(-alpha*q0*x)-1)), start=c(q0=3, alpha=0.000000001), control = list(maxiter = 1000)), silent=TRUE)
 
   if (!is.null(fit))
   {
@@ -120,6 +120,9 @@ for (i in 1:nSimulated)
 	  fitFrame[fitFrame$p==i,]$q0high <- confint2(fit)[3]
 	  fitFrame[fitFrame$p==i,]$alow <- confint2(fit)[2]
 	  fitFrame[fitFrame$p==i,]$ahigh <- confint2(fit)[4]  
+	  fitFrame[fitFrame$p==i,]$EV <- 1/(fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5) * 100)
+	  fitFrame[fitFrame$p==i,]$PmaxD <- 1/(fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5)) * (0.083 * fitFrame[fitFrame$p==i,]$k + 0.65)
+	  fitFrame[fitFrame$p==i,]$OmaxD <- (fitFrame[fitFrame$p==i,]$q0 * (10^(fitFrame[fitFrame$p==i,]$k * (exp(-fitFrame[fitFrame$p==i,]$alpha * fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$PmaxD) - 1)))) * * fitFrame[fitFrame$p==i,]$PmaxD
   }
 }
 
