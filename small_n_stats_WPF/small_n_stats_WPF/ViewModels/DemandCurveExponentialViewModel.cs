@@ -1,19 +1,49 @@
 ﻿/* 
     Copyright 2016 Shawn Gilroy
 
-    This file is part of Small N Stats.
+    This file is part of Demand Analysis.
 
-    Small N Stats is free software: you can redistribute it and/or modify
+    Demand Analysis is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, version 2.
 
-    Small N Stats is distributed in the hope that it will be useful,
+    Demand Analysis is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Small N Stats.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+    along with Demand Analysis.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+
+    ============================================================================
+
+    R.NET Community is distributed under this license:
+
+    Copyright (c) 2010, RecycleBin
+    Copyright (c) 2014-2015 CSIRO
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification, 
+    are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this list 
+    of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above copyright notice, this 
+    list of conditions and the following disclaimer in the documentation and/or other 
+    materials provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+    IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+    INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+    NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+    WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+    OF SUCH DAMAGE.
 
 */
 
@@ -121,7 +151,6 @@ namespace small_n_stats_WPF.ViewModels
         REngine engine;
 
         private bool outputFigures = false;
-        private bool outputWorkbook = true;
 
         bool failed;
 
@@ -146,6 +175,12 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand FigureOutput { get; set; }
         public RelayCommand AdvancedSettings { get; set; }
 
+        public RelayCommand ConsumptionRangeCommand { get; set; }
+        public RelayCommand PricingRangeCommand { get; set; }
+
+        /// <summary>
+        /// Public constructor
+        /// </summary>
         public DemandCurveExponentialViewModel()
         {
             ViewLoadedCommand = new RelayCommand(param => ViewLoaded(), param => true);
@@ -157,7 +192,108 @@ namespace small_n_stats_WPF.ViewModels
             FigureOutput = new RelayCommand(param => UpdateFigureOutput(), param => true);
             AdvancedSettings = new RelayCommand(param => UpdateSettings(), param => true);
 
+            ConsumptionRangeCommand = new RelayCommand(param => UpdateConsumptionRange(), param => true);
+            PricingRangeCommand = new RelayCommand(param => UpdatePricingRange(), param => true);
+
             modelArraySelection = "Exponential";
+        }
+
+        /// <summary>
+        /// Query user for a range
+        /// </summary>
+        private void UpdatePricingRange()
+        {
+            var mWin = new RangePrompt();
+            mWin.Topmost = true;
+            mWin.Owner = windowRef;
+            mWin.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            if (mWin.ShowDialog() == true)
+            {
+                string[] addresses = mWin.ResponseText.Split(':');
+
+                if (addresses.Length != 2) return;
+
+                var firstChars = new String(addresses[0].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
+                var firstNums = new String(addresses[0].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
+
+                var secondChars = new String(addresses[1].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
+                var secondNums = new String(addresses[1].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
+
+                int fNum, sNum;
+
+                if (int.TryParse(firstNums, out fNum) && int.TryParse(secondNums, out sNum) && firstChars.Length > 0 && secondChars.Length > 0)
+                {
+                    if ((sNum - fNum) == 0)
+                    {
+                        XBrush = Brushes.LightBlue;
+                        XRangeValues = firstChars + firstNums + ":" + secondChars + secondNums;
+
+                        lowColX = DataGridTools.GetColumnIndex(firstChars);
+                        highColX = DataGridTools.GetColumnIndex(secondChars);
+
+                        lowRowX = fNum;
+                        highRowX = sNum;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please ensure that only a single row is selected");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Parse error!");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Query user for a range
+        /// </summary>
+        private void UpdateConsumptionRange()
+        {
+            var mWin = new RangePrompt();
+            mWin.Topmost = true;
+            mWin.Owner = windowRef;
+            mWin.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            if (mWin.ShowDialog() == true)
+            {
+                string[] addresses = mWin.ResponseText.Split(':');
+
+                if (addresses.Length != 2) return;
+
+                var firstChars = new String(addresses[0].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
+                var firstNums = new String(addresses[0].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
+
+                var secondChars = new String(addresses[1].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
+                var secondNums = new String(addresses[1].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
+
+                int fNum, sNum;
+
+                if (int.TryParse(firstNums, out fNum) && int.TryParse(secondNums, out sNum) && firstChars.Length > 0 && secondChars.Length > 0)
+                {
+                    if ((sNum - fNum) == 0)
+                    {
+                        YBrush = Brushes.LightBlue;
+                        YRangeValues = firstChars + firstNums + ":" + secondChars + secondNums;
+
+                        lowColY = DataGridTools.GetColumnIndex(firstChars);
+                        highColY = DataGridTools.GetColumnIndex(secondChars);
+
+                        lowRowY = fNum;
+                        highRowY = sNum;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please ensure that only a single row is selected");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Parse error!");
+                }
+            }
         }
 
         /// <summary>
@@ -181,11 +317,19 @@ namespace small_n_stats_WPF.ViewModels
 
         }
 
+        /// <summary>
+        /// Command-based update of UI logic during close.
+        /// Will retain window position in Settings.settings
+        /// </summary>
         private void ViewClosed()
         {
             Properties.Settings.Default.Save();
         }
 
+        /// <summary>
+        /// Command-based update of UI logic during open.
+        /// Will re-check for R interactivity
+        /// </summary>
         private void ViewLoaded()
         {
             mWindow.OutputEvents("---------------------------------------------------");
@@ -245,38 +389,52 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Successful (or failing) selections result in a range string in respective text fields for later parsing.
+        /// </summary>
         private void GetXRange()
         {
             DefaultFieldsToGray();
 
-            if (XRangeValues.Length > 0 && !XRangeValues.ToLower().Contains("spreadsheet"))
-            {
-                for (int i = lowRowX; i <= highRowX; i++)
-                {
-                    DataGridCell mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), lowColX);
-                    mCell.Background = Brushes.Transparent;
-                    mCell = null;
-                }
-            }
-
             XBrush = Brushes.Yellow;
-            XRangeValues = "Select delays on spreadsheet";
+            XRangeValues = "Select pricing data on spreadsheet";
 
             mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_X;
 
         }
 
+        /// <summary>
+        /// Linq companion for referencing object's location in collection.
+        /// </summary>
+        /// <param name="model">
+        /// Individual row model reference
+        /// </param>
+        /// <param name="coll">
+        /// Collection overall
+        /// </param>
+        /// <returns>
+        /// int-based index
+        /// </returns>
+        private int GetIndexViewModel(RowViewModel model, ObservableCollection<RowViewModel> coll)
+        {
+            return coll.IndexOf(model);
+        }
+
+        /// <summary>
+        /// Delegate after highlighting takes place on datagrid (call back specific to values).
+        /// </summary>
         private void DataGrid_PreviewMouseUp_X(object sender, MouseButtonEventArgs e)
         {
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
 
-            lowRowX = cells.Min(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
-            highRowX = cells.Max(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
+            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+            lowRowX = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
+            highRowX = cells.Max(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
 
             lowColX = cells.Min(i => i.Column.DisplayIndex);
             highColX = cells.Max(i => i.Column.DisplayIndex);
 
-            if ((highColX - lowColX) > 0)
+            if ((highRowX - lowRowX) > 0)
             {
                 DefaultFieldsToGray();
 
@@ -286,17 +444,9 @@ namespace small_n_stats_WPF.ViewModels
                 lowRowX = -1;
                 highColX = -1;
                 highRowX = -1;
-                MessageBox.Show("Please select a single vertical column.  You can have many rows, but just one column of them.");
+                MessageBox.Show("Please select a single horizontal row (increasing, from left to right).  You can have many columns, but just one row.");
 
                 return;
-            }
-
-            if (mWindow.dataGrid.SelectedCells.Count > 0)
-            {
-                foreach (System.Windows.Controls.DataGridCellInfo obj in mWindow.dataGrid.SelectedCells)
-                {
-                    ((DataGridCell)obj.Column.GetCellContent(obj.Item).Parent).Background = Brushes.LightBlue;
-                }
             }
 
             mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_X;
@@ -305,38 +455,35 @@ namespace small_n_stats_WPF.ViewModels
             XRangeValues = DataGridTools.GetColumnName(lowColX) + lowRowX.ToString() + ":" + DataGridTools.GetColumnName(highColX) + highRowX.ToString();
         }
 
+        /// <summary>
+        /// Successful (or failing) selections result in a range string in respective text fields for later parsing.
+        /// </summary>
         private void GetYRange()
         {
             DefaultFieldsToGray();
 
-            if (YRangeValues.Length > 0 && !YRangeValues.ToLower().Contains("spreadsheet"))
-            {
-                for (int i = lowRowY; i <= highRowY; i++)
-                {
-                    DataGridCell mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), lowColY);
-                    mCell.Background = Brushes.Transparent;
-                    mCell = null;
-                }
-            }
-
             YBrush = Brushes.Yellow;
-            YRangeValues = "Select values on spreadsheet";
+            YRangeValues = "Select consumption data on spreadsheet";
 
             mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_Y;
 
         }
 
+        /// <summary>
+        /// Delegate after highlighting takes place on datagrid (call back specific to values).
+        /// </summary>
         private void DataGrid_PreviewMouseUp_Y(object sender, MouseButtonEventArgs e)
         {
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
 
-            lowRowY = cells.Min(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
-            highRowY = cells.Max(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
+            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+            lowRowY = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
+            highRowY = cells.Max(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
 
             lowColY = cells.Min(i => i.Column.DisplayIndex);
             highColY = cells.Max(i => i.Column.DisplayIndex);
 
-            if ((highColY - lowColY) > 0)
+            if ((highRowY - lowRowY) > 0)
             {
                 DefaultFieldsToGray();
 
@@ -346,17 +493,9 @@ namespace small_n_stats_WPF.ViewModels
                 lowRowY = -1;
                 highColY = -1;
                 highRowY = -1;
-                MessageBox.Show("Please select a single vertical column.  You can have many rows, but just one column of them.");
+                MessageBox.Show("Please select a single horizontal row (increasing, from left to right).  You can have many columns, but just one row.");
 
                 return;
-            }
-
-            if (mWindow.dataGrid.SelectedCells.Count > 0)
-            {
-                foreach (System.Windows.Controls.DataGridCellInfo obj in mWindow.dataGrid.SelectedCells)
-                {
-                    ((DataGridCell)obj.Column.GetCellContent(obj.Item).Parent).Background = Brushes.LightGreen;
-                }
             }
 
             mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_Y;
@@ -365,56 +504,58 @@ namespace small_n_stats_WPF.ViewModels
             YRangeValues = DataGridTools.GetColumnName(lowColY) + lowRowY.ToString() + ":" + DataGridTools.GetColumnName(highColY) + highRowY.ToString();
         }
 
-        private List<double> GetRangedValues(int startRow, int endRow, int column)
-        {
-            List<double> mRange = new List<double>();
-
-            DataGridCell mCell;
-            double test;
-
-            for (int i = startRow; i <= endRow; i++)
-            {
-                mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), column);
-
-                if (!Double.TryParse((((TextBlock)mCell.Content)).Text.ToString(), out test))
-                {
-                    return null;
-                }
-                else
-                {
-                    mRange.Add(test);
-                }
-            }
-
-            return mRange;
-        }
-
-        private List<double>[] GetRanged(int startRowX, int endRowX, int columnX, int startRowY, int endRowY, int columnY)
+        /// <summary>
+        /// Walk through ranged values as needed, finding necessary pairs
+        /// </summary>
+        /// <param name="startColDelay">
+        /// First column index for delay
+        /// </param>
+        /// <param name="endColDelay">
+        /// Final column index for delay
+        /// </param>
+        /// <param name="rowDelay">
+        /// Row index for delays
+        /// </param>
+        /// <param name="startColValue">
+        /// First column index for values
+        /// </param>
+        /// <param name="endColValue">
+        /// Final column index for values
+        /// </param>
+        /// <param name="rowValue">
+        /// Row index for values
+        /// </param>
+        /// <returns>
+        /// List of all range/value pairs that correspond
+        /// </returns>
+        private List<double>[] GetRangedValues(int startColDelay, int endColDelay, int rowDelay, int startColValue, int endColValue, int rowValue)
         {
             List<double>[] array = new List<double>[2];
             array[0] = new List<double>();
             array[1] = new List<double>();
 
-            DataGridCell mCellX,
-                         mCellY;
+            string mCellDelay, mCellValue;
 
-            double testX = -1,
-                   testY = -1;
+            double testDelay = -1,
+                   testValue = -1;
 
-            int i = startRowX,
-                j = startRowY;
+            int i = startColDelay,
+                j = startColValue;
 
-            for (; i <= endRowX && j <= endRowY;)
+            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+
+            if (itemSource == null)
+                return null;
+
+            for (; i <= endColDelay && j <= endColValue;)
             {
-                mCellX = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), columnX);
-                mCellY = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, j), columnY);
+                mCellDelay = itemSource[rowDelay].values[i];
+                mCellValue = itemSource[rowValue].values[j];
 
-                if (Double.TryParse((((TextBlock)mCellX.Content)).Text.ToString(), out testX) &&
-                    Double.TryParse((((TextBlock)mCellY.Content)).Text.ToString(), out testY))
+                if (Double.TryParse(mCellDelay, out testDelay) && Double.TryParse(mCellValue, out testValue))
                 {
-                    array[0].Add(testX);
-                    array[1].Add(testY);
-
+                    array[0].Add(testDelay);
+                    array[1].Add(testValue);
                 }
 
                 i++;
@@ -424,14 +565,26 @@ namespace small_n_stats_WPF.ViewModels
             return array;
         }
 
+        /// <summary>
+        /// Command-call to calculate based on supplied ranges and reference values (max value).
+        /// Will reference user-selected options (figures, outputs, etc.) throughout calls to R
+        /// </summary>
         private void CalculateScores()
         {
             if (failed) return;
 
-            List<double>[] array = GetRanged(lowRowX, highRowX, lowColX, lowRowY, highRowY, lowColY);
+            List<double>[] array = GetRangedValues(lowColX, highColX, lowRowX, lowColY, highColY, lowRowY);
             List<double> xRange = array[0];
             List<double> yRange = array[1];
 
+            if (xRange == null || yRange == null) return;
+
+            double lowY = yRange.Where(v => v > 0).OrderBy(v => v).First();
+            double highY = yRange.Where(v => v > 0).OrderBy(v => v).Last();
+
+            kValueDouble = (Math.Log10(highY) - Math.Log10(lowY)) + 0.5;
+
+            /*
             if (!double.TryParse(KValue, out kValueDouble) || (xRange.Count != yRange.Count))
             {
                 mWindow.OutputEvents("Error in computing ranges, inputs must be equal in length.");
@@ -440,16 +593,7 @@ namespace small_n_stats_WPF.ViewModels
                 MessageBox.Show("Hmm, check your ranges.  These don't seem paired up");
                 return;
             }
-
-            if (yRange == null)
-            {
-                System.Console.WriteLine("Null y");
-            }
-
-            if (xRange == null)
-            {
-                System.Console.WriteLine("Null x");
-            }
+            */
 
             mWindow.OutputEvents("---------------------------------------------------");
 
@@ -472,8 +616,7 @@ namespace small_n_stats_WPF.ViewModels
 
             NumericVector participantValues = engine.CreateNumericVector(pRange.ToArray());
             engine.SetSymbol("pLoad", participantValues);
-
-
+            
             NumericVector kValues = engine.CreateNumericVector(kRange.ToArray());
             engine.SetSymbol("kLoad", kValues);
 
@@ -491,24 +634,12 @@ namespace small_n_stats_WPF.ViewModels
                 var mWin = new ResultsWindow();
                 var mVM = new ResultsViewModel();
                 mWin.DataContext = mVM;
-                //mWin.Owner = windowRef;
+                mWin.Owner = windowRef;
                 mWin.Width = 500;
                 mWin.Height = 500;
                 mWin.Topmost = true;
 
-                if(outputFigures)
-                {
-                    try
-                    {
-                        engine.Evaluate("print(logChart)");
-                    }
-                    catch (Exception e)
-                    {
-                        System.Console.WriteLine(e.ToString());
-                    }
-                }
-
-                if(outputWorkbook)
+                if(true)
                 {
                     for (int i = 0; i < 35; i++)
                     {
@@ -570,6 +701,18 @@ namespace small_n_stats_WPF.ViewModels
                     mVM.RowViewModels[20].values[1] = engine.Evaluate("fitFrame[fitFrame$p==1,]$sdResid").AsVector().First().ToString();
 
                     mWin.Show();
+                }
+
+                if (outputFigures)
+                {
+                    try
+                    {
+                        engine.Evaluate("print(logChart)");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                    }
                 }
             }
             catch (Exception e)

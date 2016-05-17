@@ -64,23 +64,23 @@ namespace small_n_stats_WPF.Views
 
         private void PART_CLOSE_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void PART_MINIMIZE_Click(object sender, RoutedEventArgs e)
         {
-            this.WindowState = System.Windows.WindowState.Minimized;
+            WindowState = System.Windows.WindowState.Minimized;
         }
 
         private void PART_MAXIMIZE_RESTORE_Click(object sender, RoutedEventArgs e)
         {
-            if (this.WindowState == System.Windows.WindowState.Normal)
+            if (WindowState == System.Windows.WindowState.Normal)
             {
-                this.WindowState = System.Windows.WindowState.Maximized;
+                WindowState = System.Windows.WindowState.Maximized;
             }
             else
             {
-                this.WindowState = System.Windows.WindowState.Normal;
+                WindowState = System.Windows.WindowState.Normal;
             }
         }
 

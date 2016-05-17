@@ -8,7 +8,7 @@ using System.Windows;
 [assembly: AssemblyTitle("Demand Curve Calculator")]
 [assembly: AssemblyDescription("Tool for Computing Small-n Effect Measures")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Small N Stats")]
+[assembly: AssemblyCompany("Demand Analysis")]
 [assembly: AssemblyProduct("Demand Curve Calculator")]
 [assembly: AssemblyCopyright("Copyright ©  Shawn Gilroy  2016")]
 [assembly: AssemblyTrademark("")]

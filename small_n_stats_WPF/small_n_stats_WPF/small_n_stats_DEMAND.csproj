@@ -31,7 +31,7 @@
     <SuiteName>Small N Stats</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
-    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -61,10 +61,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>31E4A42AE9E52DE89D7CCB7DB74F32BAD82CF849</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>FF46D46E27DA4AE8C65EA241E95F03DB63847B27</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>small_n_stats_DEMAND_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>small_n_stats_WPF_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>SNS.ico</ApplicationIcon>
@@ -79,6 +79,10 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.76.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.76.0\lib\net40-client\ClosedXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
       <Private>True</Private>
@@ -132,17 +136,16 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ClipboardTools.cs" />
-    <Compile Include="Utilities\CustomConverter.cs" />
     <Compile Include="Utilities\CustomDataGrid.cs" />
     <Compile Include="Utilities\DataGridTools.cs" />
     <Compile Include="Utilities\OpenXMLHelper.cs" />
-    <Compile Include="Utilities\ProgressBarDialog.xaml.cs">
-      <DependentUpon>ProgressBarDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="Utilities\Settings.cs" />
     <Compile Include="ViewModels\DemandCurveExponentialViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\ProgressDialog.xaml.cs">
+      <DependentUpon>ProgressDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\ResultsViewModel.cs" />
     <Compile Include="ViewModels\RowViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
@@ -165,6 +168,9 @@
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RangePrompt.xaml.cs">
+      <DependentUpon>RangePrompt.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ResultsWindow.xaml.cs">
       <DependentUpon>ResultsWindow.xaml</DependentUpon>
@@ -200,12 +206,15 @@
     <None Include="Resources\License-RdotNet.txt" />
     <None Include="Resources\DemandFunctions.txt" />
     <None Include="Resources\ExponentiatedDemandFunctions.txt" />
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Source\Small-N-Stats---Demand-Calculator-master.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Utilities\ProgressBarDialog.xaml">
+    <Page Include="Views\ProgressDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -230,6 +239,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RangePrompt.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

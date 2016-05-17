@@ -1,19 +1,19 @@
 ﻿/* 
     Copyright 2016 Shawn Gilroy
 
-    This file is part of Small N Stats.
+    This file is part of Demand Analysis.
 
-    Small N Stats is free software: you can redistribute it and/or modify
+    Demand Analysis is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, version 2.
 
-    Small N Stats is distributed in the hope that it will be useful,
+    Demand Analysis is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Small N Stats.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+    along with Demand Analysis.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
 
 */
 
@@ -80,8 +80,32 @@ namespace small_n_stats_WPF.Utilities
 
             ((DataGrid)sender).ItemContainerGenerator.ItemsChanged += (object target, ItemsChangedEventArgs eArgs) =>
             {
-                DataGridTools.GetDataGridChildren(((DataGrid)sender), new List<DataGridRow>()).ForEach(d => d.Header = d.GetIndex());
+                DataGrid mGrid = (DataGrid)sender;
+
+                for (int i = 0; i < mGrid.Items.Count; i++)
+                {
+                    UpdateHeaders(mGrid, i);
+                }
             };
+        }
+
+        /// <summary>
+        /// Walks datagrid for rows, updating headers with indices as needed
+        /// </summary>
+        /// <param name="grid">
+        /// Datagrid being walked
+        /// </param>
+        /// <param name="i">
+        /// index of object (unknown) in grid content
+        /// </param>
+        public static void UpdateHeaders(DataGrid grid, int i)
+        {
+            DataGridRow item = (DataGridRow)grid.ItemContainerGenerator.ContainerFromIndex(i);
+
+            if (item != null)
+            {
+                item.Header = item.GetIndex();
+            }
         }
 
         /// <summary>
@@ -140,11 +164,7 @@ namespace small_n_stats_WPF.Utilities
 
                 for (int j = lowCol; (j < highCol) && (pasteContentColumnIterator < rowData[pasteContentRowIterator].Length); j++)
                 {
-                    // Hackish method to update property through binding (UI) to row index/column binding, setting value in cells to clipboard contents
-                    string columnPropertyName = ((Binding)((DataGridBoundColumn)ColumnFromDisplayIndex(j)).Binding).Path.Path;
-                    Items[i].GetType().GetProperty(columnPropertyName).SetValue(Items[i],
-                        rowData[pasteContentRowIterator][pasteContentColumnIterator], null);
-
+                    Items[i].GetType().GetProperty(DataGridTools.GetColumnName(j)).SetValue(Items[i], rowData[pasteContentRowIterator][pasteContentColumnIterator], null);
                     pasteContentColumnIterator++;
                 }
 

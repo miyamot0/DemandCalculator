@@ -1,46 +1,111 @@
 ﻿/* 
     Copyright 2016 Shawn Gilroy
 
-    This file is part of Small N Stats.
+    This file is part of Demand Analysis.
 
-    Small N Stats is free software: you can redistribute it and/or modify
+    Demand Analysis is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, version 2.
 
-    Small N Stats is distributed in the hope that it will be useful,
+    Demand Analysis is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Small N Stats.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+    along with Demand Analysis.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+
+    This file uses R.NET Community to leverage interactions with the R program
+
+    ============================================================================
+
+    R.NET Community is distributed under this license:
+
+    Copyright (c) 2010, RecycleBin
+    Copyright (c) 2014-2015 CSIRO
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification, 
+    are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this list 
+    of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above copyright notice, this 
+    list of conditions and the following disclaimer in the documentation and/or other 
+    materials provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+    IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+    INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+    NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+    WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+    OF SUCH DAMAGE.
+
+    ============================================================================
+
+    ClosedXML is distributed under this license:
+
+    Copyright (c) 2010 Manuel De Leon
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy of 
+    this software and associated documentation files (the "Software"), to deal in the 
+    Software without restriction, including without limitation the rights to use, 
+    copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
+    Software, and to permit persons to whom the Software is furnished to do so, 
+    subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all 
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
+using ClosedXML.Excel;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 using RDotNet;
 using small_n_stats_WPF.Utilities;
 using small_n_stats_WPF.Views;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using System.Threading;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace small_n_stats_WPF.ViewModels
 {
     class MainWindowViewModel : BaseViewModel
     {
         public MainWindow MainWindow { get; set; }
+        Thread loadThread;
+        Window window;
 
         #region Observable Bindings
 
-        public ObservableCollection<RowViewModel> RowViewModels { get; set; }
+        private ObservableCollection<RowViewModel> rowViewModels { get; set; } 
+        public ObservableCollection<RowViewModel> RowViewModels
+        {
+            get { return rowViewModels; }
+            set
+            {
+                rowViewModels = value;
+                OnPropertyChanged("RowViewModels");
+            }
+        }
 
         public string title = "Small n Stats - New File";
         public string Title
@@ -99,7 +164,6 @@ namespace small_n_stats_WPF.ViewModels
 
         public RelayCommand SaveLogsWindowCommand { get; set; }
         public RelayCommand ClearLogsWindowCommand { get; set; }
-
         public RelayCommand DeleteSelectedCommand { get; set; }
 
         /* Logic */
@@ -192,8 +256,6 @@ namespace small_n_stats_WPF.ViewModels
             Title = title;
         }
 
-        // TODO MVVM this
-
         private void DeleteSelected()
         {
             if (MainWindow.dataGrid.SelectedCells.Count > 0)
@@ -222,21 +284,26 @@ namespace small_n_stats_WPF.ViewModels
 
             bool failed = false;
 
-            SendMessageToOutput("Welcome to Small n Stats demands analysis!");
+            SendMessageToOutput("Welcome to Demand Curve Calculator!");
+            SendMessageToOutput("");
             SendMessageToOutput("All view elements loaded");
+            SendMessageToOutput("");
 
-            SendMessageToOutput("Loading R interop libraries (R.Net.Community)... ");
+            StreamReader licenseFile = new StreamReader(@"LICENSE.txt");
+
+            string line;
+
+            while ((line = licenseFile.ReadLine()) != null)
+            {
+                SendMessageToOutput(line);
+            }
+
+            SendMessageToOutput("Loading R interop libraries (R.NET Community)");
 
             try
             {
                 REngine.SetEnvironmentVariables();
 
-                SendMessageToOutput("Displaying R.Net.Community License:");
-                SendMessageToOutput("");
-                SendMessageToOutput("R.Net.Community version 1.6.5, Copyright 2011-2014 RecycleBin, Copyright 2014-2015 CSIRO");
-                SendMessageToOutput("R.Net.Community comes with ABSOLUTELY NO WARRANTY; for details select Information > Licenses > R.Net");
-                SendMessageToOutput("This is free software, and you are welcome to redistribute it under certain conditions; see license for details.");
-                SendMessageToOutput("");
                 SendMessageToOutput("Attempting to link with R installation.");
 
                 engine = REngine.GetInstance();
@@ -266,74 +333,12 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     SendMessageToOutput("");
                     SendMessageToOutput("R is found and running");
-                    SendMessageToOutput("Linking to R (R Statistical Package)");
-                    SendMessageToOutput("Displaying R License:");
-
-                    /* Interactive post for R */
-
-                    SendMessageToOutput("");
-                    SendMessageToOutput("");
-                    SendMessageToOutput("R Copyright (C) 2016 R Core Team");
-                    SendMessageToOutput("This program comes with ABSOLUTELY NO WARRANTY;");
-                    SendMessageToOutput("This is free software, and you are welcome to redistribute it");
-                    SendMessageToOutput("under certain conditions; for details select Information > Licenses > R.");
-                    SendMessageToOutput("");
-                    SendMessageToOutput("");
-
-                    SendMessageToOutput("Checking for required packages: ");
-                    /* Loading R packages for analyses */
 
                     engine.Evaluate("if (!require(ggplot2)) { install.packages('ggplot2', repos = 'http://cran.us.r-project.org') }");
-                    /* Interactive post for ggplot2 package */
-
-                    SendMessageToOutput("Package ggplot2 found/loaded");
-                    SendMessageToOutput("Displaying ggplot2 License:");
-                    SendMessageToOutput("ggplot2 Copyright (C) 2016 Hadley Wickham, Winston Chang");
-                    SendMessageToOutput("This program comes with ABSOLUTELY NO WARRANTY;");
-                    SendMessageToOutput("This is free software, and you are welcome to redistribute it");
-                    SendMessageToOutput("under certain conditions; for details select Information > Licenses > ggplot2.");
-                    SendMessageToOutput("H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.");
-                    SendMessageToOutput("");
-                    SendMessageToOutput("");
-
+                    engine.Evaluate("if (!require(reshape2)) { install.packages('reshape2', repos = 'http://cran.us.r-project.org') }");
                     engine.Evaluate("if (!require(nlstools)) { install.packages('nlstools', repos = 'http://cran.us.r-project.org') }");
-                    /* Interactive post for nlstools package */
-
-                    SendMessageToOutput("Package nlstools found/loaded");
-                    SendMessageToOutput("Displaying nlstools License:");
-                    SendMessageToOutput("nlstools Copyright (C) 2015 Florent Baty and Marie-Laure Delignette-Muller, with contributions " +
-                        "from Sandrine Charles, Jean-Pierre Flandrois, and Christian Ritz");
-                    SendMessageToOutput("This program comes with ABSOLUTELY NO WARRANTY;");
-                    SendMessageToOutput("This is free software, and you are welcome to redistribute it");
-                    SendMessageToOutput("under certain conditions; for details select Information > Licenses > nlstools.");
-                    SendMessageToOutput("Florent Baty, Christian Ritz, Sandrine Charles, Martin Brutsche, Jean-Pierre Flandrois, Marie-Laure Delignette-Muller (2015). A Toolbox for Nonlinear Regression in R: The Package nlstools. Journal of Statistical Software, 66(5), 1-21. URL http://www.jstatsoft.org/v66/i05/.");
-                    SendMessageToOutput("");
-                    SendMessageToOutput("");
-
                     engine.Evaluate("if (!require(nlmrt)) { install.packages('nlmrt', repos = 'http://cran.us.r-project.org') }");
-                    /* Interactive post for nlmrt package */
 
-                    SendMessageToOutput("Package nlmrt found");
-                    SendMessageToOutput("Displaying nlmrt License:");
-                    SendMessageToOutput("# https://cran.r-project.org/web/packages/nlmrt/index.html");
-                    SendMessageToOutput("#");
-                    SendMessageToOutput("# Copyright (C) 2016. John C. Nash.");
-                    SendMessageToOutput("#");
-                    SendMessageToOutput("# This program is free software; you can redistribute it and/or modify");
-                    SendMessageToOutput("# it under the terms of the GNU General Public License as published by");
-                    SendMessageToOutput("# the Free Software Foundation; either version 2 of the License, or");
-                    SendMessageToOutput("#  (at your option) any later version.");
-                    SendMessageToOutput("#");
-                    SendMessageToOutput("# This program is distributed in the hope that it will be useful,");
-                    SendMessageToOutput("# but WITHOUT ANY WARRANTY; without even the implied warranty of");
-                    SendMessageToOutput("# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the");
-                    SendMessageToOutput("# GNU General Public License for more details.");
-                    SendMessageToOutput("#");
-                    SendMessageToOutput("# A copy of the GNU General Public License is available at");
-                    SendMessageToOutput("# http://www.r-project.org/Licenses/");
-                    SendMessageToOutput("");
-                    SendMessageToOutput("");
-                    
                     SendMessageToOutput("All required packages have been found.  Ready to proceed.");
                 }
                 else
@@ -341,27 +346,28 @@ namespace small_n_stats_WPF.ViewModels
                     SendMessageToOutput("R DLL's not found.");
                 }
 
-                SendMessageToOutput("A listing of all referenced software, with licensing, has been displayed above.");
-                SendMessageToOutput("TLDR: Small n Stats - Demand Analysis is made possible by the following software.");
                 SendMessageToOutput("");
-                SendMessageToOutput("R Statistical Package - GPLv2 Licensed. Copyright (C) 2000-16. The R Core Team");
+                SendMessageToOutput("A listing of all referenced software, with licensing, has been displayed above.");
+                SendMessageToOutput("TLDR: Demand Curve Calculator is made possible by the following software.");
+                SendMessageToOutput("");
+                SendMessageToOutput("R Statistical Package - GPL v2 Licensed. Copyright (C) 2000-16. The R Core Team");
+                SendMessageToOutput("nlmrt R Package - GPLv2 Licensed. Copyright (C) 2016. John C. Nash.");
+                SendMessageToOutput("nlstools R Package - GPLv2 Licensed. Copyright(C) 2015 Florent Baty and Marie-Laure Delignette - Muller, with contributions from Sandrine Charles, Jean - Pierre Flandrois, and Christian Ritz.");
                 SendMessageToOutput("ggplot2 R Package - GPLv2 Licensed. Copyright (c) 2016, Hadley Wickham.");
+                SendMessageToOutput("reshape2 R Package - MIT Licensed. Copyright (c) 2014, Hadley Wickham.");
+                SendMessageToOutput("ClosedXML - MIT Licensed. Copyright (c) 2010 Manuel De Leon.");
                 SendMessageToOutput("Gnome Icon Set - GPLv2 Licensed.");
                 SendMessageToOutput("RdotNet: Interface for the R Statistical Package - New BSD License (BSD 2-Clause). Copyright(c) 2010, RecycleBin. All rights reserved.");
                 SendMessageToOutput("");
-                SendMessageToOutput("");
 
-                SendMessageToOutput("License information is also provided in Information > Licenses > ... as well as");
-                SendMessageToOutput("in the install directory of this program (under Resources).");
-                SendMessageToOutput("");
-                SendMessageToOutput("");
+                SendMessageToOutput("License information is also provided in Information > Licenses > ... as well as in the install directory of this program (under Resources).");
             }
-
         }
 
         private void ViewClosed()
         {
             Properties.Settings.Default.Save();
+            engine.Dispose();
         }
 
         #endregion
@@ -472,7 +478,8 @@ namespace small_n_stats_WPF.ViewModels
             mWin.DataContext = new BatchDemandCurveExponentialViewModel
             {
                 mWindow = MainWindow,
-                windowRef = mWin
+                windowRef = mWin,
+                mViewModel = this
             };
             mWin.Show();
         }
@@ -492,11 +499,10 @@ namespace small_n_stats_WPF.ViewModels
 
         private void CreateNewFile()
         {
-            ProgressBarDialog pd = new ProgressBarDialog();
-            pd.Owner = MainWindow;
-            pd.Title = "Starting New File...";
-            pd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            pd.Show();
+            loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
+            loadThread.SetApartmentState(ApartmentState.STA);
+            loadThread.IsBackground = true;
+            loadThread.Start();
 
             RowViewModels.Clear();
             for (int i = 0; i < RowSpans; i++)
@@ -506,12 +512,11 @@ namespace small_n_stats_WPF.ViewModels
 
             UpdateTitle("New File");
 
-            pd.Close();
+            CloseFileUIProgressWindow();
         }
 
         private void SaveFile()
         {
-
             if (haveFileLoaded)
             {
                 SaveFileWithoutDialog();
@@ -524,20 +529,18 @@ namespace small_n_stats_WPF.ViewModels
 
                 if (saveFileDialog1.ShowDialog() == true)
                 {
+                    loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
+                    loadThread.SetApartmentState(ApartmentState.STA);
+                    loadThread.IsBackground = true;
+                    loadThread.Start();
 
                     try
                     {
-                        ProgressBarDialog pd = new ProgressBarDialog();
-                        pd.Owner = MainWindow;
-                        pd.Title = "Saving File...";
-                        pd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                        pd.Show();
-
                         OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
 
                         UpdateTitle(saveFileDialog1.SafeFileName);
 
-                        pd.Close();
+                        path = Path.GetDirectoryName(saveFileDialog1.FileName);
 
                         haveFileLoaded = true;
                     }
@@ -547,6 +550,7 @@ namespace small_n_stats_WPF.ViewModels
                         Console.WriteLine(e.ToString());
                     }
 
+                    CloseFileUIProgressWindow();
                 }
             }
         }
@@ -560,19 +564,18 @@ namespace small_n_stats_WPF.ViewModels
 
             if (saveFileDialog1.ShowDialog() == true)
             {
+                loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
+                loadThread.SetApartmentState(ApartmentState.STA);
+                loadThread.IsBackground = true;
+                loadThread.Start();
+
                 try
                 {
-                    ProgressBarDialog pd = new ProgressBarDialog();
-                    pd.Owner = MainWindow;
-                    pd.Title = "Saving File...";
-                    pd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                    pd.Show();
-
                     OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
 
                     UpdateTitle(saveFileDialog1.SafeFileName);
 
-                    pd.Close();
+                    path = Path.GetDirectoryName(saveFileDialog1.FileName);
 
                     haveFileLoaded = true;
 
@@ -584,6 +587,8 @@ namespace small_n_stats_WPF.ViewModels
                     haveFileLoaded = false;
                 }
 
+                CloseFileUIProgressWindow();
+
             }
         }
 
@@ -591,30 +596,39 @@ namespace small_n_stats_WPF.ViewModels
         {
             if (haveFileLoaded)
             {
+                loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
+                loadThread.SetApartmentState(ApartmentState.STA);
+                loadThread.IsBackground = true;
+                loadThread.Start();
+
                 try
                 {
-                    ProgressBarDialog pd = new ProgressBarDialog();
-                    pd.Owner = MainWindow;
-                    pd.Title = "Saving File...";
-                    pd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                    pd.Show();
-
                     OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), Path.Combine(path, title));
 
                     UpdateTitle(title);
 
-                    pd.Close();
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show("We weren't able to save.  Is the target file open or in use?");
                     Console.WriteLine(e.ToString());
                 }
+
+                CloseFileUIProgressWindow();
             }
-            else
-            {
-                SaveFileAs();
-            }
+        }
+
+        void ShowFileUIProgressWindow()
+        {
+            window = new ProgressDialog("Processing", "File operations ongoing...");
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            window.Show();
+            Dispatcher.Run();
+        }
+
+        void CloseFileUIProgressWindow()
+        {
+            window.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(window.Close));
         }
 
         private void OpenFile()
@@ -626,48 +640,49 @@ namespace small_n_stats_WPF.ViewModels
 
             if (openFileDialog1.ShowDialog() == true)
             {
-                ProgressBarDialog pd = new ProgressBarDialog();
-                pd.Owner = MainWindow;
-                pd.Title = "Opening File...";
-                pd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                pd.Show();
+                loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
+                loadThread.SetApartmentState(ApartmentState.STA);
+                loadThread.IsBackground = true;
+                loadThread.Start();
 
                 string mExt = Path.GetExtension(openFileDialog1.FileName);
+
                 path = Path.GetDirectoryName(openFileDialog1.FileName);
 
                 try
                 {
-
                     if (mExt.Equals(".xlsx"))
                     {
-                        using (SpreadsheetDocument spreadSheetDocument = SpreadsheetDocument.Open(@openFileDialog1.FileName, false))
+
+                        using (var wb = new XLWorkbook(@openFileDialog1.FileName))
                         {
-                            WorkbookPart workbookPart = spreadSheetDocument.WorkbookPart;
-                            IEnumerable<Sheet> sheets = spreadSheetDocument.WorkbookPart.Workbook.GetFirstChild<Sheets>().Elements<Sheet>();
-                            string relationshipId = sheets.First().Id.Value;
-                            WorksheetPart worksheetPart = (WorksheetPart)spreadSheetDocument.WorkbookPart.GetPartById(relationshipId);
-                            Worksheet workSheet = worksheetPart.Worksheet;
-                            SheetData sheetData = workSheet.GetFirstChild<SheetData>();
-                            IEnumerable<Row> rows = sheetData.Descendants<Row>();
+                            var ws = wb.Worksheet(1);
+                            var range = ws.RangeUsed();
+                            var table = range.AsTable();
 
-                            RowViewModels.Clear();
+                            //RowViewModels.Clear();
 
-                            foreach (Row row in rows)
+                            ObservableCollection<RowViewModel> temp = new ObservableCollection<RowViewModel>();
+
+                            foreach (var row in table.Rows())
                             {
                                 RowViewModel mModel = new RowViewModel();
-                                //TODO fix hacky limit
-                                for (int i = 1; i < row.Descendants<Cell>().Count() && i < 100; i++)
+
+                                for (int i = 0; i <= row.CellCount(); i++)
                                 {
-                                    mModel.values[i - 1] = GetCellValue(spreadSheetDocument, row.Descendants<Cell>().ElementAt(i - 1));
+                                    mModel.values[i] = row.Cell(i).Value.ToString();
                                 }
 
-                                RowViewModels.Add(mModel);
-
+                                //RowViewModels.Add(mModel);
+                                temp.Add(mModel);
                             }
+
+                            RowViewModels = new ObservableCollection<RowViewModel>(temp);
 
                             UpdateTitle(openFileDialog1.SafeFileName);
                             haveFileLoaded = true;
                         }
+
                     }
                     else if (mExt.Equals(".csv"))
                     {
@@ -683,12 +698,10 @@ namespace small_n_stats_WPF.ViewModels
                                 string[] fields = parser.ReadFields();
 
                                 RowViewModel mModel = new RowViewModel();
-                                //TODO fix hacky limit
                                 for (int i = 0; i < fields.Length && i < 100; i++)
                                 {
                                     mModel.values[i] = fields[i];
                                 }
-
                                 RowViewModels.Add(mModel);
 
                             }
@@ -696,31 +709,16 @@ namespace small_n_stats_WPF.ViewModels
                             UpdateTitle(openFileDialog1.SafeFileName);
                             haveFileLoaded = true;
                         }
+
                     }
+
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show("We weren't able to open the file.  Is the target file open or in use?");
-                    Console.WriteLine(e.ToString());
                 }
 
-                pd.Close();
-
-            }
-        }
-
-        public static string GetCellValue(SpreadsheetDocument document, Cell cell)
-        {
-            SharedStringTablePart stringTablePart = document.WorkbookPart.SharedStringTablePart;
-            string value = cell.CellValue.InnerXml;
-
-            if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
-            {
-                return stringTablePart.SharedStringTable.ChildElements[System.Int32.Parse(value)].InnerText;
-            }
-            else
-            {
-                return value;
+                CloseFileUIProgressWindow();
             }
         }
 

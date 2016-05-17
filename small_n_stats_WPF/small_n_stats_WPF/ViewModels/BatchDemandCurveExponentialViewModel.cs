@@ -1,19 +1,49 @@
 ﻿/* 
     Copyright 2016 Shawn Gilroy
 
-    This file is part of Small N Stats.
+    This file is part of Demand Analysis.
 
-    Small N Stats is free software: you can redistribute it and/or modify
+    Demand Analysis is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, version 2.
 
-    Small N Stats is distributed in the hope that it will be useful,
+    Demand Analysis is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Small N Stats.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+    along with Demand Analysis.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+
+    ============================================================================
+
+    R.NET Community is distributed under this license:
+
+    Copyright (c) 2010, RecycleBin
+    Copyright (c) 2014-2015 CSIRO
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification, 
+    are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this list 
+    of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above copyright notice, this 
+    list of conditions and the following disclaimer in the documentation and/or other 
+    materials provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+    IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+    INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+    NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+    WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+    OF SUCH DAMAGE.
 
 */
 
@@ -23,6 +53,7 @@ using small_n_stats_WPF.Utilities;
 using small_n_stats_WPF.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,19 +65,9 @@ namespace small_n_stats_WPF.ViewModels
     class BatchDemandCurveExponentialViewModel : BaseViewModel
     {
         public MainWindow mWindow { get; set; }
+        public MainWindowViewModel mViewModel { get; set; }
         public BatchDemandCurveWindow windowRef { get; set; }
-
-        private bool runLinear = false;
-        public bool RunLinear
-        {
-            get { return runLinear; }
-            set
-            {
-                runLinear = value;
-                OnPropertyChanged("RunLinear");
-            }
-        }
-
+        
         private bool runExponential = false;
         public bool RunExponential
         {
@@ -202,6 +223,13 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand CalculateScoresCommand { get; set; }
         public RelayCommand AdvancedSettings { get; set; }
 
+        public RelayCommand ConsumptionRangeCommand { get; set; }
+        public RelayCommand PricingRangeCommand { get; set; }
+        public RelayCommand ConstantRangeCommand { get; set; }
+
+        /// <summary>
+        /// Public constructor
+        /// </summary>
         public BatchDemandCurveExponentialViewModel()
         {
             ViewLoadedCommand = new RelayCommand(param => ViewLoaded(), param => true);
@@ -213,14 +241,174 @@ namespace small_n_stats_WPF.ViewModels
             CalculateScoresCommand = new RelayCommand(param => CalculateScores(), param => true);
             AdvancedSettings = new RelayCommand(param => UpdateSettings(), param => true);
 
+            ConsumptionRangeCommand = new RelayCommand(param => UpdateConsumptionRange(), param => true);
+            PricingRangeCommand = new RelayCommand(param => UpdatePricingRange(), param => true);
+            ConstantRangeCommand = new RelayCommand(param => UpdateKRange(), param => true);
+
             modelArraySelection = "Exponential";
         }
 
+        /// <summary>
+        /// Query user for a range
+        /// </summary>
+        private void UpdatePricingRange()
+        {
+            var mWin = new RangePrompt();
+            mWin.Topmost = true;
+            mWin.Owner = windowRef;
+            mWin.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            if (mWin.ShowDialog() == true)
+            {
+                string[] addresses = mWin.ResponseText.Split(':');
+
+                if (addresses.Length != 2) return;
+
+                var firstChars = new String(addresses[0].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
+                var firstNums = new String(addresses[0].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
+
+                var secondChars = new String(addresses[1].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
+                var secondNums = new String(addresses[1].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
+
+                int fNum, sNum;
+
+                if (int.TryParse(firstNums, out fNum) && int.TryParse(secondNums, out sNum) && firstChars.Length > 0 && secondChars.Length > 0)
+                {
+                    if ((sNum - fNum) == 0)
+                    {
+                        XBrush = Brushes.LightBlue;
+                        XRangeValues = firstChars + firstNums + ":" + secondChars + secondNums;
+
+                        lowColX = DataGridTools.GetColumnIndex(firstChars);
+                        highColX = DataGridTools.GetColumnIndex(secondChars);
+
+                        lowRowX = fNum;
+                        highRowX = sNum;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please ensure that only a single row is selected");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Parse error!");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Query user for a range
+        /// </summary>
+        private void UpdateKRange()
+        {
+            var mWin = new RangePrompt();
+            mWin.Topmost = true;
+            mWin.Owner = windowRef;
+            mWin.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            if (mWin.ShowDialog() == true)
+            {
+                string[] addresses = mWin.ResponseText.Split(':');
+
+                if (addresses.Length != 2) return;
+
+                var firstChars = new String(addresses[0].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
+                var firstNums = new String(addresses[0].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
+
+                var secondChars = new String(addresses[1].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
+                var secondNums = new String(addresses[1].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
+
+                int fNum, sNum;
+
+                if (int.TryParse(firstNums, out fNum) && int.TryParse(secondNums, out sNum) && firstChars.Length > 0 && secondChars.Length > 0)
+                {
+                    //Single Column
+                    if ((DataGridTools.GetColumnIndex(firstChars) - DataGridTools.GetColumnIndex(secondChars)) == 0)
+                    {
+                        KBrush = Brushes.LightSalmon;
+                        KRangeValues = firstChars + firstNums + ":" + secondChars + secondNums;
+
+                        lowColK = DataGridTools.GetColumnIndex(firstChars);
+                        highColK = DataGridTools.GetColumnIndex(secondChars);
+
+                        lowRowK = fNum;
+                        highRowK = sNum;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please ensure that only a single row is selected");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Parse error!");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Query user for a range
+        /// </summary>
+        private void UpdateConsumptionRange()
+        {
+            var mWin = new RangePrompt();
+            mWin.Topmost = true;
+            mWin.Owner = windowRef;
+            mWin.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            if (mWin.ShowDialog() == true)
+            {
+                string[] addresses = mWin.ResponseText.Split(':');
+
+                if (addresses.Length != 2) return;
+
+                var firstChars = new String(addresses[0].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
+                var firstNums = new String(addresses[0].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
+
+                var secondChars = new String(addresses[1].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
+                var secondNums = new String(addresses[1].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
+
+                int fNum, sNum;
+
+                if (int.TryParse(firstNums, out fNum) && int.TryParse(secondNums, out sNum) && firstChars.Length > 0 && secondChars.Length > 0)
+                {
+                    if ((sNum - fNum) > 2)
+                    {
+                        YBrush = Brushes.LightBlue;
+                        YRangeValues = firstChars + firstNums + ":" + secondChars + secondNums;
+
+                        lowColY = DataGridTools.GetColumnIndex(firstChars);
+                        highColY = DataGridTools.GetColumnIndex(secondChars);
+
+                        lowRowY = fNum;
+                        highRowY = sNum;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please ensure that only a single row is selected");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Parse error!");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Command-based update of UI logic during close.
+        /// Will retain window position in Settings.settings
+        /// </summary>
         private void ViewClosed()
         {
             Properties.Settings.Default.Save();
         }
 
+        /// <summary>
+        /// Command-based update of UI logic during open.
+        /// Will re-check for R interactivity
+        /// </summary>
         private void ViewLoaded()
         {
             mWindow.OutputEvents("---------------------------------------------------");
@@ -258,7 +446,6 @@ namespace small_n_stats_WPF.ViewModels
             }
 
             DefaultFieldsToGray();
-
         }
 
         /// <summary>
@@ -271,7 +458,6 @@ namespace small_n_stats_WPF.ViewModels
                 modelArraySelection = "Exponential";
                 AdvancedMenu = !AdvancedMenu;
             }
-
         }
 
         /// <summary>
@@ -299,38 +485,34 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Successful (or failing) selections result in a range string in respective text fields for later parsing.
+        /// </summary>
         private void GetKRange()
         {
             DefaultFieldsToGray();
-
-            if (KRangeValues.Length > 0 && !KRangeValues.ToLower().Contains("spreadsheet"))
-            {
-                for (int i = lowRowK; i <= highRowK; i++)
-                {
-                    DataGridCell mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), lowColK);
-                    mCell.Background = Brushes.Transparent;
-                    mCell = null;
-                }
-            }
 
             KBrush = Brushes.Yellow;
             KRangeValues = "Select k values on spreadsheet";
 
             mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_K;
-
         }
 
+        /// <summary>
+        /// Delegate after highlighting takes place on datagrid (call back specific to values).
+        /// </summary>
         private void DataGrid_PreviewMouseUp_K(object sender, MouseButtonEventArgs e)
         {
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
 
-            lowRowK = cells.Min(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
-            highRowK = cells.Max(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
+            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+            lowRowK = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
+            highRowK = cells.Max(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
 
             lowColK = cells.Min(i => i.Column.DisplayIndex);
             highColK = cells.Max(i => i.Column.DisplayIndex);
 
-            if ((highRowK - lowRowK) > 0)
+            if ((highColK - lowColK) > 0)
             {
                 DefaultFieldsToGray();
 
@@ -340,17 +522,9 @@ namespace small_n_stats_WPF.ViewModels
                 lowRowK = -1;
                 highColK = -1;
                 highRowK = -1;
-                MessageBox.Show("Please select a single horizontal row.  You can have many columns, but just one row of them.");
+                MessageBox.Show("Please select a single vertical column.  You can have many rows, but just one column of K values.");
 
                 return;
-            }
-
-            if (mWindow.dataGrid.SelectedCells.Count > 0)
-            {
-                foreach (System.Windows.Controls.DataGridCellInfo obj in mWindow.dataGrid.SelectedCells)
-                {
-                    ((DataGridCell)obj.Column.GetCellContent(obj.Item).Parent).Background = Brushes.LightSalmon;
-                }
             }
 
             mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_K;
@@ -361,19 +535,12 @@ namespace small_n_stats_WPF.ViewModels
             KValue = "";
         }
 
+        /// <summary>
+        /// Successful (or failing) selections result in a range string in respective text fields for later parsing.
+        /// </summary>
         private void GetXRange()
         {
             DefaultFieldsToGray();
-
-            if (XRangeValues.Length > 0 && !XRangeValues.ToLower().Contains("spreadsheet"))
-            {
-                for (int i = lowRowX; i <= highRowX; i++)
-                {
-                    DataGridCell mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), lowColX);
-                    mCell.Background = Brushes.Transparent;
-                    mCell = null;
-                }
-            }
 
             XBrush = Brushes.Yellow;
             XRangeValues = "Select delays on spreadsheet";
@@ -382,17 +549,21 @@ namespace small_n_stats_WPF.ViewModels
 
         }
 
+        /// <summary>
+        /// Delegate after highlighting takes place on datagrid (call back specific to values).
+        /// </summary>
         private void DataGrid_PreviewMouseUp_X(object sender, MouseButtonEventArgs e)
         {
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
 
-            lowRowX = cells.Min(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
-            highRowX = cells.Max(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
+            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+            lowRowX = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
+            highRowX = cells.Max(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
 
             lowColX = cells.Min(i => i.Column.DisplayIndex);
             highColX = cells.Max(i => i.Column.DisplayIndex);
 
-            if ((highColX - lowColX) > 0)
+            if ((highRowX - lowRowX) > 0)
             {
                 DefaultFieldsToGray();
 
@@ -402,17 +573,9 @@ namespace small_n_stats_WPF.ViewModels
                 lowRowX = -1;
                 highColX = -1;
                 highRowX = -1;
-                MessageBox.Show("Please select a single vertical column.  You can have many rows, but just one column of them.");
+                MessageBox.Show("Please select a single horizontal row.  You can have many columns, but just one row of pricing values.");
 
                 return;
-            }
-
-            if (mWindow.dataGrid.SelectedCells.Count > 0)
-            {
-                foreach (System.Windows.Controls.DataGridCellInfo obj in mWindow.dataGrid.SelectedCells)
-                {
-                    ((DataGridCell)obj.Column.GetCellContent(obj.Item).Parent).Background = Brushes.LightBlue;
-                }
             }
 
             mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_X;
@@ -421,38 +584,51 @@ namespace small_n_stats_WPF.ViewModels
             XRangeValues = DataGridTools.GetColumnName(lowColX) + lowRowX.ToString() + ":" + DataGridTools.GetColumnName(highColX) + highRowX.ToString();
         }
 
+        /// <summary>
+        /// Successful (or failing) selections result in a range string in respective text fields for later parsing.
+        /// </summary>
         private void GetYRange()
         {
             DefaultFieldsToGray();
-
-            if (YRangeValues.Length > 0 && !YRangeValues.ToLower().Contains("spreadsheet"))
-            {
-                for (int i = lowRowY; i <= highRowY; i++)
-                {
-                    DataGridCell mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), lowColY);
-                    mCell.Background = Brushes.Transparent;
-                    mCell = null;
-                }
-            }
 
             YBrush = Brushes.Yellow;
             YRangeValues = "Select values on spreadsheet";
 
             mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_Y;
-
         }
 
+        /// <summary>
+        /// Linq companion for referencing object's location in collection.
+        /// </summary>
+        /// <param name="model">
+        /// Individual row model reference
+        /// </param>
+        /// <param name="coll">
+        /// Collection overall
+        /// </param>
+        /// <returns>
+        /// int-based index
+        /// </returns>
+        private int GetIndexViewModel(RowViewModel model, ObservableCollection<RowViewModel> coll)
+        {
+            return coll.IndexOf(model);
+        }
+
+        /// <summary>
+        /// Delegate after highlighting takes place on datagrid (call back specific to delays).
+        /// </summary>
         private void DataGrid_PreviewMouseUp_Y(object sender, MouseButtonEventArgs e)
         {
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
 
-            lowRowY = cells.Min(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
-            highRowY = cells.Max(i => DataGridTools.GetDataGridRowIndex(mWindow.dataGrid, i));
+            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+            lowRowY = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
+            highRowY = cells.Max(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
 
             lowColY = cells.Min(i => i.Column.DisplayIndex);
             highColY = cells.Max(i => i.Column.DisplayIndex);
 
-            if ((highColY - lowColY) < 2)
+            if ((highColY - lowColY) > 2 && (highRowY - lowRowY) > 2)
             {
                 DefaultFieldsToGray();
 
@@ -462,17 +638,9 @@ namespace small_n_stats_WPF.ViewModels
                 lowRowY = -1;
                 highColY = -1;
                 highRowY = -1;
-                MessageBox.Show("Please select a single vertical column.  You can have many rows, but just one column of them.");
+                MessageBox.Show("Please select a matrix of consumption values, with at least three rows of values with three individual points of data (i.e., 3x3).");
 
                 return;
-            }
-
-            if (mWindow.dataGrid.SelectedCells.Count > 0)
-            {
-                foreach (System.Windows.Controls.DataGridCellInfo obj in mWindow.dataGrid.SelectedCells)
-                {
-                    ((DataGridCell)obj.Column.GetCellContent(obj.Item).Parent).Background = Brushes.LightGreen;
-                }
             }
 
             mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_Y;
@@ -481,42 +649,20 @@ namespace small_n_stats_WPF.ViewModels
             YRangeValues = DataGridTools.GetColumnName(lowColY) + lowRowY.ToString() + ":" + DataGridTools.GetColumnName(highColY) + highRowY.ToString();
         }
 
-        private List<double> GetRangedValues(int startRow, int endRow, int column)
+        /// <summary>
+        /// Function for parsing values of individual cells by referencing view model
+        /// </summary>
+        private List<double> GetRangedValuesVM(int startCol, int endCol, int startRow)
         {
             List<double> mRange = new List<double>();
 
-            DataGridCell mCell;
-            double test;
-
-            for (int i = startRow; i <= endRow; i++)
-            {
-                mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), column);
-
-                if (!Double.TryParse((((TextBlock)mCell.Content)).Text.ToString(), out test))
-                {
-                    return null;
-                }
-                else
-                {
-                    mRange.Add(test);
-                }
-            }
-
-            return mRange;
-        }
-
-        private List<double> GetRangedValuesHorizontal(int startCol, int endCol, int row)
-        {
-            List<double> mRange = new List<double>();
-
-            DataGridCell mCell;
             double test;
 
             for (int i = startCol; i <= endCol; i++)
             {
-                mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, row), i);
+                string mRowItem = mViewModel.RowViewModels[startRow].values[i];
 
-                if (!Double.TryParse((((TextBlock)mCell.Content)).Text.ToString(), out test))
+                if (!Double.TryParse(mRowItem, out test))
                 {
                     return null;
                 }
@@ -529,86 +675,35 @@ namespace small_n_stats_WPF.ViewModels
             return mRange;
         }
 
-        private List<double>[] GetRanged(int startRowX, int endRowX, int columnX, int startRowY, int endRowY, int columnY)
-        {
-            List<double>[] array = new List<double>[2];
-            array[0] = new List<double>();
-            array[1] = new List<double>();
-
-            DataGridCell mCellX,
-                         mCellY;
-
-            double testX = -1,
-                   testY = -1;
-
-            int i = startRowX,
-                j = startRowY;
-
-            for (; i <= endRowX && j <= endRowY;)
-            {
-                mCellX = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), columnX);
-                mCellY = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, j), columnY);
-
-                if (Double.TryParse((((TextBlock)mCellX.Content)).Text.ToString(), out testX) &&
-                    Double.TryParse((((TextBlock)mCellY.Content)).Text.ToString(), out testY))
-                {
-                    array[0].Add(testX);
-                    array[1].Add(testY);
-
-                }
-
-                i++;
-                j++;
-            }
-
-            return array;
-        }
-
         /// <summary>
-        /// A method for submitting a string-encoded range and returning the value of the cells selected.
+        /// Function for parsing values of individual cells by referencing view model
         /// </summary>
-        /// <param name="range">
-        /// List of double values returned for use as delay or value points in Computation
-        /// </param>
-        public double[,] ParseBulkRange(int lowRowValue, int highRowValue, int lowColValue, int highColValue)
+        private List<double> GetRangedValuesVerticalVM(int startRow, int endRow, int col)
         {
-            double[,] mDouble = null;
-            DataGridCell mCell;
-            double test;
+            List<double> mRange = new List<double>();
 
-            int mRows = (highRowValue - lowRowValue) + 1;
-            int mCols = (highColValue - lowColValue) + 1;
-
-            mDouble = new double[mCols, mRows];
-
-            try
+            if (startRow == -1 && endRow == -1)
             {
-
-                for (int i = lowRowValue; i <= highRowValue; i++)
-                {
-
-                    for (int j = lowColValue; j <= highColValue; j++)
-                    {
-                        mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), j);
-
-                        if (!Double.TryParse((((TextBlock)mCell.Content)).Text.ToString(), out test))
-                        {
-                            return null;
-                        }
-                        else
-                        {
-                            mDouble[j - lowColValue, i - lowRowValue] = test;
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
                 return null;
             }
 
-            return mDouble;
+            double test;
+
+            for (int i = startRow; i <= endRow; i++)
+            {
+                string mRowItemCell = mViewModel.RowViewModels[i].values[col];
+
+                if (!Double.TryParse(mRowItemCell, out test))
+                {
+                    return null;
+                }
+                else
+                {
+                    mRange.Add(test);
+                }
+            }
+
+            return mRange;
         }
 
         /// <summary>
@@ -617,10 +712,12 @@ namespace small_n_stats_WPF.ViewModels
         /// <param name="range">
         /// List of double values returned for use as delay or value points in Computation
         /// </param>
-        public string[,] ParseBulkRangeStrings(int lowRowValue, int highRowValue, int lowColValue, int highColValue)
+        public string[,] ParseBulkRangeStringsVM(int lowRowValue, int highRowValue, int lowColValue, int highColValue)
         {
             string[,] mDouble = null;
-            DataGridCell mCell;
+
+            double tempHolder;
+            List<double> tempHolderList = new List<double>();
 
             int mRows = (highRowValue - lowRowValue) + 1;
             int mCols = (highColValue - lowColValue) + 1;
@@ -632,23 +729,36 @@ namespace small_n_stats_WPF.ViewModels
 
                 for (int i = lowRowValue; i <= highRowValue; i++)
                 {
-
                     for (int j = lowColValue; j <= highColValue; j++)
                     {
-                        mCell = DataGridTools.GetDataGridCell(mWindow.dataGrid, DataGridTools.GetDataGridRow(mWindow.dataGrid, i), j);
-                        mDouble[j - lowColValue, i - lowRowValue] = (((TextBlock)mCell.Content)).Text.ToString();
+                        string mRowItem = mViewModel.RowViewModels[i].values[j];
+                        mDouble[j - lowColValue, i - lowRowValue] = mRowItem;
+
+                        if (double.TryParse(mRowItem, out tempHolder))
+                        {
+                            tempHolderList.Add(tempHolder);
+                        }
                     }
                 }
             }
-            catch (Exception e)
+            catch 
             {
-                Console.WriteLine(e.ToString());
                 return null;
             }
+
+            var yList = tempHolderList.ToList().Where(e => e >= 1).OrderBy(e => e);
+            double kHigh = yList.Max(),
+                   kLow = yList.Min();
+
+            kValueDouble = Math.Log10(kHigh) - Math.Log10(kLow);
 
             return mDouble;
         }
 
+        /// <summary>
+        /// Command-call to calculate based on supplied ranges and reference values (max value).
+        /// Will reference user-selected options (figures, outputs, etc.) throughout calls to R
+        /// </summary>
         private void CalculateScores()
         {
             if (failed) return;
@@ -659,7 +769,8 @@ namespace small_n_stats_WPF.ViewModels
             mWindow.OutputEvents("Checking user-supplied ranges and reference points.");
             
             List<double> xRange = new List<double>();
-            xRange = GetRangedValues(lowRowX, highRowX, lowColX);
+
+            xRange = GetRangedValuesVM(lowColX, highColX, lowRowX);
 
             if (xRange == null)
             {
@@ -674,7 +785,7 @@ namespace small_n_stats_WPF.ViewModels
 
             List<double> yRange = new List<double>();
 
-            string[,] wholeRange = ParseBulkRangeStrings(lowRowY, highRowY, lowColY, highColY);
+            string[,] wholeRange = ParseBulkRangeStringsVM(lowRowY, highRowY, lowColY, highColY);
 
             if (wholeRange == null)
             {
@@ -689,42 +800,33 @@ namespace small_n_stats_WPF.ViewModels
             yRange.Clear();
             xRangeShadow.Clear();
 
-            for (int i = 0; i < wholeRange.GetLength(1); i++)
+            for (int i = 0; i < wholeRange.GetLength(0); i++)
             {
-                if (double.TryParse(wholeRange[0, i], out holder))
+                if (double.TryParse(wholeRange[i, 0], out holder))
                 {
                     yRange.Add(holder);
                     xRangeShadow.Add(xRange[i]);
                 }
             }
             
-            List<double> kRanges = GetRangedValuesHorizontal(lowColK, highColK, lowRowK);
+            List<double> kRanges = GetRangedValuesVerticalVM(lowRowK, highRowK, lowColK);
 
-            if (kRanges != null && kRanges.Count() > 2)
+            if(AdvancedMenu)
             {
-                customK = true;
-
-                foreach (double v in kRanges)
+                if (kRanges != null)
                 {
-                    System.Console.WriteLine("output: " + v.ToString());
+                    if (kRanges.Count() > 1 && kRanges.Count() == wholeRange.GetLength(1))
+                    {
+                        customK = true;
+                    }
+                    else if (kRanges.Count() > 1 && kRanges.Count() != wholeRange.GetLength(1))
+                    {
+                        mWindow.OutputEvents("Your custom k ranges don't match the # of columns. Column #=" + kRanges.Count() + "; Consumption Dim #=" + wholeRange.GetLength(1));
+                        MessageBox.Show("Hmm, check your k range.  It doesn't seem paired up");
+                        return;
+                    }
                 }
-
             }
-            else if ((kRanges.Count() != wholeRange.GetLength(1)))
-            {
-                mWindow.OutputEvents("Your custom k ranges don't match the # of columns. Column #=" + kRanges.Count() + "; Consumption Dim #=" + wholeRange.GetLength(1));
-                MessageBox.Show("Hmm, check your k range.  It doesn't seem paired up");
-                return;
-            }
-            else if (!double.TryParse(KValue, out kValueDouble) && (kValueDouble <= 0.0))
-            {
-                mWindow.OutputEvents("Error in computing ranges, inputs must be equal in length.");
-                mWindow.OutputEvents("Scaling constant (k) was: " + kValueDouble);
-                MessageBox.Show("Hmm, check your ranges.  These don't seem paired up");
-                return;
-            }
-
-
 
             mWindow.OutputEvents("All inputs passed verification.");
             mWindow.OutputEvents("---------------------------------------------------");
@@ -733,25 +835,24 @@ namespace small_n_stats_WPF.ViewModels
             var mWin = new ResultsWindow();
             var mVM = new ResultsViewModel();
             mWin.DataContext = mVM;
-            //mWin.Owner = windowRef;
-            mWin.Topmost = true;
+            mWin.Owner = windowRef;
+            //mWin.Topmost = true;
 
-            for (int i = 0; i < 35; i++)
+            for (int i = 0; i < wholeRange.GetLength(1) + 5; i++)
             {
                 mVM.RowViewModels.Add(new RowViewModel());
             }
 
-            for (int mIndex = 0; mIndex < wholeRange.GetLength(0); mIndex++)
+            for (int mIndex = 0; mIndex < wholeRange.GetLength(1); mIndex++)
             {
                 engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
 
                 yRange.Clear();
                 xRangeShadow.Clear();
 
-                for (int i = 0; i < wholeRange.GetLength(1); i++)
+                for (int i = 0; i < wholeRange.GetLength(0); i++)
                 {
-
-                    if (double.TryParse(wholeRange[mIndex, i], out holder))
+                    if (double.TryParse(wholeRange[i, mIndex], out holder))
                     {
                         yRange.Add(holder);
                         xRangeShadow.Add(xRange[i]);
@@ -760,16 +861,10 @@ namespace small_n_stats_WPF.ViewModels
 
                 try
                 {
-                    NumericVector yValues = engine.CreateNumericVector(yRange.ToArray());
-                    engine.SetSymbol("yLoad", yValues);
-
-                    NumericVector xValues = engine.CreateNumericVector(xRange.ToArray());
-                    engine.SetSymbol("xLoad", xValues);
-
                     List<double> kRange = new List<double>();
                     List<double> pRange = new List<double>();
 
-                    for (int i = 0; i < xRange.Count; i++)
+                    for (int i = 0; i < xRangeShadow.Count; i++)
                     {
                         if (customK)
                         {
@@ -786,64 +881,137 @@ namespace small_n_stats_WPF.ViewModels
                     NumericVector participantValues = engine.CreateNumericVector(pRange.ToArray());
                     engine.SetSymbol("pLoad", participantValues);
 
-
                     NumericVector kValues = engine.CreateNumericVector(kRange.ToArray());
                     engine.SetSymbol("kLoad", kValues);
-
-                    if (modelArraySelection == "Exponential")
-                    {
-                        engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunction());
-                    }
-                    else if (modelArraySelection == "Exponentiated")
-                    {
-                        engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunction());
-                    }
 
                     if (mIndex == 0)
                     {
                         mVM.RowViewModels[0].values[0] = "Results of Fitting";
-                        mVM.RowViewModels[1].values[0] = "K Value";
-                        mVM.RowViewModels[2].values[0] = "Fitted Parameters";
-                        mVM.RowViewModels[3].values[0] = "q0";
-                        mVM.RowViewModels[4].values[0] = "alpha";
+                        mVM.RowViewModels[0].values[1] = "K Value";
+                        mVM.RowViewModels[0].values[2] = "q0";
+                        mVM.RowViewModels[0].values[3] = "alpha";
 
-                        mVM.RowViewModels[6].values[0] = "Standard Error";
+                        mVM.RowViewModels[0].values[4] = "q0 (se)";
+                        mVM.RowViewModels[0].values[5] = "alpha (se)";
+                        mVM.RowViewModels[0].values[6] = "Q0 (95% CI)";
+                        mVM.RowViewModels[0].values[7] = "alpha (95% CI)";
 
-                        mVM.RowViewModels[7].values[0] = "q0 (se)";
-                        mVM.RowViewModels[8].values[0] = "alpha (se)";
-                        mVM.RowViewModels[10].values[0] = "95% CI";
-                        mVM.RowViewModels[11].values[0] = "Q0";
-                        mVM.RowViewModels[12].values[0] = "alpha";
-
-                        mVM.RowViewModels[14].values[0] = "Goodness of Fitness";
-                        mVM.RowViewModels[15].values[0] = "R-Squared";
-                        mVM.RowViewModels[16].values[0] = "Abs. Sum Squares";
-                        mVM.RowViewModels[17].values[0] = "Resid. SD";
-
+                        mVM.RowViewModels[0].values[8] = "R-Squared";
+                        mVM.RowViewModels[0].values[9] = "Abs. Sum Squares";
+                        mVM.RowViewModels[0].values[10] = "Resid. SD";
+                        mVM.RowViewModels[0].values[11] = "Pricing";
+                        mVM.RowViewModels[0].values[12] = "Consumption";
+                        mVM.RowViewModels[0].values[13] = "Notes";
 
                     }
 
-                    mVM.RowViewModels[0].values[1 + mIndex] = "Series #" + (mIndex+1).ToString();
-                    mVM.RowViewModels[1].values[1 + mIndex] = kRange.Min().ToString();
-                    mVM.RowViewModels[3].values[1 + mIndex] = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0").AsVector().First().ToString();
-                    mVM.RowViewModels[4].values[1 + mIndex] = engine.Evaluate("fitFrame[fitFrame$p==1,]$alpha").AsVector().First().ToString();
+                    mVM.RowViewModels[1 + mIndex].values[0] = "Series #" + (mIndex+1).ToString();
+                    mVM.RowViewModels[1 + mIndex].values[1] = kRange.Min().ToString();
 
-                    mVM.RowViewModels[7].values[1 + mIndex] = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0err").AsVector().First().ToString();
-                    mVM.RowViewModels[8].values[1 + mIndex] = engine.Evaluate("fitFrame[fitFrame$p==1,]$alphaerr").AsVector().First().ToString();
+                    NumericVector yValues = null;
+                    NumericVector xValues = null;
 
-                    string qLow = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0low").AsVector().First().ToString();
-                    string qHigh = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0high").AsVector().First().ToString();
+                    if (modelArraySelection == "Exponential")
+                    {
 
-                    string aLow = engine.Evaluate("fitFrame[fitFrame$p==1,]$alow").AsVector().First().ToString();
-                    string aHigh = engine.Evaluate("fitFrame[fitFrame$p==1,]$ahigh").AsVector().First().ToString();
+                        for (int i = 0; i < xRange.Count(); i++)
+                        {
+                            if (xRangeShadow[i] == 0)
+                            {
+                                xRangeShadow[i] = 0.01;
+                            }
+                        }
 
-                    mVM.RowViewModels[11].values[1 + mIndex] = qLow + " - " + qHigh;
-                    mVM.RowViewModels[12].values[1 + mIndex] = aLow + " - " + aHigh;
+                        List<int> removeList = new List<int>();
 
-                    mVM.RowViewModels[15].values[1 + mIndex] = engine.Evaluate("fitFrame[fitFrame$p==1,]$r2").AsVector().First().ToString();
-                    mVM.RowViewModels[16].values[1 + mIndex] = engine.Evaluate("fitFrame[fitFrame$p==1,]$absSS").AsVector().First().ToString();
-                    mVM.RowViewModels[17].values[1 + mIndex] = engine.Evaluate("fitFrame[fitFrame$p==1,]$sdResid").AsVector().First().ToString();
+                        for (int i = 0; i < yRange.Count(); i++)
+                        {
+                            if (yRange[i] == 0)
+                            {
+                                removeList.Add(i);
+                            }
+                        }
 
+                        List<double> tempX = new List<double>(xRangeShadow);
+                        List<double> tempY = new List<double>(yRange);
+
+                        if (removeList.Count() > 0)
+                        {
+                            foreach(int index in removeList)
+                            {
+                                xRangeShadow.Remove(tempX[index]);
+                                yRange.Remove(tempY[index]);
+                            }
+                        }
+
+                        if (yRange.Count() < 3)
+                        {
+                            for (int i = 2; i <= 10; i++)
+                            {
+                                mVM.RowViewModels[1 + mIndex].values[i] = "NA";
+                            }
+
+                            mVM.RowViewModels[1 + mIndex].values[11] = string.Join(",", xRangeShadow);
+                            mVM.RowViewModels[1 + mIndex].values[12] = string.Join(",", yRange);
+                            mVM.RowViewModels[1 + mIndex].values[13] = "Model could not be run, fewer than 3 data points were present?";
+
+                            continue;
+                        }
+
+                        yValues = engine.CreateNumericVector(yRange.ToArray());
+                        engine.SetSymbol("yLoad", yValues);
+
+                        xValues = engine.CreateNumericVector(xRangeShadow.ToArray());
+                        engine.SetSymbol("xLoad", xValues);
+
+                        engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunction());
+
+                    }
+                    else if (modelArraySelection == "Exponentiated")
+                    {
+                        yValues = engine.CreateNumericVector(yRange.ToArray());
+                        engine.SetSymbol("yLoad", yValues);
+
+                        xValues = engine.CreateNumericVector(xRangeShadow.ToArray());
+                        engine.SetSymbol("xLoad", xValues);
+
+                        engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunction());
+                    }
+
+                    // NA's default to true in R.Net
+                    if (engine.Evaluate("fitFrame[fitFrame$p==1,]$q0").AsVector().First().ToString() != "True")
+                    {
+                        mVM.RowViewModels[1 + mIndex].values[2] = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0").AsVector().First().ToString();
+                        mVM.RowViewModels[1 + mIndex].values[3] = engine.Evaluate("fitFrame[fitFrame$p==1,]$alpha").AsVector().First().ToString();
+                        mVM.RowViewModels[1 + mIndex].values[4] = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0err").AsVector().First().ToString();
+                        mVM.RowViewModels[1 + mIndex].values[5] = engine.Evaluate("fitFrame[fitFrame$p==1,]$alphaerr").AsVector().First().ToString();
+
+                        string qLow = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0low").AsVector().First().ToString();
+                        string qHigh = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0high").AsVector().First().ToString();
+                        string aLow = engine.Evaluate("fitFrame[fitFrame$p==1,]$alow").AsVector().First().ToString();
+                        string aHigh = engine.Evaluate("fitFrame[fitFrame$p==1,]$ahigh").AsVector().First().ToString();
+
+                        mVM.RowViewModels[1 + mIndex].values[6] = qLow + " - " + qHigh;
+                        mVM.RowViewModels[1 + mIndex].values[7] = aLow + " - " + aHigh;
+
+                        mVM.RowViewModels[1 + mIndex].values[8] = engine.Evaluate("fitFrame[fitFrame$p==1,]$r2").AsVector().First().ToString();
+                        mVM.RowViewModels[1 + mIndex].values[9] = engine.Evaluate("fitFrame[fitFrame$p==1,]$absSS").AsVector().First().ToString();
+                        mVM.RowViewModels[1 + mIndex].values[10] = engine.Evaluate("fitFrame[fitFrame$p==1,]$sdResid").AsVector().First().ToString();
+
+                        mVM.RowViewModels[1 + mIndex].values[11] = string.Join(",", xValues);
+                        mVM.RowViewModels[1 + mIndex].values[12] = string.Join(",", yValues);
+                    }
+                    else
+                    {
+                        for (int i=2;i<=10;i++)
+                        {
+                            mVM.RowViewModels[1 + mIndex].values[i] = "NA";
+                        }
+
+                        mVM.RowViewModels[1 + mIndex].values[11] = string.Join(",", xValues);
+                        mVM.RowViewModels[1 + mIndex].values[12] = string.Join(",", yValues);
+                        mVM.RowViewModels[1 + mIndex].values[13] = "Model did not optimize, was a curve actually present?";
+                    }
 
                 }
                 catch (ParseException pe)
@@ -851,7 +1019,7 @@ namespace small_n_stats_WPF.ViewModels
                     Console.WriteLine(pe.ToString());
                 }
 
-                mWindow.OutputEvents("Computation #" + ((int)mIndex + (int)1) + " of " + wholeRange.GetLength(0) + " Completed!");
+                mWindow.OutputEvents("Computation #" + ((int)mIndex + (int)1) + " of " + wholeRange.GetLength(1) + " Completed!");
 
             }
 
