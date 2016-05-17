@@ -15,8 +15,16 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Demand Analysis.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
 #
-#    Demand Analysis incorporates components from Beezdemand to compute derived 
-#    demand measures (e.g., pmaxd, omaxd)
+#    Demand Analysis incorporates source from Beezdemand to compute the following  
+#    demand measures:
+#        OmaxE
+#        PmaxE
+#        Q0e
+#        BP0
+#        BP1
+#        EV
+#        OmaxD
+#        PmaxD
 #
 #    ================================================================================
 # 
@@ -76,6 +84,8 @@ for (i in 1:nSimulated)
   dataHolder <- dataHolder[dataHolder$y != 0, ]
   dataHolder$expend <- (dataHolder$x * dataHolder$y)
 
+  ### These measures computed even if model fails/is not appropriate
+
   fitFrame[fitFrame$p==i,]$OmaxE <- max(dataHolder$expend)
   fitFrame[fitFrame$p==i,]$PmaxE <- max(dataHolder[dataHolder$expend == max(dataHolder$expend),]$x)
   fitFrame[fitFrame$p==i,]$Q0e <- dataHolder[dataHolder$x == min(dataHolder$x),]$y
@@ -89,6 +99,8 @@ for (i in 1:nSimulated)
   {
 	fitFrame[fitFrame$p==i,]$BP1 <- max(dataHolder[dataHolder$y != 0,]$x)
   }
+
+  ###
 
   fit <- NULL
   try(fit <- wrapnls(data=dataHolder, (log(y)/log(10)) ~ (log(q0)/log(10)) + k * (exp(-alpha*q0*x)-1), start=c(q0=3, alpha=0.000000001), control = list(maxiter = 1000)), silent=TRUE)
