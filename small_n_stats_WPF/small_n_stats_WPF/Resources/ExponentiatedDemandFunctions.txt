@@ -53,6 +53,7 @@ SourceFrame <- data.frame(
 
 nSimulated <- length(SourceFrame$p)
 
+
 fitFrame <- data.frame(
   p=seq(1,nSimulated,1),
   q0=rep(NA,nSimulated),
@@ -66,10 +67,42 @@ fitFrame <- data.frame(
   q0low=rep(NA,nSimulated),
   q0high=rep(NA,nSimulated),
   alow=rep(NA,nSimulated),
-  ahigh=rep(NA,nSimulated))
+  ahigh=rep(NA,nSimulated),
+  OmaxE=rep(NA,nSimulated),
+  PmaxE=rep(NA,nSimulated),
+  Q0e=rep(NA,nSimulated),
+  BP0=rep(NA,nSimulated),
+  BP1=rep(NA,nSimulated),
+  EV=rep(NA,nSimulated),
+  OmaxD=rep(NA,nSimulated),
+  PmaxD=rep(NA,nSimulated))
 
 for (i in 1:nSimulated)
 {
+  dataHolder <- NULL
+  dataHolder <- SourceFrame[SourceFrame$p==i,]
+  dataHolder[dataHolder$x == 0, ]$x <- 0.01
+  dataHolder <- dataHolder[dataHolder$y != 0, ]
+  dataHolder$expend <- (dataHolder$x * dataHolder$y)
+  
+  ### These measures computed even if model fails/is not appropriate
+
+  fitFrame[fitFrame$p==i,]$OmaxE <- max(dataHolder$expend)
+  fitFrame[fitFrame$p==i,]$PmaxE <- max(dataHolder[dataHolder$expend == max(dataHolder$expend),]$x)
+  fitFrame[fitFrame$p==i,]$Q0e <- dataHolder[dataHolder$x == min(dataHolder$x),]$y
+  
+  if (length(dataHolder[dataHolder$y == 0,]$x) > 0)
+  {
+	fitFrame[fitFrame$p==i,]$BP0 <- min(dataHolder[dataHolder$y == 0,]$x)
+  }
+
+  if (sum(dataHolder$y > 0))
+  {
+	fitFrame[fitFrame$p==i,]$BP1 <- max(dataHolder[dataHolder$y != 0,]$x)
+  }
+
+  ###
+
   fit <- NULL
   try(fit <- wrapnls(data=SourceFrame[SourceFrame$p==i,], y ~ q0 * 10^(k * (exp(-alpha*q0*x)-1)), start=c(q0=3, alpha=0.000000001), control = list(maxiter = 1000)), silent=TRUE)
 
