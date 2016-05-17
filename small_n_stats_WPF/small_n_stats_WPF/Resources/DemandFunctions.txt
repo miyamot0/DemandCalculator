@@ -15,10 +15,27 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Demand Analysis.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
 #
+#	 Demand Analysis incorporates components from Beezdemand to compute derived 
+#	 demand measures (e.g., pmaxd, omaxd)
 #
-#
+#	 ================================================================================
 # 
-# params = Demand Function fittings
+#	 Beezdemand is distributed under this license:
+#
+#    Copyright 2016 Brent Kaplan
+#
+#    Beezdemand is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 2.
+#
+#    Beezdemand is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with Beezdemand.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+#
 
 SourceFrame <- data.frame(
   p=pLoad,
@@ -59,6 +76,20 @@ for (i in 1:nSimulated)
   dataHolder <- dataHolder[dataHolder$y != 0, ]
   dataHolder$expend <- (dataHolder$x * dataHolder$y)
 
+  fitFrame[fitFrame$p==i,]$OmaxE <- max(dataHolder$expend)
+  fitFrame[fitFrame$p==i,]$PmaxE <- max(dataHolder[dataHolder$expend == max(dataHolder$expend),]$x)
+  fitFrame[fitFrame$p==i,]$Q0e <- dataHolder[dataHolder$x == min(dataHolder$x),]$y
+  
+  if (length(dataHolder[dataHolder$y == 0,]$x) > 0)
+  {
+	fitFrame[fitFrame$p==i,]$BP0 <- min(dataHolder[dataHolder$y == 0,]$x)
+  }
+
+  if (sum(dataHolder$y > 0))
+  {
+	fitFrame[fitFrame$p==i,]$BP1 <- max(dataHolder[dataHolder$y != 0,]$x)
+  }
+
   fit <- NULL
   try(fit <- wrapnls(data=dataHolder, (log(y)/log(10)) ~ (log(q0)/log(10)) + k * (exp(-alpha*q0*x)-1), start=c(q0=3, alpha=0.000000001), control = list(maxiter = 1000)), silent=TRUE)
   
@@ -76,33 +107,11 @@ for (i in 1:nSimulated)
     fitFrame[fitFrame$p==i,]$q0high <- confint2(fit)[3]
     fitFrame[fitFrame$p==i,]$alow <- confint2(fit)[2]
     fitFrame[fitFrame$p==i,]$ahigh <- confint2(fit)[4]
-
-    ## Model Fit need not happen for these to be observed
-
-    fitFrame[fitFrame$p==i,]$OmaxE <- max(dataHolder$expend)
-    fitFrame[fitFrame$p==i,]$PmaxE <- max(dataHolder[dataHolder$expend == max(dataHolder$expend),]$x)
-    fitFrame[fitFrame$p==i,]$Q0e <- dataHolder[dataHolder$x == min(dataHolder$x),]$y
-
-    ##
-
-    if (length(dataHolder[dataHolder$y == 0,]$x) > 0)
-    {
-        fitFrame[fitFrame$p==i,]$BP0 <- min(dataHolder[dataHolder$y == 0,]$x)
-    }
-
-    if (sum(dataHolder$y > 0))
-    {
-        fitFrame[fitFrame$p==i,]$BP1 <- max(dataHolder[dataHolder$y != 0,]$x)
-    }
-
     fitFrame[fitFrame$p==i,]$EV <- 1/(fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5) * 100)
     fitFrame[fitFrame$p==i,]$PmaxD <- 1/(fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5)) * (0.083 * fitFrame[fitFrame$p==i,]$k + 0.65)
     fitFrame[fitFrame$p==i,]$OmaxD <- (10^(log10(fitFrame[fitFrame$p==i,]$q0) + (fitFrame[fitFrame$p==i,]$k * (exp(-fitFrame[fitFrame$p==i,]$alpha * fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$PmaxD) - 1)))) * fitFrame[fitFrame$p==i,]$PmaxD
-
   }
 }
-
-#fitFrame
 
 xDraw <- seq(min(SourceFrame$x), max(SourceFrame$x), 0.01)
 
