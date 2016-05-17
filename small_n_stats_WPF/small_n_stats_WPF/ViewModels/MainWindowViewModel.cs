@@ -656,11 +656,13 @@ namespace small_n_stats_WPF.ViewModels
 
                         using (var wb = new XLWorkbook(@openFileDialog1.FileName))
                         {
+                            
                             var ws = wb.Worksheet(1);
                             var range = ws.RangeUsed();
                             var table = range.AsTable();
+                            table.SetShowHeaderRow(false);
 
-                            //RowViewModels.Clear();
+                            RowViewModels.Clear();
 
                             ObservableCollection<RowViewModel> temp = new ObservableCollection<RowViewModel>();
 
