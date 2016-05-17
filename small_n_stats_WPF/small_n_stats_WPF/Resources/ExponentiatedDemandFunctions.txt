@@ -15,10 +15,35 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Demand Analysis.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
 #
+#    Demand Analysis incorporates source from Beezdemand to compute the following  
+#    demand measures:
+#        OmaxE
+#        PmaxE
+#        Q0e
+#        BP0
+#        BP1
+#        EV
+#        OmaxD
+#        PmaxD
 #
-#
+#    ================================================================================
 # 
-# params = Demand Function fittings
+#    Beezdemand is distributed under this license:
+#
+#    Copyright 2016 Brent Kaplan
+#
+#    Beezdemand is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 2.
+#
+#    Beezdemand is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with Beezdemand.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+#
 
 SourceFrame <- data.frame(
   p=pLoad,
@@ -26,9 +51,7 @@ SourceFrame <- data.frame(
   x=xLoad,
   k=kLoad)
 
-#SourceFrame
-
-nSimulated <- max(SourceFrame$p)
+nSimulated <- length(SourceFrame$p)
 
 fitFrame <- data.frame(
   p=seq(1,nSimulated,1),
