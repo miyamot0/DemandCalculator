@@ -755,6 +755,29 @@ namespace small_n_stats_WPF.ViewModels
             return mDouble;
         }
 
+        private bool AreZerosInMatrix(string[,] source)
+        {
+            int cols = source.GetLength(0);
+            int rows = source.GetLength(1);
+            
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    int temp;
+                    if (int.tryParse(source[i,j], out temp))
+                    {
+                        if (temp == 0)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Command-call to calculate based on supplied ranges and reference values (max value).
         /// Will reference user-selected options (figures, outputs, etc.) throughout calls to R
@@ -804,6 +827,8 @@ namespace small_n_stats_WPF.ViewModels
             yRange.Clear();
             xRangeShadow.Clear();
 
+            // TODO why is this even here anymore?  \\//
+
             for (int i = 0; i < wholeRange.GetLength(0); i++)
             {
                 if (double.TryParse(wholeRange[i, 0], out holder))
@@ -812,6 +837,8 @@ namespace small_n_stats_WPF.ViewModels
                     xRangeShadow.Add(xRange[i]);
                 }
             }
+            
+            // TODO kRanges need not be calculated if not in advanced? 
             
             List<double> kRanges = GetRangedValuesVerticalVM(lowRowK, highRowK, lowColK);
 
