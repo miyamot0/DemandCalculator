@@ -53,7 +53,6 @@ SourceFrame <- data.frame(
 
 nSimulated <- length(SourceFrame$p)
 
-
 fitFrame <- data.frame(
   p=seq(1,nSimulated,1),
   q0=rep(NA,nSimulated),
@@ -81,15 +80,16 @@ for (i in 1:nSimulated)
 {
   dataHolder <- NULL
   dataHolder <- SourceFrame[SourceFrame$p==i,]
-  dataHolder[dataHolder$x == 0, ]$x <- 0.01
-  dataHolder <- dataHolder[dataHolder$y != 0, ]
   dataHolder$expend <- (dataHolder$x * dataHolder$y)
   
   ### These measures computed even if model fails/is not appropriate
 
   fitFrame[fitFrame$p==i,]$OmaxE <- max(dataHolder$expend)
   fitFrame[fitFrame$p==i,]$PmaxE <- max(dataHolder[dataHolder$expend == max(dataHolder$expend),]$x)
-  fitFrame[fitFrame$p==i,]$Q0e <- dataHolder[dataHolder$x == min(dataHolder$x),]$y
+
+  xMin <- min(dataHolder$x)
+
+  fitFrame[fitFrame$p==i,]$Q0e <- min(dataHolder[dataHolder$x == xMin,]$y)
   
   if (length(dataHolder[dataHolder$y == 0,]$x) > 0)
   {
@@ -122,7 +122,7 @@ for (i in 1:nSimulated)
 	  fitFrame[fitFrame$p==i,]$ahigh <- confint2(fit)[4]  
 	  fitFrame[fitFrame$p==i,]$EV <- 1/(fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5) * 100)
 	  fitFrame[fitFrame$p==i,]$PmaxD <- 1/(fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5)) * (0.083 * fitFrame[fitFrame$p==i,]$k + 0.65)
-	  fitFrame[fitFrame$p==i,]$OmaxD <- (fitFrame[fitFrame$p==i,]$q0 * (10^(fitFrame[fitFrame$p==i,]$k * (exp(-fitFrame[fitFrame$p==i,]$alpha * fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$PmaxD) - 1)))) * * fitFrame[fitFrame$p==i,]$PmaxD
+      fitFrame[fitFrame$p==i,]$OmaxD <- (fitFrame[fitFrame$p==i,]$q0 * (10^(fitFrame[fitFrame$p==i,]$k * (exp(-fitFrame[fitFrame$p==i,]$alpha * fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$PmaxD) - 1)))) * fitFrame[fitFrame$p==i,]$PmaxD
   }
 }
 

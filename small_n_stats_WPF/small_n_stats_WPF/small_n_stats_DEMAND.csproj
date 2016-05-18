@@ -138,6 +138,7 @@
     <Compile Include="Utilities\ClipboardTools.cs" />
     <Compile Include="Utilities\CustomDataGrid.cs" />
     <Compile Include="Utilities\DataGridTools.cs" />
+    <Compile Include="Utilities\Decisions.cs" />
     <Compile Include="Utilities\OpenXMLHelper.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="Utilities\Settings.cs" />
@@ -174,6 +175,9 @@
     </Compile>
     <Compile Include="Views\ResultsWindow.xaml.cs">
       <DependentUpon>ResultsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectionWindow.xaml.cs">
+      <DependentUpon>SelectionWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -249,6 +253,10 @@
     <Page Include="Views\ResultsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

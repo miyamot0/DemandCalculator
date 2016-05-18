@@ -60,8 +60,7 @@
         <Grid Grid.Column="0" 
               Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -137,25 +136,9 @@
                 </TextBox.ContextMenu>
             </TextBox>
 
-            <Label Grid.Row="3" 
-               Grid.Column="0"
-               Margin="10"
-               HorizontalAlignment="Center"
-               Content="K Scaling">
-            </Label>
-
-            <TextBox
-            Name="kValue"
-            Grid.Row="3" 
-            Grid.Column="1"
-            Grid.ColumnSpan="3"
-            Margin="10"
-            Text="{Binding KValue}">
-            </TextBox>
-
             <StackPanel
             Orientation="Horizontal"
-            Grid.Row="4"
+            Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             VerticalAlignment="Center"
@@ -183,7 +166,7 @@
 
             <StackPanel
             Orientation="Horizontal"
-            Grid.Row="4"
+            Grid.Row="3"
             Grid.Column="2"
             Grid.ColumnSpan="2"
             VerticalAlignment="Center"
@@ -217,7 +200,7 @@
             <FlowDocumentScrollViewer
             Grid.Column="0"
             Grid.ColumnSpan="4"
-            Grid.Row="5"
+            Grid.Row="4"
             Grid.RowSpan="3"
             IsSelectionEnabled="False"
             VerticalScrollBarVisibility="Hidden">
@@ -243,7 +226,7 @@
             </FlowDocumentScrollViewer>
 
             <Button Name="calculateButton" 
-                Grid.Row="8" 
+                Grid.Row="7" 
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
                 Margin="10"
@@ -280,7 +263,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -304,7 +287,7 @@
             <FlowDocumentScrollViewer
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
-                Grid.Row="2"
+                Grid.Row="3"
                 Grid.RowSpan="6"
                 IsSelectionEnabled="False"
                 VerticalContentAlignment="Top"
@@ -349,8 +332,25 @@
                 </FlowDocument>
             </FlowDocumentScrollViewer>
 
+
+            <Label Grid.Row="1" 
+               Grid.Column="0"
+               Margin="10"
+               HorizontalAlignment="Center"
+               Content="Custom K">
+            </Label>
+
+            <TextBox
+            Name="kValue"
+            Grid.Row="1" 
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            Margin="10"
+            Text="{Binding KValue}">
+            </TextBox>
+            
             <Label 
-               Grid.Row="1" 
+               Grid.Row="2" 
                Grid.Column="0"
                Margin="10"
                HorizontalAlignment="Center"
@@ -361,7 +361,7 @@
             <ComboBox Name="selectedModel"
                       SelectedValuePath="Content"
                       SelectedValue="{Binding ModelArraySelection}"
-                      Grid.Row="1" 
+                      Grid.Row="2" 
                       Grid.Column="1"
                       Grid.ColumnSpan="3"
                       Margin="10"

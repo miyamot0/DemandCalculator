@@ -571,29 +571,196 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void CalculateScores()
         {
+
+
             if (failed) return;
 
             List<double>[] array = GetRangedValues(lowColX, highColX, lowRowX, lowColY, highColY, lowRowY);
-            List<double> xRange = array[0];
-            List<double> yRange = array[1];
+            List<double> xRange = new List<double>(array[0]);
+            List<double> yRange = new List<double>(array[1]);
+
+            bool isExponential = (modelArraySelection == "Exponential");
 
             if (xRange == null || yRange == null) return;
+
+            // Are zeroes in y range?
+            var yQuery = (from y in yRange
+                         where y == 0
+                         select y).Any();
+
+            List<double> xCopy, yCopy;
+
+            if (yQuery)
+            {
+                var yValueWindow = new SelectionWindow(new string[] { "Drop Zeroes", "Change Hundredth", "One Percent of Lowest" }, "Drop Zeroes");
+                yValueWindow.Title = "Zero values found in Consumption";
+                yValueWindow.MessageLabel.Text = "Please select how to manage the zero values";
+                yValueWindow.Owner = windowRef;
+                yValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                yValueWindow.Topmost = true;
+
+                if (isExponential)
+                {
+                    if (yValueWindow.ShowDialog() == true)
+                    {
+                        int output = yValueWindow.MessageOptions.SelectedIndex;
+
+                        if (output == 0)
+                        {
+                            xCopy = new List<double>();
+                            yCopy = new List<double>();
+
+                            for (int i = 0; i < yRange.Count; i++)
+                            {
+                                if (yRange[i] == 0)
+                                {
+                                    // Nothing, not even x added
+                                }
+                                else
+                                {
+                                    yCopy.Add(yRange[i]);
+                                    xCopy.Add(xRange[i]);
+                                }
+                            }
+
+                            xRange = new List<double>(xCopy);
+                            yRange = new List<double>(yCopy);
+                        }
+                        else if (output == 1)
+                        {
+                            yCopy = new List<double>();
+
+                            foreach (double y in yRange)
+                            {
+                                if (y == 0)
+                                {
+                                    yCopy.Add(0.01);
+                                }
+                                else
+                                {
+                                    yCopy.Add(y);
+                                }
+                            }
+
+                            yRange = new List<double>(yCopy);
+                        }
+                        if (output == 2)
+                        {
+                            double yLow = yRange.Where(y => y > 0).Min(y => y);
+                            yLow = yLow / 100;
+
+                            yCopy = new List<double>();
+
+                            foreach (double y in yRange)
+                            {
+                                if (y == 0)
+                                {
+                                    yCopy.Add(yLow);
+                                }
+                                else
+                                {
+                                    yCopy.Add(y);
+                                }
+                            }
+
+                            yRange = new List<double>(yCopy);
+                        }
+                    }
+                }              
+            }
+
+            // Are zeroes in y range?
+            var xQuery = (from x in xRange
+                          where x == 0
+                          select x).Any();
+
+            if (xQuery)
+            {
+                var xValueWindow = new SelectionWindow(new string[] { "Change Hundredth", "Drop Zeroes" }, "Change Hundredth");
+                xValueWindow.Title = "Zero values found in Pricing";
+                xValueWindow.MessageLabel.Text = "Please select how to manage the zero values";
+                xValueWindow.Owner = windowRef;
+                xValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                xValueWindow.Topmost = true;
+
+                if (xValueWindow.ShowDialog() == true)
+                {
+                    int output = xValueWindow.MessageOptions.SelectedIndex;
+
+                    List<double> copy;
+
+                    if (output == 0)
+                    {
+                        copy = new List<double>();
+
+                        foreach (double x in xRange)
+                        {
+                            if (x == 0)
+                            {
+                                copy.Add(0.01);
+                            }
+                            else
+                            {
+                                copy.Add(x);
+                            }
+                        }
+
+                        xRange = new List<double>(copy);
+                    }
+                    else if (output == 1)
+                    {
+                        xCopy = new List<double>();
+                        yCopy = new List<double>();
+
+                        for (int i = 0; i < xRange.Count; i++)
+                        {
+                            if (xRange[i] == 0)
+                            {
+                                // Nothing, not even x added
+                            }
+                            else
+                            {
+                                yCopy.Add(yRange[i]);
+                                xCopy.Add(xRange[i]);
+                            }
+                        }
+
+                        xRange = new List<double>(xCopy);
+                        yRange = new List<double>(yCopy);
+                    }
+                }
+            }
 
             double lowY = yRange.Where(v => v > 0).OrderBy(v => v).First();
             double highY = yRange.Where(v => v > 0).OrderBy(v => v).Last();
 
             kValueDouble = (Math.Log10(highY) - Math.Log10(lowY)) + 0.5;
 
-            /*
-            if (!double.TryParse(KValue, out kValueDouble) || (xRange.Count != yRange.Count))
+            double tempVal;
+
+            if (double.TryParse(KValue, out tempVal))
             {
-                mWindow.OutputEvents("Error in computing ranges, inputs must be equal in length.");
-                mWindow.OutputEvents("Counts for X and Y ranges were " + xRange.Count + " and " + yRange.Count + " respectively.");
-                mWindow.OutputEvents("Scaling constant (k) was: " + kValueDouble);
-                MessageBox.Show("Hmm, check your ranges.  These don't seem paired up");
-                return;
+                var kValueWindow = new SelectionWindow(new string[] { "Use derived K", "Use Custom K" }, "Use derived K");
+                kValueWindow.Title = "Multiple K Sources";
+                kValueWindow.MessageLabel.Text = "Please select where K should come from:";
+                kValueWindow.Owner = windowRef;
+                kValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                kValueWindow.Topmost = true;
+
+                if (kValueWindow.ShowDialog() == true)
+                {
+                    int output = kValueWindow.MessageOptions.SelectedIndex;
+
+                    if (output == 0)
+                    {
+                        kValueDouble = (Math.Log10(highY) - Math.Log10(lowY)) + 0.5;
+                    }
+                    else if (output == 1)
+                    {
+                        double.TryParse(KValue, out kValueDouble);
+                    }
+                }
             }
-            */
 
             mWindow.OutputEvents("---------------------------------------------------");
 

@@ -80,15 +80,16 @@ for (i in 1:nSimulated)
 {
   dataHolder <- NULL
   dataHolder <- SourceFrame[SourceFrame$p==i,]
-  dataHolder[dataHolder$x == 0, ]$x <- 0.01
-  dataHolder <- dataHolder[dataHolder$y != 0, ]
   dataHolder$expend <- (dataHolder$x * dataHolder$y)
 
   ### These measures computed even if model fails/is not appropriate
 
   fitFrame[fitFrame$p==i,]$OmaxE <- max(dataHolder$expend)
   fitFrame[fitFrame$p==i,]$PmaxE <- max(dataHolder[dataHolder$expend == max(dataHolder$expend),]$x)
-  fitFrame[fitFrame$p==i,]$Q0e <- dataHolder[dataHolder$x == min(dataHolder$x),]$y
+
+  xMin <- min(dataHolder$x)
+
+  fitFrame[fitFrame$p==i,]$Q0e <- min(dataHolder[dataHolder$x == xMin,]$y)
   
   if (length(dataHolder[dataHolder$y == 0,]$x) > 0)
   {

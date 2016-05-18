@@ -794,6 +794,10 @@ namespace small_n_stats_WPF.ViewModels
                 return;
             }
 
+            // Check for zero consumptions
+            // Check for zero prices
+            // Verify k source
+
             List<double> xRangeShadow = new List<double>();
             double holder;
 
