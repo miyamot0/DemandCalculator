@@ -777,6 +777,36 @@ namespace small_n_stats_WPF.ViewModels
 
             return false;
         }
+        
+        private double[] GetLowestAndHighestInMatrix(string[,] source)
+        {
+            int cols = source.GetLength(0);
+            int rows = source.GetLength(1);
+            
+            double low = 9999999.0;
+            double high = 0.0;
+            
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    double temp;
+                    if (double.tryParse(source[i,j], out temp))
+                    {
+                        if (temp > high)
+                        {
+                            high = temp;
+                        }
+                        else (temp < low)
+                        {
+                            low = temp;
+                        }
+                    }
+                }
+            }
+
+            return new double[] { low, high };
+        }
 
         /// <summary>
         /// Command-call to calculate based on supplied ranges and reference values (max value).
@@ -818,7 +848,13 @@ namespace small_n_stats_WPF.ViewModels
             }
 
             // Check for zero consumptions
-            // Check for zero prices
+            bool yQuery = AreZerosInMatrix(wholeRange);
+
+            // Are zeroes in x range?
+            bool xQuery = (from x in xRange
+                          where x == 0
+                          select x).Any();
+
             // Verify k source
 
             List<double> xRangeShadow = new List<double>();
