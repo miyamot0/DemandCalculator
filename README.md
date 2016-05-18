@@ -1,15 +1,17 @@
 # Small N Stats Demand Calculator
-Small N Stats Demand Calculator is a WPF application that uses R interop libraries (R.Net Community) to easily facilitate complex calculations required of behavior economic scientists.  
+Small N Stats Demand Calculator is a WPF application that uses R interop libraries (R.Net Community) to easily facilitate complex calculations required of behavior economic (BE) scientists.  
+
 Features include:
-  - Non-linear model fittings
-  - Multiple Models available
-  - Access to R-based graphics and R-based graphic capabilities
-  - Input/output in common spreadsheet file formats (.xlsx, .csv)
+  - Non-linear model fittings (John Nash's modified LM optimizer, specificially suited for BE models)
+  - Multiple Models available (Hursh & Silberberg's Exponential Model, Koffarnus et. al.'s Exponentiated model)
+  - R-based graphical output in appropriate log space(s) (ggplot2)
+  - Easily imports common file formats into the application's spreadsheet (.xlsx, .csv)
+  - Full range of BE outcome metrics (empirical and derived), saveable in common spreadsheet file formats
 
 ### Version
 1.0.0.32
 
-### Referenced Works (software)
+### Referenced Works (F/OSS software)
 The Small N Stats Demand Calculator uses a number of open source projects to work properly:
 * R Statistical Package - GPL v2 Licensed. Copyright (C) 2000-16. The R Core Team
 * RdotNet: Interface for the R Statistical Package - New BSD License (BSD 2-Clause). Copyright(c) 2010, RecycleBin. All rights reserved
@@ -25,8 +27,8 @@ The Small N Stats Demand Calculator is based on the following academic works:
 * Koffarnus, M. N., Franck, C. T., Stein, J. and Bickel, W. K. (2015). A modified exponential behavioral economic demand model to better describe consumption data. Experimental Clinical Psychopharmacology, 23, 504-512.
 
 ### Acknowledgements and Credits
-* Brent Kaplan, Applied Behavioral Economics Laboratory, University of Kansas (www.behavioraleconlab.com)
-* Derek D. Reed, Applied Behavioral Economics Laboratory, University of Kansas (www.behavioraleconlab.com)
+* Brent Kaplan, Applied Behavioral Economics Laboratory, University of Kansas (www.behavioraleconlab.com) [Github](https://github.com/bkaplan4)
+* Derek D. Reed, Applied Behavioral Economics Laboratory, University of Kansas (www.behavioraleconlab.com) [Github](https://github.com/derekdreed)
 * Chris Franck, Laboratory for Interdisciplinary Statistical Analysis - Virginia Tech
 
 ### Installation
