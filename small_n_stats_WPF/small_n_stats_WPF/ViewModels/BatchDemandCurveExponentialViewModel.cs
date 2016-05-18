@@ -856,15 +856,13 @@ namespace small_n_stats_WPF.ViewModels
                           select x).Any();
 
             // Verify k source
-
             List<double> xRangeShadow = new List<double>();
             double holder;
 
             yRange.Clear();
             xRangeShadow.Clear();
 
-            // TODO why is this even here anymore?  \\//
-
+            // Reference point to compare user-supplied k Range with
             for (int i = 0; i < wholeRange.GetLength(0); i++)
             {
                 if (double.TryParse(wholeRange[i, 0], out holder))
@@ -876,10 +874,10 @@ namespace small_n_stats_WPF.ViewModels
             
             // TODO kRanges need not be calculated if not in advanced? 
             
-            List<double> kRanges = GetRangedValuesVerticalVM(lowRowK, highRowK, lowColK);
-
             if(AdvancedMenu)
             {
+                List<double> kRanges = GetRangedValuesVerticalVM(lowRowK, highRowK, lowColK);
+
                 if (kRanges != null)
                 {
                     if (kRanges.Count() > 1 && kRanges.Count() == wholeRange.GetLength(1))
@@ -888,13 +886,89 @@ namespace small_n_stats_WPF.ViewModels
                     }
                     else if (kRanges.Count() > 1 && kRanges.Count() != wholeRange.GetLength(1))
                     {
-                        mWindow.OutputEvents("Your custom k ranges don't match the # of columns. Column #=" + kRanges.Count() + "; Consumption Dim #=" + wholeRange.GetLength(1));
-                        MessageBox.Show("Hmm, check your k range.  It doesn't seem paired up");
+                        mWindow.OutputEvents("Your custom k ranges don't match the # of rows.);
+                        MessageBox.Show("Hmm, check your k range.  It doesn't seem paired up with the rows.");
                         return;
                     }
                 }
             }
 
+            if (xQuery)
+            {
+                var xValueWindow = new SelectionWindow(new string[] { "Change Hundredth", "Drop Zeroes" }, "Change Hundredth");
+                xValueWindow.Title = "Zero values found in Pricing";
+                xValueWindow.MessageLabel.Text = "Please select how to manage the zero values";
+                xValueWindow.Owner = windowRef;
+                xValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                xValueWindow.Topmost = true;
+    
+                if (xValueWindow.ShowDialog() == true)
+                {
+                    int output = xValueWindow.MessageOptions.SelectedIndex;
+    
+                    if (output == 0)
+                    {
+                        // Set flag to mod 0's to 0.01
+                    }
+                    else if (output == 1)
+                    {
+                        // set flag to drop 0's
+                    }
+                }                
+            }
+            
+            if (yQuery)
+            {
+                var yValueWindow = new SelectionWindow(new string[] { "Drop Zeroes", "Change Hundredth", "One Percent of Lowest" }, "Drop Zeroes");
+                yValueWindow.Title = "Zero values found in Consumption";
+                yValueWindow.MessageLabel.Text = "Please select how to manage the zero values";
+                yValueWindow.Owner = windowRef;
+                yValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                yValueWindow.Topmost = true;
+                
+                if (yValueWindow.ShowDialog() == true)
+                {
+                    int output = yValueWindow.MessageOptions.SelectedIndex;
+    
+                    if (output == 0)
+                    {
+                        // Set flag to drop 0's
+                    }
+                    else if (output == 1)
+                    {
+                        // set flag to change to 0.01
+                    }
+                    else if (output == 2)
+                    {
+                        // set flag to change to 1% of lowest
+                    }
+                }
+            }
+            
+            if (customK)
+            {
+                var kValueWindow = new SelectionWindow(new string[] { "Use derived K", "Use Custom Ks" }, "Use derived K");
+                kValueWindow.Title = "Multiple K Sources";
+                kValueWindow.MessageLabel.Text = "Please select where K should come from (derived recommended):";
+                kValueWindow.Owner = windowRef;
+                kValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                kValueWindow.Topmost = true;
+
+                if (kValueWindow.ShowDialog() == true)
+                {
+                    int output = kValueWindow.MessageOptions.SelectedIndex;
+
+                    if (output == 0)
+                    {
+                        // flag to use derived K's
+                    }
+                    else if (output == 1)
+                    {
+                        // flag to use supplied k's
+                    }
+                }
+            }
+            
             mWindow.OutputEvents("All inputs passed verification.");
             mWindow.OutputEvents("---------------------------------------------------");
             mWindow.OutputEvents("Beginning Batched Computations...");
