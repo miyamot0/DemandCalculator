@@ -103,20 +103,37 @@ namespace small_n_stats_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright 2016 Shawn Gilroy
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string GraphingExponential {
+            get {
+                return ResourceManager.GetString("GraphingExponential", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string GraphingExponentiated {
+            get {
+                return ResourceManager.GetString("GraphingExponentiated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Demand Curve Calculator is Copyright (C) 2016 Shawn Gilroy
+        ///Contact: Shawn Gilroy (shawn.gilroy@temple.edu)
         ///
-        ///This file is part of Demand Analysis.
+        ///====================
+        ///Demand Curve Calculator LICENSE
+        ///====================
         ///
-        ///Demand Analysis is free software: you can redistribute it and/or modify
-        ///it under the terms of the GNU General Public License as published by
-        ///the Free Software Foundation, version 2.
+        ///Demand Curve Calculator is free software: you can redistribute it and/or modify it 
+        ///under the terms of the GNU General Public License as published by the 
+        ///Free Software Foundation, version 2.
         ///
-        ///Demand Analysis is distributed in the hope that it will be useful,
-        ///but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///GNU General Public License for more details.
-        ///
-        ///You should [rest of string was truncated]&quot;;.
+        ///Demand Curve Calculator is distributed in the hope that it will be useful, but
+        ///WITHOUT ANY WARRANTY; without even the implie [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LICENSE {
             get {

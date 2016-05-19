@@ -1598,7 +1598,14 @@ namespace small_n_stats_WPF.ViewModels
                         mVM.RowViewModels[1].values[21] = "Model did not optimize, was a curve actually present?";
                     }
 
-                    engine.Evaluate("print(logChart)");
+                    if (modelArraySelection == "Exponential")
+                    {
+                        engine.Evaluate(DemandFunctionSolvers.GetExponentialGraphingFunction());
+                    }
+                    else if (modelArraySelection == "Exponentiated")
+                    {
+                        engine.Evaluate(DemandFunctionSolvers.GetExponentiatedGraphingFunction());
+                    }
                 }
                 catch (ParseException pe)
                 {

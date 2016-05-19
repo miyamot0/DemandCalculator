@@ -36,5 +36,21 @@ namespace small_n_stats_WPF.Mathematics
         {
             return Properties.Resources.ExponentiatedDemandFunctions;
         }
+
+        /// <summary>
+        /// Graphing code for logged exponential model
+        /// </summary>
+        public static string GetExponentialGraphingFunction()
+        {
+            return Properties.Resources.GraphingExponential;
+        }
+
+        /// <summary>
+        /// Graphing code for logged exponentiated model
+        /// </summary>
+        public static string GetExponentiatedGraphingFunction()
+        {
+            return Properties.Resources.GraphingExponentiated;
+        }
     }
 }

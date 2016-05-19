@@ -874,7 +874,14 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     try
                     {
-                        engine.Evaluate("print(logChart)");
+                        if (modelArraySelection == "Exponential")
+                        {
+                            engine.Evaluate(DemandFunctionSolvers.GetExponentialGraphingFunction());
+                        }
+                        else if (modelArraySelection == "Exponentiated")
+                        {
+                            engine.Evaluate(DemandFunctionSolvers.GetExponentiatedGraphingFunction());
+                        }
                     }
                     catch (Exception e)
                     {

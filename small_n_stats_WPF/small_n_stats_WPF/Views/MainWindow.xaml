@@ -209,15 +209,6 @@
                 </MenuItem>
             </Menu>
 
-	    <!-- 
-	    	TODO
-	    	test out property changed handler?
-	    	... Mode=TwoWay, UpdateSourceTrigger=PropertyChanged for itemsource?
-
-	    	bind on focus change?
-	    	... UpdateSourceTrigger=LostFocus ?
-	    -->
-
             <custom:CustomDataGrid x:Name="dataGrid" 
                                     HorizontalAlignment="Stretch" 
                                     VerticalContentAlignment="Stretch"
