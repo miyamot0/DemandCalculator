@@ -2,6 +2,7 @@
 {
     public enum YValueDecisions
     {
+        DoNothing,
         DropZeros,
         ChangeHundredth,
         OnePercentLowest
@@ -9,7 +10,14 @@
 
     public enum XValueDecisions
     {
+        DoNothing,
         ChangeHundredth,
         DropZeros
+    }
+
+    public enum KValueDecisions
+    {
+        DeriveValues,
+        UseSuppliedValues
     }
 }

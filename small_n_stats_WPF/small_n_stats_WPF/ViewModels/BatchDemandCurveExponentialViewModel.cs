@@ -147,6 +147,17 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        private string selectedMode = "Individual";
+        public string SelectedMode
+        {
+            get { return selectedMode; }
+            set
+            {
+                selectedMode = value;
+                OnPropertyChanged("SelectedMode");
+            }
+        }
+
         private Brush xBrush = Brushes.White;
         public Brush XBrush
         {
@@ -755,6 +766,15 @@ namespace small_n_stats_WPF.ViewModels
             return mDouble;
         }
 
+        /// <summary>
+        /// Bool check if there are zeroes in the supplied two dimensional arrow
+        /// </summary>
+        /// <param name="source">
+        /// Two dimensional array
+        /// </param>
+        /// <returns>
+        /// Return true if a zero is somewhere in matrix
+        /// </returns>
         private bool AreZerosInMatrix(string[,] source)
         {
             int cols = source.GetLength(0);
@@ -765,7 +785,7 @@ namespace small_n_stats_WPF.ViewModels
                 for (int j = 0; j < cols; j++)
                 {
                     int temp;
-                    if (int.tryParse(source[i,j], out temp))
+                    if (int.TryParse(source[j,i], out temp))
                     {
                         if (temp == 0)
                         {
@@ -777,7 +797,16 @@ namespace small_n_stats_WPF.ViewModels
 
             return false;
         }
-        
+
+        /// <summary>
+        /// Bool check if there are zeroes in the supplied two dimensional arrow
+        /// </summary>
+        /// <param name="source">
+        /// Two dimensional array
+        /// </param>
+        /// <returns>
+        /// Return two index array of the lowest (1) and highest (2) non-zero elements
+        /// </returns>
         private double[] GetLowestAndHighestInMatrix(string[,] source)
         {
             int cols = source.GetLength(0);
@@ -791,13 +820,13 @@ namespace small_n_stats_WPF.ViewModels
                 for (int j = 0; j < cols; j++)
                 {
                     double temp;
-                    if (double.tryParse(source[i,j], out temp))
+                    if (double.TryParse(source[j,i], out temp))
                     {
                         if (temp > high)
                         {
                             high = temp;
                         }
-                        else (temp < low)
+                        else if (temp < low && temp > 0)
                         {
                             low = temp;
                         }
@@ -817,6 +846,12 @@ namespace small_n_stats_WPF.ViewModels
             if (failed) return;
 
             bool customK = false;
+
+            double derivedK = -1;
+
+            YValueDecisions yBehavior = YValueDecisions.DoNothing;
+            XValueDecisions xBehavior = XValueDecisions.DoNothing;
+            KValueDecisions kBehavior = KValueDecisions.DeriveValues;
 
             mWindow.OutputEvents("---------------------------------------------------");
             mWindow.OutputEvents("Checking user-supplied ranges and reference points.");
@@ -847,6 +882,8 @@ namespace small_n_stats_WPF.ViewModels
                 return;
             }
 
+            #region CheckForDataState
+
             // Check for zero consumptions
             bool yQuery = AreZerosInMatrix(wholeRange);
 
@@ -871,22 +908,23 @@ namespace small_n_stats_WPF.ViewModels
                     xRangeShadow.Add(xRange[i]);
                 }
             }
-            
-            // TODO kRanges need not be calculated if not in advanced? 
-            
-            if(AdvancedMenu)
+
+            List<double> kRanges = null;
+
+            if (AdvancedMenu)
             {
-                List<double> kRanges = GetRangedValuesVerticalVM(lowRowK, highRowK, lowColK);
+                kRanges = GetRangedValuesVerticalVM(lowRowK, highRowK, lowColK);
 
                 if (kRanges != null)
                 {
                     if (kRanges.Count() > 1 && kRanges.Count() == wholeRange.GetLength(1))
                     {
+                        kBehavior = KValueDecisions.UseSuppliedValues;
                         customK = true;
                     }
                     else if (kRanges.Count() > 1 && kRanges.Count() != wholeRange.GetLength(1))
                     {
-                        mWindow.OutputEvents("Your custom k ranges don't match the # of rows.);
+                        mWindow.OutputEvents("Your custom k ranges don't match the # of rows.");
                         MessageBox.Show("Hmm, check your k range.  It doesn't seem paired up with the rows.");
                         return;
                     }
@@ -895,7 +933,7 @@ namespace small_n_stats_WPF.ViewModels
 
             if (xQuery)
             {
-                var xValueWindow = new SelectionWindow(new string[] { "Change Hundredth", "Drop Zeroes" }, "Change Hundredth");
+                var xValueWindow = new SelectionWindow(new string[] { "Change Hundredth", "Drop Zeroes", "Do Nothing" }, "Change Hundredth");
                 xValueWindow.Title = "Zero values found in Pricing";
                 xValueWindow.MessageLabel.Text = "Please select how to manage the zero values";
                 xValueWindow.Owner = windowRef;
@@ -908,18 +946,22 @@ namespace small_n_stats_WPF.ViewModels
     
                     if (output == 0)
                     {
-                        // Set flag to mod 0's to 0.01
+                        xBehavior = XValueDecisions.ChangeHundredth;
                     }
                     else if (output == 1)
                     {
-                        // set flag to drop 0's
+                        xBehavior = XValueDecisions.DropZeros;
+                    }
+                    else if (output == 2)
+                    {
+                        xBehavior = XValueDecisions.DoNothing;
                     }
                 }                
             }
             
             if (yQuery)
             {
-                var yValueWindow = new SelectionWindow(new string[] { "Drop Zeroes", "Change Hundredth", "One Percent of Lowest" }, "Drop Zeroes");
+                var yValueWindow = new SelectionWindow(new string[] { "Drop Zeroes", "Change Hundredth", "One Percent of Lowest", "Do Nothing" }, "Drop Zeroes");
                 yValueWindow.Title = "Zero values found in Consumption";
                 yValueWindow.MessageLabel.Text = "Please select how to manage the zero values";
                 yValueWindow.Owner = windowRef;
@@ -932,15 +974,19 @@ namespace small_n_stats_WPF.ViewModels
     
                     if (output == 0)
                     {
-                        // Set flag to drop 0's
+                        yBehavior = YValueDecisions.DropZeros;
                     }
                     else if (output == 1)
                     {
-                        // set flag to change to 0.01
+                        yBehavior = YValueDecisions.ChangeHundredth;
                     }
                     else if (output == 2)
                     {
-                        // set flag to change to 1% of lowest
+                        yBehavior = YValueDecisions.OnePercentLowest;
+                    }
+                    else if (output == 3)
+                    {
+                        yBehavior = YValueDecisions.DoNothing;
                     }
                 }
             }
@@ -960,15 +1006,17 @@ namespace small_n_stats_WPF.ViewModels
 
                     if (output == 0)
                     {
-                        // flag to use derived K's
+                        kBehavior = KValueDecisions.DeriveValues;
                     }
                     else if (output == 1)
                     {
-                        // flag to use supplied k's
+                        kBehavior = KValueDecisions.UseSuppliedValues;
                     }
                 }
             }
-            
+
+            #endregion
+
             mWindow.OutputEvents("All inputs passed verification.");
             mWindow.OutputEvents("---------------------------------------------------");
             mWindow.OutputEvents("Beginning Batched Computations...");
@@ -976,112 +1024,182 @@ namespace small_n_stats_WPF.ViewModels
             var mWin = new ResultsWindow();
             var mVM = new ResultsViewModel();
             mWin.DataContext = mVM;
-            mWin.Owner = windowRef;
-            //mWin.Topmost = true;
 
             for (int i = 0; i < wholeRange.GetLength(1) + 5; i++)
             {
                 mVM.RowViewModels.Add(new RowViewModel());
             }
 
-            for (int mIndex = 0; mIndex < wholeRange.GetLength(1); mIndex++)
+            double[] yLowHigh = GetLowestAndHighestInMatrix(wholeRange);
+
+            derivedK = (Math.Log10(yLowHigh[1]) - Math.Log10(yLowHigh[0])) + 0.5;
+
+            if (SelectedMode == "Individual")
             {
-                engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
 
-                yRange.Clear();
-                xRangeShadow.Clear();
+                #region IndividualFittings
 
-                for (int i = 0; i < wholeRange.GetLength(0); i++)
+                for (int mIndex = 0; mIndex < wholeRange.GetLength(1); mIndex++)
                 {
-                    if (double.TryParse(wholeRange[i, mIndex], out holder))
-                    {
-                        yRange.Add(holder);
-                        xRangeShadow.Add(xRange[i]);
-                    }
-                }
+                    engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
 
-                try
-                {
-                    List<double> kRange = new List<double>();
-                    List<double> pRange = new List<double>();
+                    yRange.Clear();
+                    xRangeShadow.Clear();
 
-                    for (int i = 0; i < xRangeShadow.Count; i++)
+                    for (int i = 0; i < wholeRange.GetLength(0); i++)
                     {
-                        if (customK)
+                        if (double.TryParse(wholeRange[i, mIndex], out holder))
                         {
-                            kRange.Add(kRanges[mIndex]);
+                            yRange.Add(holder);
+                            xRangeShadow.Add(xRange[i]);
                         }
-                        else
+                    }
+
+                    try
+                    {
+                        List<double> kRange = new List<double>();
+                        List<double> pRange = new List<double>();
+
+                        if (mIndex == 0)
                         {
-                            kRange.Add(kValueDouble);
+                            mVM.RowViewModels[0].values[0] = "Results of Fitting";
+                            mVM.RowViewModels[0].values[1] = "K Value";
+                            mVM.RowViewModels[0].values[2] = "q0";
+                            mVM.RowViewModels[0].values[3] = "alpha";
+
+                            mVM.RowViewModels[0].values[4] = "q0 (se)";
+                            mVM.RowViewModels[0].values[5] = "alpha (se)";
+                            mVM.RowViewModels[0].values[6] = "Q0 (95% CI)";
+                            mVM.RowViewModels[0].values[7] = "alpha (95% CI)";
+
+                            mVM.RowViewModels[0].values[8] = "R-Squared";
+                            mVM.RowViewModels[0].values[9] = "Abs. Sum Squares";
+                            mVM.RowViewModels[0].values[10] = "Resid. SD";
+
+                            mVM.RowViewModels[0].values[11] = "Empirical oMax";
+                            mVM.RowViewModels[0].values[12] = "Empirical pMax";
+                            mVM.RowViewModels[0].values[13] = "Q0e";
+                            mVM.RowViewModels[0].values[14] = "BP0";
+                            mVM.RowViewModels[0].values[15] = "BP1";
+                            mVM.RowViewModels[0].values[16] = "EV";
+                            mVM.RowViewModels[0].values[17] = "Derived oMax";
+                            mVM.RowViewModels[0].values[18] = "Derived pMax";
+
+                            mVM.RowViewModels[0].values[19] = "Pricing";
+                            mVM.RowViewModels[0].values[20] = "Consumption";
+                            mVM.RowViewModels[0].values[21] = "Notes";
+
                         }
 
-                        pRange.Add(1);
-                    }
+                        mVM.RowViewModels[1 + mIndex].values[0] = "Series #" + (mIndex+1).ToString();
 
-                    NumericVector participantValues = engine.CreateNumericVector(pRange.ToArray());
-                    engine.SetSymbol("pLoad", participantValues);
+                        NumericVector yValues = null;
+                        NumericVector xValues = null;
 
-                    NumericVector kValues = engine.CreateNumericVector(kRange.ToArray());
-                    engine.SetSymbol("kLoad", kValues);
-
-                    if (mIndex == 0)
-                    {
-                        mVM.RowViewModels[0].values[0] = "Results of Fitting";
-                        mVM.RowViewModels[0].values[1] = "K Value";
-                        mVM.RowViewModels[0].values[2] = "q0";
-                        mVM.RowViewModels[0].values[3] = "alpha";
-
-                        mVM.RowViewModels[0].values[4] = "q0 (se)";
-                        mVM.RowViewModels[0].values[5] = "alpha (se)";
-                        mVM.RowViewModels[0].values[6] = "Q0 (95% CI)";
-                        mVM.RowViewModels[0].values[7] = "alpha (95% CI)";
-
-                        mVM.RowViewModels[0].values[8] = "R-Squared";
-                        mVM.RowViewModels[0].values[9] = "Abs. Sum Squares";
-                        mVM.RowViewModels[0].values[10] = "Resid. SD";
-                        mVM.RowViewModels[0].values[11] = "Pricing";
-                        mVM.RowViewModels[0].values[12] = "Consumption";
-                        mVM.RowViewModels[0].values[13] = "Notes";
-
-                    }
-
-                    mVM.RowViewModels[1 + mIndex].values[0] = "Series #" + (mIndex+1).ToString();
-                    mVM.RowViewModels[1 + mIndex].values[1] = kRange.Min().ToString();
-
-                    NumericVector yValues = null;
-                    NumericVector xValues = null;
-
-                    if (modelArraySelection == "Exponential")
-                    {
-
-                        for (int i = 0; i < xRange.Count(); i++)
+                        if (yBehavior == YValueDecisions.DoNothing)
                         {
-                            if (xRangeShadow[i] == 0)
+                            // Nothing different
+                        }
+                        else if (yBehavior == YValueDecisions.ChangeHundredth)
+                        {
+                            List<double> yCopy = new List<double>();
+
+                            foreach (double y in yRange)
                             {
-                                xRangeShadow[i] = 0.01;
+                                if (y == 0)
+                                {
+                                    yCopy.Add(0.01);
+                                }
+                                else
+                                {
+                                    yCopy.Add(y);
+                                }
+                            }
+
+                            yRange = new List<double>(yCopy);
+                        }
+                        else if (yBehavior == YValueDecisions.OnePercentLowest)
+                        {
+                            double yLow = yRange.Where(y => y > 0).Min(y => y);
+                            yLow = yLow / 100;
+
+                            List<double> yCopy = new List<double>();
+
+                            foreach (double y in yRange)
+                            {
+                                if (y == 0)
+                                {
+                                    yCopy.Add(yLow);
+                                }
+                                else
+                                {
+                                    yCopy.Add(y);
+                                }
+                            }
+
+                            yRange = new List<double>(yCopy);
+                        }
+                        else if (yBehavior == YValueDecisions.DropZeros)
+                        {
+                            List<int> removeList = new List<int>();
+
+                            for (int i = 0; i < yRange.Count(); i++)
+                            {
+                                if (yRange[i] == 0)
+                                {
+                                    removeList.Add(i);
+                                }
+                            }
+
+                            List<double> tempX = new List<double>(xRangeShadow);
+                            List<double> tempY = new List<double>(yRange);
+
+                            if (removeList.Count() > 0)
+                            {
+                                foreach (int index in removeList)
+                                {
+                                    xRangeShadow.Remove(tempX[index]);
+                                    yRange.Remove(tempY[index]);
+                                }
                             }
                         }
 
-                        List<int> removeList = new List<int>();
-
-                        for (int i = 0; i < yRange.Count(); i++)
+                        if (xBehavior == XValueDecisions.DoNothing)
                         {
-                            if (yRange[i] == 0)
+                            // Do nothing different
+                        }
+                        else if (xBehavior == XValueDecisions.ChangeHundredth)
+                        {
+                            for (int i = 0; i < xRangeShadow.Count(); i++)
                             {
-                                removeList.Add(i);
+                                if (xRangeShadow[i] == 0.0)
+                                {
+                                    xRangeShadow[i] = 0.01;
+                                }
                             }
                         }
-
-                        List<double> tempX = new List<double>(xRangeShadow);
-                        List<double> tempY = new List<double>(yRange);
-
-                        if (removeList.Count() > 0)
+                        else if (xBehavior == XValueDecisions.DropZeros)
                         {
-                            foreach(int index in removeList)
+                            List<int> removeList = new List<int>();
+
+                            for (int i = 0; i < xRangeShadow.Count(); i++)
                             {
-                                xRangeShadow.Remove(tempX[index]);
-                                yRange.Remove(tempY[index]);
+                                if (xRangeShadow[i] == 0)
+                                {
+                                    removeList.Add(i);
+                                }
+                            }
+
+                            List<double> tempX = new List<double>(xRangeShadow);
+                            List<double> tempY = new List<double>(yRange);
+
+                            if (removeList.Count() > 0)
+                            {
+                                foreach (int index in removeList)
+                                {
+                                    xRangeShadow.Remove(tempX[index]);
+                                    yRange.Remove(tempY[index]);
+                                }
                             }
                         }
 
@@ -1098,6 +1216,285 @@ namespace small_n_stats_WPF.ViewModels
 
                             continue;
                         }
+
+                        /////
+
+                        for (int i = 0; i < xRangeShadow.Count; i++)
+                        {
+                            if (kBehavior == KValueDecisions.DeriveValues)
+                            {
+                                kRange.Add(derivedK);
+                            }
+                            else if (kBehavior == KValueDecisions.UseSuppliedValues)
+                            {
+                                kRange.Add(kRanges[mIndex]);
+                            }
+
+                            pRange.Add(1);
+                        }
+
+                        mVM.RowViewModels[1 + mIndex].values[1] = kRange.Min().ToString();
+
+                        NumericVector kValues = engine.CreateNumericVector(kRange.ToArray());
+                        engine.SetSymbol("kLoad", kValues);
+
+                        NumericVector participantValues = engine.CreateNumericVector(pRange.ToArray());
+                        engine.SetSymbol("pLoad", participantValues);
+
+                        if (modelArraySelection == "Exponential")
+                        {
+
+                            yValues = engine.CreateNumericVector(yRange.ToArray());
+                            engine.SetSymbol("yLoad", yValues);
+
+                            xValues = engine.CreateNumericVector(xRangeShadow.ToArray());
+                            engine.SetSymbol("xLoad", xValues);
+
+                            engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunction());
+
+                        }
+                        else if (modelArraySelection == "Exponentiated")
+                        {
+                            yValues = engine.CreateNumericVector(yRange.ToArray());
+                            engine.SetSymbol("yLoad", yValues);
+
+                            xValues = engine.CreateNumericVector(xRangeShadow.ToArray());
+                            engine.SetSymbol("xLoad", xValues);
+
+                            engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunction());
+                        }
+
+                        // NA's default to true in R.Net
+                        if (engine.Evaluate("fitFrame[fitFrame$p==1,]$q0").AsVector().First().ToString() != "True")
+                        {
+                            mVM.RowViewModels[1 + mIndex].values[2] = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0").AsVector().First().ToString();
+                            mVM.RowViewModels[1 + mIndex].values[3] = engine.Evaluate("fitFrame[fitFrame$p==1,]$alpha").AsVector().First().ToString();
+                            mVM.RowViewModels[1 + mIndex].values[4] = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0err").AsVector().First().ToString();
+                            mVM.RowViewModels[1 + mIndex].values[5] = engine.Evaluate("fitFrame[fitFrame$p==1,]$alphaerr").AsVector().First().ToString();
+
+                            string qLow = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0low").AsVector().First().ToString();
+                            string qHigh = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0high").AsVector().First().ToString();
+                            string aLow = engine.Evaluate("fitFrame[fitFrame$p==1,]$alow").AsVector().First().ToString();
+                            string aHigh = engine.Evaluate("fitFrame[fitFrame$p==1,]$ahigh").AsVector().First().ToString();
+
+                            mVM.RowViewModels[1 + mIndex].values[6] = qLow + " - " + qHigh;
+                            mVM.RowViewModels[1 + mIndex].values[7] = aLow + " - " + aHigh;
+
+                            mVM.RowViewModels[1 + mIndex].values[8] = engine.Evaluate("fitFrame[fitFrame$p==1,]$r2").AsVector().First().ToString();
+                            mVM.RowViewModels[1 + mIndex].values[9] = engine.Evaluate("fitFrame[fitFrame$p==1,]$absSS").AsVector().First().ToString();
+                            mVM.RowViewModels[1 + mIndex].values[10] = engine.Evaluate("fitFrame[fitFrame$p==1,]$sdResid").AsVector().First().ToString();
+
+                            mVM.RowViewModels[1 + mIndex].values[11] = engine.Evaluate("fitFrame[fitFrame$p==1,]$OmaxE").AsVector().First().ToString();
+                            mVM.RowViewModels[1 + mIndex].values[12] = engine.Evaluate("fitFrame[fitFrame$p==1,]$PmaxE").AsVector().First().ToString();
+                            mVM.RowViewModels[1 + mIndex].values[13] = engine.Evaluate("fitFrame[fitFrame$p==1,]$Q0e").AsVector().First().ToString();
+
+                            if (engine.Evaluate("fitFrame[fitFrame$p==1,]$BP0").AsVector().First().ToString() == "True")
+                            {
+                                mVM.RowViewModels[1 + mIndex].values[14] = "NA";
+                            }
+                            else
+                            {
+                                mVM.RowViewModels[1 + mIndex].values[14] = engine.Evaluate("fitFrame[fitFrame$p==1,]$BP0").AsVector().First().ToString();
+                            }
+
+                            mVM.RowViewModels[1 + mIndex].values[15] = engine.Evaluate("fitFrame[fitFrame$p==1,]$BP1").AsVector().First().ToString();
+                            mVM.RowViewModels[1 + mIndex].values[16] = engine.Evaluate("fitFrame[fitFrame$p==1,]$EV").AsVector().First().ToString();
+                            mVM.RowViewModels[1 + mIndex].values[17] = engine.Evaluate("fitFrame[fitFrame$p==1,]$OmaxD").AsVector().First().ToString();
+                            mVM.RowViewModels[1 + mIndex].values[18] = engine.Evaluate("fitFrame[fitFrame$p==1,]$PmaxD").AsVector().First().ToString();
+
+                            mVM.RowViewModels[1 + mIndex].values[19] = string.Join(",", xValues);
+                            mVM.RowViewModels[1 + mIndex].values[20] = string.Join(",", yValues);
+                        }
+                        else
+                        {
+                            for (int i=2;i<=18;i++)
+                            {
+                                mVM.RowViewModels[1 + mIndex].values[i] = "NA";
+                            }
+
+                            mVM.RowViewModels[1 + mIndex].values[19] = string.Join(",", xValues);
+                            mVM.RowViewModels[1 + mIndex].values[20] = string.Join(",", yValues);
+                            mVM.RowViewModels[1 + mIndex].values[21] = "Model did not optimize, was a curve actually present?";
+                        }
+
+                    }
+                    catch (ParseException pe)
+                    {
+                        Console.WriteLine(pe.ToString());
+                    }
+
+                    mWindow.OutputEvents("Computation #" + ((int)mIndex + (int)1) + " of " + wholeRange.GetLength(1) + " Completed!");
+
+                }
+
+                #endregion
+
+            }
+            else if (SelectedMode == "Group")
+            {
+
+                #region GroupFitting
+
+                kBehavior = KValueDecisions.DeriveValues;
+
+                engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
+
+                yRange = new List<double>();
+                xRangeShadow = new List<double>();
+                List<double> kRange = new List<double>();
+                List<double> pRange = new List<double>();
+
+                try
+                {
+
+                    for (int mIndex = 0; mIndex < wholeRange.GetLength(1); mIndex++)
+                    {
+                        for (int i = 0; i < wholeRange.GetLength(0); i++)
+                        {
+                            if (double.TryParse(wholeRange[i, mIndex], out holder))
+                            {
+                                yRange.Add(holder);
+                                xRangeShadow.Add(xRange[i]);
+                            }
+                        }
+                    }
+
+                    NumericVector yValues = null;
+                    NumericVector xValues = null;
+
+                    for (int i = 0; i < wholeRange.GetLength(1); i++)
+                    {
+                        if (kBehavior == KValueDecisions.DeriveValues)
+                        {
+                            kRange.Add(derivedK);
+                        }
+                        else if (kBehavior == KValueDecisions.UseSuppliedValues)
+                        {
+                            kRange.Add(kRanges[i]);
+                        }
+
+                        pRange.Add(1);
+                    }
+
+                    if (yBehavior == YValueDecisions.DoNothing)
+                    {
+                        // Nothing different
+                    }
+                    else if (yBehavior == YValueDecisions.ChangeHundredth)
+                    {
+                        List<double> yCopy = new List<double>();
+
+                        foreach (double y in yRange)
+                        {
+                            if (y == 0)
+                            {
+                                yCopy.Add(0.01);
+                            }
+                            else
+                            {
+                                yCopy.Add(y);
+                            }
+                        }
+
+                        yRange = new List<double>(yCopy);
+                    }
+                    else if (yBehavior == YValueDecisions.OnePercentLowest)
+                    {
+                        double yLow = yRange.Where(y => y > 0).Min(y => y);
+                        yLow = yLow / 100;
+
+                        List<double> yCopy = new List<double>();
+
+                        foreach (double y in yRange)
+                        {
+                            if (y == 0)
+                            {
+                                yCopy.Add(yLow);
+                            }
+                            else
+                            {
+                                yCopy.Add(y);
+                            }
+                        }
+
+                        yRange = new List<double>(yCopy);
+                    }
+                    else if (yBehavior == YValueDecisions.DropZeros)
+                    {
+                        List<int> removeList = new List<int>();
+
+                        for (int i = 0; i < yRange.Count(); i++)
+                        {
+                            if (yRange[i] == 0)
+                            {
+                                removeList.Add(i);
+                            }
+                        }
+
+                        List<double> tempX = new List<double>(xRangeShadow);
+                        List<double> tempY = new List<double>(yRange);
+
+                        if (removeList.Count() > 0)
+                        {
+                            foreach (int index in removeList)
+                            {
+                                xRangeShadow.RemoveAt(index);
+                                yRange.RemoveAt(index);
+                                kRange.RemoveAt(index);
+                                pRange.RemoveAt(index);
+                            }
+                        }
+                    }
+
+                    if (xBehavior == XValueDecisions.DoNothing)
+                    {
+                        // Do nothing different
+                    }
+                    else if (xBehavior == XValueDecisions.ChangeHundredth)
+                    {
+                        for (int i = 0; i < xRangeShadow.Count(); i++)
+                        {
+                            if (xRangeShadow[i] == 0.0)
+                            {
+                                xRangeShadow[i] = 0.01;
+                            }
+                        }
+                    }
+                    else if (xBehavior == XValueDecisions.DropZeros)
+                    {
+                        List<int> removeList = new List<int>();
+
+                        for (int i = 0; i < xRangeShadow.Count(); i++)
+                        {
+                            if (xRangeShadow[i] == 0)
+                            {
+                                removeList.Add(i);
+                            }
+                        }
+
+                        List<double> tempX = new List<double>(xRangeShadow);
+                        List<double> tempY = new List<double>(yRange);
+
+                        if (removeList.Count() > 0)
+                        {
+                            foreach (int index in removeList)
+                            {
+                                xRangeShadow.RemoveAt(index);
+                                yRange.RemoveAt(index);
+                                kRange.RemoveAt(index);
+                                pRange.RemoveAt(index);
+                            }
+                        }
+                    }
+
+                    NumericVector kValues = engine.CreateNumericVector(kRange.ToArray());
+                    engine.SetSymbol("kLoad", kValues);
+
+                    NumericVector participantValues = engine.CreateNumericVector(pRange.ToArray());
+                    engine.SetSymbol("pLoad", participantValues);
+
+                    if (modelArraySelection == "Exponential")
+                    {
 
                         yValues = engine.CreateNumericVector(yRange.ToArray());
                         engine.SetSymbol("yLoad", yValues);
@@ -1119,51 +1516,100 @@ namespace small_n_stats_WPF.ViewModels
                         engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunction());
                     }
 
+                    mVM.RowViewModels[0].values[0] = "Results of Fitting";
+                    mVM.RowViewModels[0].values[1] = "K Value";
+                    mVM.RowViewModels[0].values[2] = "q0";
+                    mVM.RowViewModels[0].values[3] = "alpha";
+
+                    mVM.RowViewModels[0].values[4] = "q0 (se)";
+                    mVM.RowViewModels[0].values[5] = "alpha (se)";
+                    mVM.RowViewModels[0].values[6] = "Q0 (95% CI)";
+                    mVM.RowViewModels[0].values[7] = "alpha (95% CI)";
+
+                    mVM.RowViewModels[0].values[8] = "R-Squared";
+                    mVM.RowViewModels[0].values[9] = "Abs. Sum Squares";
+                    mVM.RowViewModels[0].values[10] = "Resid. SD";
+
+                    mVM.RowViewModels[0].values[11] = "Empirical oMax";
+                    mVM.RowViewModels[0].values[12] = "Empirical pMax";
+                    mVM.RowViewModels[0].values[13] = "Q0e";
+                    mVM.RowViewModels[0].values[14] = "BP0";
+                    mVM.RowViewModels[0].values[15] = "BP1";
+                    mVM.RowViewModels[0].values[16] = "EV";
+                    mVM.RowViewModels[0].values[17] = "Derived oMax";
+                    mVM.RowViewModels[0].values[18] = "Derived pMax";
+
+                    mVM.RowViewModels[0].values[19] = "Pricing";
+                    mVM.RowViewModels[0].values[20] = "Consumption";
+                    mVM.RowViewModels[0].values[21] = "Notes";
+
                     // NA's default to true in R.Net
                     if (engine.Evaluate("fitFrame[fitFrame$p==1,]$q0").AsVector().First().ToString() != "True")
                     {
-                        mVM.RowViewModels[1 + mIndex].values[2] = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0").AsVector().First().ToString();
-                        mVM.RowViewModels[1 + mIndex].values[3] = engine.Evaluate("fitFrame[fitFrame$p==1,]$alpha").AsVector().First().ToString();
-                        mVM.RowViewModels[1 + mIndex].values[4] = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0err").AsVector().First().ToString();
-                        mVM.RowViewModels[1 + mIndex].values[5] = engine.Evaluate("fitFrame[fitFrame$p==1,]$alphaerr").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[0] = "Aggregated Fitting";
+                        mVM.RowViewModels[1].values[1] = kRange.Min().ToString();
+                        mVM.RowViewModels[1].values[2] = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[3] = engine.Evaluate("fitFrame[fitFrame$p==1,]$alpha").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[4] = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0err").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[5] = engine.Evaluate("fitFrame[fitFrame$p==1,]$alphaerr").AsVector().First().ToString();
 
                         string qLow = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0low").AsVector().First().ToString();
                         string qHigh = engine.Evaluate("fitFrame[fitFrame$p==1,]$q0high").AsVector().First().ToString();
                         string aLow = engine.Evaluate("fitFrame[fitFrame$p==1,]$alow").AsVector().First().ToString();
                         string aHigh = engine.Evaluate("fitFrame[fitFrame$p==1,]$ahigh").AsVector().First().ToString();
 
-                        mVM.RowViewModels[1 + mIndex].values[6] = qLow + " - " + qHigh;
-                        mVM.RowViewModels[1 + mIndex].values[7] = aLow + " - " + aHigh;
+                        mVM.RowViewModels[1].values[6] = qLow + " - " + qHigh;
+                        mVM.RowViewModels[1].values[7] = aLow + " - " + aHigh;
 
-                        mVM.RowViewModels[1 + mIndex].values[8] = engine.Evaluate("fitFrame[fitFrame$p==1,]$r2").AsVector().First().ToString();
-                        mVM.RowViewModels[1 + mIndex].values[9] = engine.Evaluate("fitFrame[fitFrame$p==1,]$absSS").AsVector().First().ToString();
-                        mVM.RowViewModels[1 + mIndex].values[10] = engine.Evaluate("fitFrame[fitFrame$p==1,]$sdResid").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[8] = engine.Evaluate("fitFrame[fitFrame$p==1,]$r2").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[9] = engine.Evaluate("fitFrame[fitFrame$p==1,]$absSS").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[10] = engine.Evaluate("fitFrame[fitFrame$p==1,]$sdResid").AsVector().First().ToString();
 
-                        mVM.RowViewModels[1 + mIndex].values[11] = string.Join(",", xValues);
-                        mVM.RowViewModels[1 + mIndex].values[12] = string.Join(",", yValues);
+                        mVM.RowViewModels[1].values[11] = engine.Evaluate("fitFrame[fitFrame$p==1,]$OmaxE").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[12] = engine.Evaluate("fitFrame[fitFrame$p==1,]$PmaxE").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[13] = engine.Evaluate("fitFrame[fitFrame$p==1,]$Q0e").AsVector().First().ToString();
+
+                        if (engine.Evaluate("fitFrame[fitFrame$p==1,]$BP0").AsVector().First().ToString() == "True")
+                        {
+                            mVM.RowViewModels[1].values[14] = "NA";
+                        }
+                        else
+                        {
+                            mVM.RowViewModels[1].values[14] = engine.Evaluate("fitFrame[fitFrame$p==1,]$BP0").AsVector().First().ToString();
+                        }
+
+                        mVM.RowViewModels[1].values[15] = engine.Evaluate("fitFrame[fitFrame$p==1,]$BP1").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[16] = engine.Evaluate("fitFrame[fitFrame$p==1,]$EV").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[17] = engine.Evaluate("fitFrame[fitFrame$p==1,]$OmaxD").AsVector().First().ToString();
+                        mVM.RowViewModels[1].values[18] = engine.Evaluate("fitFrame[fitFrame$p==1,]$PmaxD").AsVector().First().ToString();
+
+                        mVM.RowViewModels[1].values[19] = string.Join(",", xValues);
+                        mVM.RowViewModels[1].values[20] = string.Join(",", yValues);
                     }
                     else
                     {
-                        for (int i=2;i<=10;i++)
+                        for (int i = 2; i <= 18; i++)
                         {
-                            mVM.RowViewModels[1 + mIndex].values[i] = "NA";
+                            mVM.RowViewModels[1].values[i] = "NA";
                         }
 
-                        mVM.RowViewModels[1 + mIndex].values[11] = string.Join(",", xValues);
-                        mVM.RowViewModels[1 + mIndex].values[12] = string.Join(",", yValues);
-                        mVM.RowViewModels[1 + mIndex].values[13] = "Model did not optimize, was a curve actually present?";
+                        mVM.RowViewModels[1].values[19] = string.Join(",", xValues);
+                        mVM.RowViewModels[1].values[20] = string.Join(",", yValues);
+                        mVM.RowViewModels[1].values[21] = "Model did not optimize, was a curve actually present?";
                     }
 
+                    engine.Evaluate("print(logChart)");
                 }
                 catch (ParseException pe)
                 {
                     Console.WriteLine(pe.ToString());
                 }
 
-                mWindow.OutputEvents("Computation #" + ((int)mIndex + (int)1) + " of " + wholeRange.GetLength(1) + " Completed!");
+                mWindow.OutputEvents("Group computations Completed!");
+
+                #endregion
 
             }
-
             mWindow.OutputEvents("Final Calculations Completed!");
             mWin.Show();
 

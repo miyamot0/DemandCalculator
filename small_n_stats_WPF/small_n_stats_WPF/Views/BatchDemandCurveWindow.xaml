@@ -141,6 +141,28 @@
           
             <!-- Check Box Controls Left -->
 
+            <Label
+                Grid.Row="3"
+                Grid.Column="0"
+                Content="Mode"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center">
+            </Label>
+            
+            <ComboBox 
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="5"
+                Padding="10,0,0,0"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Center"
+                SelectedValuePath="Content"
+                SelectedValue="{Binding SelectedMode}"
+                IsSynchronizedWithCurrentItem="True">
+                <ComboBoxItem IsSelected="True">Individual</ComboBoxItem>
+                <ComboBoxItem>Group</ComboBoxItem>
+            </ComboBox>
+            
             <StackPanel
             Orientation="Horizontal"
             Grid.Row="3"
