@@ -126,6 +126,8 @@ for (i in 1:nSimulated)
   }
 }
 
+### TODO, migrate this code.  No use to do this in batch/group mode!
+
 xDraw <- seq(min(SourceFrame$x), max(SourceFrame$x), 0.01)
 
 p.rep <- seq(1,max(SourceFrame$p),1)
