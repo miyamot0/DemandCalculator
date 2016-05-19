@@ -213,6 +213,7 @@
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\License_Beezdemand.txt" />
     <Content Include="Source\Small-N-Stats---Demand-Calculator-master.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

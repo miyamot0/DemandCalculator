@@ -73,7 +73,7 @@ namespace small_n_stats_WPF.Properties {
         ///#    Demand Analysis is distributed in the hope that it will be useful,
         ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
         ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU General  [rest of string was truncated]&quot;;.
+        ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ExponentialDemandFunctions {
             get {
@@ -94,7 +94,7 @@ namespace small_n_stats_WPF.Properties {
         ///#    Demand Analysis is distributed in the hope that it will be useful,
         ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
         ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU General  [rest of string was truncated]&quot;;.
+        ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ExponentiatedDemandFunctions {
             get {
@@ -116,11 +116,20 @@ namespace small_n_stats_WPF.Properties {
         ///MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         ///GNU General Public License for more details.
         ///
-        ///You should have  [rest of string was truncated]&quot;;.
+        ///You should [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LICENSE {
             get {
                 return ResourceManager.GetString("LICENSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string License_Beezdemand {
+            get {
+                return ResourceManager.GetString("License_Beezdemand", resourceCulture);
             }
         }
         
