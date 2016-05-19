@@ -16,363 +16,367 @@
 ﻿-->
 ﻿
 ﻿<Window x:Class="small_n_stats_WPF.Views.DemandCurveWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"
-        xmlns:local="clr-namespace:small_n_stats_WPF.Views"
-        mc:Ignorable="d"
-        Height="450" 
-        Width="425"
-        Top="{Binding Source={x:Static settings:Settings.Default}, 
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"
+         xmlns:local="clr-namespace:small_n_stats_WPF.Views"
+         mc:Ignorable="d"
+         Height="450" 
+         Width="425"
+         Top="{Binding Source={x:Static settings:Settings.Default}, 
                 Path=DemandTop, 
                 Mode=TwoWay}" 
-        Left="{Binding Source={x:Static settings:Settings.Default}, 
+         Left="{Binding Source={x:Static settings:Settings.Default}, 
                 Path=DemandLeft, 
                 Mode=TwoWay}"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        Title="Demand Curve Module">
+         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+         Title="Demand Curve Module">
 
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding ViewLoadedCommand}"/>
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Closing">
-            <i:InvokeCommandAction Command="{Binding ViewClosingCommand}"/>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
+         <i:Interaction.Triggers>
+             <i:EventTrigger EventName="Loaded">
+                 <i:InvokeCommandAction Command="{Binding ViewLoadedCommand}"/>
+             </i:EventTrigger>
+            
+             <i:EventTrigger EventName="Closing">
+                 <i:InvokeCommandAction Command="{Binding ViewClosingCommand}"/>
+             </i:EventTrigger>
+         </i:Interaction.Triggers>
 
-    <Window.Style>
-        <Style TargetType="Window">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding AdvancedMenu}"  Value="True">
-                    <Setter Property="MinWidth" Value="850"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Style>
+         <Window.Style>
+             <Style TargetType="Window">
+                 <Style.Triggers>
+                     <DataTrigger Binding="{Binding AdvancedMenu}"  Value="True">
+                         <Setter Property="MinWidth" Value="850"/>
+                     </DataTrigger>
+                 </Style.Triggers>
+             </Style>
+         </Window.Style>
 
-    <Grid>
-        <Grid.Resources>
-            <Style TargetType="CheckBox" x:Key="unlockingKey">
-                <Style.Triggers>
-                    <Trigger Property="IsChecked" Value="True">
-                        <Setter Property="IsEnabled" Value="False" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Resources>
+         <!-- Grid with two sides, basic and an optional advanced view -->
+         <Grid>
+             
+             <!-- Checkbox to disable after click -->
+             <Grid.Resources>
+                 <Style TargetType="CheckBox" x:Key="unlockingKey">
+                 <Style.Triggers>
+                     <Trigger Property="IsChecked" Value="True">
+                         <Setter Property="IsEnabled" Value="False" />
+                     </Trigger>
+                 </Style.Triggers>
+             </Style>
+         </Grid.Resources>
+
+         <!-- Pre-sized main display, advanced window to claim unused space on resize -->
+         <Grid.ColumnDefinitions>
+             <ColumnDefinition Width="400"></ColumnDefinition>
+             <ColumnDefinition Width="*"></ColumnDefinition>
+         </Grid.ColumnDefinitions>
         
+         <Grid.RowDefinitions>
+             <RowDefinition Height="*"></RowDefinition>
+         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
+         <Grid Grid.Column="0" 
+               Grid.Row="0">
+             <Grid.RowDefinitions>
+                 <RowDefinition Height="50"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+             </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0" 
-              Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
+             <Grid.ColumnDefinitions>
+                 <ColumnDefinition Width="100"></ColumnDefinition>
+                 <ColumnDefinition Width="100"></ColumnDefinition>
+                 <ColumnDefinition Width="100"></ColumnDefinition>
+                 <ColumnDefinition Width="100"></ColumnDefinition>
+             </Grid.ColumnDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock
-            x:Name="windowTitle"
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.ColumnSpan="4"
-            FontSize="18"
-            Text="Demand Curve Module"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center">
-            </TextBlock>
+             <TextBlock x:Name="windowTitle"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        FontSize="18"
+                        Text="Demand Curve Module"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+             </TextBlock>
 
             <Button Name="timeButton" 
-                Grid.Row="1" 
-                Grid.Column="0"
-                Margin="10"
-                Content="Pricing"
-                Command="{Binding GetXRangeCommand}">
+                    Grid.Row="1" 
+                    Grid.Column="0"
+                    Margin="10"
+                    Content="Pricing"
+                    Command="{Binding GetXRangeCommand}">
             </Button>
 
-            <TextBox
-            Name="xRange"
-            Grid.Row="1" 
-            Grid.Column="1"
-            Grid.ColumnSpan="3"
-            IsReadOnly="True"
-            Margin="10"
-            Text="{Binding XRangeValues}"
-            Background="{Binding Path=XBrush}">
-                <TextBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Manually Type Range" Command="{Binding PricingRangeCommand}" />
-                    </ContextMenu>
-                </TextBox.ContextMenu>
+            <TextBox Name="xRange"
+                     Grid.Row="1" 
+                     Grid.Column="1"
+                     Grid.ColumnSpan="3"
+                     IsReadOnly="True"
+                     Margin="10"
+                     Text="{Binding XRangeValues}"
+                     Background="{Binding Path=XBrush}">
+                         <TextBox.ContextMenu>
+                             <ContextMenu>
+                                 <MenuItem Header="Manually Type Range" Command="{Binding PricingRangeCommand}" />
+                             </ContextMenu>
+                         </TextBox.ContextMenu>
             </TextBox>
 
             <Button Name="valueButton" 
-                Grid.Row="2" 
-                Grid.Column="0"
-                Margin="10"
-                Content="Consumption"
-                Command="{Binding GetYRangeCommand}">
+                    Grid.Row="2" 
+                    Grid.Column="0"
+                    Margin="10"
+                    Content="Consumption"
+                    Command="{Binding GetYRangeCommand}">
             </Button>
 
-            <TextBox
-            Name="yRange"
-            Grid.Row="2" 
-            Grid.Column="1"
-            Grid.ColumnSpan="3"
-            IsReadOnly="True"
-            Margin="10"
-            Text="{Binding YRangeValues}"
-            Background="{Binding Path=YBrush}">
-                <TextBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Manually Type Range" Command="{Binding ConsumptionRangeCommand}" />
-                    </ContextMenu>
-                </TextBox.ContextMenu>
+            <TextBox Name="yRange"
+                     Grid.Row="2" 
+                     Grid.Column="1"
+                     Grid.ColumnSpan="3"
+                     IsReadOnly="True"
+                     Margin="10"
+                     Text="{Binding YRangeValues}"
+                     Background="{Binding Path=YBrush}">
+                         <TextBox.ContextMenu>
+                             <ContextMenu>
+                                 <MenuItem Header="Manually Type Range" Command="{Binding ConsumptionRangeCommand}" />
+                             </ContextMenu>
+                         </TextBox.ContextMenu>
             </TextBox>
 
-            <StackPanel
-            Orientation="Horizontal"
-            Grid.Row="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Right"
-            Margin="0,0,15,0">
-                <Label Content="Output Model Figures?"/>
-                <CheckBox
-                    Grid.Row="4"
-                    Grid.Column="2"
-                    Grid.ColumnSpan="2"
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Left"
-                    Content="">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Checked">
-                            <i:InvokeCommandAction Command="{Binding Path=FigureOutput}"/>
-                        </i:EventTrigger>
-                        <i:EventTrigger EventName="Unchecked">
-                            <i:InvokeCommandAction Command="{Binding Path=FigureOutput}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </CheckBox>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,15,0">
+                        <Label Content="Output Model Figures?"/>
+                        
+                        <CheckBox Grid.Row="4"
+                                  Grid.Column="2"
+                                  Grid.ColumnSpan="2"
+                                  Margin="5,0,0,0"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Left"
+                                  Content="">
+                                      <i:Interaction.Triggers>
+                                          <i:EventTrigger EventName="Checked">
+                                              <i:InvokeCommandAction Command="{Binding Path=FigureOutput}"/>
+                                          </i:EventTrigger>
+                                          
+                                          <i:EventTrigger EventName="Unchecked">
+                                              <i:InvokeCommandAction Command="{Binding Path=FigureOutput}"/>
+                                          </i:EventTrigger>
+                                      </i:Interaction.Triggers>
+                        </CheckBox>
             </StackPanel>
 
-            <StackPanel
-            Orientation="Horizontal"
-            Grid.Row="3"
-            Grid.Column="2"
-            Grid.ColumnSpan="2"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Right"
-            Margin="0,0,25,0">
-                <Label Content="Advanced Settings?"/>
-                <CheckBox
-                    Grid.Row="4"
-                    Grid.Column="2"
-                    Grid.ColumnSpan="2"
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Left"
-                    Style="{DynamicResource unlockingKey}"
-                    Content="">
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        Grid.ColumnSpan="2"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,25,0">
+                        <Label Content="Advanced Settings?"/>
+                        <CheckBox
+                            Grid.Row="4"
+                            Grid.Column="2"
+                            Grid.ColumnSpan="2"
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Style="{DynamicResource unlockingKey}"
+                            Content="">
 
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Checked">
+                                <i:InvokeCommandAction Command="{Binding Path=AdvancedSettings}"/>                            
+                            </i:EventTrigger>
 
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Checked">
-                            <i:InvokeCommandAction Command="{Binding Path=AdvancedSettings}"/>                            
-                        </i:EventTrigger>
-                        <i:EventTrigger EventName="Unchecked">
-                            <i:InvokeCommandAction Command="{Binding Path=AdvancedSettings}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-
-                    
+                            <i:EventTrigger EventName="Unchecked">
+                                <i:InvokeCommandAction Command="{Binding Path=AdvancedSettings}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                 </CheckBox>
             </StackPanel>
             
-            <FlowDocumentScrollViewer
-            Grid.Column="0"
-            Grid.ColumnSpan="4"
-            Grid.Row="4"
-            Grid.RowSpan="3"
-            IsSelectionEnabled="False"
-            VerticalScrollBarVisibility="Hidden">
+            <FlowDocumentScrollViewer Grid.Column="0"
+                                      Grid.ColumnSpan="4"
+                                      Grid.Row="4"
+                                      Grid.RowSpan="3"
+                                      IsSelectionEnabled="False"
+                                      VerticalScrollBarVisibility="Hidden">
                 <FlowDocument>
                     <FlowDocument.Resources>
                         <Style TargetType="{x:Type Paragraph}">
-                            <Setter Property="Margin" Value="0"/>
-                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" 
+                                    Value="0"/>
+                            <Setter Property="Padding" 
+                                    Value="0"/>
                         </Style>
                     </FlowDocument.Resources>
-                    <Paragraph FontSize="12" FontFamily="Segoe UI">
+                    
+                    <Paragraph FontSize="12" 
+                               FontFamily="Segoe UI">
                         <Bold>Directions:</Bold>
                     </Paragraph>
-                    <Paragraph FontSize="12" FontFamily="Segoe UI" Padding="0,5,0,0">
-                        The fitting of demand curves requires that users select a range of 
-                    Pricing Values (Vertical columns) that correspond with a range of 
-                    Consumption Values (Vertical columns).  Small n Stats can calculate
-                    both the Exponential Demand Function (Hursh &amp; Silverburg, 2008) 
-                    as well as the Exponentiated Demand Function (Koffarnus, Franck, Stein
-                    &amp; Bickel, 2015).  Figures and spreadsheet output are available.
+                    
+                    <Paragraph FontSize="12" 
+                               FontFamily="Segoe UI" 
+                               Padding="0,5,0,0">
+                                   The fitting of demand curves requires that users select a range of 
+                                   Pricing Values (Vertical columns) that correspond with a range of 
+                                   Consumption Values (Vertical columns).  Small n Stats can calculate
+                                   both the Exponential Demand Function (Hursh &amp; Silverburg, 2008) 
+                                   as well as the Exponentiated Demand Function (Koffarnus, Franck, Stein
+                                   &amp; Bickel, 2015).  Figures and spreadsheet output are available.
                     </Paragraph>
                 </FlowDocument>
             </FlowDocumentScrollViewer>
 
             <Button Name="calculateButton" 
-                Grid.Row="7" 
-                Grid.Column="0"
-                Grid.ColumnSpan="4"
-                Margin="10"
-                Content="Calculate"
-                Command="{Binding CalculateScoresCommand}">
+                    Grid.Row="7" 
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4"
+                    Margin="10"
+                    Content="Calculate"
+                    Command="{Binding CalculateScoresCommand}">
             </Button>
 
         </Grid>
         
-        <Grid Grid.Column="1"              
-              Grid.Row="0"
-              x:Name="AdvWindow">
+        <!-- Advanced Settings Grid -->
+        
+        <Grid x:Name="AdvWindow"
+              Grid.Column="1"              
+              Grid.Row="0">
             
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding AdvancedMenu}"
-                                 Value="False">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding AdvancedMenu}" 
-                                 Value="True">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
+             <Grid.Style>
+                 <Style TargetType="Grid">
+                     <Style.Triggers>
+                         <DataTrigger Binding="{Binding AdvancedMenu}"
+                                  Value="False">
+                             <Setter Property="Visibility" Value="Collapsed"/>
+                         </DataTrigger>
+                   
+                         <DataTrigger Binding="{Binding AdvancedMenu}" 
+                                  Value="True">
+                             <Setter Property="Visibility" Value="Visible"/>
+                         </DataTrigger>
+                     </Style.Triggers>
+                 </Style>
+             </Grid.Style>
             
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+             <Grid.ColumnDefinitions>
+                 <ColumnDefinition Width="100"></ColumnDefinition>
+                 <ColumnDefinition Width="100"></ColumnDefinition>
+                 <ColumnDefinition Width="100"></ColumnDefinition>
+                 <ColumnDefinition Width="100"></ColumnDefinition>
+             </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
+             <Grid.RowDefinitions>
+                 <RowDefinition Height="50"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+                 <RowDefinition Height="*"></RowDefinition>
+             </Grid.RowDefinitions>
 
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="0"
-                Grid.ColumnSpan="4"
-                FontSize="18"
-                Text="Advanced Settings"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-            </TextBlock>
+             <TextBlock Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        FontSize="18"
+                        Text="Advanced Settings"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+             </TextBlock>
 
-            <FlowDocumentScrollViewer
-                Grid.Column="0"
-                Grid.ColumnSpan="4"
-                Grid.Row="3"
-                Grid.RowSpan="6"
-                IsSelectionEnabled="False"
-                VerticalContentAlignment="Top"
-                VerticalScrollBarVisibility="Hidden">
+            <FlowDocumentScrollViewer Grid.Column="0"
+                                      Grid.ColumnSpan="4"
+                                      Grid.Row="3"
+                                      Grid.RowSpan="6"
+                                      IsSelectionEnabled="False"
+                                      VerticalContentAlignment="Top"
+                                      VerticalScrollBarVisibility="Hidden">
 
                 <FlowDocument>
                     <FlowDocument.Resources>
                         <Style TargetType="{x:Type Paragraph}">
-                            <Setter Property="Margin" Value="0"/>
-                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" 
+                                    Value="0"/>
+                            <Setter Property="Padding" 
+                                    Value="0"/>
                         </Style>
                     </FlowDocument.Resources>
-                    <Paragraph FontSize="12" FontFamily="Segoe UI">
+                    
+                    <Paragraph FontSize="12" 
+                               FontFamily="Segoe UI">
                         <Bold>Alternative Demand Curve Models:</Bold>
                     </Paragraph>
-                    <Paragraph 
-                        FontSize="12" 
-                        FontFamily="Segoe UI" 
-                        Padding="0,5,0,0">
-                        Small n Stats can calculate is capable of fitting both the Exponential 
-                        Demand Function (Hursh &amp; Silverburg, 2008) and Exponentiated Demand 
-                        Function (Koffarnus, Franck, Stein &amp; Bickel, 2015).  
-                        You may select either below.
+                    
+                    <Paragraph FontSize="12" 
+                               FontFamily="Segoe UI" 
+                               Padding="0,5,0,0">
+                               Small n Stats can calculate is capable of fitting both the Exponential 
+                               Demand Function (Hursh &amp; Silverburg, 2008) and Exponentiated Demand 
+                               Function (Koffarnus, Franck, Stein &amp; Bickel, 2015).  
+                               You may select either below.
                     </Paragraph>
                     
-                    <Paragraph 
-                        FontSize="12" 
-                        FontFamily="Segoe UI" 
-                        Padding="0,5,0,0">
-                        Output metrics for each individual model will be equivalent, though
-                        careful consideration is warranted given the specific nature of your
-                        research question and design.
+                    <Paragraph FontSize="12" 
+                               FontFamily="Segoe UI" 
+                               Padding="0,5,0,0">
+                               Output metrics for each individual model will be equivalent, though
+                               careful consideration is warranted given the specific nature of your
+                               research question and design.
                     </Paragraph>
 
-                    <Paragraph 
-                        FontSize="12" 
-                        FontFamily="Segoe UI" 
-                        Padding="0,5,0,0">
-                        For a more in-depth review of these differences, please review the work
-                        from Koffarnus et. al., 2015.
+                    <Paragraph FontSize="12" 
+                               FontFamily="Segoe UI" 
+                               Padding="0,5,0,0">
+                               For a more in-depth review of these differences, please review the work
+                               from Koffarnus et. al., 2015.
                     </Paragraph>
                 </FlowDocument>
             </FlowDocumentScrollViewer>
 
-
             <Label Grid.Row="1" 
-               Grid.Column="0"
-               Margin="10"
-               HorizontalAlignment="Center"
-               Content="Custom K">
+                   Grid.Column="0"
+                   Margin="10"
+                   HorizontalAlignment="Center"
+                   Content="Custom K">
             </Label>
 
-            <TextBox
-            Name="kValue"
-            Grid.Row="1" 
-            Grid.Column="1"
-            Grid.ColumnSpan="3"
-            Margin="10"
-            Text="{Binding KValue}">
+            <TextBox Name="kValue"
+                     Grid.Row="1" 
+                     Grid.Column="1"
+                     Grid.ColumnSpan="3"
+                     Margin="10"
+                     Text="{Binding KValue}">
             </TextBox>
             
-            <Label 
-               Grid.Row="2" 
-               Grid.Column="0"
-               Margin="10"
-               HorizontalAlignment="Center"
-               FontWeight="Bold"
-               Content="Model:">
+            <Label Grid.Row="2" 
+                   Grid.Column="0"
+                   Margin="10"
+                   HorizontalAlignment="Center"
+                   FontWeight="Bold"
+                   Content="Model:">
             </Label>
 
             <ComboBox Name="selectedModel"
@@ -383,12 +387,9 @@
                       Grid.ColumnSpan="3"
                       Margin="10"
                       IsSynchronizedWithCurrentItem="True">
-                <ComboBoxItem IsSelected="True">Exponential</ComboBoxItem>
-                <ComboBoxItem>Exponentiated</ComboBoxItem>
+                          <ComboBoxItem IsSelected="True">Exponential</ComboBoxItem>
+                          <ComboBoxItem>Exponentiated</ComboBoxItem>
             </ComboBox>
-
         </Grid>
-        
     </Grid>
-
 </Window>
