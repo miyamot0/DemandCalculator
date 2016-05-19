@@ -82,30 +82,16 @@ namespace small_n_stats_WPF.Utilities
             {
                 DataGrid mGrid = (DataGrid)sender;
 
-                for (int i = 0; i < mGrid.Items.Count; i++)
+                foreach (var item in mGrid.Items)
                 {
-                    UpdateHeaders(mGrid, i);
+                    DataGridRow row = (DataGridRow)mGrid.ItemContainerGenerator.ContainerFromItem(item);
+
+                    if (row != null)
+                    {
+                        row.Header = row.GetIndex();
+                    }
                 }
             };
-        }
-
-        /// <summary>
-        /// Walks datagrid for rows, updating headers with indices as needed
-        /// </summary>
-        /// <param name="grid">
-        /// Datagrid being walked
-        /// </param>
-        /// <param name="i">
-        /// index of object (unknown) in grid content
-        /// </param>
-        public static void UpdateHeaders(DataGrid grid, int i)
-        {
-            DataGridRow item = (DataGridRow)grid.ItemContainerGenerator.ContainerFromIndex(i);
-
-            if (item != null)
-            {
-                item.Header = item.GetIndex();
-            }
         }
 
         /// <summary>
