@@ -156,6 +156,7 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand NlmrtLicenseWindowCommand { get; set; }
         public RelayCommand NlstoolsLicenseWindowCommand { get; set; }
         public RelayCommand RLicenseWindowCommand { get; set; }
+        public RelayCommand BeezdemandLicenseWindowCommand { get; set; }
         public RelayCommand LicenseWindowCommand { get; set; }
 
         /* End Menu Items */
@@ -229,6 +230,7 @@ namespace small_n_stats_WPF.ViewModels
             NlmrtLicenseWindowCommand = new RelayCommand(param => NlmrtLicenseInformationWindow(), param => true);
             NlstoolsLicenseWindowCommand = new RelayCommand(param => NlsToolsLicenseInformationWindow(), param => true);
             RLicenseWindowCommand = new RelayCommand(param => RLicenseInformationWindow(), param => true);
+            BeezdemandLicenseWindowCommand = new RelayCommand(param => BeezdemandLicenseInformationWindow(), param => true);
             LicenseWindowCommand = new RelayCommand(param => LicenseInformationWindow(), param => true);
 
             #endregion
@@ -379,7 +381,7 @@ namespace small_n_stats_WPF.ViewModels
             var window = new License();
             window.DataContext = new LicenseViewModel
             {
-                licenseTitle = "License - Gnome Icons (GPLv2)",
+                licenseTitle = "License - Gnome Icons",
                 licenseText = Properties.Resources.License_GNOME_icons
             };
             window.Show();
@@ -390,7 +392,7 @@ namespace small_n_stats_WPF.ViewModels
             var window = new License();
             window.DataContext = new LicenseViewModel
             {
-                licenseTitle = "License - R Statistical Package (GPLv2)",
+                licenseTitle = "License - R Statistical Package",
                 licenseText = Properties.Resources.License_R
             };
             window.Show();
@@ -436,6 +438,17 @@ namespace small_n_stats_WPF.ViewModels
             {
                 licenseTitle = "License - R.Net",
                 licenseText = Properties.Resources.License_RdotNet
+            };
+            window.Show();
+        }
+
+        private void BeezdemandLicenseInformationWindow()
+        {
+            var window = new License();
+            window.DataContext = new LicenseViewModel
+            {
+                licenseTitle = "License - Beezdemand",
+                licenseText = Properties.Resources.License_Beezdemand
             };
             window.Show();
         }
@@ -715,7 +728,7 @@ namespace small_n_stats_WPF.ViewModels
                     }
 
                 }
-                catch (Exception e)
+                catch 
                 {
                     MessageBox.Show("We weren't able to open the file.  Is the target file open or in use?");
                 }

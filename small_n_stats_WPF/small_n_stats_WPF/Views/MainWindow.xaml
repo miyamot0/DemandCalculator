@@ -148,34 +148,6 @@
                             <Image Source="/Images/text-x-preview.png" />
                         </MenuItem.Icon>
 
-                        <MenuItem Header="ggplot2 (GPL >= 2)"
-                                  Command="{Binding Ggplot2LicenseWindowCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Images/text-x-preview.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-
-                        <MenuItem Header="GNOME Icon Theme (GPL >= 2)"
-                                  Command="{Binding GnomeIconLicenseWindowCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Images/text-x-preview.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-
-                        <MenuItem Header="nlmrt (GPL >= 2)"
-                                  Command="{Binding NlmrtLicenseWindowCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Images/text-x-preview.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-
-                        <MenuItem Header="nlstools (GPL >= 2)"
-                                  Command="{Binding NlstoolsLicenseWindowCommand}">
-                            <MenuItem.Icon>
-                                <Image Source="/Images/text-x-preview.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-
                         <MenuItem Header="R Statistical Package (GPL 2)"
                                   Command="{Binding RLicenseWindowCommand}">
                             <MenuItem.Icon>
@@ -183,8 +155,43 @@
                             </MenuItem.Icon>
                         </MenuItem>
 
+                        <MenuItem Header="nlmrt R Package (GPL >= 2)"
+                                  Command="{Binding NlmrtLicenseWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/text-x-preview.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Header="nlstools R Package (GPL >= 2)"
+                                  Command="{Binding NlstoolsLicenseWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/text-x-preview.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
                         <MenuItem Header="R.NET Community (BSD 2-Clause)"
                                   Command="{Binding RDotNetLicenseWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/text-x-preview.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Header="ggplot2 R Package (GPL >= 2)"
+                                  Command="{Binding Ggplot2LicenseWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/text-x-preview.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Header="Beezdemand R Package (GPL 2)"
+                                  Command="{Binding BeezdemandLicenseWindowCommand}">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/text-x-preview.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem Header="GNOME Icon Theme (GPL >= 2)"
+                                  Command="{Binding GnomeIconLicenseWindowCommand}">
                             <MenuItem.Icon>
                                 <Image Source="/Images/text-x-preview.png" />
                             </MenuItem.Icon>
