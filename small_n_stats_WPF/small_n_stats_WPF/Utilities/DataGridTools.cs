@@ -17,7 +17,6 @@
 
 */
 
-
 namespace small_n_stats_WPF.Utilities
 {
     public class DataGridTools
