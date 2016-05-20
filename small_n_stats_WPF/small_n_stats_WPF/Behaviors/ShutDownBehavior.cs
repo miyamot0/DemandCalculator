@@ -41,13 +41,6 @@ namespace small_n_stats_WPF.Behaviors
             set
             {
                 SetValue(ShutDownProperty, value);
-                
-                /* Test! Might be able to avoid the event all together. potentially null out propter metadata?
-                    if (value == true)
-                    {
-                        ((Window)AssociatedObject).Close();
-                    }
-                */
             }
         }
 
