@@ -50,26 +50,28 @@ SourceFrame <- data.frame(
   y=yLoad,
   x=xLoad)
 
-## Get N unique participants, informing loop
 participants <- unique(SourceFrame$p)
-np <- length(participants)
+nSimulated <- length(participants)
 
 deltaq = 0.025
 bounce = 0.10
 reversals = 0
 ncons0 = 2
 
+SteinFrame <- data.frame(
+  Participant=rep(NA,nSimulated),
+  TotalPass=rep(NA,nSimulated),
+  DeltaQ=rep(NA,nSimulated),
+  DeltaQPass=rep(NA,nSimulated),
+  Bounce=rep(NA,nSimulated),
+  BouncePass=rep(NA,nSimulated),
+  Reversals=rep(NA,nSimulated),
+  ReversalsPass=rep(NA,nSimulated),
+  NumPosValues=rep(NA,nSimulated))
 
-cnames <- c("Participant", "TotalPass", "DeltaQ", "DeltaQPass", "Bounce",
-            "BouncePass", "Reversals", "ReversalsPass", "NumPosValues")
-
-dfres <- data.frame(matrix(vector(),
-                           np,
-                           length(cnames),
-                           dimnames = list(c(), c(cnames))), stringsAsFactors = FALSE)
-
-for (i in seq_len(np)) {
-  dfres[i, "Participant"] <- participants[i]
+for (i in seq_len(nSimulated)) 
+{
+  SteinFrame[i, "Participant"] <- participants[i]
   
   adf <- NULL
   adf <- SourceFrame[SourceFrame$p == participants[i], ]
@@ -77,55 +79,75 @@ for (i in seq_len(np)) {
   
   adf[, c("x01", "y01")] <- adf[, c("x", "y")] + .01
   
-  dfres[i, "DeltaQ"] <- round((log10(adf[1, "y01"]) - log10(adf[nrow(adf), "y01"])) / (log10(adf[nrow(adf), "x01"]) - log10(adf[1, "x01"])), 4)
-  dfres[i, "Bounce"] <- round(sum(diff(adf[, "y"]) > adf[1, "y"] * 0.25, na.rm = TRUE)  / (nrow(adf) - 1), 4)
+  SteinFrame[i, "DeltaQ"] <- round((log10(adf[1, "y01"]) - log10(adf[nrow(adf), "y01"])) / (log10(adf[nrow(adf), "x01"]) - log10(adf[1, "x01"])), 4)
+  SteinFrame[i, "Bounce"] <- round(sum(diff(adf[, "y"]) > adf[1, "y"] * 0.25, na.rm = TRUE)  / (nrow(adf) - 1), 4)
   
   nrev <- NULL
   if (0 %in% adf[, "y"]) 
   {
     z <- which(adf[, "y"] == 0)
-    if (ncons0 == 2) {
-      if (any(z > NROW(adf) - 2)) {
-        z <- z[-which(z > NROW(adf) - 2)]
-      }
-      if (length(z) > 0) {
-        for (j in (min(z)):(NROW(adf) - 2)) {
-          if (adf[j, "y"] == 0 && adf[j + 1, "y"] == 0 && adf[j + 2, "y"] != 0) {
-            nrev[j] <- 1
-          } else {
-            next
-          }
+    if (ncons0 == 2) 
+	{
+        if (any(z > NROW(adf) - 2)) 
+	    {
+            z <- z[-which(z > NROW(adf) - 2)]
         }
-        dfres[i, "Reversals"] <- sum(nrev, na.rm = TRUE)
-      } else {
-        dfres[i, "Reversals"] <- 0
-      }
-    } else {
-      if (ncons0 == 1) {
-        if (any(z > NROW(adf) - 1)) {
-          z <- z[-which(z > NROW(adf) - 1)]
-        }
-        if (length(z) > 0) {
-          for (j in (min(z)):(NROW(adf) - 1)) {
-            if (adf[j, "y"] == 0 && adf[j + 1, "y"] != 0) {
-              nrev[j] <- 1
-            } else {
-              next
-            }
-          }
-          dfres[i, "Reversals"] <- sum(nrev, na.rm = TRUE)
-        } else {
-          dfres[i, "Reversals"] <- 0
-        }
-      }
-    }
+
+		if (length(z) > 0) 
+		{
+			for (j in (min(z)):(NROW(adf) - 2)) 
+			{
+			  if (adf[j, "y"] == 0 && adf[j + 1, "y"] == 0 && adf[j + 2, "y"] != 0) 
+			  {
+				  nrev[j] <- 1
+			  } else 
+			  {
+				  next
+			  }
+			}
+
+			SteinFrame[i, "Reversals"] <- sum(nrev, na.rm = TRUE)
+
+		  } else {
+			  SteinFrame[i, "Reversals"] <- 0
+		  }
+
+		} else 
+		{
+		    if (ncons0 == 1) 
+			{
+			    if (any(z > NROW(adf) - 1)) 
+				{
+			        z <- z[-which(z > NROW(adf) - 1)]
+			    }
+			
+			if (length(z) > 0) 
+			{
+			  for (j in (min(z)):(NROW(adf) - 1)) 
+			  {
+				    if (adf[j, "y"] == 0 && adf[j + 1, "y"] != 0) 
+				    {
+				        nrev[j] <- 1
+				    } else 
+				    {
+				        next
+				    }
+	  		    }
+
+			    SteinFrame[i, "Reversals"] <- sum(nrev, na.rm = TRUE)
+
+			} else {
+			    SteinFrame[i, "Reversals"] <- 0
+			}
+		}
+	  }
   } else {
-    dfres[i, "Reversals"] <- 0
+      SteinFrame[i, "Reversals"] <- 0
   }
   
-  dfres[i, "NumPosValues"] <- length(adf[ adf$y != 0, "y"])
-  dfres[i, "DeltaQPass"] <- ifelse(dfres[i, "DeltaQ"] >= deltaq, "Pass", "Fail")
-  dfres[i, "BouncePass"] <- ifelse(dfres[i, "Bounce"] <= bounce, "Pass", "Fail")
-  dfres[i, "ReversalsPass"] <- ifelse(dfres[i, "Reversals"] <= reversals, "Pass", "Fail")
-  dfres[i, "TotalPass"] <- length(grep("Pass", dfres[i, ]))
+  SteinFrame[i, "NumPosValues"] <- length(adf[ adf$y != 0, "y"])
+  SteinFrame[i, "DeltaQPass"] <- ifelse(SteinFrame[i, "DeltaQ"] >= deltaq, "Pass", "Fail")
+  SteinFrame[i, "BouncePass"] <- ifelse(SteinFrame[i, "Bounce"] <= bounce, "Pass", "Fail")
+  SteinFrame[i, "ReversalsPass"] <- ifelse(SteinFrame[i, "Reversals"] <= reversals, "Pass", "Fail")
+  SteinFrame[i, "TotalPass"] <- length(grep("Pass", SteinFrame[i, ]))
 }

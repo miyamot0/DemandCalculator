@@ -615,7 +615,7 @@ namespace small_n_stats_WPF.ViewModels
 
             engine.Evaluate(DemandFunctionSolvers.GetSteinSystematicCheck());
 
-            var results = engine.Evaluate("dfres").AsDataFrame();
+            var results = engine.Evaluate("SteinFrame").AsDataFrame();
             var colNames = results.ColumnNames;
 
             var outputter = colNames[0].ToString().Trim().PadRight(14, ' ') +

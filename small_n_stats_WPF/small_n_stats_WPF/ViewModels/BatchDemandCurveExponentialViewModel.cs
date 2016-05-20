@@ -911,7 +911,7 @@ namespace small_n_stats_WPF.ViewModels
 
             engine.Evaluate(DemandFunctionSolvers.GetSteinSystematicCheck());
 
-            var results = engine.Evaluate("dfres").AsDataFrame();
+            var results = engine.Evaluate("SteinFrame").AsDataFrame();
             var colNames = results.ColumnNames;
 
             var outputter = colNames[0].ToString().Trim().PadRight(14, ' ') +
@@ -1396,7 +1396,7 @@ namespace small_n_stats_WPF.ViewModels
 
                             mVM.RowViewModels[1 + mIndex].values[19] = string.Join(",", xValues);
                             mVM.RowViewModels[1 + mIndex].values[20] = string.Join(",", yValues);
-                            mVM.RowViewModels[1 + mIndex].values[21] = "Model did not optimize, was a curve actually present?";
+                            mVM.RowViewModels[1 + mIndex].values[21] = "Model did not converge, was a curve actually present?";
                         }
 
                     }
@@ -1677,7 +1677,7 @@ namespace small_n_stats_WPF.ViewModels
 
                         mVM.RowViewModels[1].values[19] = string.Join(",", xValues);
                         mVM.RowViewModels[1].values[20] = string.Join(",", yValues);
-                        mVM.RowViewModels[1].values[21] = "Model did not optimize, was a curve actually present?";
+                        mVM.RowViewModels[1].values[21] = "Model did not converge, was a curve actually present?";
                     }
 
                     if (modelArraySelection == "Exponential")
