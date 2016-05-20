@@ -69,23 +69,26 @@ SteinFrame <- data.frame(
   ReversalsPass=rep(NA,nSimulated),
   NumPosValues=rep(NA,nSimulated))
 
-for (i in seq_len(nSimulated)) 
+# 
+# OG Author: Brent Kaplan
+# Modified by Shawn Gilroy to enable C# hooks into/out of R sessions
+#
+for (i in seq(1,nSimulated,1)) 
 {
   SteinFrame[i, "Participant"] <- participants[i]
   
   adf <- NULL
   adf <- SourceFrame[SourceFrame$p == participants[i], ]
-  
-  
+    
   adf[, c("x01", "y01")] <- adf[, c("x", "y")] + .01
   
-  SteinFrame[i, "DeltaQ"] <- round((log10(adf[1, "y01"]) - log10(adf[nrow(adf), "y01"])) / (log10(adf[nrow(adf), "x01"]) - log10(adf[1, "x01"])), 4)
-  SteinFrame[i, "Bounce"] <- round(sum(diff(adf[, "y"]) > adf[1, "y"] * 0.25, na.rm = TRUE)  / (nrow(adf) - 1), 4)
+  SteinFrame[i, ]$DeltaQ <- round((log10(adf[1, "y01"]) - log10(adf[nrow(adf), "y01"])) / (log10(adf[nrow(adf), "x01"]) - log10(adf[1, "x01"])), 4)
+  SteinFrame[i, ]$Bounce <- round(sum(diff(adf[, "y"]) > adf[1, "y"] * 0.25, na.rm = TRUE)  / (nrow(adf) - 1), 4)
   
   nrev <- NULL
-  if (0 %in% adf[, "y"]) 
+  if (0 %in% adf[, ]$y) 
   {
-    z <- which(adf[, "y"] == 0)
+    z <- which(adf[, ]$y == 0)
     if (ncons0 == 2) 
 	{
         if (any(z > NROW(adf) - 2)) 
@@ -97,7 +100,7 @@ for (i in seq_len(nSimulated))
 		{
 			for (j in (min(z)):(NROW(adf) - 2)) 
 			{
-			  if (adf[j, "y"] == 0 && adf[j + 1, "y"] == 0 && adf[j + 2, "y"] != 0) 
+			  if (adf[j, ]$y == 0 && adf[j + 1, ]$y == 0 && adf[j + 2, ]$y != 0) 
 			  {
 				  nrev[j] <- 1
 			  } else 
@@ -106,10 +109,10 @@ for (i in seq_len(nSimulated))
 			  }
 			}
 
-			SteinFrame[i, "Reversals"] <- sum(nrev, na.rm = TRUE)
+			SteinFrame[i, ]$Reversals <- sum(nrev, na.rm = TRUE)
 
 		  } else {
-			  SteinFrame[i, "Reversals"] <- 0
+			  SteinFrame[i, ]$Reversals <- 0
 		  }
 
 		} else 
@@ -125,7 +128,7 @@ for (i in seq_len(nSimulated))
 			{
 			  for (j in (min(z)):(NROW(adf) - 1)) 
 			  {
-				    if (adf[j, "y"] == 0 && adf[j + 1, "y"] != 0) 
+				    if (adf[j, ]$y == 0 && adf[j + 1, ]$y != 0) 
 				    {
 				        nrev[j] <- 1
 				    } else 
@@ -134,20 +137,20 @@ for (i in seq_len(nSimulated))
 				    }
 	  		    }
 
-			    SteinFrame[i, "Reversals"] <- sum(nrev, na.rm = TRUE)
+			    SteinFrame[i, ]$Reversals <- sum(nrev, na.rm = TRUE)
 
 			} else {
-			    SteinFrame[i, "Reversals"] <- 0
+			    SteinFrame[i, ]$Reversals <- 0
 			}
 		}
 	  }
   } else {
-      SteinFrame[i, "Reversals"] <- 0
+      SteinFrame[i, ]$Reversals <- 0
   }
   
-  SteinFrame[i, "NumPosValues"] <- length(adf[ adf$y != 0, "y"])
-  SteinFrame[i, "DeltaQPass"] <- ifelse(SteinFrame[i, "DeltaQ"] >= deltaq, "Pass", "Fail")
-  SteinFrame[i, "BouncePass"] <- ifelse(SteinFrame[i, "Bounce"] <= bounce, "Pass", "Fail")
-  SteinFrame[i, "ReversalsPass"] <- ifelse(SteinFrame[i, "Reversals"] <= reversals, "Pass", "Fail")
-  SteinFrame[i, "TotalPass"] <- length(grep("Pass", SteinFrame[i, ]))
+  SteinFrame[i, ]$NumPosValues <- length(adf[ adf$y != 0, "y"])
+  SteinFrame[i, ]$DeltaQPass <- ifelse(SteinFrame[i, "DeltaQ"] >= deltaq, "Pass", "Fail")
+  SteinFrame[i, ]$BouncePass <- ifelse(SteinFrame[i, "Bounce"] <= bounce, "Pass", "Fail")
+  SteinFrame[i, ]$ReversalsPass <- ifelse(SteinFrame[i, "Reversals"] <= reversals, "Pass", "Fail")
+  SteinFrame[i, ]$TotalPass <- length(grep("Pass", SteinFrame[i, ]))
 }
