@@ -13,8 +13,12 @@ Features include:
 
 ### Referenced Works (F/OSS software)
 The Small N Stats Demand Calculator uses a number of open source projects to work properly:
-* R Statistical Package - GPL v2 Licensed. Copyright (C) 2000-16. The R Core Team
+* R Statistical Package - GPL v2 Licensed. Copyright (C) 2000-16. The R Core Team [Site](https://www.r-project.org/)
 * RdotNet: Interface for the R Statistical Package - New BSD License (BSD 2-Clause). Copyright(c) 2010, RecycleBin. All rights reserved [Github](https://github.com/jmp75/rdotnet)
+* RdotNet/Dynamic Interop - MIT Licensed. Copyright (c) 2015 Jean-Michel Perraud, Copyright (c) 2014 Daniel Collins, CSIRO, Copyright (c) 2013 Kosei, evolvedmicrobe. [Github](https://github.com/jmp75/dynamic-interop-dll)
+* ClosedXML - MIT Licensed. Copyright (c) 2010 Manuel De Leon. [Codeplex](http://closedxml.codeplex.com/SourceControl/latest)
+
+### Referenced Works (R packages/scripts)
 * nlmrt R Package - GPLv2 Licensed. Copyright (C) 2016. John C. Nash
 * ExponentialDemandFunction R script - GPLv2 Licensed. Copyright (c) 2016. Shawn Gilroy [Github](https://github.com/miyamot0/ExponentialDemandFitting)
 * ExponentiatedDemandFunction R script - GPLv2 Licensed. Copyright (c) 2016. Shawn Gilroy [Github](https://github.com/miyamot0/ExponentiatedDemandFitting)
@@ -31,6 +35,7 @@ The Small N Stats Demand Calculator is based on the following academic works:
 ### Acknowledgements and Credits
 * Brent Kaplan, Applied Behavioral Economics Laboratory, University of Kansas (www.behavioraleconlab.com) [Github](https://github.com/bkaplan4)
 * Derek D. Reed, Applied Behavioral Economics Laboratory, University of Kansas (www.behavioraleconlab.com) [Github](https://github.com/derekdreed)
+* Donald A. Hantula, Decision Making Laboratory, Temple University [Site](http://astro.temple.edu/~hantula/)
 * Chris Franck, Laboratory for Interdisciplinary Statistical Analysis - Virginia Tech
 
 ### Installation
