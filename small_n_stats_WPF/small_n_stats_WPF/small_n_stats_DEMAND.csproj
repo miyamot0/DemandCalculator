@@ -144,6 +144,9 @@
     <Compile Include="Utilities\Settings.cs" />
     <Compile Include="ViewModels\DemandCurveExponentialViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\CheckWindow.xaml.cs">
+      <DependentUpon>CheckWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProgressDialog.xaml.cs">
       <DependentUpon>ProgressDialog.xaml</DependentUpon>
     </Compile>
@@ -216,11 +219,16 @@
     <None Include="Resources\License_Beezdemand.txt" />
     <None Include="Resources\GraphingExponential.txt" />
     <None Include="Resources\GraphingExponentiated.txt" />
+    <None Include="Resources\SteinSystematicCheck.txt" />
     <Content Include="Source\Small-N-Stats---Demand-Calculator-master.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\CheckWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ProgressDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

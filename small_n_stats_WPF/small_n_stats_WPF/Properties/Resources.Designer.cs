@@ -103,7 +103,19 @@ namespace small_n_stats_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to # 
+        ///#    Copyright 2016 Shawn Gilroy
+        ///#
+        ///#    This file is part of Demand Analysis.
+        ///#
+        ///#    Demand Analysis is free software: you can redistribute it and/or modify
+        ///#    it under the terms of the GNU General Public License as published by
+        ///#    the Free Software Foundation, version 2.
+        ///#
+        ///#    Demand Analysis is distributed in the hope that it will be useful,
+        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GraphingExponential {
             get {
@@ -112,7 +124,19 @@ namespace small_n_stats_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to # 
+        ///#    Copyright 2016 Shawn Gilroy
+        ///#
+        ///#    This file is part of Demand Analysis.
+        ///#
+        ///#    Demand Analysis is free software: you can redistribute it and/or modify
+        ///#    it under the terms of the GNU General Public License as published by
+        ///#    the Free Software Foundation, version 2.
+        ///#
+        ///#    Demand Analysis is distributed in the hope that it will be useful,
+        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GraphingExponentiated {
             get {
@@ -142,7 +166,19 @@ namespace small_n_stats_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 		    GNU GENERAL PUBLIC LICENSE
+        ///		       Version 2, June 1991
+        ///
+        /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+        ///                       59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+        /// Everyone is permitted to copy and distribute verbatim copies
+        /// of this license document, but changing it is not allowed.
+        ///
+        ///			    Preamble
+        ///
+        ///  The licenses for most software are designed to take away your
+        ///freedom to share and change it.  By contrast, the GNU General Public
+        ///License is intended to guara [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string License_Beezdemand {
             get {
@@ -279,6 +315,27 @@ namespace small_n_stats_WPF.Properties {
             get {
                 object obj = ResourceManager.GetObject("SNS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # 
+        ///#    Copyright 2016 Shawn Gilroy
+        ///#
+        ///#    This file is part of Demand Analysis.
+        ///#
+        ///#    Demand Analysis is free software: you can redistribute it and/or modify
+        ///#    it under the terms of the GNU General Public License as published by
+        ///#    the Free Software Foundation, version 2.
+        ///#
+        ///#    Demand Analysis is distributed in the hope that it will be useful,
+        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SteinSystematicCheck {
+            get {
+                return ResourceManager.GetString("SteinSystematicCheck", resourceCulture);
             }
         }
     }

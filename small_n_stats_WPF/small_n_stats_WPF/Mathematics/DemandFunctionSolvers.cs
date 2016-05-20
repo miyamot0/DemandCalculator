@@ -52,5 +52,14 @@ namespace small_n_stats_WPF.Mathematics
         {
             return Properties.Resources.GraphingExponentiated;
         }
+
+        /// <summary>
+        /// Stein check for systematic purchase data
+        /// Original Author: Brent Kaplan
+        /// </summary>
+        public static string GetSteinSystematicCheck()
+        {
+            return Properties.Resources.SteinSystematicCheck;
+        }
     }
 }

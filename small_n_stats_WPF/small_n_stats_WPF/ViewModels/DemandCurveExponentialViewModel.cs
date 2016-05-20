@@ -275,7 +275,7 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     if ((sNum - fNum) == 0)
                     {
-                        YBrush = Brushes.LightBlue;
+                        YBrush = Brushes.LightGreen;
                         YRangeValues = firstChars + firstNums + ":" + secondChars + secondNums;
 
                         lowColY = DataGridTools.GetColumnIndex(firstChars);
@@ -427,6 +427,8 @@ namespace small_n_stats_WPF.ViewModels
         {
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
 
+            if (cells.Count < 1) return;
+
             var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
             lowRowX = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
             highRowX = cells.Max(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
@@ -475,6 +477,8 @@ namespace small_n_stats_WPF.ViewModels
         private void DataGrid_PreviewMouseUp_Y(object sender, MouseButtonEventArgs e)
         {
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
+
+            if (cells.Count < 1) return;
 
             var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
             lowRowY = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
@@ -572,7 +576,6 @@ namespace small_n_stats_WPF.ViewModels
         private void CalculateScores()
         {
 
-
             if (failed) return;
 
             List<double>[] array = GetRangedValues(lowColX, highColX, lowRowX, lowColY, highColY, lowRowY);
@@ -589,6 +592,79 @@ namespace small_n_stats_WPF.ViewModels
                          select y).Any();
 
             List<double> xCopy, yCopy;
+
+            var yTempCheck = new List<double>(yRange);
+            var xTempCheck = new List<double>(xRange);
+            var pTempCheck = new List<double>();
+
+            foreach (var y in yTempCheck)
+            {
+                pTempCheck.Add(1);
+            }
+
+            engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
+
+            NumericVector yValuesCheck = engine.CreateNumericVector(yTempCheck.ToArray());
+            engine.SetSymbol("yLoad", yValuesCheck);
+
+            NumericVector xValuesCheck = engine.CreateNumericVector(xTempCheck.ToArray());
+            engine.SetSymbol("xLoad", xValuesCheck);
+
+            NumericVector pValuesCheck = engine.CreateNumericVector(pTempCheck.ToArray());
+            engine.SetSymbol("pLoad", pValuesCheck);
+
+            engine.Evaluate(DemandFunctionSolvers.GetSteinSystematicCheck());
+
+            var results = engine.Evaluate("dfres").AsDataFrame();
+            var colNames = results.ColumnNames;
+
+            var outputter = colNames[0].ToString().Trim().PadRight(14, ' ') +
+                colNames[1].ToString().Trim().PadRight(14, ' ') +
+                colNames[2].ToString().Trim().PadRight(14, ' ') +
+                colNames[3].ToString().Trim().PadRight(14, ' ') +
+                colNames[4].ToString().Trim().PadRight(14, ' ') +
+                colNames[5].ToString().Trim().PadRight(14, ' ') +
+                colNames[6].ToString().Trim().PadRight(14, ' ') +
+                colNames[7].ToString().Trim().PadRight(14, ' ') +
+                colNames[8].ToString().Trim().PadRight(14, ' ');
+
+            foreach (var row in results.GetRows())
+            {
+                outputter = outputter + "\n" + row["Participant"].ToString().Trim().PadRight(14, ' ') +
+                    row["TotalPass"].ToString().Trim().PadRight(14, ' ') +
+                    row["DeltaQ"].ToString().Trim().PadRight(14, ' ') +
+                    row["DeltaQPass"].ToString().Trim().PadRight(14, ' ') +
+                    row["Bounce"].ToString().Trim().PadRight(14, ' ') +
+                    row["BouncePass"].ToString().Trim().PadRight(14, ' ') +
+                    row["Reversals"].ToString().Trim().PadRight(14, ' ') +
+                    row["ReversalsPass"].ToString().Trim().PadRight(14, ' ') +
+                    row["NumPosValues"].ToString().Trim().PadRight(14, ' ');
+            }
+
+            mWindow.OutputEvents(outputter);
+
+            var winHack = new CheckWindow(new string[] { "I'd like to proceed", "I'd like to review my data" }, "I'd like to proceed");
+            System.Windows.Documents.Paragraph para = new System.Windows.Documents.Paragraph();
+            para.Inlines.Add(outputter);
+            winHack.outputWindow.Document.Blocks.Add(para);
+            winHack.outputWindow.ScrollToEnd();
+
+            winHack.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            winHack.Title = "Results of Stein Test";
+            winHack.Owner = windowRef;
+            winHack.Width = 650;
+            winHack.Height = 400;
+            winHack.Topmost = true;
+
+            if (winHack.ShowDialog() == true)
+            {
+                if (winHack.MessageOptions.SelectedIndex == 1)
+                {
+                    return;
+                }
+            }
+
+            engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
 
             if (yQuery)
             {

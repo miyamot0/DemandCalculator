@@ -21,7 +21,6 @@ using Microsoft.Win32;
 using System.IO;
 using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Input;
 
 namespace small_n_stats_WPF.Views
 {
@@ -72,33 +71,6 @@ namespace small_n_stats_WPF.Views
         public void ClearLogs()
         {
             outputWindow.Document.Blocks.Clear();
-        }
-
-        private void PART_CLOSE_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void PART_MINIMIZE_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = System.Windows.WindowState.Minimized;
-        }
-
-        private void PART_MAXIMIZE_RESTORE_Click(object sender, RoutedEventArgs e)
-        {
-            if (WindowState == System.Windows.WindowState.Normal)
-            {
-                WindowState = System.Windows.WindowState.Maximized;
-            }
-            else
-            {
-                WindowState = System.Windows.WindowState.Normal;
-            }
-        }
-
-        private void PART_TITLEBAR_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
         }
     }
 }

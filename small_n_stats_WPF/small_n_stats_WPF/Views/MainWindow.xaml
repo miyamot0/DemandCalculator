@@ -264,7 +264,7 @@
             </custom:CustomDataGrid>
         </DockPanel>
 
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+        <ScrollViewer HorizontalScrollBarVisibility="Visible" 
                       VerticalScrollBarVisibility="Auto" 
                       x:Name="Scroller"
                       Grid.Row="3">
@@ -273,7 +273,10 @@
                          IsReadOnly="True"
                          BorderBrush="Transparent"
                          BorderThickness="0"
-                         Width="{Binding ElementName=Scroller, Path=ViewportWidth}">
+                         FontFamily="Courier New"
+                         HorizontalContentAlignment="Left"
+                         HorizontalScrollBarVisibility="Visible"
+                         Width="3000">
                 <RichTextBox.Resources>
                     <Style TargetType="{x:Type Paragraph}">
                         <Setter Property="Margin" 

@@ -882,6 +882,88 @@ namespace small_n_stats_WPF.ViewModels
                 return;
             }
 
+            #region SteinTest
+
+            List<double> xTemp = new List<double>();
+            List<double> yTemp = new List<double>();
+            List<double> pTemp = new List<double>();
+
+            for (int i = 0; i < wholeRange.GetLength(1); i++)
+            {
+                for (int j = 0; j < wholeRange.GetLength(0); j++)
+                {
+                    yTemp.Add(double.Parse(wholeRange[j, i]));
+                    xTemp.Add(xRange[j]);
+                    pTemp.Add(i + 1);
+                }
+            }
+
+            engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
+
+            NumericVector yValuesCheck = engine.CreateNumericVector(yTemp.ToArray());
+            engine.SetSymbol("yLoad", yValuesCheck);
+
+            NumericVector xValuesCheck = engine.CreateNumericVector(xTemp.ToArray());
+            engine.SetSymbol("xLoad", xValuesCheck);
+
+            NumericVector pValuesCheck = engine.CreateNumericVector(pTemp.ToArray());
+            engine.SetSymbol("pLoad", pValuesCheck);
+
+            engine.Evaluate(DemandFunctionSolvers.GetSteinSystematicCheck());
+
+            var results = engine.Evaluate("dfres").AsDataFrame();
+            var colNames = results.ColumnNames;
+
+            var outputter = colNames[0].ToString().Trim().PadRight(14, ' ') +
+                colNames[1].ToString().Trim().PadRight(14, ' ') +
+                colNames[2].ToString().Trim().PadRight(14, ' ') +
+                colNames[3].ToString().Trim().PadRight(14, ' ') +
+                colNames[4].ToString().Trim().PadRight(14, ' ') +
+                colNames[5].ToString().Trim().PadRight(14, ' ') +
+                colNames[6].ToString().Trim().PadRight(14, ' ') +
+                colNames[7].ToString().Trim().PadRight(14, ' ') +
+                colNames[8].ToString().Trim().PadRight(14, ' ');
+
+            foreach (var row in results.GetRows())
+            {
+                outputter = outputter + "\n" + row["Participant"].ToString().Trim().PadRight(14, ' ') +
+                    row["TotalPass"].ToString().Trim().PadRight(14, ' ') +
+                    row["DeltaQ"].ToString().Trim().PadRight(14, ' ') +
+                    row["DeltaQPass"].ToString().Trim().PadRight(14, ' ') +
+                    row["Bounce"].ToString().Trim().PadRight(14, ' ') +
+                    row["BouncePass"].ToString().Trim().PadRight(14, ' ') +
+                    row["Reversals"].ToString().Trim().PadRight(14, ' ') +
+                    row["ReversalsPass"].ToString().Trim().PadRight(14, ' ') +
+                    row["NumPosValues"].ToString().Trim().PadRight(14, ' ');
+            }
+
+            mWindow.OutputEvents(outputter);
+
+            var winHack = new CheckWindow(new string[] { "I'd like to proceed", "I'd like to review my data" }, "I'd like to proceed");
+            System.Windows.Documents.Paragraph para = new System.Windows.Documents.Paragraph();
+            para.Inlines.Add(outputter);
+            winHack.outputWindow.Document.Blocks.Add(para);
+            winHack.outputWindow.ScrollToEnd();
+
+            winHack.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            winHack.Title = "Results of Stein Test";
+            winHack.Owner = windowRef;
+            winHack.Width = 650;
+            winHack.Height = 400;
+            winHack.Topmost = true;
+
+            if (winHack.ShowDialog() == true)
+            {
+                if (winHack.MessageOptions.SelectedIndex == 1)
+                {
+                    return;
+                }
+            }
+
+            engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
+
+            #endregion
+
             #region CheckForDataState
 
             // Check for zero consumptions
@@ -890,7 +972,7 @@ namespace small_n_stats_WPF.ViewModels
             // Are zeroes in x range?
             bool xQuery = (from x in xRange
                           where x == 0
-                          select x).Any();
+                          select x).Any() && (SelectedMode == "Individual");
 
             // Verify k source
             List<double> xRangeShadow = new List<double>();
@@ -1617,6 +1699,7 @@ namespace small_n_stats_WPF.ViewModels
                 #endregion
 
             }
+
             mWindow.OutputEvents("Final Calculations Completed!");
             mWin.Show();
 

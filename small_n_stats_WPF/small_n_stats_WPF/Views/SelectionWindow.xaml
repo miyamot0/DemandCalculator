@@ -28,13 +28,21 @@
         Width="350">
     <StackPanel VerticalAlignment="Bottom"                     
                 Margin="5">
+
+        <ScrollViewer>
         <TextBlock x:Name="MessageLabel" 
+                   ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                    Text="blah"
                    Margin="5"/>
-        <ComboBox  x:Name="MessageOptions">            
-        </ComboBox>        
+        </ScrollViewer>
+        <ComboBox  x:Name="MessageOptions"
+                   Margin="5"/>
+
         <Button Content="Save"
                 Margin="5" 
+                HorizontalAlignment="Stretch"
                 Click="Button_Click" />
+        
     </StackPanel>
 </Window>
