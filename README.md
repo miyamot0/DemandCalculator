@@ -31,6 +31,7 @@ The Small N Stats Demand Calculator is based on the following academic works:
 ### Acknowledgements and Credits
 * Brent Kaplan, Applied Behavioral Economics Laboratory, University of Kansas (www.behavioraleconlab.com) [Github](https://github.com/bkaplan4)
 * Derek D. Reed, Applied Behavioral Economics Laboratory, University of Kansas (www.behavioraleconlab.com) [Github](https://github.com/derekdreed)
+* Donald A. Hantula, Decision Making Laboratory, Temple University [Site](http://astro.temple.edu/~hantula/)
 * Chris Franck, Laboratory for Interdisciplinary Statistical Analysis - Virginia Tech
 
 ### Installation
