@@ -21,6 +21,7 @@ The Small N Stats Demand Calculator uses a number of open source projects to wor
 * nlstools R Package - GPLv2 Licensed. Copyright(C) 2015 Florent Baty and Marie-Laure Delignette - Muller, with contributions from Sandrine Charles, Jean - Pierre Flandrois, and Christian Ritz
 * ggplot2 R Package - GPLv2 Licensed. Copyright (c) 2016, Hadley Wickham
 * reshape2 R Package - MIT Licensed. Copyright (c) 2014, Hadley Wickham
+* ClosedXML - MIT Licensed. Copyright (c) 2010 Manuel De Leon.
 * beezdemand Package R package - GPLv2 Licensed. Copyright (c) 2016, Brent Kaplan [Github](https://github.com/bkaplan4/beezdemand)
 
 ### Referenced Works (academic works)
