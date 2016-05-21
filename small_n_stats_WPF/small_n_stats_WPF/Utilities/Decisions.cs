@@ -43,7 +43,9 @@
     /// </summary>
     public enum KValueDecisions
     {
-        DeriveValues,
-        UseSuppliedValues
+        DeriveValuesIndividual,
+        DeriveValuesGroup,
+        UseSuppliedValues,
+        FitK
     }
 }

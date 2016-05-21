@@ -220,6 +220,8 @@
     <None Include="Resources\GraphingExponential.txt" />
     <None Include="Resources\GraphingExponentiated.txt" />
     <None Include="Resources\SteinSystematicCheck.txt" />
+    <None Include="Resources\ExponentialDemandFunctionsKFitted.txt" />
+    <None Include="Resources\ExponentiatedDemandFunctionsKFitted.txt" />
     <Content Include="Source\Small-N-Stats---Demand-Calculator-master.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
