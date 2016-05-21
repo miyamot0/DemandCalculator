@@ -110,9 +110,9 @@ namespace small_n_stats_WPF.Utilities
         /// </returns>
         public static XValueDecisions GetXBehavior(string modelType, Window windowRef)
         {
-            string recommended = (modelType == "Exponential") ? "Drop Zeroes" : "Change Hundredth";
+            string recommended = (modelType == "Exponential") ? "Drop Zeroes" : "Do Nothing";
 
-            var xValueWindow = new SelectionWindow(new string[] { "Change Hundredth", "Drop Zeroes", "Do Nothing" }, "Change Hundredth");
+            var xValueWindow = new SelectionWindow(new string[] { "Change Hundredth", "Drop Zeroes", "Do Nothing" }, recommended);
             xValueWindow.Title = "How do you want to treat 0 Pricing (free) values";
             xValueWindow.MessageLabel.Text = "Please select how to manage the zero X values";
             xValueWindow.Owner = windowRef;

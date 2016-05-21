@@ -246,7 +246,7 @@
                                     VerticalAlignment="Stretch">
                 <DataGrid.InputBindings>
                     <KeyBinding Key="Delete" Command="{Binding DeleteSelectedCommand}" />
-                    <KeyBinding Gesture="Ctrl+X" Command="{Binding CutSelectedCommand}"/>
+                    <KeyBinding Gesture="Ctrl+X" Command="{Binding CutSelectedCommand}" />
                 </DataGrid.InputBindings>
 
                 <DataGrid.ColumnHeaderStyle>
