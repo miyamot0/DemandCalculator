@@ -39,7 +39,7 @@
     }
 
     /// <summary>
-    /// Enum values to aide in automated decision-making.
+    /// Enum values to aide in automated decision-making.  
     /// </summary>
     public enum KValueDecisions
     {
