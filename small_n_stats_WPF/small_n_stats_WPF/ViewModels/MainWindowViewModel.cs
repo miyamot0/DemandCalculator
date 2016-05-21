@@ -183,6 +183,7 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand SaveLogsWindowCommand { get; set; }
         public RelayCommand ClearLogsWindowCommand { get; set; }
         public RelayCommand DeleteSelectedCommand { get; set; }
+        public RelayCommand CutSelectedCommand { get; set; }
 
         #endregion
 
@@ -253,6 +254,7 @@ namespace small_n_stats_WPF.ViewModels
             #region GridCommands
 
             DeleteSelectedCommand = new RelayCommand(param => DeleteSelected(), param => true);
+            CutSelectedCommand = new RelayCommand(param => CutSelected(), param => true);
 
             #endregion
 
@@ -377,6 +379,43 @@ namespace small_n_stats_WPF.ViewModels
         {
             if (MainWindow.dataGrid.SelectedCells.Count > 0)
             {
+                foreach (System.Windows.Controls.DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
+                {
+                    var rvm = obj.Item as RowViewModel;
+
+                    if (rvm != null)
+                    {
+                        int x = RowViewModels.IndexOf(rvm);
+                        RowViewModels[x].values[obj.Column.DisplayIndex] = "";
+                        RowViewModels[x].ForcePropertyUpdate(obj.Column.DisplayIndex);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Cut cells after copying to clipboard
+        /// </summary>
+        private void CutSelected()
+        {
+            if (MainWindow.dataGrid.SelectedCells.Count > 0)
+            {
+                List<string> holdPreClip = new List<string>();
+
+                foreach (DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
+                {
+                    var rvm = obj.Item as RowViewModel;
+
+                    if (rvm != null)
+                    {
+                        int x = RowViewModels.IndexOf(rvm);
+                        holdPreClip.Add(RowViewModels[x].values[obj.Column.DisplayIndex]);
+                    }
+                }
+
+                string holdClip = string.Join("\t", holdPreClip);
+                Clipboard.SetText(holdClip);
+
                 foreach (System.Windows.Controls.DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
                 {
                     var rvm = obj.Item as RowViewModel;
