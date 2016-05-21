@@ -575,6 +575,7 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void CalculateScores()
         {
+            mWindow.dataGrid.CommitEdit();
 
             if (failed) return;
 
