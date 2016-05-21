@@ -208,20 +208,20 @@ namespace small_n_stats_WPF.ViewModels
 
         bool failed;
 
-        int lowRowX = 0,
-            highRowX = 0,
-            lowColX = 0,
-            highColX = 0;
+        int lowRowX = -1,
+            highRowX = -1,
+            lowColX = -1,
+            highColX = -1;
 
-        int lowRowY = 0,
-            highRowY = 0,
-            lowColY = 0,
-            highColY = 0;
+        int lowRowY = -1,
+            highRowY = -1,
+            lowColY = -1,
+            highColY = -1;
 
-        int lowRowK = 0,
-            highRowK = 0,
-            lowColK = 0,
-            highColK = 0;
+        int lowRowK = -1,
+            highRowK = -1,
+            lowColK = -1,
+            highColK = -1;
 
         /* Commands */
 
@@ -237,6 +237,7 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand ConsumptionRangeCommand { get; set; }
         public RelayCommand PricingRangeCommand { get; set; }
         public RelayCommand ConstantRangeCommand { get; set; }
+        public RelayCommand ResetConstantRangeCommand { get; set; }
 
         /// <summary>
         /// Public constructor
@@ -255,6 +256,7 @@ namespace small_n_stats_WPF.ViewModels
             ConsumptionRangeCommand = new RelayCommand(param => UpdateConsumptionRange(), param => true);
             PricingRangeCommand = new RelayCommand(param => UpdatePricingRange(), param => true);
             ConstantRangeCommand = new RelayCommand(param => UpdateKRange(), param => true);
+            ResetConstantRangeCommand = new RelayCommand(param => ResetKRange(), param => true);
 
             modelArraySelection = "Exponential";
         }
@@ -306,6 +308,21 @@ namespace small_n_stats_WPF.ViewModels
                     MessageBox.Show("Parse error!");
                 }
             }
+        }
+
+        /// <summary>
+        /// Query user for a range
+        /// </summary>
+        private void ResetKRange()
+        {
+            KBrush = Brushes.LightGray;
+            KRangeValues = "";
+
+            lowColK = -1;
+            highColK = -1;
+
+            lowRowK = -1;
+            highRowK = -1;
         }
 
         /// <summary>
@@ -557,7 +574,7 @@ namespace small_n_stats_WPF.ViewModels
             DefaultFieldsToGray();
 
             XBrush = Brushes.Yellow;
-            XRangeValues = "Select delays on spreadsheet";
+            XRangeValues = "Select pricing values on spreadsheet";
 
             mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_X;
 
@@ -609,7 +626,7 @@ namespace small_n_stats_WPF.ViewModels
             DefaultFieldsToGray();
 
             YBrush = Brushes.Yellow;
-            YRangeValues = "Select values on spreadsheet";
+            YRangeValues = "Select consumption values on spreadsheet";
 
             mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_Y;
         }
@@ -673,6 +690,8 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private List<double> GetRangedValuesVM(int startCol, int endCol, int startRow)
         {
+            if (startCol == -1 || startRow == -1) return null;
+
             List<double> mRange = new List<double>();
 
             double test;
@@ -1017,10 +1036,9 @@ namespace small_n_stats_WPF.ViewModels
         {
             if (failed) return;
 
-            bool customK = false;
-
             double derivedK = -1;
 
+            mWindow.OutputEvents(" ");
             mWindow.OutputEvents("---------------------------------------------------");
             
             mWindow.OutputEvents("Checking user-supplied ranges and reference points....");
@@ -1030,23 +1048,45 @@ namespace small_n_stats_WPF.ViewModels
 
             if (xRange == null)
             {
-                mWindow.OutputEvents("Error while validating the Delays.  There cannot be any blank, null or non-numeric fields.");
-                MessageBox.Show("Please review the the Delays column.  There cannot be any blank, null or non-numeric fields.");
+                mWindow.OutputEvents("Error while validating the Pricing values.  There cannot be any blank, null or non-numeric fields.");
+                MessageBox.Show("Please review the the Pricing row.  There cannot be any blank, null or non-numeric fields.");
                 return;
             }
 
             if (wholeRange == null)
             {
-                mWindow.OutputEvents("There were items that failed validation in the Indifference Point values.  Are any fields blank or not numeric?");
-                MessageBox.Show("There were items that failed validation in the Indifference Point values.");
+                mWindow.OutputEvents("There were items that failed validation in the Consumption values.  Are any fields blank or not numeric?");
+                MessageBox.Show("There were items that failed validation in the Consumption values.");
                 return;
             }
 
-            #region FittingHeuristic
+            List<double> kRanges = null;
+
+            if (AdvancedMenu)
+            {
+                kRanges = GetRangedValuesVerticalVM(lowRowK, highRowK, lowColK);
+
+                if (kRanges != null)
+                {
+                    if (kRanges.Count() > 1 && kRanges.Count() != wholeRange.GetLength(1))
+                    {
+                        mWindow.OutputEvents("Your custom k ranges don't match the # of rows.");
+                        MessageBox.Show("Hmm, check your k range.  It doesn't seem paired up with the rows.");
+                        return;
+                    }
+                }
+                else if (kRanges == null && lowRowK != -1)
+                {
+                    mWindow.OutputEvents("There were items that failed validation in the K values.  Are any fields blank or not numeric?");
+                    MessageBox.Show("There were items that failed validation in the K values.");
+                    return;
+                }
+            }
 
             mWindow.OutputEvents("Data passed null and type checks...");
-
             mWindow.OutputEvents("Determining a fitting heuristic...");
+
+            #region FittingHeuristic
 
             engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
 
@@ -1206,28 +1246,6 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     yRange.Add(holder);
                     xRangeShadow.Add(xRange[i]);
-                }
-            }
-
-            List<double> kRanges = null;
-
-            if (AdvancedMenu)
-            {
-                kRanges = GetRangedValuesVerticalVM(lowRowK, highRowK, lowColK);
-
-                if (kRanges != null)
-                {
-                    if (kRanges.Count() > 1 && kRanges.Count() == wholeRange.GetLength(1))
-                    {
-                        kBehavior = KValueDecisions.UseSuppliedValues;
-                        customK = true;
-                    }
-                    else if (kRanges.Count() > 1 && kRanges.Count() != wholeRange.GetLength(1))
-                    {
-                        mWindow.OutputEvents("Your custom k ranges don't match the # of rows.");
-                        MessageBox.Show("Hmm, check your k range.  It doesn't seem paired up with the rows.");
-                        return;
-                    }
                 }
             }
 
@@ -1575,32 +1593,29 @@ namespace small_n_stats_WPF.ViewModels
                                 yRange.Add(holder);
                                 xRangeShadow.Add(xRange[i]);
                                 pRange.Add(1);
+
+                                if (kBehavior == KValueDecisions.DeriveValuesGroup)
+                                {
+                                    kRange.Add(derivedK);
+                                }
+                                else if (kBehavior == KValueDecisions.DeriveValuesIndividual)
+                                {
+                                    double hi = yRange.Where(v => v > 0).ToList().Max();
+                                    double lo = yRange.Where(v => v > 0).ToList().Min();
+                                    double indivK = (Math.Log10(hi) - Math.Log10(lo)) + 0.5;
+
+                                    kRange.Add(indivK);
+                                }
+                                else if (kBehavior == KValueDecisions.UseSuppliedValues)
+                                {
+                                    kRange.Add(kRanges[mIndex]);
+                                }
                             }
                         }
                     }
 
                     NumericVector yValues = null;
                     NumericVector xValues = null;
-
-                    for (int i = 0; i < yRange.Count; i++)
-                    {
-                        if (kBehavior == KValueDecisions.DeriveValuesGroup)
-                        {
-                            kRange.Add(derivedK);
-                        }
-                        else if (kBehavior == KValueDecisions.DeriveValuesIndividual)
-                        {
-                            double hi = yRange.Where(v => v > 0).ToList().Max();
-                            double lo = yRange.Where(v => v > 0).ToList().Min();
-                            double indivK = (Math.Log10(hi) - Math.Log10(lo)) + 0.5;
-
-                            kRange.Add(indivK);
-                        }
-                        else if (kBehavior == KValueDecisions.UseSuppliedValues)
-                        {
-                            kRange.Add(kRanges[i]);
-                        }
-                    }
 
                     if (yBehavior == YValueDecisions.DoNothing)
                     {
@@ -1666,6 +1681,7 @@ namespace small_n_stats_WPF.ViewModels
                     xTemp = new List<double>(xRangeShadow);
                     yTemp = new List<double>(yRange);
                     pTemp = new List<double>(pRange);
+                    List<double> kTemp = new List<double>(kRange);
 
                     for (int i = 0; i < xTemp.Count; i++)
                     {
@@ -1689,11 +1705,21 @@ namespace small_n_stats_WPF.ViewModels
                             yTemp.RemoveAt(index);
                             xTemp.RemoveAt(index);
                             pTemp.RemoveAt(index);
+
+                            if (kBehavior != KValueDecisions.FitK)
+                            {
+                                kTemp.RemoveAt(index);
+                            }
                         }
 
                         yRange = new List<double>(yTemp);
                         xRangeShadow = new List<double>(xTemp);
                         pRange = new List<double>(pTemp);
+
+                        if (kBehavior != KValueDecisions.FitK)
+                        {
+                            kRange = new List<double>(kTemp);
+                        }
                     }
 
                     NumericVector kValues = engine.CreateNumericVector(kRange.ToArray());

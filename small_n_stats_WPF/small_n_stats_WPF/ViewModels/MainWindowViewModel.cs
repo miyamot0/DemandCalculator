@@ -264,9 +264,14 @@ namespace small_n_stats_WPF.ViewModels
             {
                 foreach (System.Windows.Controls.DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
                 {
-                    int x = (RowViewModels.IndexOf((RowViewModel)obj.Item));
-                    RowViewModels[x].values[obj.Column.DisplayIndex] = "";
-                    RowViewModels[x].ForcePropertyUpdate(obj.Column.DisplayIndex);
+                    var rvm = obj.Item as RowViewModel;
+
+                    if (rvm != null)
+                    {
+                        int x = RowViewModels.IndexOf(rvm);
+                        RowViewModels[x].values[obj.Column.DisplayIndex] = "";
+                        RowViewModels[x].ForcePropertyUpdate(obj.Column.DisplayIndex);
+                    }
                 }
             }
         }

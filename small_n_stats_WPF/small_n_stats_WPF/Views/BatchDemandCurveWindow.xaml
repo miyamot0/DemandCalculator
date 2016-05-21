@@ -313,6 +313,7 @@
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Manually Type Range" Command="{Binding ConstantRangeCommand}" />
+                        <MenuItem Header="Reset Range" Command="{Binding ResetConstantRangeCommand}" />
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
