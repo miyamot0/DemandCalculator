@@ -62,5 +62,8 @@
     <Setting Name="DemandLeft" Type="System.Double" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
+    <Setting Name="RecentFiles" Type="System.String" Scope="User">
+      <Value Profile="(Default)"> </Value>
+    </Setting>
   </Settings>
 </SettingsFile>

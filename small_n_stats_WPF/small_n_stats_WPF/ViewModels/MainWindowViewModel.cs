@@ -83,8 +83,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace small_n_stats_WPF.ViewModels
@@ -105,6 +107,17 @@ namespace small_n_stats_WPF.ViewModels
             {
                 rowViewModels = value;
                 OnPropertyChanged("RowViewModels");
+            }
+        }
+
+        private ObservableCollection<MenuItem> recentStuff { get; set; }
+        public ObservableCollection<MenuItem> RecentStuff
+        {
+            get { return recentStuff; }
+            set
+            {
+                recentStuff = value;
+                OnPropertyChanged("RecentStuff");
             }
         }
 
@@ -136,10 +149,12 @@ namespace small_n_stats_WPF.ViewModels
 
         public RelayCommand FileNewCommand { get; set; }
         public RelayCommand FileOpenCommand { get; set; }
+        public RelayCommand FileOpenNoDialogCommand { get; set; }
         public RelayCommand FileSaveCommand { get; set; }
         public RelayCommand FileSaveAsCommand { get; set; }
         public RelayCommand FileCloseCommand { get; set; }
         public RelayCommand FileSaveNoDialogCommand { get; set; }
+        public RelayCommand RecentsClearCommand { get; set; }
 
         public RelayCommand ViewLoadedCommand { get; set; }
         public RelayCommand ViewClosingCommand { get; set; }
@@ -148,7 +163,6 @@ namespace small_n_stats_WPF.ViewModels
 
         public RelayCommand DemandCurveWindowCommand { get; set; }
         public RelayCommand BatchDemandCurveWindowCommand { get; set; }
-
         public RelayCommand InformationWindowCommand { get; set; }
 
         REngine engine;
@@ -183,6 +197,7 @@ namespace small_n_stats_WPF.ViewModels
         public static int RowSpans = 50;
         public static int ColSpans = 100;
         private string workingSheet = "";
+        string[] recentsArray;
 
         public MainWindowViewModel()
         {
@@ -195,6 +210,42 @@ namespace small_n_stats_WPF.ViewModels
             FileCloseCommand = new RelayCommand(param => CloseProgram(), param => true);
 
             FileSaveNoDialogCommand = new RelayCommand(param => SaveFileWithoutDialog(), param => true);
+            FileOpenNoDialogCommand = new RelayCommand(param => FileOpenNoDialog(param), param => true);
+
+
+            RecentsClearCommand = new RelayCommand(param => ClearRecents(), param => true);
+            
+            RecentStuff = new ObservableCollection<MenuItem>();
+
+            recentsArray = Properties.Settings.Default.RecentFiles.Trim().Split(';');
+
+            List<string> workingRecents = recentsArray.Select(item => item).Where(item => item.Trim().Length > 1).ToList();
+
+            if (workingRecents != null && workingRecents.Count > 0)
+            {
+                RecentStuff.Clear();
+
+                foreach(string recentFileLocation in workingRecents)
+                {
+                    if (recentFileLocation.Trim().Length < 2)
+                    {
+                        continue;
+                    }
+
+                    RecentStuff.Add(new MenuItem
+                    {
+                        Header = recentFileLocation,
+                        Command = FileOpenNoDialogCommand,
+                        CommandParameter = recentFileLocation
+                    });
+                }
+            }
+
+            RecentStuff.Add(new MenuItem
+            {
+                Header = "Clear Recents",
+                Command = RecentsClearCommand
+            });
 
             #endregion
 
@@ -256,6 +307,56 @@ namespace small_n_stats_WPF.ViewModels
         }
 
         #region UI
+
+        private void ClearRecents()
+        {
+            Properties.Settings.Default.RecentFiles = "";
+            Properties.Settings.Default.Save();
+
+            RecentStuff.Clear();
+            RecentStuff.Add(new MenuItem
+            {
+                Header = "Clear Recents",
+                Command = RecentsClearCommand
+            });
+        }
+
+        private void AddToRecents(string filePath)
+        {
+            recentsArray = Properties.Settings.Default.RecentFiles.Split(';');
+
+            List<string> workingRecents = recentsArray.Select(item => item).Where(item => item.Trim().Length > 1).ToList();
+
+            if (!workingRecents.Contains(filePath))
+            {
+                workingRecents.Add(filePath);
+                Properties.Settings.Default.RecentFiles = string.Join(";", workingRecents.ToArray());
+                Properties.Settings.Default.Save();
+
+                RecentStuff.Clear();
+
+                foreach (string recentFileLocation in workingRecents)
+                {
+                    if (recentFileLocation.Trim().Length < 2)
+                    {
+                        continue;
+                    }
+
+                    RecentStuff.Add(new MenuItem
+                    {
+                        Header = recentFileLocation,
+                        Command = TestCommand,
+                        CommandParameter = recentFileLocation
+                    });
+                }
+
+                RecentStuff.Add(new MenuItem
+                {
+                    Header = "Clear Recents",
+                    Command = RecentsClearCommand
+                });
+            }
+        }
 
         /// <summary>
         /// Update window title through bound object
@@ -582,7 +683,7 @@ namespace small_n_stats_WPF.ViewModels
                     }
                     catch (Exception e)
                     {
-                        MessageBox.Show("We weren't able to save.  Is the target file open or in use?");
+                        MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
                         Console.WriteLine(e.ToString());
                     }
 
@@ -624,7 +725,7 @@ namespace small_n_stats_WPF.ViewModels
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("We weren't able to save.  Is the target file open or in use?");
+                    MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
                     Console.WriteLine(e.ToString());
                     haveFileLoaded = false;
                 }
@@ -654,7 +755,7 @@ namespace small_n_stats_WPF.ViewModels
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("We weren't able to save.  Is the target file open or in use?");
+                    MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
                     Console.WriteLine(e.ToString());
                 }
 
@@ -793,21 +894,174 @@ namespace small_n_stats_WPF.ViewModels
 
                     }
 
+                    AddToRecents(@openFileDialog1.FileName);
                 }
                 catch (IOException e)
                 {
                     CloseFileUIProgressWindow();
                     Console.WriteLine(e.ToString());
-                    MessageBox.Show("We weren't able to open the file.  The file selected is in use.");
+                    MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
                 }
                 catch (Exception e)
                 {
                     CloseFileUIProgressWindow();
                     Console.WriteLine(e.ToString());
-                    MessageBox.Show("We weren't able to open the file.  Is the target file open or in use?");
+                    MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
                 }
 
                 CloseFileUIProgressWindow();
+            }
+        }
+
+        private void OpenFileNoDialog(string filePath)
+        {
+            loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
+            loadThread.SetApartmentState(ApartmentState.STA);
+            loadThread.IsBackground = true;
+            loadThread.Start();
+
+            string mExt = Path.GetExtension(@filePath);
+
+            path = Path.GetDirectoryName(@filePath);
+
+            try
+            {
+                if (mExt.Equals(".xlsx"))
+                {
+
+                    using (var wb = new XLWorkbook(@filePath))
+                    {
+
+                        var wsMult = wb.Worksheets;
+
+                        List<string> workSheets = new List<string>();
+
+                        foreach (IXLWorksheet sheetPeek in wsMult)
+                        {
+                            workSheets.Add(sheetPeek.Name);
+                        }
+
+                        string[] workSheetsArray = workSheets.ToArray();
+
+                        var sheetWindow = new SelectionWindow(workSheetsArray, workSheetsArray[0]);
+                        sheetWindow.Title = "Pick a sheet";
+                        sheetWindow.MessageLabel.Text = "Select which spreadsheet to load";
+                        sheetWindow.Owner = MainWindow;
+                        sheetWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                        sheetWindow.Topmost = true;
+
+                        int output = -1;
+
+                        if (sheetWindow.ShowDialog() == true)
+                        {
+                            output = sheetWindow.MessageOptions.SelectedIndex + 1;
+
+                            workingSheet = workSheetsArray[sheetWindow.MessageOptions.SelectedIndex];
+                        }
+
+                        if (output == -1)
+                        {
+                            return;
+                        }
+
+                        var ws = wb.Worksheet(output);
+
+                        RowViewModels.Clear();
+
+                        int currRows = 50;
+
+                        ObservableCollection<RowViewModel> temp = new ObservableCollection<RowViewModel>();
+                        for (int i = 0; i < currRows; i++)
+                        {
+                            temp.Add(new RowViewModel());
+                        }
+
+                        var cellsUsed = ws.CellsUsed();
+
+                        foreach (var cell in cellsUsed)
+                        {
+                            int col = cell.Address.ColumnNumber;
+                            int row = cell.Address.RowNumber;
+
+                            if (row >= currRows)
+                            {
+                                while (currRows < row)
+                                {
+                                    temp.Add(new RowViewModel());
+                                    currRows++;
+                                }
+                            }
+
+                            if (col - 1 >= ColSpans)
+                            {
+                                continue;
+                            }
+
+                            temp[row - 1].values[col - 1] = cell.Value.ToString();
+                        }
+
+                        RowViewModels = new ObservableCollection<RowViewModel>(temp);
+
+                        UpdateTitle(Path.GetFileName(@filePath));
+                        haveFileLoaded = true;
+                    }
+
+                }
+                else if (mExt.Equals(".csv"))
+                {
+                    using (TextFieldParser parser = new TextFieldParser(@filePath))
+                    {
+                        parser.TextFieldType = FieldType.Delimited;
+                        parser.SetDelimiters(",");
+
+                        RowViewModels.Clear();
+
+                        while (!parser.EndOfData)
+                        {
+                            string[] fields = parser.ReadFields();
+
+                            RowViewModel mModel = new RowViewModel();
+                            for (int i = 0; i < fields.Length && i < 100; i++)
+                            {
+                                mModel.values[i] = fields[i];
+                            }
+                            RowViewModels.Add(mModel);
+
+                        }
+
+                        workingSheet = "Demand Analysis Calculations";
+
+                        UpdateTitle(Path.GetFileName(@filePath));
+                        haveFileLoaded = true;
+                    }
+
+                }
+
+                AddToRecents(@filePath);
+            }
+            catch (IOException e)
+            {
+                CloseFileUIProgressWindow();
+                Console.WriteLine(e.ToString());
+                MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
+            }
+            catch (Exception e)
+            {
+                CloseFileUIProgressWindow();
+                Console.WriteLine(e.ToString());
+                MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
+            }
+
+            CloseFileUIProgressWindow();
+        }
+
+        private void FileOpenNoDialog(object param)
+        {
+            string path = param as string;
+
+            if (path != null)
+            {
+                OpenFileNoDialog(path);
             }
         }
 
