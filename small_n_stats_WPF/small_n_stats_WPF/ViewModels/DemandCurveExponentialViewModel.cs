@@ -576,32 +576,6 @@ namespace small_n_stats_WPF.ViewModels
 
             kValueDouble = (Math.Log10(highY) - Math.Log10(lowY)) + 0.5;
 
-            double tempVal;
-
-            if (double.TryParse(KValue, out tempVal))
-            {
-                var kValueWindow = new SelectionWindow(new string[] { "Use derived K", "Use Custom K" }, "Use derived K");
-                kValueWindow.Title = "Multiple K Sources";
-                kValueWindow.MessageLabel.Text = "Please select where K should come from:";
-                kValueWindow.Owner = windowRef;
-                kValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                kValueWindow.Topmost = true;
-
-                if (kValueWindow.ShowDialog() == true)
-                {
-                    int output = kValueWindow.MessageOptions.SelectedIndex;
-
-                    if (output == 0)
-                    {
-                        kValueDouble = (Math.Log10(highY) - Math.Log10(lowY)) + 0.5;
-                    }
-                    else if (output == 1)
-                    {
-                        double.TryParse(KValue, out kValueDouble);
-                    }
-                }
-            }
-
             mWindow.OutputEvents("Data passed null and type checks...");
             mWindow.OutputEvents("Determining a fitting heuristic...");
 
@@ -612,6 +586,20 @@ namespace small_n_stats_WPF.ViewModels
             YValueDecisions yBehavior = Decisions.GetYBehavior(modelArraySelection, windowRef);
             XValueDecisions xBehavior = Decisions.GetXBehavior(modelArraySelection, windowRef);
             KValueDecisions kBehavior = Decisions.GetKBehaviorIndividual(windowRef);
+
+            if (kBehavior == KValueDecisions.DeriveValuesIndividual)
+            {
+                kValueDouble = (Math.Log10(highY) - Math.Log10(lowY)) + 0.5;
+            }
+            else if (kBehavior == KValueDecisions.UseSuppliedValues)
+            {
+                if (!double.TryParse(KValue, out kValueDouble))
+                {
+                    mWindow.OutputEvents("Your supplied K value does not appear correct.");
+                    MessageBox.Show("Your supplied K value does not appear correct.");
+                    return;
+                }
+            }
 
             mWindow.OutputEvents("---------------------------------------------------");
 

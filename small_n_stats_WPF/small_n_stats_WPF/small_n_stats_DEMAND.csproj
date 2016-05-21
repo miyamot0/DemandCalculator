@@ -28,10 +28,10 @@
     <InstallUrl>http://www.smallnstats.com/demand_calculator/</InstallUrl>
     <ProductName>Demand Calculator</ProductName>
     <PublisherName>Small N Stats</PublisherName>
-    <SuiteName>Small N Stats</SuiteName>
+    <SuiteName>Demand Calculator</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
-    <ApplicationRevision>12</ApplicationRevision>
+    <ApplicationRevision>16</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
