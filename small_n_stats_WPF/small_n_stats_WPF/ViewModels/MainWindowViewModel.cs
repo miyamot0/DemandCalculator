@@ -184,12 +184,6 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand ClearLogsWindowCommand { get; set; }
         public RelayCommand DeleteSelectedCommand { get; set; }
 
-        /* For Demo Purposes */
-
-        public RelayCommand TestCommand { get; set; }
-
-        /* ^^^ ^^^ ^^^ */
-
         #endregion
 
         bool haveFileLoaded = false;
@@ -290,8 +284,6 @@ namespace small_n_stats_WPF.ViewModels
 
             #endregion
 
-            /* End Menu Items */
-
             RowViewModels = new ObservableCollection<RowViewModel>();
 
             ObservableCollection<RowViewModel> temp = new ObservableCollection<RowViewModel>();
@@ -308,6 +300,9 @@ namespace small_n_stats_WPF.ViewModels
 
         #region UI
 
+        /// <summary>
+        /// Clears the recents list, saving a blank string to settings
+        /// </summary>
         private void ClearRecents()
         {
             Properties.Settings.Default.RecentFiles = "";
@@ -321,6 +316,12 @@ namespace small_n_stats_WPF.ViewModels
             });
         }
 
+        /// <summary>
+        /// Adds a recently opened/saved file to the recent lists, if not already present
+        /// </summary>
+        /// <param name="filePath">
+        /// Path to recently opened/saved file
+        /// </param>
         private void AddToRecents(string filePath)
         {
             recentsArray = Properties.Settings.Default.RecentFiles.Split(';');
@@ -345,7 +346,7 @@ namespace small_n_stats_WPF.ViewModels
                     RecentStuff.Add(new MenuItem
                     {
                         Header = recentFileLocation,
-                        Command = TestCommand,
+                        Command = FileOpenNoDialogCommand,
                         CommandParameter = recentFileLocation
                     });
                 }
@@ -394,6 +395,9 @@ namespace small_n_stats_WPF.ViewModels
 
         #region Triggers
 
+        /// <summary>
+        /// Loaded event trigger
+        /// </summary>
         private void ViewLoaded()
         {
             ShuttingDown = false;
@@ -485,6 +489,9 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Closed event trigger
+        /// </summary>
         private void ViewClosed()
         {
             Properties.Settings.Default.Save();
@@ -495,6 +502,9 @@ namespace small_n_stats_WPF.ViewModels
 
         #region Licenses
 
+        /// <summary>
+        /// License window
+        /// </summary>
         private void GnomeIconLicenseInformationWindow()
         {
             var window = new License();
@@ -506,6 +516,9 @@ namespace small_n_stats_WPF.ViewModels
             window.Show();
         }
 
+        /// <summary>
+        /// License window
+        /// </summary>
         private void RLicenseInformationWindow()
         {
             var window = new License();
@@ -517,6 +530,9 @@ namespace small_n_stats_WPF.ViewModels
             window.Show();
         }
 
+        /// <summary>
+        /// License window
+        /// </summary>
         private void NlsToolsLicenseInformationWindow()
         {
             var window = new License();
@@ -528,6 +544,9 @@ namespace small_n_stats_WPF.ViewModels
             window.Show();
         }
 
+        /// <summary>
+        /// License window
+        /// </summary>
         private void NlmrtLicenseInformationWindow()
         {
             var window = new License();
@@ -539,6 +558,9 @@ namespace small_n_stats_WPF.ViewModels
             window.Show();
         }
 
+        /// <summary>
+        /// License window
+        /// </summary>
         private void Ggplot2LicenseInformationWindow()
         {
             var window = new License();
@@ -550,6 +572,9 @@ namespace small_n_stats_WPF.ViewModels
             window.Show();
         }
 
+        /// <summary>
+        /// License window
+        /// </summary>
         private void RdotNetLicenseInformationWindow()
         {
             var window = new License();
@@ -561,6 +586,9 @@ namespace small_n_stats_WPF.ViewModels
             window.Show();
         }
 
+        /// <summary>
+        /// License window
+        /// </summary>
         private void BeezdemandLicenseInformationWindow()
         {
             var window = new License();
@@ -572,6 +600,9 @@ namespace small_n_stats_WPF.ViewModels
             window.Show();
         }
 
+        /// <summary>
+        /// License window
+        /// </summary>
         private void LicenseInformationWindow()
         {
             var window = new License();
@@ -587,6 +618,9 @@ namespace small_n_stats_WPF.ViewModels
 
         #region OpenWindows
 
+        /// <summary>
+        /// Single mode analysis window
+        /// </summary>
         private void OpenDemandCurveWindow()
         {
             var mWin = new DemandCurveWindow();
@@ -601,6 +635,9 @@ namespace small_n_stats_WPF.ViewModels
             mWin.Show();
         }
 
+        /// <summary>
+        /// Batch mode analysis window
+        /// </summary>
         private void OpenBatchDemandCurveWindow()
         {
             var mWin = new BatchDemandCurveWindow();
@@ -616,6 +653,9 @@ namespace small_n_stats_WPF.ViewModels
             mWin.Show();
         }
 
+        /// <summary>
+        /// Information window
+        /// </summary>
         private void OpenInformationWindow()
         {
             var mWin = new InformationWindow();
@@ -629,6 +669,9 @@ namespace small_n_stats_WPF.ViewModels
 
         #region FileIO
 
+        /// <summary>
+        /// Creates new spreadsheet, not really "file"
+        /// </summary>
         private void CreateNewFile()
         {
             loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
@@ -650,6 +693,9 @@ namespace small_n_stats_WPF.ViewModels
             CloseFileUIProgressWindow();
         }
 
+        /// <summary>
+        /// Saves file, usually from Ctrl+S binding
+        /// </summary>
         private void SaveFile()
         {
             MainWindow.dataGrid.CommitEdit();
@@ -694,6 +740,9 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Saves file with a dialog 
+        /// </summary>
         private void SaveFileAs()
         {
             MainWindow.dataGrid.CommitEdit();
@@ -735,6 +784,9 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Saves file without a dialog call
+        /// </summary>
         private void SaveFileWithoutDialog()
         {
             MainWindow.dataGrid.CommitEdit();
@@ -763,6 +815,9 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Opens a file with a dialog
+        /// </summary>
         private void OpenFile()
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -913,6 +968,12 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Opens a file without a dialog window
+        /// </summary>
+        /// <param name="filePath">
+        /// path to the file to be opened
+        /// </param>
         private void OpenFileNoDialog(string filePath)
         {
             loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
@@ -1055,6 +1116,12 @@ namespace small_n_stats_WPF.ViewModels
             CloseFileUIProgressWindow();
         }
 
+        /// <summary>
+        /// Method for opening file w/o dialog
+        /// </summary>
+        /// <param name="param">
+        /// Command parameter 
+        /// </param>
         private void FileOpenNoDialog(object param)
         {
             string path = param as string;
@@ -1065,6 +1132,9 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Shows progress bar on another thread
+        /// </summary>
         void ShowFileUIProgressWindow()
         {
             window = new ProgressDialog("Processing", "File operations ongoing...");
@@ -1073,11 +1143,17 @@ namespace small_n_stats_WPF.ViewModels
             Dispatcher.Run();
         }
 
+        /// <summary>
+        /// Closes progress bar on another thread
+        /// </summary>
         void CloseFileUIProgressWindow()
         {
             window.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(window.Close));
         }
 
+        /// <summary>
+        /// Updates ShutDown trigger
+        /// </summary>
         private void CloseProgram()
         {
             ShuttingDown = true;
