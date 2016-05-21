@@ -400,7 +400,6 @@ namespace small_n_stats_WPF.ViewModels
             XRangeValues = "Select pricing data on spreadsheet";
 
             mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_X;
-
         }
 
         /// <summary>
@@ -409,10 +408,10 @@ namespace small_n_stats_WPF.ViewModels
         private void DataGrid_PreviewMouseUp_X(object sender, MouseButtonEventArgs e)
         {
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
-
-            if (cells.Count < 1) return;
-
             var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+
+            if (cells.Count < 1 || itemSource.Count < 1) return;
+
             lowRowX = cells.Min(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
             highRowX = cells.Max(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
 
@@ -451,7 +450,6 @@ namespace small_n_stats_WPF.ViewModels
             YRangeValues = "Select consumption data on spreadsheet";
 
             mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_Y;
-
         }
 
         /// <summary>
@@ -460,10 +458,10 @@ namespace small_n_stats_WPF.ViewModels
         private void DataGrid_PreviewMouseUp_Y(object sender, MouseButtonEventArgs e)
         {
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
-
-            if (cells.Count < 1) return;
-
             var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+
+            if (cells.Count < 1 || itemSource.Count < 1) return;
+
             lowRowY = cells.Min(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
             highRowY = cells.Max(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
 

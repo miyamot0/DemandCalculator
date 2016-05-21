@@ -38,10 +38,7 @@ namespace small_n_stats_WPF.Behaviors
         public bool ShuttingDownFlag
         {
             get { return (bool)GetValue(ShutDownProperty); }
-            set
-            {
-                SetValue(ShutDownProperty, value);
-            }
+            set { SetValue(ShutDownProperty, value); }
         }
 
         /// <summary>
@@ -57,10 +54,7 @@ namespace small_n_stats_WPF.Behaviors
         /// </summary>
         private void OnValueChanged()
         {
-            if (ShuttingDownFlag)
-            {
-                ((Window)AssociatedObject).Close();
-            }
+            if (ShuttingDownFlag) { ((Window)AssociatedObject).Close(); }
         }
     }
 }
