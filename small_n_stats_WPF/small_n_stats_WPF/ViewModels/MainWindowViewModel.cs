@@ -79,6 +79,7 @@ using RDotNet;
 using small_n_stats_WPF.Utilities;
 using small_n_stats_WPF.Views;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -647,19 +648,6 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
-        void ShowFileUIProgressWindow()
-        {
-            window = new ProgressDialog("Processing", "File operations ongoing...");
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            window.Show();
-            Dispatcher.Run();
-        }
-
-        void CloseFileUIProgressWindow()
-        {
-            window.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(window.Close));
-        }
-
         private void OpenFile()
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -685,27 +673,72 @@ namespace small_n_stats_WPF.ViewModels
 
                         using (var wb = new XLWorkbook(@openFileDialog1.FileName))
                         {
-                            
-                            var ws = wb.Worksheet(1);
+
+                            var wsMult = wb.Worksheets;
+
+                            List<string> workSheets = new List<string>();
+
+                            foreach (IXLWorksheet sheetPeek in wsMult)
+                            {
+                                workSheets.Add(sheetPeek.Name);
+                            }
+
+                            string[] workSheetsArray = workSheets.ToArray();
+
+                            var sheetWindow = new SelectionWindow(workSheetsArray, workSheetsArray[0]);
+                            sheetWindow.Title = "Pick a sheet";
+                            sheetWindow.MessageLabel.Text = "Select which spreadsheet to load";
+                            sheetWindow.Owner = MainWindow;
+                            sheetWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                            sheetWindow.Topmost = true;
+
+                            int output = -1;
+
+                            if (sheetWindow.ShowDialog() == true)
+                            {
+                                output = sheetWindow.MessageOptions.SelectedIndex + 1;
+                            }
+
+                            if (output == -1)
+                            {
+                                return;
+                            }
+
+                            var ws = wb.Worksheet(output);
                             var range = ws.RangeUsed();
-                            var table = range.AsTable();
-                            table.SetShowHeaderRow(false);
 
                             RowViewModels.Clear();
 
+                            int currRows = 50;
+
                             ObservableCollection<RowViewModel> temp = new ObservableCollection<RowViewModel>();
-
-                            foreach (var row in table.Rows())
+                            for (int i=0; i < currRows; i++)
                             {
-                                RowViewModel mModel = new RowViewModel();
+                                temp.Add(new RowViewModel());
+                            }
 
-                                for (int i = 0; i <= row.CellCount(); i++)
+                            var cellsUsed = ws.CellsUsed();
+
+                            foreach (var cell in cellsUsed)
+                            {
+                                int col = cell.Address.ColumnNumber;
+                                int row = cell.Address.RowNumber;
+
+                                if (row >= currRows)
                                 {
-                                    mModel.values[i] = row.Cell(i).Value.ToString();
+                                    while (currRows < row )
+                                    {
+                                        temp.Add(new RowViewModel());
+                                        currRows++;
+                                    }
                                 }
 
-                                //RowViewModels.Add(mModel);
-                                temp.Add(mModel);
+                                if (col-1 >= ColSpans)
+                                {
+                                    continue;
+                                }
+
+                                temp[row-1].values[col-1] = cell.Value.ToString();
                             }
 
                             RowViewModels = new ObservableCollection<RowViewModel>(temp);
@@ -744,13 +777,34 @@ namespace small_n_stats_WPF.ViewModels
                     }
 
                 }
-                catch 
+                catch (IOException e)
                 {
+                    CloseFileUIProgressWindow();
+                    Console.WriteLine(e.ToString());
+                    MessageBox.Show("We weren't able to open the file.  The file selected is in use.");
+                }
+                catch (Exception e)
+                {
+                    CloseFileUIProgressWindow();
+                    Console.WriteLine(e.ToString());
                     MessageBox.Show("We weren't able to open the file.  Is the target file open or in use?");
                 }
 
                 CloseFileUIProgressWindow();
             }
+        }
+
+        void ShowFileUIProgressWindow()
+        {
+            window = new ProgressDialog("Processing", "File operations ongoing...");
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            window.Show();
+            Dispatcher.Run();
+        }
+
+        void CloseFileUIProgressWindow()
+        {
+            window.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(window.Close));
         }
 
         private void CloseProgram()
