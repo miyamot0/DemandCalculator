@@ -131,6 +131,8 @@ namespace small_n_stats_WPF.ViewModels
 
         #endregion
 
+        #region Commands
+
         public RelayCommand FileNewCommand { get; set; }
         public RelayCommand FileOpenCommand { get; set; }
         public RelayCommand FileSaveCommand { get; set; }
@@ -167,18 +169,18 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand ClearLogsWindowCommand { get; set; }
         public RelayCommand DeleteSelectedCommand { get; set; }
 
-        /* Logic */
-
-        bool haveFileLoaded = false;
-        string path = "";
-        public static int RowSpans = 50;
-        public static int ColSpans = 100;
-
         /* For Demo Purposes */
 
         public RelayCommand TestCommand { get; set; }
 
         /* ^^^ ^^^ ^^^ */
+
+        #endregion
+
+        bool haveFileLoaded = false;
+        string path = "";
+        public static int RowSpans = 50;
+        public static int ColSpans = 100;
 
         public MainWindowViewModel()
         {
@@ -253,11 +255,20 @@ namespace small_n_stats_WPF.ViewModels
 
         #region UI
 
+        /// <summary>
+        /// Update window title through bound object
+        /// </summary>
+        /// <param name="title">
+        /// File name to be used in title (string)
+        /// </param>
         public void UpdateTitle(string title)
         {
             Title = title;
         }
 
+        /// <summary>
+        /// Loop through selected/highlighted cells, clear cell contents through bound collections
+        /// </summary>
         private void DeleteSelected()
         {
             if (MainWindow.dataGrid.SelectedCells.Count > 0)
