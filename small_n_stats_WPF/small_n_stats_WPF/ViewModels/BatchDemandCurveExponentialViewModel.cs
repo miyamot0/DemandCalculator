@@ -837,6 +837,15 @@ namespace small_n_stats_WPF.ViewModels
             return new double[] { low, high };
         }
 
+        /// <summary>
+        /// Query's user about how to address certain values
+        /// </summary>
+        /// <param name="modelType">
+        /// modelType informs the "default", recommended option
+        /// </param>
+        /// <returns>
+        /// Decision enum
+        /// </returns>
         private YValueDecisions GetYBehavior(string modelType)
         {
             string recommended = (modelType == "Exponential") ? "Drop Zeroes" : "Do Nothing";
@@ -873,6 +882,15 @@ namespace small_n_stats_WPF.ViewModels
             return YValueDecisions.DoNothing;
         }
 
+        /// <summary>
+        /// Query's user about how to address certain values
+        /// </summary>
+        /// <param name="modelType">
+        /// modelType informs the "default", recommended option
+        /// </param>
+        /// <returns>
+        /// Decision enum
+        /// </returns>
         private XValueDecisions GetXBehavior(string modelType)
         {
             string recommended = (modelType == "Exponential") ? "Drop Zeroes" : "Change Hundredth";
@@ -905,6 +923,15 @@ namespace small_n_stats_WPF.ViewModels
             return XValueDecisions.DoNothing;
         }
 
+        /// <summary>
+        /// Query's user about how to address certain values
+        /// </summary>
+        /// <param name="modelType">
+        /// modelType informs the "default", recommended option
+        /// </param>
+        /// <returns>
+        /// Decision enum
+        /// </returns>
         private KValueDecisions GetKBehaviorIndividual()
         {
             var kValueWindow = new SelectionWindow(new string[] { "Use derived K (group)", "Use derived K (individual)", "Use Custom Ks" }, "Use derived K (group)");
@@ -935,6 +962,15 @@ namespace small_n_stats_WPF.ViewModels
             return KValueDecisions.DeriveValuesGroup;
         }
 
+        /// <summary>
+        /// Query's user about how to address certain values
+        /// </summary>
+        /// <param name="modelType">
+        /// modelType informs the "default", recommended option
+        /// </param>
+        /// <returns>
+        /// Decision enum
+        /// </returns>
         private KValueDecisions GetKBehaviorGroup()
         {
             var kValueWindow = new SelectionWindow(new string[] { "Fit K as parameter", "Use derived K (group)", "Use Custom Ks" }, "Fit K as parameter");
@@ -978,12 +1014,7 @@ namespace small_n_stats_WPF.ViewModels
             double derivedK = -1;
 
             mWindow.OutputEvents("---------------------------------------------------");
-            mWindow.OutputEvents("Determining a fitting heuristic...");
-
-            YValueDecisions yBehavior = GetYBehavior(modelArraySelection);
-            XValueDecisions xBehavior = GetXBehavior(modelArraySelection);
-            KValueDecisions kBehavior = (SelectedMode == "Individual") ? GetKBehaviorIndividual() : GetKBehaviorGroup();
-
+            
             mWindow.OutputEvents("Checking user-supplied ranges and reference points....");
             
             List<double> xRange = GetRangedValuesVM(lowColX, highColX, lowRowX);
@@ -1003,9 +1034,17 @@ namespace small_n_stats_WPF.ViewModels
                 return;
             }
 
+            #region FittingHeuristic
+
             mWindow.OutputEvents("Data passed null and type checks...");
 
+            mWindow.OutputEvents("Determining a fitting heuristic...");
+
             engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
+
+            YValueDecisions yBehavior = GetYBehavior(modelArraySelection);
+            XValueDecisions xBehavior = GetXBehavior(modelArraySelection);
+            KValueDecisions kBehavior = (SelectedMode == "Individual") ? GetKBehaviorIndividual() : GetKBehaviorGroup();
 
             mWindow.OutputEvents("---------------------------------------------------");
 
@@ -1074,8 +1113,10 @@ namespace small_n_stats_WPF.ViewModels
                 }
             }
 
+            #endregion
+
             #region SteinTest
-            
+
             engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
 
             NumericVector yValuesCheck = engine.CreateNumericVector(yTemp.ToArray());
@@ -1384,8 +1425,6 @@ namespace small_n_stats_WPF.ViewModels
                             continue;
                         }
 
-                        /////
-
                         for (int i = 0; i < xRangeShadow.Count; i++)
                         {
                             if (kBehavior == KValueDecisions.DeriveValuesGroup)
@@ -1553,8 +1592,6 @@ namespace small_n_stats_WPF.ViewModels
                         {
                             kRange.Add(kRanges[i]);
                         }
-
-                        //pRange.Add(1);
                     }
 
                     if (yBehavior == YValueDecisions.DoNothing)
@@ -1601,37 +1638,6 @@ namespace small_n_stats_WPF.ViewModels
                         yRange = new List<double>(yCopy);
                     }
 
-                    //TODO drop zero stuff
-
-                    /*
-                    else if (yBehavior == YValueDecisions.DropZeros)
-                    {
-                        List<int> removeList = new List<int>();
-
-                        for (int i = 0; i < yRange.Count(); i++)
-                        {
-                            if (yRange[i] == 0)
-                            {
-                                removeList.Add(i);
-                            }
-                        }
-
-                        List<double> tempX = new List<double>(xRangeShadow);
-                        List<double> tempY = new List<double>(yRange);
-
-                        if (removeList.Count() > 0)
-                        {
-                            foreach (int index in removeList)
-                            {
-                                xRangeShadow.RemoveAt(index);
-                                yRange.RemoveAt(index);
-                                kRange.RemoveAt(index);
-                                pRange.RemoveAt(index);
-                            }
-                        }
-                    }
-                    */
-
                     if (xBehavior == XValueDecisions.DoNothing)
                     {
                         // Do nothing different
@@ -1646,37 +1652,6 @@ namespace small_n_stats_WPF.ViewModels
                             }
                         }
                     }
-
-                    /*
-
-                    else if (xBehavior == XValueDecisions.DropZeros)
-                    {
-                        List<int> removeList = new List<int>();
-
-                        for (int i = 0; i < xRangeShadow.Count(); i++)
-                        {
-                            if (xRangeShadow[i] == 0)
-                            {
-                                removeList.Add(i);
-                            }
-                        }
-
-                        List<double> tempX = new List<double>(xRangeShadow);
-                        List<double> tempY = new List<double>(yRange);
-
-                        if (removeList.Count() > 0)
-                        {
-                            foreach (int index in removeList)
-                            {
-                                xRangeShadow.RemoveAt(index);
-                                yRange.RemoveAt(index);
-                                kRange.RemoveAt(index);
-                                pRange.RemoveAt(index);
-                            }
-                        }
-                    }
-
-                    */
 
                     indicesToRemove.Clear();
 
@@ -1712,12 +1687,6 @@ namespace small_n_stats_WPF.ViewModels
                         xRangeShadow = new List<double>(xTemp);
                         pRange = new List<double>(pTemp);
                     }
-
-                    Console.WriteLine("x: " + string.Join(",", xRangeShadow));
-                    Console.WriteLine("y: " + string.Join(",", yRange));
-                    Console.WriteLine("k: " + string.Join(",", kRange));
-                    Console.WriteLine("p: " + string.Join(",", pRange));
-
 
                     NumericVector kValues = engine.CreateNumericVector(kRange.ToArray());
                     engine.SetSymbol("kLoad", kValues);
@@ -1875,110 +1844,6 @@ namespace small_n_stats_WPF.ViewModels
 
             mWindow.OutputEvents("Final Calculations Completed!");
             mWin.Show();
-
-            /*
-
-            
-            #region CheckForDataState
-
-            // Check for zero consumptions
-            bool yQuery = AreZerosInMatrix(wholeRange);
-
-            // Are zeroes in x range?
-            bool xQuery = (from x in xRange
-                          where x == 0
-                          select x).Any() && (SelectedMode == "Individual");
-
-            // Verify k source
-
-            if (xQuery)
-            {
-                var xValueWindow = new SelectionWindow(new string[] { "Change Hundredth", "Drop Zeroes", "Do Nothing" }, "Change Hundredth");
-                xValueWindow.Title = "Zero values found in Pricing";
-                xValueWindow.MessageLabel.Text = "Please select how to manage the zero values";
-                xValueWindow.Owner = windowRef;
-                xValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                xValueWindow.Topmost = true;
-    
-                if (xValueWindow.ShowDialog() == true)
-                {
-                    int output = xValueWindow.MessageOptions.SelectedIndex;
-    
-                    if (output == 0)
-                    {
-                        xBehavior = XValueDecisions.ChangeHundredth;
-                    }
-                    else if (output == 1)
-                    {
-                        xBehavior = XValueDecisions.DropZeros;
-                    }
-                    else if (output == 2)
-                    {
-                        xBehavior = XValueDecisions.DoNothing;
-                    }
-                }                
-            }
-            
-            if (yQuery)
-            {
-                var yValueWindow = new SelectionWindow(new string[] { "Drop Zeroes", "Change Hundredth", "One Percent of Lowest", "Do Nothing" }, "Drop Zeroes");
-                yValueWindow.Title = "Zero values found in Consumption";
-                yValueWindow.MessageLabel.Text = "Please select how to manage the zero values";
-                yValueWindow.Owner = windowRef;
-                yValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                yValueWindow.Topmost = true;
-                
-                if (yValueWindow.ShowDialog() == true)
-                {
-                    int output = yValueWindow.MessageOptions.SelectedIndex;
-    
-                    if (output == 0)
-                    {
-                        yBehavior = YValueDecisions.DropZeros;
-                    }
-                    else if (output == 1)
-                    {
-                        yBehavior = YValueDecisions.ChangeHundredth;
-                    }
-                    else if (output == 2)
-                    {
-                        yBehavior = YValueDecisions.OnePercentLowest;
-                    }
-                    else if (output == 3)
-                    {
-                        yBehavior = YValueDecisions.DoNothing;
-                    }
-                }
-            }
-            
-            if (customK)
-            {
-                var kValueWindow = new SelectionWindow(new string[] { "Use derived K", "Use Custom Ks" }, "Use derived K");
-                kValueWindow.Title = "Multiple K Sources";
-                kValueWindow.MessageLabel.Text = "Please select where K should come from (derived recommended):";
-                kValueWindow.Owner = windowRef;
-                kValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                kValueWindow.Topmost = true;
-
-                if (kValueWindow.ShowDialog() == true)
-                {
-                    int output = kValueWindow.MessageOptions.SelectedIndex;
-
-                    if (output == 0)
-                    {
-                        kBehavior = KValueDecisions.DeriveValues;
-                    }
-                    else if (output == 1)
-                    {
-                        kBehavior = KValueDecisions.UseSuppliedValues;
-                    }
-                }
-            }
-
-            #endregion
-
-
-            */
         }
     }
 }
