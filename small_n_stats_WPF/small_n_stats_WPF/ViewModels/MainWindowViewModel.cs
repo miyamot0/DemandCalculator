@@ -705,7 +705,6 @@ namespace small_n_stats_WPF.ViewModels
                             }
 
                             var ws = wb.Worksheet(output);
-                            var range = ws.RangeUsed();
 
                             RowViewModels.Clear();
 
