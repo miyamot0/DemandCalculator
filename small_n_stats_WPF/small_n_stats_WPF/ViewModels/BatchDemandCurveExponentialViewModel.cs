@@ -517,6 +517,9 @@ namespace small_n_stats_WPF.ViewModels
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
 
             var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+
+            if (cells.Count < 1 || itemSource.Count < 1) return;
+
             lowRowK = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
             highRowK = cells.Max(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
 
@@ -568,6 +571,9 @@ namespace small_n_stats_WPF.ViewModels
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
 
             var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+
+            if (cells.Count < 1 || itemSource.Count < 1) return;
+
             lowRowX = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
             highRowX = cells.Max(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
 
@@ -631,8 +637,10 @@ namespace small_n_stats_WPF.ViewModels
         private void DataGrid_PreviewMouseUp_Y(object sender, MouseButtonEventArgs e)
         {
             List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
-
             var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+
+            if (cells.Count < 1 || itemSource.Count < 1) return;
+
             lowRowY = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
             highRowY = cells.Max(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
 
