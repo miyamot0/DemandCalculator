@@ -551,6 +551,8 @@ namespace small_n_stats_WPF.ViewModels
 
         private void SaveFile()
         {
+            MainWindow.dataGrid.CommitEdit();
+
             if (haveFileLoaded)
             {
                 SaveFileWithoutDialog();
@@ -593,6 +595,8 @@ namespace small_n_stats_WPF.ViewModels
 
         private void SaveFileAs()
         {
+            MainWindow.dataGrid.CommitEdit();
+
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
             saveFileDialog1.FileName = title;
@@ -632,6 +636,8 @@ namespace small_n_stats_WPF.ViewModels
 
         private void SaveFileWithoutDialog()
         {
+            MainWindow.dataGrid.CommitEdit();
+
             if (haveFileLoaded)
             {
                 loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
