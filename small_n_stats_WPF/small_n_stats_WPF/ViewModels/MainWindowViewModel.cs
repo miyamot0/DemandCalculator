@@ -182,6 +182,7 @@ namespace small_n_stats_WPF.ViewModels
         string path = "";
         public static int RowSpans = 50;
         public static int ColSpans = 100;
+        private string workingSheet = "";
 
         public MainWindowViewModel()
         {
@@ -541,6 +542,9 @@ namespace small_n_stats_WPF.ViewModels
             }
 
             UpdateTitle("New File");
+            workingSheet = "Sheet1";
+
+            haveFileLoaded = false;
 
             CloseFileUIProgressWindow();
         }
@@ -580,6 +584,8 @@ namespace small_n_stats_WPF.ViewModels
                         Console.WriteLine(e.ToString());
                     }
 
+                    workingSheet = "Demand Analysis Calculations";
+
                     CloseFileUIProgressWindow();
                 }
             }
@@ -609,6 +615,8 @@ namespace small_n_stats_WPF.ViewModels
 
                     haveFileLoaded = true;
 
+                    workingSheet = "Demand Analysis Calculations";
+
                 }
                 catch (Exception e)
                 {
@@ -633,7 +641,7 @@ namespace small_n_stats_WPF.ViewModels
 
                 try
                 {
-                    OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), Path.Combine(path, title));
+                    OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), Path.Combine(path, title), workingSheet);
 
                     UpdateTitle(title);
 
@@ -697,6 +705,8 @@ namespace small_n_stats_WPF.ViewModels
                             if (sheetWindow.ShowDialog() == true)
                             {
                                 output = sheetWindow.MessageOptions.SelectedIndex + 1;
+
+                                workingSheet = workSheetsArray[sheetWindow.MessageOptions.SelectedIndex];
                             }
 
                             if (output == -1)
@@ -768,6 +778,8 @@ namespace small_n_stats_WPF.ViewModels
                                 RowViewModels.Add(mModel);
 
                             }
+
+                            workingSheet = "Demand Analysis Calculations";
 
                             UpdateTitle(openFileDialog1.SafeFileName);
                             haveFileLoaded = true;

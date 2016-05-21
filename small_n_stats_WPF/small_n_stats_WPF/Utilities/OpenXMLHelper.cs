@@ -42,6 +42,7 @@
 using small_n_stats_WPF.ViewModels;
 using System.Collections.ObjectModel;
 using ClosedXML.Excel;
+using System.IO;
 
 namespace small_n_stats_WPF.Utilities
 {
@@ -58,8 +59,64 @@ namespace small_n_stats_WPF.Utilities
         /// </summary>
         public static void ExportToExcel(ObservableCollection<RowViewModel> rowCollection, string filePath)
         {
-            var wb = new XLWorkbook();
-            var ws = wb.AddWorksheet("Demand Analysis Calculations");
+            XLWorkbook wb;
+
+            if (File.Exists(filePath))
+            {
+                wb = new XLWorkbook(@filePath);
+            }
+            else
+            {
+                wb = new XLWorkbook();
+            }
+
+            IXLWorksheet ws;
+
+            ws = wb.AddWorksheet("Demand Analysis Calculations");
+
+            for (int i = 0; i < rowCollection.Count; i++)
+            {
+                for (int j = 0; j < 100; j++)
+                {
+                    ws.Cell(i + 1, j + 1).Value = rowCollection[i].values[j].ToString();
+                }
+            }
+
+            wb.SaveAs(filePath);
+        }
+
+        /// <summary>
+        /// Write contents of RowModels to spreadsheet
+        /// <param name="rowCollection">
+        /// Contents of data grid
+        /// </param>
+        /// <param name="filePath">
+        /// Output location for .xlsx file
+        /// </param>
+        /// <param name="worksheetName">
+        /// Specific sheet to update
+        /// </param>
+        /// </summary>
+        public static void ExportToExcel(ObservableCollection<RowViewModel> rowCollection, string filePath, string worksheetName)
+        {
+            XLWorkbook wb;
+
+            if (File.Exists(filePath))
+            {
+                wb = new XLWorkbook(@filePath);
+            }
+            else
+            {
+                wb = new XLWorkbook();
+            }
+
+
+            IXLWorksheet ws;
+
+            if(!wb.TryGetWorksheet(worksheetName, out ws))
+            {
+                ws = wb.AddWorksheet("Demand Analysis Calculations");
+            }
 
             for (int i = 0; i < rowCollection.Count; i++)
             {
