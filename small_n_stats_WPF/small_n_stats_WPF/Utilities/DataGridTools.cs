@@ -17,6 +17,9 @@
 
 */
 
+using small_n_stats_WPF.ViewModels;
+using System.Collections.ObjectModel;
+
 namespace small_n_stats_WPF.Utilities
 {
     public class DataGridTools
@@ -56,5 +59,21 @@ namespace small_n_stats_WPF.Utilities
             return ((location.Length - 1) * 26) + letters.IndexOf(location[location.Length - 1]);
         }
 
+        /// <summary>
+        /// Linq companion for referencing object's location in collection.
+        /// </summary>
+        /// <param name="model">
+        /// Individual row model reference
+        /// </param>
+        /// <param name="coll">
+        /// Collection overall
+        /// </param>
+        /// <returns>
+        /// int-based index
+        /// </returns>
+        public static int GetIndexViewModel(RowViewModel model, ObservableCollection<RowViewModel> coll)
+        {
+            return coll.IndexOf(model);
+        }
     }
 }

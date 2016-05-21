@@ -404,23 +404,6 @@ namespace small_n_stats_WPF.ViewModels
         }
 
         /// <summary>
-        /// Linq companion for referencing object's location in collection.
-        /// </summary>
-        /// <param name="model">
-        /// Individual row model reference
-        /// </param>
-        /// <param name="coll">
-        /// Collection overall
-        /// </param>
-        /// <returns>
-        /// int-based index
-        /// </returns>
-        private int GetIndexViewModel(RowViewModel model, ObservableCollection<RowViewModel> coll)
-        {
-            return coll.IndexOf(model);
-        }
-
-        /// <summary>
         /// Delegate after highlighting takes place on datagrid (call back specific to values).
         /// </summary>
         private void DataGrid_PreviewMouseUp_X(object sender, MouseButtonEventArgs e)
@@ -430,8 +413,8 @@ namespace small_n_stats_WPF.ViewModels
             if (cells.Count < 1) return;
 
             var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
-            lowRowX = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
-            highRowX = cells.Max(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
+            lowRowX = cells.Min(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
+            highRowX = cells.Max(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
 
             lowColX = cells.Min(i => i.Column.DisplayIndex);
             highColX = cells.Max(i => i.Column.DisplayIndex);
@@ -481,8 +464,8 @@ namespace small_n_stats_WPF.ViewModels
             if (cells.Count < 1) return;
 
             var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
-            lowRowY = cells.Min(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
-            highRowY = cells.Max(i => GetIndexViewModel((RowViewModel)i.Item, itemSource));
+            lowRowY = cells.Min(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
+            highRowY = cells.Max(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
 
             lowColY = cells.Min(i => i.Column.DisplayIndex);
             highColY = cells.Max(i => i.Column.DisplayIndex);
@@ -570,131 +553,6 @@ namespace small_n_stats_WPF.ViewModels
         }
         
         /// <summary>
-        /// Query's user about how to address certain values
-        /// </summary>
-        /// <param name="modelType">
-        /// modelType informs the "default", recommended option
-        /// </param>
-        /// <returns>
-        /// Decision enum
-        /// </returns>
-        private YValueDecisions GetYBehavior(string modelType)
-        {
-            string recommended = (modelType == "Exponential") ? "Drop Zeroes" : "Do Nothing";
-
-            var yValueWindow = new SelectionWindow(new string[] { "Drop Zeroes", "Change Hundredth", "One Percent of Lowest", "Do Nothing" }, recommended);
-            yValueWindow.Title = "How do you want to treat 0 Consumption values";
-            yValueWindow.MessageLabel.Text = "Please select how to manage the zero Y values";
-            yValueWindow.Owner = windowRef;
-            yValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            yValueWindow.Topmost = true;
-
-            if (yValueWindow.ShowDialog() == true)
-            {
-                int output = yValueWindow.MessageOptions.SelectedIndex;
-
-                if (output == 0)
-                {
-                    return YValueDecisions.DropZeros;
-                }
-                else if (output == 1)
-                {
-                    return YValueDecisions.ChangeHundredth;
-                }
-                else if (output == 2)
-                {
-                    return YValueDecisions.OnePercentLowest;
-                }
-                else if (output == 3)
-                {
-                    return YValueDecisions.DoNothing;
-                }
-            }
-
-            return YValueDecisions.DoNothing;
-        }
-
-        /// <summary>
-        /// Query's user about how to address certain values
-        /// </summary>
-        /// <param name="modelType">
-        /// modelType informs the "default", recommended option
-        /// </param>
-        /// <returns>
-        /// Decision enum
-        /// </returns>
-        private XValueDecisions GetXBehavior(string modelType)
-        {
-            string recommended = (modelType == "Exponential") ? "Drop Zeroes" : "Change Hundredth";
-
-            var xValueWindow = new SelectionWindow(new string[] { "Change Hundredth", "Drop Zeroes", "Do Nothing" }, "Change Hundredth");
-            xValueWindow.Title = "How do you want to treat 0 Pricing (free) values";
-            xValueWindow.MessageLabel.Text = "Please select how to manage the zero X values";
-            xValueWindow.Owner = windowRef;
-            xValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            xValueWindow.Topmost = true;
-
-            if (xValueWindow.ShowDialog() == true)
-            {
-                int output = xValueWindow.MessageOptions.SelectedIndex;
-
-                if (output == 0)
-                {
-                    return XValueDecisions.ChangeHundredth;
-                }
-                else if (output == 1)
-                {
-                    return XValueDecisions.DropZeros;
-                }
-                else if (output == 2)
-                {
-                    return XValueDecisions.DoNothing;
-                }
-            }
-
-            return XValueDecisions.DoNothing;
-        }
-
-        /// <summary>
-        /// Query's user about how to address certain values
-        /// </summary>
-        /// <param name="modelType">
-        /// modelType informs the "default", recommended option
-        /// </param>
-        /// <returns>
-        /// Decision enum
-        /// </returns>
-        private KValueDecisions GetKBehaviorIndividual()
-        {
-            var kValueWindow = new SelectionWindow(new string[] { "Use derived K (individual)", "Fit a K (individual)", "Use Custom Ks" }, "Use derived K (individual)");
-            kValueWindow.Title = "How do you want to derive K values";
-            kValueWindow.MessageLabel.Text = "Please select how to ascertain K:";
-            kValueWindow.Owner = windowRef;
-            kValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            kValueWindow.Topmost = true;
-
-            if (kValueWindow.ShowDialog() == true)
-            {
-                int output = kValueWindow.MessageOptions.SelectedIndex;
-
-                if (output == 0)
-                {
-                    return KValueDecisions.DeriveValuesIndividual;
-                }
-                else if (output == 1)
-                {
-                    return KValueDecisions.FitK;
-                }
-                else if (output == 2)
-                {
-                    return KValueDecisions.UseSuppliedValues;
-                }
-            }
-
-            return KValueDecisions.DeriveValuesIndividual;
-        }
-        
-        /// <summary>
         /// Command-call to calculate based on supplied ranges and reference values (max value).
         /// Will reference user-selected options (figures, outputs, etc.) throughout calls to R
         /// </summary>
@@ -753,9 +611,9 @@ namespace small_n_stats_WPF.ViewModels
 
             engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
 
-            YValueDecisions yBehavior = GetYBehavior(modelArraySelection);
-            XValueDecisions xBehavior = GetXBehavior(modelArraySelection);
-            KValueDecisions kBehavior = GetKBehaviorIndividual();
+            YValueDecisions yBehavior = Decisions.GetYBehavior(modelArraySelection, windowRef);
+            XValueDecisions xBehavior = Decisions.GetXBehavior(modelArraySelection, windowRef);
+            KValueDecisions kBehavior = Decisions.GetKBehaviorIndividual(windowRef);
 
             mWindow.OutputEvents("---------------------------------------------------");
 
