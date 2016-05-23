@@ -1108,9 +1108,15 @@ namespace small_n_stats_WPF.ViewModels
                             mVM.RowViewModels[0].values[17] = "Derived oMax";
                             mVM.RowViewModels[0].values[18] = "Derived pMax";
 
-                            mVM.RowViewModels[0].values[19] = "Pricing";
-                            mVM.RowViewModels[0].values[20] = "Consumption";
-                            mVM.RowViewModels[0].values[21] = "Notes";
+                            mVM.RowViewModels[0].values[19] = "TotalPass";
+                            mVM.RowViewModels[0].values[20] = "DeltaQ";
+                            mVM.RowViewModels[0].values[21] = "DeltaQPass";
+                            mVM.RowViewModels[0].values[22] = "Bounce";
+                            mVM.RowViewModels[0].values[23] = "BouncePass";
+                            mVM.RowViewModels[0].values[24] = "Reversals";
+                            mVM.RowViewModels[0].values[25] = "ReversalsPass";
+                            mVM.RowViewModels[0].values[26] = "NumPosValues";
+                            mVM.RowViewModels[0].values[27] = "Notes";
 
                         }
 
@@ -1353,8 +1359,15 @@ namespace small_n_stats_WPF.ViewModels
                             mVM.RowViewModels[1 + mIndex].values[17] = engine.Evaluate("fitFrame[fitFrame$p==1,]$OmaxD").AsVector().First().ToString();
                             mVM.RowViewModels[1 + mIndex].values[18] = engine.Evaluate("fitFrame[fitFrame$p==1,]$PmaxD").AsVector().First().ToString();
 
-                            mVM.RowViewModels[1 + mIndex].values[19] = string.Join(",", xRange);
-                            mVM.RowViewModels[1 + mIndex].values[20] = string.Join(",", yRange);
+
+                            mVM.RowViewModels[1 + mIndex].values[19] = results[mIndex, "TotalPass"].ToString();
+                            mVM.RowViewModels[1 + mIndex].values[20] = results[mIndex, "DeltaQ"].ToString();
+                            mVM.RowViewModels[1 + mIndex].values[21] = results[mIndex, "DeltaQPass"].ToString();
+                            mVM.RowViewModels[1 + mIndex].values[22] = results[mIndex, "Bounce"].ToString();
+                            mVM.RowViewModels[1 + mIndex].values[23] = results[mIndex, "BouncePass"].ToString();
+                            mVM.RowViewModels[1 + mIndex].values[24] = results[mIndex, "Reversals"].ToString();
+                            mVM.RowViewModels[1 + mIndex].values[25] = results[mIndex, "ReversalsPass"].ToString();
+                            mVM.RowViewModels[1 + mIndex].values[26] = results[mIndex, "NumPosValues"].ToString();
                         }
                         else
                         {
@@ -1363,8 +1376,6 @@ namespace small_n_stats_WPF.ViewModels
                                 mVM.RowViewModels[1 + mIndex].values[i] = "NA";
                             }
 
-                            mVM.RowViewModels[1 + mIndex].values[19] = string.Join(",", xRange);
-                            mVM.RowViewModels[1 + mIndex].values[20] = string.Join(",", yRange);
                             mVM.RowViewModels[1 + mIndex].values[21] = "Model did not converge, was a curve actually present?";
                         }
 

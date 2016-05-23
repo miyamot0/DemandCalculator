@@ -782,9 +782,15 @@ namespace small_n_stats_WPF.ViewModels
                 mVM.RowViewModels[0].values[17] = "Derived oMax";
                 mVM.RowViewModels[0].values[18] = "Derived pMax";
 
-                mVM.RowViewModels[0].values[19] = "Pricing";
-                mVM.RowViewModels[0].values[20] = "Consumption";
-                mVM.RowViewModels[0].values[21] = "Notes";
+                mVM.RowViewModels[0].values[19] = "TotalPass";
+                mVM.RowViewModels[0].values[20] = "DeltaQ";
+                mVM.RowViewModels[0].values[21] = "DeltaQPass";
+                mVM.RowViewModels[0].values[22] = "Bounce";
+                mVM.RowViewModels[0].values[23] = "BouncePass";
+                mVM.RowViewModels[0].values[24] = "Reversals";
+                mVM.RowViewModels[0].values[25] = "ReversalsPass";
+                mVM.RowViewModels[0].values[26] = "NumPosValues";
+                mVM.RowViewModels[0].values[27] = "Notes";
 
                 mVM.RowViewModels[1].values[0] = "Series #" + (1).ToString();
 
@@ -1021,8 +1027,6 @@ namespace small_n_stats_WPF.ViewModels
                     mVM.RowViewModels[1].values[17] = engine.Evaluate("fitFrame[fitFrame$p==1,]$OmaxD").AsVector().First().ToString();
                     mVM.RowViewModels[1].values[18] = engine.Evaluate("fitFrame[fitFrame$p==1,]$PmaxD").AsVector().First().ToString();
 
-                    mVM.RowViewModels[1].values[19] = string.Join(",", xRange);
-                    mVM.RowViewModels[1].values[20] = string.Join(",", yRange);
                 }
                 else
                 {
@@ -1031,10 +1035,17 @@ namespace small_n_stats_WPF.ViewModels
                         mVM.RowViewModels[1].values[i] = "NA";
                     }
 
-                    mVM.RowViewModels[1].values[19] = string.Join(",", xRange);
-                    mVM.RowViewModels[1].values[20] = string.Join(",", yRange);
                     mVM.RowViewModels[1].values[21] = "Model did not converge, was a curve actually present?";
                 }
+
+                mVM.RowViewModels[1].values[19] = results[0, "TotalPass"].ToString();
+                mVM.RowViewModels[1].values[20] = results[0, "DeltaQ"].ToString();
+                mVM.RowViewModels[1].values[21] = results[0, "DeltaQPass"].ToString();
+                mVM.RowViewModels[1].values[22] = results[0, "Bounce"].ToString();
+                mVM.RowViewModels[1].values[23] = results[0, "BouncePass"].ToString();
+                mVM.RowViewModels[1].values[24] = results[0, "Reversals"].ToString();
+                mVM.RowViewModels[1].values[25] = results[0, "ReversalsPass"].ToString();
+                mVM.RowViewModels[1].values[26] = results[0, "NumPosValues"].ToString();
 
                 mWin.Show();
 
