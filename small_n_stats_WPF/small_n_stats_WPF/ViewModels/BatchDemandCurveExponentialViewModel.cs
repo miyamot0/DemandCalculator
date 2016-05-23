@@ -1331,8 +1331,8 @@ namespace small_n_stats_WPF.ViewModels
                             mVM.RowViewModels[1 + mIndex].values[17] = engine.Evaluate("fitFrame[fitFrame$p==1,]$OmaxD").AsVector().First().ToString();
                             mVM.RowViewModels[1 + mIndex].values[18] = engine.Evaluate("fitFrame[fitFrame$p==1,]$PmaxD").AsVector().First().ToString();
 
-                            mVM.RowViewModels[1 + mIndex].values[19] = string.Join(",", xValues);
-                            mVM.RowViewModels[1 + mIndex].values[20] = string.Join(",", yValues);
+                            mVM.RowViewModels[1 + mIndex].values[19] = string.Join(",", xRange);
+                            mVM.RowViewModels[1 + mIndex].values[20] = string.Join(",", yRange);
                         }
                         else
                         {
@@ -1341,8 +1341,8 @@ namespace small_n_stats_WPF.ViewModels
                                 mVM.RowViewModels[1 + mIndex].values[i] = "NA";
                             }
 
-                            mVM.RowViewModels[1 + mIndex].values[19] = string.Join(",", xValues);
-                            mVM.RowViewModels[1 + mIndex].values[20] = string.Join(",", yValues);
+                            mVM.RowViewModels[1 + mIndex].values[19] = string.Join(",", xRange);
+                            mVM.RowViewModels[1 + mIndex].values[20] = string.Join(",", yRange);
                             mVM.RowViewModels[1 + mIndex].values[21] = "Model did not converge, was a curve actually present?";
                         }
 
