@@ -72,7 +72,10 @@ namespace small_n_stats_WPF.Utilities
 
             IXLWorksheet ws;
 
-            ws = wb.AddWorksheet("Demand Analysis Calculations");
+            if (!wb.TryGetWorksheet("Demand Analysis Calculations", out ws))
+            {
+                ws = wb.AddWorksheet("Demand Analysis Calculations");
+            }
 
             for (int i = 0; i < rowCollection.Count; i++)
             {
@@ -109,7 +112,6 @@ namespace small_n_stats_WPF.Utilities
             {
                 wb = new XLWorkbook();
             }
-
 
             IXLWorksheet ws;
 
