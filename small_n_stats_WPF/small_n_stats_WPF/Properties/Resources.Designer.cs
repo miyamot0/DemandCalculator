@@ -117,6 +117,48 @@ namespace small_n_stats_WPF.Properties {
         ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
+        internal static string ExponentialDemandFunctionsKSet {
+            get {
+                return ResourceManager.GetString("ExponentialDemandFunctionsKSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # 
+        ///#    Copyright 2016 Shawn Gilroy
+        ///#
+        ///#    This file is part of Demand Analysis.
+        ///#
+        ///#    Demand Analysis is free software: you can redistribute it and/or modify
+        ///#    it under the terms of the GNU General Public License as published by
+        ///#    the Free Software Foundation, version 2.
+        ///#
+        ///#    Demand Analysis is distributed in the hope that it will be useful,
+        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ExponentiatedDemandFunctionKSet {
+            get {
+                return ResourceManager.GetString("ExponentiatedDemandFunctionKSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # 
+        ///#    Copyright 2016 Shawn Gilroy
+        ///#
+        ///#    This file is part of Demand Analysis.
+        ///#
+        ///#    Demand Analysis is free software: you can redistribute it and/or modify
+        ///#    it under the terms of the GNU General Public License as published by
+        ///#    the Free Software Foundation, version 2.
+        ///#
+        ///#    Demand Analysis is distributed in the hope that it will be useful,
+        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        /// </summary>
         internal static string ExponentiatedDemandFunctions {
             get {
                 return ResourceManager.GetString("ExponentiatedDemandFunctions", resourceCulture);

@@ -38,6 +38,14 @@ namespace small_n_stats_WPF.Mathematics
         }
 
         /// <summary>
+        /// Hursh & Silverburg's exponetial function is called from resources here (as string), for use in R function calls
+        /// </summary>
+        public static string GetExponentialDemandFunctionKSet()
+        {
+            return Properties.Resources.ExponentialDemandFunctionsKSet;
+        }
+
+        /// <summary>
         /// Koffarnus' exponentiated function is called from resources here (as string), for use in R function calls
         /// </summary>
         public static string GetExponentiatedDemandFunction()
@@ -51,6 +59,14 @@ namespace small_n_stats_WPF.Mathematics
         public static string GetExponentiatedDemandFunctionKFittings()
         {
             return Properties.Resources.ExponentiatedDemandFunctionsKFitted;
+        }
+
+        /// <summary>
+        /// Koffarnus' exponentiated function is called from resources here (as string), for use in R function calls
+        /// </summary>
+        public static string GetExponentiatedDemandFunctionKSet()
+        {
+            return Properties.Resources.ExponentiatedDemandFunctionKSet;
         }
 
         /// <summary>

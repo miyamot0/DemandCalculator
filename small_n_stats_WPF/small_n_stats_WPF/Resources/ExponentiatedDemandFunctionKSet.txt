@@ -48,7 +48,8 @@
 SourceFrame <- data.frame(
   p=pLoad,
   y=yLoad,
-  x=xLoad)
+  x=xLoad,
+  k=kLoad)
 
 nSimulated <- length(unique(SourceFrame$p))
 
@@ -98,53 +99,47 @@ fitFrame <- data.frame(
   OmaxD=rep(NA,1),
   PmaxD=rep(NA,1))
 
-  fittedK <- NULL
-
   dataHolder <- NULL
   dataHolder <- SourceFrame
   dataHolder$expend <- (dataHolder$x * dataHolder$y)
   
   fitFrame[1,]$OmaxE <- max(dataHolder$expend)
   fitFrame[1,]$PmaxE <- max(dataHolder[dataHolder$expend == max(dataHolder$expend),]$x)
-  
+
   xMin <- min(dataHolder$x)
-  
+
   fitFrame[1,]$Q0e <- min(dataHolder[dataHolder$x == xMin,]$y)
   
   if (length(dataHolder[dataHolder$y == 0,]$x) > 0)
   {
-    fitFrame[1,]$BP0 <- min(dataHolder[dataHolder$y == 0,]$x)
+	fitFrame[1,]$BP0 <- min(dataHolder[dataHolder$y == 0,]$x)
   }
-  
+
   if (sum(dataHolder$y > 0))
   {
-    fitFrame[1,]$BP1 <- max(dataHolder[dataHolder$y != 0,]$x)
+	fitFrame[1,]$BP1 <- max(dataHolder[dataHolder$y != 0,]$x)
   }
-  
+
   fit <- NULL
-  try(fit <- wrapnls(data=dataHolder, y ~ q0 * 10^(k * (exp(-alpha*q0*x)-1)), start=c(q0=10, k=3, alpha=0.000000001),
-                     trace=FALSE, control = list(maxiter = 1000, smallsstest=FALSE, femax=10000, minFactor=0.000000000001)), silent=FALSE)
-  
+  try(fit <- wrapnls(data=dataHolder, y ~ q0 * 10^(k * (exp(-alpha*q0*x)-1)), start=c(q0=3, alpha=0.000000001), control = list(maxiter = 1000)), silent=TRUE)
+
   if (!is.null(fit))
   {
-    fitFrame[1,]$q0 <- as.numeric(coef(fit)["q0"])
-    fitFrame[1,]$alpha <- as.numeric(coef(fit)["alpha"])
-    fitFrame[1,]$k <- as.numeric(coef(fit)["k"])
-    fitFrame[1,]$q0err <- summary(fit)[[10]][1,2]
-    fitFrame[1,]$alphaerr <- summary(fit)[[10]][3,2]
-	fitFrame[1,]$r2 <- 1.0 -(deviance(fit)/sum((dataHolder$y - mean(dataHolder$y))^2))
-    fitFrame[1,]$absSS <- deviance(fit)
-    fitFrame[1,]$sdResid <- sqrt(deviance(fit)/df.residual(fit))
-    fitFrame[1,]$q0low <- confint2(fit)[1]
-    fitFrame[1,]$q0high <- confint2(fit)[4]
-    fitFrame[1,]$alow <- confint2(fit)[3]
-    fitFrame[1,]$ahigh <- confint2(fit)[6]    
-
-	fittedK <- as.numeric(coef(fit)["k"])
-
-	fitFrame[1,]$EV <- 1/(fitFrame[1,]$alpha * (fitFrame[1,]$k ^ 1.5) * 100)
-	fitFrame[1,]$PmaxD <- 1/(fitFrame[1,]$q0 * fitFrame[1,]$alpha * (fitFrame[1,]$k ^ 1.5)) * (0.083 * fitFrame[1,]$k + 0.65)
-    fitFrame[1,]$OmaxD <- (fitFrame[1,]$q0 * (10^(fitFrame[1,]$k * (exp(-fitFrame[1,]$alpha * fitFrame[1,]$q0 * fitFrame[1,]$PmaxD) - 1)))) * fitFrame[1,]$PmaxD
+	  fitFrame[1,]$q0 <- as.numeric(coef(fit)["q0"])
+	  fitFrame[1,]$alpha <- as.numeric(coef(fit)["alpha"])
+	  fitFrame[1,]$k <- min(SourceFrame$k)
+	  fitFrame[1,]$q0err <- summary(fit)[[10]][1,2]
+	  fitFrame[1,]$alphaerr <- summary(fit)[[10]][2,2]
+	  fitFrame[1,]$r2 <- 1.0 -(deviance(fit)/sum((dataHolder$y-mean(dataHolder$y))^2))
+	  fitFrame[1,]$absSS <- deviance(fit)  
+	  fitFrame[1,]$sdResid <- sqrt(deviance(fit)/df.residual(fit))
+	  fitFrame[1,]$q0low <- confint2(fit)[1]
+	  fitFrame[1,]$q0high <- confint2(fit)[3]
+	  fitFrame[1,]$alow <- confint2(fit)[2]
+	  fitFrame[1,]$ahigh <- confint2(fit)[4]  
+	  fitFrame[1,]$EV <- 1/(fitFrame[1,]$alpha * (fitFrame[1,]$k ^ 1.5) * 100)
+	  fitFrame[1,]$PmaxD <- 1/(fitFrame[1,]$q0 * fitFrame[1,]$alpha * (fitFrame[1,]$k ^ 1.5)) * (0.083 * fitFrame[1,]$k + 0.65)
+      fitFrame[1,]$OmaxD <- (fitFrame[1,]$q0 * (10^(fitFrame[1,]$k * (exp(-fitFrame[1,]$alpha * fitFrame[1,]$q0 * fitFrame[1,]$PmaxD) - 1)))) * fitFrame[1,]$PmaxD
   }
 
 for (i in 1:nSimulated)
@@ -175,14 +170,14 @@ for (i in 1:nSimulated)
   ###
   
   fit <- NULL
-  try(fit <- wrapnls(data=dataHolder, y ~ q0 * 10^(fittedK * (exp(-alpha*q0*x)-1)), start=c(q0=10, alpha=0.000000001),
+  try(fit <- wrapnls(data=dataHolder, y ~ q0 * 10^(k * (exp(-alpha*q0*x)-1)), start=c(q0=10, alpha=0.000000001),
                      trace=FALSE, control = list(maxiter = 1000, smallsstest=FALSE, femax=10000, minFactor=0.000000000001)), silent=FALSE)
   
   if (!is.null(fit))
   {
     fitFrameTemp[fitFrameTemp$p==i,]$q0 <- as.numeric(coef(fit)["q0"])
     fitFrameTemp[fitFrameTemp$p==i,]$alpha <- as.numeric(coef(fit)["alpha"])
-    fitFrameTemp[fitFrameTemp$p==i,]$k <- fittedK
+    fitFrameTemp[fitFrameTemp$p==i,]$k <- min(dataHolder$k)
     fitFrameTemp[fitFrameTemp$p==i,]$q0err <- summary(fit)[[10]][1,2]
     fitFrameTemp[fitFrameTemp$p==i,]$alphaerr <- summary(fit)[[10]][2,2]
 	fitFrameTemp[fitFrameTemp$p==i,]$r2 <- 1.0 -(deviance(fit)/sum((dataHolder$y - mean(dataHolder$y))^2))

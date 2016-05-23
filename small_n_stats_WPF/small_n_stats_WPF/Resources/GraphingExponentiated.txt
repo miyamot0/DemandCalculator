@@ -16,7 +16,7 @@
 #    along with Demand Analysis.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
 #
 
-xDraw <- seq(min(SourceFrame$x), max(SourceFrame$x), 0.01)
+xDraw <- seq(min(SourceFrame$x), max(SourceFrame$x), 0.1)
 
 p.rep <- seq(1,max(SourceFrame$p),1)
 
@@ -31,9 +31,9 @@ for (j in 1:max(SourceFrame$p))
 {
   for (i in 1:length(xDraw))
   {
-    qTemp <- fitFrame[fitFrame$p==j,]$q0
-    aTemp <- fitFrame[fitFrame$p==j,]$alpha
-    kTemp <- fitFrame[fitFrame$p==j,]$k
+    qTemp <- fitFrame[1,]$q0
+    aTemp <- fitFrame[1,]$alpha
+    kTemp <- fitFrame[1,]$k
 
     graphFrame[ graphFrame$Individual==j & graphFrame$DemandSeries==as.numeric(i),]$YSeries <- qTemp * 10^(kTemp * (exp(-aTemp*qTemp*xDraw[i])-1))
     graphFrame[ graphFrame$Individual==j & graphFrame$DemandSeries==as.numeric(i),]$XSeries <- xDraw[i]
