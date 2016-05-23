@@ -22,6 +22,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.IO;
 
 namespace small_n_stats_WPF.ViewModels
 {
@@ -58,6 +59,7 @@ namespace small_n_stats_WPF.ViewModels
             ShuttingDown = true;
         }
 
+        /*
         private void SaveFile()
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -73,6 +75,36 @@ namespace small_n_stats_WPF.ViewModels
                 catch (Exception e)
                 {
                     MessageBox.Show("We weren't able to save.  Is the target file open or in use?");
+                    Console.WriteLine(e.ToString());
+                }
+            }
+        }
+        */
+
+        private void SaveFile()
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.FileName = "Results";
+            saveFileDialog1.Filter = "Excel file (*.xlsx)|*.xlsx|CSV file (*.csv)|*.csv|All files (*.*)|*.*";
+
+            if (saveFileDialog1.ShowDialog() == true)
+            {
+                try
+                {
+                    string mExt = Path.GetExtension(saveFileDialog1.FileName);
+
+                    if (mExt.Equals(".xlsx"))
+                    {
+                        OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
+                    }
+                    else if (mExt.Equals(".csv"))
+                    {
+                        OpenXMLHelper.ExportToCSV(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
                     Console.WriteLine(e.ToString());
                 }
             }

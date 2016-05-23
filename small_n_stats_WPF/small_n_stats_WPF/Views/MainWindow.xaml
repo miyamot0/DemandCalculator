@@ -81,7 +81,6 @@
                             <Image Source="/Images/document-open.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator />
                     <MenuItem Header="_Recent" 
 						x:Name="recentMenuItem"
                         ItemsSource="{Binding RecentStuff}">

@@ -747,18 +747,31 @@ namespace small_n_stats_WPF.ViewModels
             {
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
                 saveFileDialog1.FileName = title;
-                saveFileDialog1.Filter = "Excel file (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+                saveFileDialog1.Filter = "Excel file (*.xlsx)|*.xlsx|CSV file (*.csv)|*.csv|All files (*.*)|*.*";
 
                 if (saveFileDialog1.ShowDialog() == true)
                 {
-                    loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
-                    loadThread.SetApartmentState(ApartmentState.STA);
-                    loadThread.IsBackground = true;
-                    loadThread.Start();
-
                     try
                     {
-                        OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
+                        string mExt = Path.GetExtension(saveFileDialog1.FileName);
+
+                        path = Path.GetDirectoryName(saveFileDialog1.FileName);
+
+                        if (mExt.Equals(".xlsx"))
+                        {
+                            loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
+                            loadThread.SetApartmentState(ApartmentState.STA);
+                            loadThread.IsBackground = true;
+                            loadThread.Start();
+
+                            OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
+
+                            CloseFileUIProgressWindow();
+                        }
+                        else if (mExt.Equals(".csv"))
+                        {
+                            OpenXMLHelper.ExportToCSV(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
+                        }
 
                         UpdateTitle(saveFileDialog1.SafeFileName);
 
@@ -773,8 +786,6 @@ namespace small_n_stats_WPF.ViewModels
                     }
 
                     workingSheet = "Demand Analysis Calculations";
-
-                    CloseFileUIProgressWindow();
                 }
             }
         }
@@ -789,18 +800,33 @@ namespace small_n_stats_WPF.ViewModels
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
             saveFileDialog1.FileName = title;
-            saveFileDialog1.Filter = "Excel file (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+            saveFileDialog1.Filter = "Excel file (*.xlsx)|*.xlsx|CSV file (*.csv)|*.csv|All files (*.*)|*.*";
 
             if (saveFileDialog1.ShowDialog() == true)
             {
-                loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
-                loadThread.SetApartmentState(ApartmentState.STA);
-                loadThread.IsBackground = true;
-                loadThread.Start();
+                string mExt = Path.GetExtension(saveFileDialog1.FileName);
+
+                path = Path.GetDirectoryName(saveFileDialog1.FileName);
 
                 try
                 {
-                    OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
+                    if (mExt.Equals(".xlsx"))
+                    {
+                        loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
+                        loadThread.SetApartmentState(ApartmentState.STA);
+                        loadThread.IsBackground = true;
+                        loadThread.Start();
+
+                        OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
+
+                        CloseFileUIProgressWindow();
+                    }
+                    else if (mExt.Equals(".csv"))
+                    {
+                        OpenXMLHelper.ExportToCSV(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
+                    }
+
+                    workingSheet = "Demand Analysis Calculations";
 
                     UpdateTitle(saveFileDialog1.SafeFileName);
 
@@ -808,7 +834,6 @@ namespace small_n_stats_WPF.ViewModels
 
                     haveFileLoaded = true;
 
-                    workingSheet = "Demand Analysis Calculations";
 
                 }
                 catch (Exception e)
@@ -817,8 +842,6 @@ namespace small_n_stats_WPF.ViewModels
                     Console.WriteLine(e.ToString());
                     haveFileLoaded = false;
                 }
-
-                CloseFileUIProgressWindow();
 
             }
         }
@@ -832,14 +855,27 @@ namespace small_n_stats_WPF.ViewModels
 
             if (haveFileLoaded)
             {
-                loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
-                loadThread.SetApartmentState(ApartmentState.STA);
-                loadThread.IsBackground = true;
-                loadThread.Start();
-
                 try
                 {
-                    OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), Path.Combine(path, title), workingSheet);
+                    string mExt = Path.GetExtension(Path.Combine(path, title));
+
+                    path = Path.GetDirectoryName(Path.Combine(path, title));
+
+                    if (mExt.Equals(".xlsx"))
+                    {
+                        loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
+                        loadThread.SetApartmentState(ApartmentState.STA);
+                        loadThread.IsBackground = true;
+                        loadThread.Start();
+
+                        OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), Path.Combine(path, title));
+
+                        CloseFileUIProgressWindow();
+                    }
+                    else if (mExt.Equals(".csv"))
+                    {
+                        OpenXMLHelper.ExportToCSV(new ObservableCollection<RowViewModel>(RowViewModels), Path.Combine(path, title));
+                    }
 
                     UpdateTitle(title);
 
@@ -849,8 +885,6 @@ namespace small_n_stats_WPF.ViewModels
                     MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
                     Console.WriteLine(e.ToString());
                 }
-
-                CloseFileUIProgressWindow();
             }
         }
 

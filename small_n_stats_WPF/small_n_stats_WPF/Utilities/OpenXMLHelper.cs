@@ -54,6 +54,34 @@ namespace small_n_stats_WPF.Utilities
         /// Contents of data grid
         /// </param>
         /// <param name="filePath">
+        /// Output location for .csv file
+        /// </param>
+        /// </summary>
+        public static void ExportToCSV(ObservableCollection<RowViewModel> rowCollection, string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            using (var csv = new StreamWriter(filePath, true))
+            {
+                foreach (RowViewModel rvm in rowCollection)
+                {
+                    var newLine = string.Join(",", rvm.values);
+                    csv.WriteLine(newLine);
+                }
+
+                csv.Close();
+            }
+        }
+
+        /// <summary>
+        /// Write contents of RowModels to spreadsheet
+        /// <param name="rowCollection">
+        /// Contents of data grid
+        /// </param>
+        /// <param name="filePath">
         /// Output location for .xlsx file
         /// </param>
         /// </summary>
