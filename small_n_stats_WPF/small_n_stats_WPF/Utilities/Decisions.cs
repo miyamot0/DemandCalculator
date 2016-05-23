@@ -55,6 +55,95 @@ namespace small_n_stats_WPF.Utilities
     public class Decisions
     {
         /// <summary>
+        /// Supplies description of behavior
+        /// </summary>
+        /// <param name="decision"></param>
+        /// <returns></returns>
+        public static string GetYBehaviorDescription(YValueDecisions decision)
+        {
+            string holderString = string.Empty;
+
+            switch (decision)
+            {
+                case YValueDecisions.ChangeHundredth:
+                    holderString = "Zero Y values : Changed to 0.01";
+                    break;
+
+                case YValueDecisions.DoNothing:
+                    holderString = "Zero Y Values : Unmodified";
+                    break;
+
+                case YValueDecisions.OnePercentLowest:
+                    holderString = "Zero Y Values : 1% of lowest value";
+                    break;
+
+                case YValueDecisions.DropZeros:
+                    holderString = "Zero Y Values : Dropped";
+                    break;
+            }
+
+            return holderString;
+        }
+
+        /// <summary>
+        /// Supplies description of behavior
+        /// </summary>
+        /// <param name="decision"></param>
+        /// <returns></returns>
+        public static string GetXBehaviorDescription(XValueDecisions decision)
+        {
+            string holderString = string.Empty;
+
+            switch (decision)
+            {
+                case XValueDecisions.ChangeHundredth:
+                    holderString = "Zero X values : Changed to 0.01";
+                    break;
+
+                case XValueDecisions.DoNothing:
+                    holderString = "Zero X values : Unmodified";
+                    break;
+
+                case XValueDecisions.DropZeros:
+                    holderString = "Zero X values : Dropped";
+                    break;
+            }
+
+            return holderString;
+        }
+
+        /// <summary>
+        /// Supplies description of behavior
+        /// </summary>
+        /// <param name="decision"></param>
+        /// <returns></returns>
+        public static string GetKBehaviorDescription(KValueDecisions decision)
+        {
+            string holderString = string.Empty;
+
+            switch(decision)
+            {
+                case KValueDecisions.DeriveValuesGroup:
+                    holderString = "K values : Derived from whole sample";
+                    break;
+
+                case KValueDecisions.DeriveValuesIndividual:
+                    holderString = "K values : Derived from individual series";
+                    break;
+
+                case KValueDecisions.FitK:
+                    holderString = "K values : Fitted with other parameters";
+                    break;
+
+                case KValueDecisions.UseSuppliedValues:
+                    holderString = "K values : User supplied K";
+                    break;
+            }
+
+            return holderString;
+        }
+
+        /// <summary>
         /// Query's user about how to address certain values
         /// </summary>
         /// <param name="modelType">

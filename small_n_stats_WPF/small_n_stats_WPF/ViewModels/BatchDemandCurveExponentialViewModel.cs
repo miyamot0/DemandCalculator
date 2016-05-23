@@ -1046,7 +1046,7 @@ namespace small_n_stats_WPF.ViewModels
             var mVM = new ResultsViewModel();
             mWin.DataContext = mVM;
 
-            for (int i = 0; i < wholeRange.GetLength(1) + 5; i++)
+            for (int i = 0; i < wholeRange.GetLength(1) + 10; i++)
             {
                 mVM.RowViewModels.Add(new RowViewModel());
             }
@@ -1378,6 +1378,12 @@ namespace small_n_stats_WPF.ViewModels
 
                             mVM.RowViewModels[1 + mIndex].values[21] = "Model did not converge, was a curve actually present?";
                         }
+
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 2].values[0] = "Model: " + ModelArraySelection;
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 3].values[0] = "Analysis : " + SelectedMode;
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 4].values[0] = "Y Behavior: " + Decisions.GetYBehaviorDescription(yBehavior);
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 5].values[0] = "X Behavior: " + Decisions.GetXBehaviorDescription(xBehavior);
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 6].values[0] = "K Behavior: " + Decisions.GetKBehaviorDescription(kBehavior);
 
                     }
                     catch (ParseException pe)
@@ -1754,6 +1760,12 @@ namespace small_n_stats_WPF.ViewModels
                             rowNumber++;
                         }
 
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 5].values[0] = "Model: " + ModelArraySelection;
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 6].values[0] = "Analysis : " + SelectedMode;
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 7].values[0] = "Y Behavior: " + Decisions.GetYBehaviorDescription(yBehavior);
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 8].values[0] = "X Behavior: " + Decisions.GetXBehaviorDescription(xBehavior);
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 9].values[0] = "K Behavior: " + Decisions.GetKBehaviorDescription(kBehavior);
+
                         #endregion
                     }
                     else
@@ -1879,7 +1891,15 @@ namespace small_n_stats_WPF.ViewModels
                             }
 
                             rowNumber++;
+
                         }
+
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 5].values[0] = "Model: " + ModelArraySelection;
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 6].values[0] = "Analysis : " + SelectedMode;
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 7].values[0] = "Y Behavior: " + Decisions.GetYBehaviorDescription(yBehavior);
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 8].values[0] = "X Behavior: " + Decisions.GetXBehaviorDescription(xBehavior);
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 9].values[0] = "K Behavior: " + Decisions.GetKBehaviorDescription(kBehavior);
+
 
                         #endregion 
                     }

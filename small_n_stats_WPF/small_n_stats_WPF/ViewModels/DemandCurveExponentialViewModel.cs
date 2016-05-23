@@ -743,7 +743,7 @@ namespace small_n_stats_WPF.ViewModels
             var mVM = new ResultsViewModel();
             mWin.DataContext = mVM;
 
-            for (int i = 0; i < yRange.Count + 5; i++)
+            for (int i = 0; i < yRange.Count + 10; i++)
             {
                 mVM.RowViewModels.Add(new RowViewModel());
             }
@@ -1046,6 +1046,12 @@ namespace small_n_stats_WPF.ViewModels
                 mVM.RowViewModels[1].values[24] = results[0, "Reversals"].ToString();
                 mVM.RowViewModels[1].values[25] = results[0, "ReversalsPass"].ToString();
                 mVM.RowViewModels[1].values[26] = results[0, "NumPosValues"].ToString();
+
+                mVM.RowViewModels[5].values[0] = "Model: " + ModelArraySelection;
+                mVM.RowViewModels[6].values[0] = "Analysis : " + "Individual";
+                mVM.RowViewModels[7].values[0] = "Y Behavior: " + Decisions.GetYBehaviorDescription(yBehavior);
+                mVM.RowViewModels[8].values[0] = "X Behavior: " + Decisions.GetXBehaviorDescription(xBehavior);
+                mVM.RowViewModels[9].values[0] = "K Behavior: " + Decisions.GetKBehaviorDescription(kBehavior);
 
                 mWin.Show();
 
