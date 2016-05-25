@@ -816,6 +816,27 @@ namespace small_n_stats_WPF.ViewModels
         }
 
         /// <summary>
+        /// Get Standard Deviation
+        /// </summary>
+        /// <param name="values">
+        /// List of doubles
+        /// </param>
+        /// <returns></returns>
+        private double StandardDeviation(List<double> values)
+        {
+            double ret = -1;
+
+            if (values.Count() > 1)
+            {
+                double avg = values.Average();
+                double sum = values.Sum(d => (d - avg) * (d - avg));
+                ret = Math.Sqrt(sum / values.Count());
+            }
+
+            return ret;
+        }
+
+        /// <summary>
         /// Command-call to calculate based on supplied ranges and reference values (max value).
         /// Will reference user-selected options (figures, outputs, etc.) throughout calls to R
         /// </summary>
@@ -1385,6 +1406,33 @@ namespace small_n_stats_WPF.ViewModels
                         mVM.RowViewModels[wholeRange.GetLength(1) + 5].values[0] = "X Behavior: " + Decisions.GetXBehaviorDescription(xBehavior);
                         mVM.RowViewModels[wholeRange.GetLength(1) + 6].values[0] = "K Behavior: " + Decisions.GetKBehaviorDescription(kBehavior);
 
+                        for (int i=0; i<7; i++)
+                        {
+                            mVM.RowViewModels.Add(new RowViewModel());
+                        }
+
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 8].values[0] = "X";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 9].values[0] = "Mean";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 10].values[0] = "SD";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 11].values[0] = "% Zero";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 12].values[0] = "% NA";
+
+                        List<double> currentValues;
+                        for (int j = 0; j < wholeRange.GetLength(0); j++)
+                        {
+                            currentValues = new List<double>();
+
+                            for (int i = 0; i < wholeRange.GetLength(1); i++)
+                            {
+                                currentValues.Add(Double.Parse(wholeRange[j, i]));
+                            }
+
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 8].values[j + 1] = xRange[j].ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 9].values[j + 1] = currentValues.Average().ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 10].values[j + 1] = StandardDeviation(currentValues).ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 11].values[j + 1] = ((double)((double)currentValues.Count(v => v == 0) / (double)currentValues.Count()) * 100).ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 12].values[j + 1] = "";
+                        }
                     }
                     catch (ParseException pe)
                     {
@@ -1766,6 +1814,35 @@ namespace small_n_stats_WPF.ViewModels
                         mVM.RowViewModels[wholeRange.GetLength(1) + 8].values[0] = "X Behavior: " + Decisions.GetXBehaviorDescription(xBehavior);
                         mVM.RowViewModels[wholeRange.GetLength(1) + 9].values[0] = "K Behavior: " + Decisions.GetKBehaviorDescription(kBehavior);
 
+
+                        for (int i = 0; i < 7; i++)
+                        {
+                            mVM.RowViewModels.Add(new RowViewModel());
+                        }
+
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 11].values[0] = "X";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 12].values[0] = "Mean";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 13].values[0] = "SD";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 14].values[0] = "% Zero";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 15].values[0] = "% NA";
+
+                        List<double> currentValues;
+                        for (int j = 0; j < wholeRange.GetLength(0); j++)
+                        {
+                            currentValues = new List<double>();
+
+                            for (int i = 0; i < wholeRange.GetLength(1); i++)
+                            {
+                                currentValues.Add(Double.Parse(wholeRange[j, i]));
+                            }
+
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 11].values[j + 1] = xRange[j].ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 12].values[j + 1] = currentValues.Average().ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 13].values[j + 1] = StandardDeviation(currentValues).ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 14].values[j + 1] = ((double)((double)currentValues.Count(v => v == 0) / (double)currentValues.Count()) * 100).ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 15].values[j + 1] = "";
+                        }
+
                         #endregion
                     }
                     else
@@ -1900,6 +1977,34 @@ namespace small_n_stats_WPF.ViewModels
                         mVM.RowViewModels[wholeRange.GetLength(1) + 8].values[0] = "X Behavior: " + Decisions.GetXBehaviorDescription(xBehavior);
                         mVM.RowViewModels[wholeRange.GetLength(1) + 9].values[0] = "K Behavior: " + Decisions.GetKBehaviorDescription(kBehavior);
 
+
+                        for (int i = 0; i < 7; i++)
+                        {
+                            mVM.RowViewModels.Add(new RowViewModel());
+                        }
+
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 11].values[0] = "X";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 12].values[0] = "Mean";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 13].values[0] = "SD";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 14].values[0] = "% Zero";
+                        mVM.RowViewModels[wholeRange.GetLength(1) + 15].values[0] = "% NA";
+
+                        List<double> currentValues;
+                        for (int j = 0; j < wholeRange.GetLength(0); j++)
+                        {
+                            currentValues = new List<double>();
+
+                            for (int i = 0; i < wholeRange.GetLength(1); i++)
+                            {
+                                currentValues.Add(Double.Parse(wholeRange[j, i]));
+                            }
+
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 11].values[j + 1] = xRange[j].ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 12].values[j + 1] = currentValues.Average().ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 13].values[j + 1] = StandardDeviation(currentValues).ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 14].values[j + 1] = ((double)((double)currentValues.Count(v => v == 0) / (double)currentValues.Count()) * 100).ToString();
+                            mVM.RowViewModels[wholeRange.GetLength(1) + 15].values[j + 1] = "";
+                        }
 
                         #endregion 
                     }

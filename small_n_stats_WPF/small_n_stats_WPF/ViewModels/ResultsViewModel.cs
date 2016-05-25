@@ -55,6 +55,9 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Save file command
+        /// </summary>
         private void SaveFile()
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();

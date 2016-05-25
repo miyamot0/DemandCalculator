@@ -238,6 +238,7 @@
                                     BorderThickness="0"
                                     EnableColumnVirtualization="True"
                                     VerticalAlignment="Stretch">
+                
                 <DataGrid.InputBindings>
                     <KeyBinding Key="Delete" Command="{Binding DeleteSelectedCommand}" />
                     <KeyBinding Gesture="Ctrl+X" Command="{Binding CutSelectedCommand}" />
