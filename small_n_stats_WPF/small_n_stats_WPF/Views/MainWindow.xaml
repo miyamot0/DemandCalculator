@@ -24,7 +24,6 @@
         xmlns:local="clr-namespace:small_n_stats_WPF"
         xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"
         xmlns:custom="clr-namespace:small_n_stats_WPF.Utilities"
-        xmlns:bx="clr-namespace:small_n_stats_WPF.Behaviors"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="{Binding Title}" 
@@ -32,10 +31,6 @@
         Width="{Binding Source={x:Static settings:Settings.Default}, Path=MainWidth, Mode=TwoWay}"
         Top="{Binding Source={x:Static settings:Settings.Default}, Path=MainTop, Mode=TwoWay}" 
         Left="{Binding Source={x:Static settings:Settings.Default}, Path=MainLeft, Mode=TwoWay}">
-
-    <i:Interaction.Behaviors>
-        <bx:ShutDownBehavior ShuttingDownFlag="{Binding ShuttingDown}" />
-    </i:Interaction.Behaviors>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -105,8 +100,9 @@
                     </MenuItem>
                     <Separator />
                     <MenuItem Header="_Close" 
-						x:Name="closeMenuItem" 
-						Command="{Binding FileCloseCommand}">
+                              x:Name="closeMenuItem" 
+                              Command="{Binding FileCloseCommand}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <MenuItem.Icon>
                             <Image Source="/Images/application-exit.png" />
                         </MenuItem.Icon>
@@ -239,7 +235,6 @@
                                     RowDetailsVisibilityMode="Visible"
                                     ClipboardCopyMode="ExcludeHeader"
                                     ItemsSource="{Binding RowViewModels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    DisplayRowNumbers="True"
                                     BorderThickness="0"
                                     EnableColumnVirtualization="True"
                                     VerticalAlignment="Stretch">

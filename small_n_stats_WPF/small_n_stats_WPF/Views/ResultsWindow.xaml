@@ -23,16 +23,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:small_n_stats_WPF.Views"
         xmlns:custom="clr-namespace:small_n_stats_WPF.Utilities"
-        xmlns:bx="clr-namespace:small_n_stats_WPF.Behaviors"
         mc:Ignorable="d"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         Title="ResultsWindow" 
         Height="400" 
         Width="400">
-
-    <i:Interaction.Behaviors>
-        <bx:ShutDownBehavior ShuttingDownFlag="{Binding ShuttingDown}" />
-    </i:Interaction.Behaviors>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -58,8 +53,9 @@
                     </MenuItem>
                     <Separator />
                     <MenuItem Header="_Close" 
-						x:Name="closeMenuItem" 
-						Command="{Binding FileCloseCommand}">
+                              x:Name="closeMenuItem" 
+                              Command="{Binding FileCloseCommand}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <MenuItem.Icon>
                             <Image Source="/Images/application-exit.png" />
                         </MenuItem.Icon>
@@ -81,7 +77,6 @@
                                     RowDetailsVisibilityMode="Visible"
                                     ClipboardCopyMode="ExcludeHeader"
                                     ItemsSource="{Binding RowViewModels}"
-                                    DisplayRowNumbers="True"
                                     BorderThickness="0"
                                     VerticalAlignment="Stretch">
                 <DataGrid.ColumnHeaderStyle>

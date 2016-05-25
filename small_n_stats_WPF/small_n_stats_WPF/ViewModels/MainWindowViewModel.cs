@@ -132,17 +132,6 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
-        public bool shuttingDown = false;
-        public bool ShuttingDown
-        {
-            get { return shuttingDown; }
-            set
-            {
-                shuttingDown = value;
-                OnPropertyChanged("ShuttingDown");
-            }
-        }
-
         #endregion
 
         #region Commands
@@ -202,7 +191,7 @@ namespace small_n_stats_WPF.ViewModels
             FileOpenCommand = new RelayCommand(param => OpenFile(), param => true);
             FileSaveCommand = new RelayCommand(param => SaveFile(), param => true);
             FileSaveAsCommand = new RelayCommand(param => SaveFileAs(), param => true);
-            FileCloseCommand = new RelayCommand(param => CloseProgram(), param => true);
+            FileCloseCommand = new RelayCommand(param => CloseProgramWindow(param), param => true);
 
             FileSaveNoDialogCommand = new RelayCommand(param => SaveFileWithoutDialog(), param => true);
             FileOpenNoDialogCommand = new RelayCommand(param => FileOpenNoDialog(param), param => true);
@@ -439,8 +428,6 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void ViewLoaded()
         {
-            ShuttingDown = false;
-
             IntroWindow introWindow = new IntroWindow();
             introWindow.Owner = MainWindow;
             introWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -1225,11 +1212,17 @@ namespace small_n_stats_WPF.ViewModels
         }
 
         /// <summary>
-        /// Updates ShutDown trigger
+        /// Shutdown event
         /// </summary>
-        private void CloseProgram()
+        /// <param name="param"></param>
+        private void CloseProgramWindow(object param)
         {
-            ShuttingDown = true;
+            var windowObj = param as Window;
+
+            if (windowObj != null)
+            {
+                windowObj.Close();
+            }
         }
 
         #endregion FileIO

@@ -31,17 +31,6 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand FileSaveCommand { get; set; }
         public RelayCommand FileCloseCommand { get; set; }
 
-        public bool shuttingDown = false;
-        public bool ShuttingDown
-        {
-            get { return shuttingDown; }
-            set
-            {
-                shuttingDown = value;
-                OnPropertyChanged("ShuttingDown");
-            }
-        }
-
         public ObservableCollection<RowViewModel> RowViewModels { get; set; }
         
         public ResultsViewModel()
@@ -49,37 +38,22 @@ namespace small_n_stats_WPF.ViewModels
             RowViewModels = new ObservableCollection<RowViewModel>();
 
             FileSaveCommand = new RelayCommand(param => SaveFile(), param => true);
-            FileCloseCommand = new RelayCommand(param => CloseProgram(), param => true);
-
-            ShuttingDown = false;
+            FileCloseCommand = new RelayCommand(param => CloseProgramWindow(param), param => true);
         }
 
-        private void CloseProgram()
+        /// <summary>
+        /// Shutdown event
+        /// </summary>
+        /// <param name="param"></param>
+        private void CloseProgramWindow(object param)
         {
-            ShuttingDown = true;
-        }
+            var windowObj = param as Window;
 
-        /*
-        private void SaveFile()
-        {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.FileName = "Results";
-            saveFileDialog1.Filter = "Excel file (*.xlsx)|*.xlsx|All files (*.*)|*.*";
-
-            if (saveFileDialog1.ShowDialog() == true)
+            if (windowObj != null)
             {
-                try
-                {
-                    OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("We weren't able to save.  Is the target file open or in use?");
-                    Console.WriteLine(e.ToString());
-                }
+                windowObj.Close();
             }
         }
-        */
 
         private void SaveFile()
         {
