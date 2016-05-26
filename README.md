@@ -16,7 +16,7 @@ The Small N Stats Demand Calculator uses a number of open source projects to wor
 * R Statistical Package - GPL v2 Licensed. Copyright (C) 2000-16. The R Core Team [Site](https://www.r-project.org/)
 * RdotNet: Interface for the R Statistical Package - New BSD License (BSD 2-Clause). Copyright(c) 2010, RecycleBin. All rights reserved [Github](https://github.com/jmp75/rdotnet)
 * RdotNet/Dynamic Interop - MIT Licensed. Copyright (c) 2015 Jean-Michel Perraud, Copyright (c) 2014 Daniel Collins, CSIRO, Copyright (c) 2013 Kosei, evolvedmicrobe. [Github](https://github.com/jmp75/dynamic-interop-dll)
-* ClosedXML - MIT Licensed. Copyright (c) 2010 Manuel De Leon. [Codeplex](http://closedxml.codeplex.com/SourceControl/latest)
+* EPPlus - LGPL Licensed. Copyright (c) 2016 Jan Källman. [Codeplex](http://epplus.codeplex.com/)
 
 ### Referenced Works (R packages/scripts)
 * nlmrt R Package - GPLv2 Licensed. Copyright (C) 2016. John C. Nash
