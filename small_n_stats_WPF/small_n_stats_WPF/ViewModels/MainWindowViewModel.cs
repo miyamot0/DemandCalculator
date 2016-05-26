@@ -72,9 +72,9 @@
 
 */
 
-using ClosedXML.Excel;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
+using OfficeOpenXml;
 using RDotNet;
 using small_n_stats_WPF.Utilities;
 using small_n_stats_WPF.Views;
@@ -900,15 +900,15 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     if (mExt.Equals(".xlsx"))
                     {
+                        FileInfo existingFile = new FileInfo(openFileDialog1.FileName);
 
-                        using (var wb = new XLWorkbook(@openFileDialog1.FileName))
+                        using (ExcelPackage package = new ExcelPackage(existingFile))
                         {
-
-                            var wsMult = wb.Worksheets;
+                            var wsMult = package.Workbook.Worksheets;
 
                             List<string> workSheets = new List<string>();
 
-                            foreach (IXLWorksheet sheetPeek in wsMult)
+                            foreach (ExcelWorksheet sheetPeek in wsMult)
                             {
                                 workSheets.Add(sheetPeek.Name);
                             }
@@ -936,40 +936,43 @@ namespace small_n_stats_WPF.ViewModels
                                 return;
                             }
 
-                            var ws = wb.Worksheet(output);
+                            var ws = package.Workbook.Worksheets[sheetWindow.MessageOptions.SelectedIndex + 1];
 
                             RowViewModels.Clear();
 
                             int currRows = 50;
 
                             ObservableCollection<RowViewModel> temp = new ObservableCollection<RowViewModel>();
-                            for (int i=0; i < currRows; i++)
+                            for (int i = 0; i < currRows; i++)
                             {
                                 temp.Add(new RowViewModel());
                             }
 
-                            var cellsUsed = ws.CellsUsed();
+                            var cellsUsed = ws.Cells;
 
                             foreach (var cell in cellsUsed)
                             {
-                                int col = cell.Address.ColumnNumber;
-                                int row = cell.Address.RowNumber;
+                                var colStr = DataGridTools.GetColumnIndex(new String(cell.Address.ToCharArray().Where(c => !Char.IsDigit(c)).ToArray()));
+                                var rowStr = int.Parse(new String(cell.Address.ToCharArray().Where(c => Char.IsDigit(c)).ToArray()));
 
-                                if (row >= currRows)
+                                if (rowStr >= currRows)
                                 {
-                                    while (currRows < row )
+                                    while (currRows < rowStr)
                                     {
                                         temp.Add(new RowViewModel());
                                         currRows++;
                                     }
                                 }
 
-                                if (col-1 >= ColSpans)
+                                if (colStr - 1 >= ColSpans)
                                 {
                                     continue;
                                 }
 
-                                temp[row-1].values[col-1] = cell.Value.ToString();
+                                if (cell.Text.Length > 0)
+                                {
+                                    temp[rowStr - 1].values[colStr] = cell.Text;
+                                }
                             }
 
                             RowViewModels = new ObservableCollection<RowViewModel>(temp);
@@ -977,7 +980,6 @@ namespace small_n_stats_WPF.ViewModels
                             UpdateTitle(openFileDialog1.SafeFileName);
                             haveFileLoaded = true;
                         }
-
                     }
                     else if (mExt.Equals(".csv"))
                     {
@@ -1001,7 +1003,7 @@ namespace small_n_stats_WPF.ViewModels
 
                             }
 
-                            workingSheet = "Demand Analysis Calculations";
+                            workingSheet = "Model Selector";
 
                             UpdateTitle(openFileDialog1.SafeFileName);
                             haveFileLoaded = true;
@@ -1049,15 +1051,15 @@ namespace small_n_stats_WPF.ViewModels
             {
                 if (mExt.Equals(".xlsx"))
                 {
+                    FileInfo existingFile = new FileInfo(filePath);
 
-                    using (var wb = new XLWorkbook(@filePath))
+                    using (ExcelPackage package = new ExcelPackage(existingFile))
                     {
-
-                        var wsMult = wb.Worksheets;
+                        var wsMult = package.Workbook.Worksheets;
 
                         List<string> workSheets = new List<string>();
 
-                        foreach (IXLWorksheet sheetPeek in wsMult)
+                        foreach (ExcelWorksheet sheetPeek in wsMult)
                         {
                             workSheets.Add(sheetPeek.Name);
                         }
@@ -1085,7 +1087,7 @@ namespace small_n_stats_WPF.ViewModels
                             return;
                         }
 
-                        var ws = wb.Worksheet(output);
+                        var ws = package.Workbook.Worksheets[sheetWindow.MessageOptions.SelectedIndex + 1];
 
                         RowViewModels.Clear();
 
@@ -1097,36 +1099,39 @@ namespace small_n_stats_WPF.ViewModels
                             temp.Add(new RowViewModel());
                         }
 
-                        var cellsUsed = ws.CellsUsed();
+                        var cellsUsed = ws.Cells;
 
                         foreach (var cell in cellsUsed)
                         {
-                            int col = cell.Address.ColumnNumber;
-                            int row = cell.Address.RowNumber;
+                            var colStr = DataGridTools.GetColumnIndex(new String(cell.Address.ToCharArray().Where(c => !Char.IsDigit(c)).ToArray()));
+                            var rowStr = int.Parse(new String(cell.Address.ToCharArray().Where(c => Char.IsDigit(c)).ToArray()));
 
-                            if (row >= currRows)
+                            if (rowStr >= currRows)
                             {
-                                while (currRows < row)
+                                while (currRows < rowStr)
                                 {
                                     temp.Add(new RowViewModel());
                                     currRows++;
                                 }
                             }
 
-                            if (col - 1 >= ColSpans)
+                            if (colStr - 1 >= ColSpans)
                             {
                                 continue;
                             }
 
-                            temp[row - 1].values[col - 1] = cell.Value.ToString();
+                            if (cell.Text.Length > 0)
+                            {
+                                temp[rowStr - 1].values[colStr] = cell.Text;
+                            }
+
                         }
 
                         RowViewModels = new ObservableCollection<RowViewModel>(temp);
 
-                        UpdateTitle(Path.GetFileName(@filePath));
+                        UpdateTitle(existingFile.Name);
                         haveFileLoaded = true;
                     }
-
                 }
                 else if (mExt.Equals(".csv"))
                 {

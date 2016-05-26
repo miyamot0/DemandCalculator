@@ -17,31 +17,30 @@
 
     ============================================================================
 
-    ClosedXML is distributed under this license:
+    EPPlus is distributed under this license:
 
-    Copyright (c) 2010 Manuel De Leon
+    Copyright (c) 2016 Jan Källman
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy of 
-    this software and associated documentation files (the "Software"), to deal in the 
-    Software without restriction, including without limitation the rights to use, 
-    copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
-    Software, and to permit persons to whom the Software is furnished to do so, 
-    subject to the following conditions:
+    EPPlus is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Library General Public License as published by
+    the Free Software Foundation.
 
-    The above copyright notice and this permission notice shall be included in all 
-    copies or substantial portions of the Software.
+    EPPlus is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
-    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
-    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    You should have received a copy of the GNU Library General Public License
+    along with EPPlus.  If not, see <http://epplus.codeplex.com/license>.
+
+    This file uses EPP to leverage interactions with OOXML documents
 */
 
+using OfficeOpenXml;
 using small_n_stats_WPF.ViewModels;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ClosedXML.Excel;
 using System.IO;
 
 namespace small_n_stats_WPF.Utilities
@@ -87,33 +86,53 @@ namespace small_n_stats_WPF.Utilities
         /// </summary>
         public static void ExportToExcel(ObservableCollection<RowViewModel> rowCollection, string filePath)
         {
-            XLWorkbook wb;
-
-            if (File.Exists(filePath))
+            FileInfo newFile = new FileInfo(filePath);
+            if (newFile.Exists)
             {
-                wb = new XLWorkbook(@filePath);
-            }
-            else
-            {
-                wb = new XLWorkbook();
+                newFile.Delete();
+                newFile = new FileInfo(filePath);
             }
 
-            IXLWorksheet ws;
-
-            if (!wb.TryGetWorksheet("Demand Analysis Calculations", out ws))
+            using (ExcelPackage package = new ExcelPackage(newFile))
             {
-                ws = wb.AddWorksheet("Demand Analysis Calculations");
-            }
+                var wsMult = package.Workbook.Worksheets;
 
-            for (int i = 0; i < rowCollection.Count; i++)
-            {
-                for (int j = 0; j < 100; j++)
+                List<string> workSheets = new List<string>();
+
+                foreach (ExcelWorksheet sheetPeek in wsMult)
                 {
-                    ws.Cell(i + 1, j + 1).Value = rowCollection[i].values[j].ToString();
+                    workSheets.Add(sheetPeek.Name);
                 }
-            }
 
-            wb.SaveAs(filePath);
+                string[] workSheetsArray = workSheets.ToArray();
+
+                int position = Array.IndexOf(workSheetsArray, "Model Selector");
+
+                ExcelWorksheet ws;
+
+                if (position > -1)
+                {
+                    ws = package.Workbook.Worksheets[position + 1];
+                }
+                else
+                {
+                    ws = package.Workbook.Worksheets.Add("Model Selector");
+                }
+
+                for (int i = 0; i < rowCollection.Count; i++)
+                {
+                    for (int j = 0; j < 100; j++)
+                    {
+                        //                        ws.Cells[i + 1, j + 1].Style.
+                        ws.Cells[i + 1, j + 1].Value = rowCollection[i].values[j];
+                        //Console.WriteLine("Row: {0} Column: {1} Value: {2}", i, j, rowCollection[i].values[j].ToString());
+                    }
+                }
+
+                package.Compression = CompressionLevel.Default;
+                package.Save();
+
+            }
         }
 
         /// <summary>
@@ -130,33 +149,50 @@ namespace small_n_stats_WPF.Utilities
         /// </summary>
         public static void ExportToExcel(ObservableCollection<RowViewModel> rowCollection, string filePath, string worksheetName)
         {
-            XLWorkbook wb;
-
-            if (File.Exists(filePath))
+            FileInfo newFile = new FileInfo(filePath);
+            if (newFile.Exists)
             {
-                wb = new XLWorkbook(@filePath);
-            }
-            else
-            {
-                wb = new XLWorkbook();
+                newFile.Delete();
+                newFile = new FileInfo(filePath);
             }
 
-            IXLWorksheet ws;
-
-            if(!wb.TryGetWorksheet(worksheetName, out ws))
+            using (ExcelPackage package = new ExcelPackage(newFile))
             {
-                ws = wb.AddWorksheet("Demand Analysis Calculations");
-            }
+                var wsMult = package.Workbook.Worksheets;
 
-            for (int i = 0; i < rowCollection.Count; i++)
-            {
-                for (int j = 0; j < 100; j++)
+                List<string> workSheets = new List<string>();
+
+                foreach (ExcelWorksheet sheetPeek in wsMult)
                 {
-                    ws.Cell(i + 1, j + 1).Value = rowCollection[i].values[j].ToString();
+                    workSheets.Add(sheetPeek.Name);
                 }
-            }
 
-            wb.SaveAs(filePath);
+                string[] workSheetsArray = workSheets.ToArray();
+
+                int position = Array.IndexOf(workSheetsArray, worksheetName);
+
+                ExcelWorksheet ws;
+
+                if (position > -1)
+                {
+                    ws = package.Workbook.Worksheets[position + 1];
+                }
+                else
+                {
+                    ws = package.Workbook.Worksheets.Add(worksheetName);
+                }
+
+                for (int i = 0; i < rowCollection.Count; i++)
+                {
+                    for (int j = 0; j < 100; j++)
+                    {
+                        ws.Cells[i + 1, j + 1].Value = rowCollection[i].values[j].ToString();
+                    }
+                }
+
+                package.Save();
+
+            }
         }
     }
 }
