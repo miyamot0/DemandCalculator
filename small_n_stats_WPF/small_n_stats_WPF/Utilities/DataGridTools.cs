@@ -56,6 +56,7 @@ namespace small_n_stats_WPF.Utilities
         /// </summary>
         public static int GetColumnIndex(string location)
         {
+            location = location.ToUpper();
             return ((location.Length - 1) * 26) + letters.IndexOf(location[location.Length - 1]);
         }
 
