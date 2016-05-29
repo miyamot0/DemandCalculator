@@ -9,12 +9,6 @@
         mc:Ignorable="d"
         Title="Batch Demand Curve Fitting" 
         Height="525"
-        Top="{Binding Source={x:Static settings:Settings.Default}, 
-                Path=DemandTop, 
-                Mode=TwoWay}" 
-        Left="{Binding Source={x:Static settings:Settings.Default}, 
-                Path=DemandLeft, 
-                Mode=TwoWay}"
         Width="425">
 
     <i:Interaction.Triggers>

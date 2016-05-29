@@ -26,12 +26,6 @@
          mc:Ignorable="d"
          Height="450" 
          Width="425"
-         Top="{Binding Source={x:Static settings:Settings.Default}, 
-                Path=DemandTop, 
-                Mode=TwoWay}" 
-         Left="{Binding Source={x:Static settings:Settings.Default}, 
-                Path=DemandLeft, 
-                Mode=TwoWay}"
          xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
          Title="Demand Curve Module">
 
