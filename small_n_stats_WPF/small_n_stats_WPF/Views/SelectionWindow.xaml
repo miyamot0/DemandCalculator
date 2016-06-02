@@ -30,17 +30,17 @@
     <StackPanel VerticalAlignment="Bottom"                     
                 Margin="5">
 
-        <ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Disabled">
         <TextBlock x:Name="MessageLabel" 
                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                   ScrollViewer.VerticalScrollBarVisibility="Auto"
+                   ScrollViewer.VerticalScrollBarVisibility="Disabled"
                    Text="blah"
                    Margin="5"/>
         </ScrollViewer>
         <ComboBox  x:Name="MessageOptions"
                    Margin="5"/>
 
-        <Button Content="Save"
+        <Button Content="Continue"
                 Margin="5" 
                 HorizontalAlignment="Stretch"
                 Click="Button_Click" />
