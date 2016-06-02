@@ -24,6 +24,7 @@
         xmlns:local="clr-namespace:small_n_stats_WPF.Views"
         mc:Ignorable="d"
         Title="Choice Prompt" 
+        ResizeMode="NoResize"
         Height="150" 
         Width="350">
     <StackPanel VerticalAlignment="Bottom"                     

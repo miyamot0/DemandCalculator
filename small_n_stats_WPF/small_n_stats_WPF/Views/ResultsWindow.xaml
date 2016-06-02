@@ -25,8 +25,8 @@
         xmlns:custom="clr-namespace:small_n_stats_WPF.Utilities"
         mc:Ignorable="d"
         Title="ResultsWindow" 
-        Height="400" 
-        Width="400">
+        Height="600" 
+        Width="600">
 
     <Grid>
         <Grid.RowDefinitions>

@@ -10,6 +10,7 @@
         Closing="Window_Closing"
         WindowStartupLocation="CenterOwner"
         Title="Batch Demand Curve Fitting" 
+        ResizeMode="NoResize"
         Height="525"
         Width="425">
 

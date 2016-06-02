@@ -23,6 +23,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:small_n_stats_WPF.Views"
         mc:Ignorable="d"
+        ResizeMode="NoResize"
         Title="Range Prompt" 
         Height="150" 
         Width="300">
