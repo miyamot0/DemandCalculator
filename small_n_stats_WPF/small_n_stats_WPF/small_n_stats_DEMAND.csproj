@@ -142,6 +142,9 @@
     <Compile Include="Views\CheckWindow.xaml.cs">
       <DependentUpon>CheckWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ImageWindow.xaml.cs">
+      <DependentUpon>ImageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProgressDialog.xaml.cs">
       <DependentUpon>ProgressDialog.xaml</DependentUpon>
     </Compile>
@@ -219,6 +222,8 @@
     <None Include="Resources\ExponentiatedDemandFunctionsKFitted.txt" />
     <None Include="Resources\ExponentialDemandFunctionsKSet.txt" />
     <None Include="Resources\ExponentiatedDemandFunctionKSet.txt" />
+    <None Include="Resources\License_base64enc.txt" />
+    <None Include="Resources\License_EPPlus.txt" />
     <Content Include="Source\DemandCalculator-93a1ad5831559d04a3fcc2ed6402fe97ea3400b5.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -227,6 +232,10 @@
     <Page Include="Views\CheckWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ImageWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ProgressDialog.xaml">
       <SubType>Designer</SubType>
@@ -291,19 +300,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="SNS.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\application-exit.png" />
-    <Resource Include="Images\applications-other.png" />
-    <Resource Include="Images\applications-science.png" />
-    <Resource Include="Images\document-new.png" />
-    <Resource Include="Images\document-open.png" />
-    <Resource Include="Images\document-save-as.png" />
-    <Resource Include="Images\document-save.png" />
-    <Resource Include="Images\edit-clear.png" />
-    <Resource Include="Images\edit-copy.png" />
-    <Resource Include="Images\text-x-preview.png" />
-    <Resource Include="Images\x-office-address-book.png" />
   </ItemGroup>
   <ItemGroup>
     <PublishFile Include="Source\small-n-stats-WPF-master-e73fd4c3a57571d634ae08c83f588852883873d9.zip">

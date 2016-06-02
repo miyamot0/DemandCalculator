@@ -17,6 +17,7 @@
 
 */
 
+using small_n_stats_WPF.ViewModels;
 using System.Windows;
 
 namespace small_n_stats_WPF.Views
@@ -29,6 +30,32 @@ namespace small_n_stats_WPF.Views
         public BatchDemandCurveWindow()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var viewModel = (BatchDemandCurveExponentialViewModel)DataContext;
+
+            if (viewModel.ViewLoadedCommand.CanExecute(null))
+                viewModel.ViewLoadedCommand.Execute(null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var viewModel = (BatchDemandCurveExponentialViewModel)DataContext;
+
+            if (viewModel.ViewClosingCommand.CanExecute(null))
+                viewModel.ViewClosingCommand.Execute(null);
         }
     }
 }

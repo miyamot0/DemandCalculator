@@ -4,21 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:small_n_stats_WPF.Views"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        WindowStartupLocation="CenterOwner"
         Title="Batch Demand Curve Fitting" 
         Height="525"
         Width="425">
-
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding ViewLoadedCommand}"/>
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Closing">
-            <i:InvokeCommandAction Command="{Binding ViewClosingCommand}"/>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
 
     <Window.Style>
         <Style TargetType="Window">
@@ -174,19 +167,8 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left"
                     Style="{DynamicResource unlockingKey}"
-                    Content="">
-
-
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Checked">
-                            <i:InvokeCommandAction Command="{Binding Path=AdvancedSettings}"/>
-                        </i:EventTrigger>
-                        <i:EventTrigger EventName="Unchecked">
-                            <i:InvokeCommandAction Command="{Binding Path=AdvancedSettings}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-
-
+                    Content=""
+                    IsChecked="{Binding Path=AdvancedMenu, Mode=TwoWay}">
                 </CheckBox>
             </StackPanel>
 

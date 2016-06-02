@@ -336,41 +336,6 @@ OF SUCH DAMAGE.
 
 ============================================================================
 
-Gnome Icon Theme is distributed under this license:
-
-Copyright © 2003-2016 The GNOME Project
-
-Ulisse Perusin <uli.peru@gmail.com>
-Riccardo Buzzotta <raozuzu@yahoo.it>
-Josef Vybíral <cornelius@vybiral.info>
-Hylke Bons <h.bons@gmail.com>
-Ricardo González <rick@jinlabs.com>
-Lapo Calamandrei <calamandrei@gmail.com>
-Rodney Dawes <dobey@novell.com>
-Luca Ferretti <elle.uca@libero.it>
-Tuomas Kuosmanen <tigert@gimp.org>
-Andreas Nilsson <nisses.mail@home.se>
-Jakub Steiner <jimmac@novell.com>
-
-Some external 3D Assets used:
-Geraldo Cockerhan - http://www.blendswap.com/blends/view/40495 CCBYSA
-
-All rights reserved.
-
-Gnome Icon Theme is free software: you can redistribute it and/or modify it 
-under the terms of the GNU General Lesser Public License as published by the 
-Free Software Foundation, version 3.
-
-Gnome Icon Theme is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General
-Public License for more details.
-
-You should have received a copy of the GNU General Lesser Public License along
-with Gnome Icon Theme. If not, see <http://www.gnu.org/licenses/>.
-
-============================================================================
-
 nlmrt (R Package) is distributed under this license:
 
 Copyright (C) 2016. John C. Nash
@@ -450,26 +415,39 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 ============================================================================
 
-ClosedXML is distributed under this license:
+EPPlus is distributed under this license:
 
-Copyright (c) 2010 Manuel De Leon
+Copyright (c) 2016 Jan K�llman 
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of 
-this software and associated documentation files (the "Software"), to deal in the 
-Software without restriction, including without limitation the rights to use, 
-copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
-Software, and to permit persons to whom the Software is furnished to do so, 
-subject to the following conditions:
+EPPlus is free software: you can redistribute it and/or modify it 
+under the terms of the GNU General Public License as published by the 
+Free Software Foundation, version 2.
 
-The above copyright notice and this permission notice shall be included in all 
-copies or substantial portions of the Software.
+EPPlus is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+You should have received a copy of the GNU General Public License along
+with EPPlus. If not, see <http://www.gnu.org/licenses/>.
+
+============================================================================
+
+base64enc (R Package) is distributed under this license:
+
+Copyright (C) 2015 Simon Urbanek
+
+base64enc is free software: you can redistribute it and/or modify it 
+under the terms of the GNU General Public License as published by the 
+Free Software Foundation, version 2.
+
+base64enc is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with base64enc. If not, see <http://www.gnu.org/licenses/>.
 
 ================================================================================
  

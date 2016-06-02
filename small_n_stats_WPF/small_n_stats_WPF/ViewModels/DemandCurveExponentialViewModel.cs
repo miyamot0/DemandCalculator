@@ -54,11 +54,13 @@ using small_n_stats_WPF.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace small_n_stats_WPF.ViewModels
 {
@@ -151,6 +153,15 @@ namespace small_n_stats_WPF.ViewModels
         REngine engine;
 
         private bool outputFigures = false;
+        public bool OutputFigures
+        {
+            get { return outputFigures; }
+            set
+            {
+                outputFigures = value;
+                OnPropertyChanged("OutputFigures");
+            }
+        }
 
         bool failed;
 
@@ -719,7 +730,6 @@ namespace small_n_stats_WPF.ViewModels
             winHack.Owner = windowRef;
             winHack.Width = 650;
             winHack.Height = 400;
-            winHack.Topmost = true;
 
             if (winHack.ShowDialog() == true)
             {
@@ -1053,20 +1063,74 @@ namespace small_n_stats_WPF.ViewModels
                 mVM.RowViewModels[8].values[0] = "X Behavior: " + Decisions.GetXBehaviorDescription(xBehavior);
                 mVM.RowViewModels[9].values[0] = "K Behavior: " + Decisions.GetKBehaviorDescription(kBehavior);
 
+
+                mWin.Owner = mWindow;
                 mWin.Show();
 
                 if (outputFigures)
                 {
                     try
                     {
+                        engine.Evaluate("library(ggplot2)");
+                        engine.Evaluate("library(reshape2)");
+                        engine.Evaluate("library(gridExtra)");
+
+                        if (kBehavior == KValueDecisions.FitK)
+                        {
+                            engine.Evaluate("fittedKBool <- TRUE");
+                            engine.Evaluate("textOmax <- '\n Derived oMax'");
+                            engine.Evaluate("textPmax <- '\n Derived pMax'");
+                            engine.Evaluate("graphingOmax <- fitFrame[fitFrame$p==1,]$OmaxD");
+                            engine.Evaluate("graphingPmax <- fitFrame[fitFrame$p==1,]$PmaxD");
+                        }
+                        else
+                        {
+                            engine.Evaluate("fittedKBool <- FALSE");
+                            engine.Evaluate("textOmax <- '\n Empirical oMax'");
+                            engine.Evaluate("textPmax <- '\n Empirical pMax'");
+                            engine.Evaluate("graphingOmax <- fitFrame[fitFrame$p==1,]$OmaxE");
+                            engine.Evaluate("graphingPmax <- fitFrame[fitFrame$p==1,]$PmaxE");
+                        }
+
                         if (modelArraySelection == "Exponential")
                         {
                             engine.Evaluate(DemandFunctionSolvers.GetExponentialGraphingFunction());
+
                         }
                         else if (modelArraySelection == "Exponentiated")
                         {
                             engine.Evaluate(DemandFunctionSolvers.GetExponentiatedGraphingFunction());
                         }
+
+                        string output = engine.Evaluate("demandString").AsVector().First().ToString();
+
+                        byte[] bytes = Convert.FromBase64String(output);
+
+                        BitmapImage bi = new BitmapImage();
+                        bi.BeginInit();
+                        bi.StreamSource = new MemoryStream(bytes);
+                        bi.EndInit();
+
+                        var iWindow = new ImageWindow();
+                        iWindow.imageHolder.Source = bi;
+                        iWindow.images = bi;
+                        iWindow.Owner = mWindow;
+                        iWindow.Show();
+
+                        string output2 = engine.Evaluate("workString").AsVector().First().ToString();
+
+                        byte[] bytes2 = Convert.FromBase64String(output2);
+
+                        BitmapImage bi2 = new BitmapImage();
+                        bi2.BeginInit();
+                        bi2.StreamSource = new MemoryStream(bytes2);
+                        bi2.EndInit();
+
+                        var iWindow2 = new ImageWindow();
+                        iWindow2.imageHolder.Source = bi2;
+                        iWindow2.images = bi2;
+                        iWindow.Owner = mWindow;
+                        iWindow2.Show();
                     }
                     catch (Exception e)
                     {

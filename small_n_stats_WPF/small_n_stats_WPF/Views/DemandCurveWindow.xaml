@@ -26,20 +26,12 @@
          mc:Ignorable="d"
          Height="450" 
          Width="425"
-         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+         Loaded="Window_Loaded"
+         Closing="Window_Closing"
+         WindowStartupLocation="CenterOwner"
          Title="Demand Curve Module">
 
-         <i:Interaction.Triggers>
-             <i:EventTrigger EventName="Loaded">
-                 <i:InvokeCommandAction Command="{Binding ViewLoadedCommand}"/>
-             </i:EventTrigger>
-            
-             <i:EventTrigger EventName="Closing">
-                 <i:InvokeCommandAction Command="{Binding ViewClosingCommand}"/>
-             </i:EventTrigger>
-         </i:Interaction.Triggers>
-
-         <Window.Style>
+        <Window.Style>
              <Style TargetType="Window">
                  <Style.Triggers>
                      <DataTrigger Binding="{Binding AdvancedMenu}"  Value="True">
@@ -164,16 +156,8 @@
                                   Margin="5,0,0,0"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Left"
-                                  Content="">
-                                      <i:Interaction.Triggers>
-                                          <i:EventTrigger EventName="Checked">
-                                              <i:InvokeCommandAction Command="{Binding Path=FigureOutput}"/>
-                                          </i:EventTrigger>
-                                          
-                                          <i:EventTrigger EventName="Unchecked">
-                                              <i:InvokeCommandAction Command="{Binding Path=FigureOutput}"/>
-                                          </i:EventTrigger>
-                                      </i:Interaction.Triggers>
+                                  Content=""
+                                  IsChecked="{Binding Path=OutputFigures, Mode=TwoWay}">
                         </CheckBox>
             </StackPanel>
 
@@ -193,17 +177,8 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Style="{DynamicResource unlockingKey}"
-                            Content="">
-
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Checked">
-                                <i:InvokeCommandAction Command="{Binding Path=AdvancedSettings}"/>                            
-                            </i:EventTrigger>
-
-                            <i:EventTrigger EventName="Unchecked">
-                                <i:InvokeCommandAction Command="{Binding Path=AdvancedSettings}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
+                            Content=""
+                            IsChecked="{Binding Path=AdvancedMenu, Mode=TwoWay}">
                 </CheckBox>
             </StackPanel>
             

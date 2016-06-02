@@ -65,7 +65,6 @@ namespace small_n_stats_WPF.ViewModels
     class BatchDemandCurveExponentialViewModel : BaseViewModel
     {
         public MainWindow mWindow { get; set; }
-        public MainWindowViewModel mViewModel { get; set; }
         public BatchDemandCurveWindow windowRef { get; set; }
         
         private bool runExponential = false;
@@ -675,13 +674,18 @@ namespace small_n_stats_WPF.ViewModels
         {
             if (startCol == -1 || startRow == -1) return null;
 
+            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+
+            if (itemSource == null)
+                return null;
+
             List<double> mRange = new List<double>();
 
             double test;
 
             for (int i = startCol; i <= endCol; i++)
             {
-                string mRowItem = mViewModel.RowViewModels[startRow].values[i];
+                string mRowItem = itemSource[startRow].values[i];
 
                 if (!Double.TryParse(mRowItem, out test))
                 {
@@ -708,11 +712,16 @@ namespace small_n_stats_WPF.ViewModels
                 return null;
             }
 
+            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+
+            if (itemSource == null)
+                return null;
+
             double test;
 
             for (int i = startRow; i <= endRow; i++)
             {
-                string mRowItemCell = mViewModel.RowViewModels[i].values[col];
+                string mRowItemCell = itemSource[i].values[col];
 
                 if (!Double.TryParse(mRowItemCell, out test))
                 {
@@ -737,6 +746,11 @@ namespace small_n_stats_WPF.ViewModels
         {
             string[,] mDouble = null;
 
+            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+
+            if (itemSource == null)
+                return null;
+
             double tempHolder;
             List<double> tempHolderList = new List<double>();
 
@@ -752,7 +766,7 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     for (int j = lowColValue; j <= highColValue; j++)
                     {
-                        string mRowItem = mViewModel.RowViewModels[i].values[j];
+                        string mRowItem = itemSource[i].values[j];
                         mDouble[j - lowColValue, i - lowRowValue] = mRowItem;
 
                         if (double.TryParse(mRowItem, out tempHolder))
@@ -1027,7 +1041,6 @@ namespace small_n_stats_WPF.ViewModels
             winHack.Owner = windowRef;
             winHack.Width = 650;
             winHack.Height = 400;
-            winHack.Topmost = true;
 
             if (winHack.ShowDialog() == true)
             {
@@ -1627,7 +1640,6 @@ namespace small_n_stats_WPF.ViewModels
                         else
                         {
                             engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunctionKSet());
-                            //engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunction());
                         }
                     }
                     else if (modelArraySelection == "Exponentiated")
@@ -1645,7 +1657,6 @@ namespace small_n_stats_WPF.ViewModels
                         else
                         {
                             engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunctionKSet());
-                            //engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunction());
                         }
 
                     }
@@ -1758,6 +1769,16 @@ namespace small_n_stats_WPF.ViewModels
                             if (row["q0"].ToString() != "True")
                             {
                                 mVM.RowViewModels[rowNumber].values[0] = "Series #" + row["p"].ToString();
+
+                                if (kBehavior == KValueDecisions.FitK)
+                                {
+                                    mVM.RowViewModels[rowNumber].values[1] = row["k"].ToString();
+                                }
+                                else
+                                {
+                                    mVM.RowViewModels[rowNumber].values[1] = kRange.Min().ToString();
+                                }
+
                                 mVM.RowViewModels[rowNumber].values[1] = row["k"].ToString();
                                 mVM.RowViewModels[rowNumber].values[2] = row["q0"].ToString();
                                 mVM.RowViewModels[rowNumber].values[3] = row["alpha"].ToString();
@@ -2009,35 +2030,18 @@ namespace small_n_stats_WPF.ViewModels
                         #endregion 
                     }
 
-                    /*
-
-                    #region GraphingCalls
-
-                    if (modelArraySelection == "Exponential")
-                    {
-                        engine.Evaluate(DemandFunctionSolvers.GetExponentialGraphingFunction());
-                    }
-                    else if (modelArraySelection == "Exponentiated")
-                    {
-                        engine.Evaluate(DemandFunctionSolvers.GetExponentiatedGraphingFunction());
-                    }
-
-                    #endregion
-
-                    */
                 }
                 catch (ParseException pe)
                 {
                     Console.WriteLine(pe.ToString());
                 }
 
-                mWindow.OutputEvents("Group computations Completed!");
-
                 #endregion
 
             }
 
             mWindow.OutputEvents("Final Calculations Completed!");
+            mWin.Owner = mWindow;
             mWin.Show();
         }
     }

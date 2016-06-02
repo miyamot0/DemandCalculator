@@ -18,6 +18,7 @@
 */
 
 using Microsoft.Win32;
+using small_n_stats_WPF.ViewModels;
 using System.IO;
 using System.Windows;
 using System.Windows.Documents;
@@ -71,6 +72,32 @@ namespace small_n_stats_WPF.Views
         public void ClearLogs()
         {
             outputWindow.Document.Blocks.Clear();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var viewModel = (MainWindowViewModel) DataContext;
+
+            if (viewModel.ViewLoadedCommand.CanExecute(null))
+                viewModel.ViewLoadedCommand.Execute(null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var viewModel = (MainWindowViewModel) DataContext;
+
+            if (viewModel.ViewClosingCommand.CanExecute(null))
+                viewModel.ViewClosingCommand.Execute(null);
         }
     }
 }

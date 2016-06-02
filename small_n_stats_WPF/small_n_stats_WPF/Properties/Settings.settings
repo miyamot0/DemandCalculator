@@ -8,60 +8,6 @@
     <Setting Name="MainWidth" Type="System.Double" Scope="User">
       <Value Profile="(Default)">400</Value>
     </Setting>
-    <Setting Name="MainTop" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="MainLeft" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="OmnibusTauTop" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="OmnibusTauLeft" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="NonOverlapTop" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="NonOverlapLeft" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="NapTop" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="NapLeft" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="SenTop" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="SenLeft" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="BatchDiscountTop" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="BatchDiscountLeft" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="EscalationTop" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="EscalationLeft" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="DiscountTop" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="DiscountLeft" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="DemandTop" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
-    <Setting Name="DemandLeft" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
     <Setting Name="RecentFiles" Type="System.String" Scope="User">
       <Value Profile="(Default)">
                 </Value>

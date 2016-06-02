@@ -148,12 +148,13 @@ namespace small_n_stats_WPF.ViewModels
 
         REngine engine;
 
-        public RelayCommand GnomeIconLicenseWindowCommand { get; set; }
         public RelayCommand RDotNetLicenseWindowCommand { get; set; }
         public RelayCommand Ggplot2LicenseWindowCommand { get; set; }
         public RelayCommand NlmrtLicenseWindowCommand { get; set; }
         public RelayCommand NlstoolsLicenseWindowCommand { get; set; }
         public RelayCommand RLicenseWindowCommand { get; set; }
+        public RelayCommand BaseEncodeLicenseWindowCommand { get; set; }
+        public RelayCommand EPPLicenseWindowCommand { get; set; }
         public RelayCommand BeezdemandLicenseWindowCommand { get; set; }
         public RelayCommand LicenseWindowCommand { get; set; }
 
@@ -255,19 +256,22 @@ namespace small_n_stats_WPF.ViewModels
             #endregion
 
             #region LicenseCommands
-
-            GnomeIconLicenseWindowCommand = new RelayCommand(param => GnomeIconLicenseInformationWindow(), param => true);
+            
             RDotNetLicenseWindowCommand = new RelayCommand(param => RdotNetLicenseInformationWindow(), param => true);
             Ggplot2LicenseWindowCommand = new RelayCommand(param => Ggplot2LicenseInformationWindow(), param => true);
             NlmrtLicenseWindowCommand = new RelayCommand(param => NlmrtLicenseInformationWindow(), param => true);
             NlstoolsLicenseWindowCommand = new RelayCommand(param => NlsToolsLicenseInformationWindow(), param => true);
             RLicenseWindowCommand = new RelayCommand(param => RLicenseInformationWindow(), param => true);
+
+            BaseEncodeLicenseWindowCommand = new RelayCommand(param => BaseEncodeLicenseInformationWindow(), param => true);
+            EPPLicenseWindowCommand = new RelayCommand(param => EPPLicenseWindow(), param => true);
+
             BeezdemandLicenseWindowCommand = new RelayCommand(param => BeezdemandLicenseInformationWindow(), param => true);
             LicenseWindowCommand = new RelayCommand(param => LicenseInformationWindow(), param => true);
 
-            #endregion
+        #endregion
 
-            RowViewModels = new ObservableCollection<RowViewModel>();
+        RowViewModels = new ObservableCollection<RowViewModel>();
 
             ObservableCollection<RowViewModel> temp = new ObservableCollection<RowViewModel>();
 
@@ -481,6 +485,7 @@ namespace small_n_stats_WPF.ViewModels
                     engine.Evaluate("if (!require(reshape2)) { install.packages('reshape2', repos = 'http://cran.us.r-project.org') }");
                     engine.Evaluate("if (!require(nlstools)) { install.packages('nlstools', repos = 'http://cran.us.r-project.org') }");
                     engine.Evaluate("if (!require(nlmrt)) { install.packages('nlmrt', repos = 'http://cran.us.r-project.org') }");
+                    engine.Evaluate("if (!require(base64enc)) { install.packages('base64enc', repos = 'http://cran.us.r-project.org') }");
 
                     SendMessageToOutput("All required packages have been found.  Ready to proceed.");
                 }
@@ -498,8 +503,8 @@ namespace small_n_stats_WPF.ViewModels
                 SendMessageToOutput("nlstools R Package - GPLv2 Licensed. Copyright(C) 2015 Florent Baty and Marie-Laure Delignette - Muller, with contributions from Sandrine Charles, Jean - Pierre Flandrois, and Christian Ritz.");
                 SendMessageToOutput("ggplot2 R Package - GPLv2 Licensed. Copyright (c) 2016, Hadley Wickham.");
                 SendMessageToOutput("reshape2 R Package - MIT Licensed. Copyright (c) 2014, Hadley Wickham.");
-                SendMessageToOutput("ClosedXML - MIT Licensed. Copyright (c) 2010 Manuel De Leon.");
-                SendMessageToOutput("Gnome Icon Set - GPLv2 Licensed.");
+                SendMessageToOutput("base64enc R Package - GPLv2+ Licensed. Copyright (c) 2015, Simon Urbanek.");
+                SendMessageToOutput("EPPlus - GPLv2 Licensed. Copyright (c) 2016 Jan Källman.");
                 SendMessageToOutput("RdotNet: Interface for the R Statistical Package - New BSD License (BSD 2-Clause). Copyright(c) 2010, RecycleBin. All rights reserved.");
                 SendMessageToOutput("beezdemand R Package - GPLv2 Licensed. Copyright (c) 2016, Brent Kaplan.");
                 SendMessageToOutput("");
@@ -523,20 +528,6 @@ namespace small_n_stats_WPF.ViewModels
         /// <summary>
         /// License window
         /// </summary>
-        private void GnomeIconLicenseInformationWindow()
-        {
-            var window = new License();
-            window.DataContext = new LicenseViewModel
-            {
-                licenseTitle = "License - Gnome Icons",
-                licenseText = Properties.Resources.License_GNOME_icons
-            };
-            window.Show();
-        }
-
-        /// <summary>
-        /// License window
-        /// </summary>
         private void RLicenseInformationWindow()
         {
             var window = new License();
@@ -545,6 +536,24 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - R Statistical Package",
                 licenseText = Properties.Resources.License_R
             };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Show();
+        }
+
+        /// <summary>
+        /// License window
+        /// </summary>
+        private void EPPLicenseWindow()
+        {
+            var window = new License();
+            window.DataContext = new LicenseViewModel
+            {
+                licenseTitle = "License (GPLv2) - EPPlus",
+                licenseText = Properties.Resources.License_EPPlus
+            };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
 
@@ -559,6 +568,8 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - nlstools",
                 licenseText = Properties.Resources.License_nlstools
             };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
 
@@ -573,6 +584,8 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - nlmrt",
                 licenseText = Properties.Resources.License_nlmrt
             };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
 
@@ -587,6 +600,24 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - ggplot2",
                 licenseText = Properties.Resources.License_ggplot2
             };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Show();
+        }
+
+        /// <summary>
+        /// License window
+        /// </summary>
+        private void BaseEncodeLicenseInformationWindow()
+        {
+            var window = new License();
+            window.DataContext = new LicenseViewModel
+            {
+                licenseTitle = "License (GPLv2+) - base64enc",
+                licenseText = Properties.Resources.License_base64enc
+            };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
 
@@ -601,6 +632,8 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - R.Net",
                 licenseText = Properties.Resources.License_RdotNet
             };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
 
@@ -615,6 +648,8 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - Beezdemand",
                 licenseText = Properties.Resources.License_Beezdemand
             };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
 
@@ -629,6 +664,8 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - Small n Stats",
                 licenseText = Properties.Resources.LICENSE
             };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
 
@@ -644,7 +681,6 @@ namespace small_n_stats_WPF.ViewModels
             var mWin = new DemandCurveWindow();
             mWin.Owner = MainWindow;
             mWin.windowTitle.Text = "Demand Curve Analysis";
-            mWin.Topmost = true;
             mWin.DataContext = new DemandCurveExponentialViewModel
             {
                 mWindow = MainWindow,
@@ -661,12 +697,10 @@ namespace small_n_stats_WPF.ViewModels
             var mWin = new BatchDemandCurveWindow();
             mWin.Owner = MainWindow;
             mWin.windowTitle.Text = "Batch Demand Curve Analysis";
-            mWin.Topmost = true;
             mWin.DataContext = new BatchDemandCurveExponentialViewModel
             {
                 mWindow = MainWindow,
-                windowRef = mWin,
-                mViewModel = this
+                windowRef = mWin
             };
             mWin.Show();
         }
@@ -679,7 +713,6 @@ namespace small_n_stats_WPF.ViewModels
             var mWin = new InformationWindow();
             mWin.Owner = MainWindow;
             mWin.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            mWin.Topmost = true;
             mWin.Show();
         }
 
