@@ -224,9 +224,7 @@
     <None Include="Resources\ExponentiatedDemandFunctionKSet.txt" />
     <None Include="Resources\License_base64enc.txt" />
     <None Include="Resources\License_EPPlus.txt" />
-    <Content Include="Source\DemandCalculator-93a1ad5831559d04a3fcc2ed6402fe97ea3400b5.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="Source\DemandCalculator-master.zip" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\CheckWindow.xaml">
