@@ -24,7 +24,6 @@
         xmlns:local="clr-namespace:small_n_stats_WPF.Views"
         xmlns:custom="clr-namespace:small_n_stats_WPF.Utilities"
         mc:Ignorable="d"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         Title="ResultsWindow" 
         Height="400" 
         Width="400">
