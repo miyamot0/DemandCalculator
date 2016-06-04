@@ -115,7 +115,7 @@
                 <MenuItem Header="_Information">
                     <MenuItem Header="_Licenses">
 
-                        <MenuItem Header="R Statistical Package (GPL 2)"
+                        <MenuItem Header="R Statistical Package (GPLv2)"
                                   Command="{Binding RLicenseWindowCommand}">
                         </MenuItem>
 
@@ -131,27 +131,27 @@
                                   Command="{Binding SharpVectorGraphicsLicenseWindowCommand}">
                         </MenuItem>
 
-                        <MenuItem Header="nlmrt R Package (GPL >= 2)"
+                        <MenuItem Header="nlmrt R Package (GPLv2)"
                                   Command="{Binding NlmrtLicenseWindowCommand}">
                         </MenuItem>
 
-                        <MenuItem Header="nlstools R Package (GPL >= 2)"
+                        <MenuItem Header="nlstools R Package (GPLv2)"
                                   Command="{Binding NlstoolsLicenseWindowCommand}">
                         </MenuItem>
 
-                        <MenuItem Header="base64enc R Package (GPL >= 2)"
+                        <MenuItem Header="base64enc R Package (GPLv2)"
                                   Command="{Binding BaseEncodeLicenseWindowCommand}">
                         </MenuItem>
 
-                        <MenuItem Header="ggplot2 R Package (GPL >= 2)"
+                        <MenuItem Header="ggplot2 R Package (GPLv2)"
                                   Command="{Binding Ggplot2LicenseWindowCommand}">
                         </MenuItem>
 
-                        <MenuItem Header="Beezdemand R Package (GPL 2)"
+                        <MenuItem Header="Beezdemand R Package (GPLv2)"
                                   Command="{Binding BeezdemandLicenseWindowCommand}">
                         </MenuItem>
 
-                        <MenuItem Header="Small n Stats (GPL 2)"
+                        <MenuItem Header="Small n Stats (GPLv2)"
                                   Command="{Binding LicenseWindowCommand}">
                         </MenuItem>
                     </MenuItem>
