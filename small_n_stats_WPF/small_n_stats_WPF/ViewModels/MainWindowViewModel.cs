@@ -438,7 +438,7 @@ namespace small_n_stats_WPF.ViewModels
             SendMessageToOutput("All view elements loaded");
             SendMessageToOutput("");
 
-            StreamReader licenseFile = new StreamReader(@"LICENSE.txt");
+            StringReader licenseFile = new StringReader(Properties.Resources.LICENSE);
 
             string line;
 
