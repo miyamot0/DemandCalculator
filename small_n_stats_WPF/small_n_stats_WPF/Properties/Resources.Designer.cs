@@ -292,7 +292,19 @@ namespace small_n_stats_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 		    GNU GENERAL PUBLIC LICENSE
+        ///		       Version 2, June 1991
+        ///
+        /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+        ///                       59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+        /// Everyone is permitted to copy and distribute verbatim copies
+        /// of this license document, but changing it is not allowed.
+        ///
+        ///			    Preamble
+        ///
+        ///  The licenses for most software are designed to take away your
+        ///freedom to share and change it.  By contrast, the GNU General Public
+        ///License is intended to guara [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string License_EPPlus {
             get {
@@ -419,6 +431,22 @@ namespace small_n_stats_WPF.Properties {
         internal static string License_RdotNet {
             get {
                 return ResourceManager.GetString("License_RdotNet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copyright (c) 2010, SharpVectorGraphics
+        ///All rights reserved.
+        ///
+        ///Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+        ///
+        ///* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+        ///
+        ///* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other material [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string License_SharpVectorGraphics {
+            get {
+                return ResourceManager.GetString("License_SharpVectorGraphics", resourceCulture);
             }
         }
         

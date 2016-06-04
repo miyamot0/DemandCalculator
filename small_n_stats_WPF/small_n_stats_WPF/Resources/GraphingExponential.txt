@@ -107,14 +107,16 @@ workChart <- ggplot() +
   if (fittedKBool == TRUE)
   {
 	  workChart <- workChart + geom_line(data=graphFrame, aes(x=XSeries, y=OSeries, group=Individual, colour = factor(Individual)))
-  }  png(tempf1 <- tempfile(fileext = '.png'), width = 6, height = 6, units = 'in', res = 300)
-  print(logChart)
+  }  svg(tempf1 <- tempfile(fileext = '.svg'), width = 9, height = 9)  print(logChart)
   dev.off()
 
-  png(tempf2 <- tempfile(fileext = '.png'), width = 6, height = 6, units = 'in', res = 300)
+  svg(tempf2 <- tempfile(fileext = '.svg'), width = 9, height = 9)
   print(workChart)
   dev.off()
 
   require('base64enc')
   demandString <- base64encode(readBin(tempf1, 'raw', file.info(tempf1)[1, 'size']), 'txt')
   workString <- base64encode(readBin(tempf2, 'raw', file.info(tempf2)[1, 'size']), 'txt')
+
+  unlink(tempf1)
+  unlink(tempf2)

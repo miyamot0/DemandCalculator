@@ -117,6 +117,10 @@
                                   Command="{Binding RDotNetLicenseWindowCommand}">
                         </MenuItem>
 
+                        <MenuItem Header="SharpVectors License (BSD 3-Clause)" 
+                                  Command="{Binding SharpVectorGraphicsLicenseWindowCommand}">
+                        </MenuItem>
+
                         <MenuItem Header="nlmrt R Package (GPL >= 2)"
                                   Command="{Binding NlmrtLicenseWindowCommand}">
                         </MenuItem>

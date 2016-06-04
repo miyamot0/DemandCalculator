@@ -149,6 +149,7 @@ namespace small_n_stats_WPF.ViewModels
         REngine engine;
 
         public RelayCommand RDotNetLicenseWindowCommand { get; set; }
+        public RelayCommand SharpVectorGraphicsLicenseWindowCommand { get; set; }
         public RelayCommand Ggplot2LicenseWindowCommand { get; set; }
         public RelayCommand NlmrtLicenseWindowCommand { get; set; }
         public RelayCommand NlstoolsLicenseWindowCommand { get; set; }
@@ -258,6 +259,7 @@ namespace small_n_stats_WPF.ViewModels
             #region LicenseCommands
             
             RDotNetLicenseWindowCommand = new RelayCommand(param => RdotNetLicenseInformationWindow(), param => true);
+            SharpVectorGraphicsLicenseWindowCommand = new RelayCommand(param => SharpVectorGraphicsLicenseInformationWindow(), param => true);
             Ggplot2LicenseWindowCommand = new RelayCommand(param => Ggplot2LicenseInformationWindow(), param => true);
             NlmrtLicenseWindowCommand = new RelayCommand(param => NlmrtLicenseInformationWindow(), param => true);
             NlstoolsLicenseWindowCommand = new RelayCommand(param => NlsToolsLicenseInformationWindow(), param => true);
@@ -506,6 +508,7 @@ namespace small_n_stats_WPF.ViewModels
                 SendMessageToOutput("base64enc R Package - GPLv2+ Licensed. Copyright (c) 2015, Simon Urbanek.");
                 SendMessageToOutput("EPPlus - GPLv2 Licensed. Copyright (c) 2016 Jan Källman.");
                 SendMessageToOutput("RdotNet: Interface for the R Statistical Package - New BSD License (BSD 2-Clause). Copyright(c) 2010, RecycleBin. All rights reserved.");
+                SendMessageToOutput("SharpVectors: Library for rendering SVG - New BSD License (BSD 3-Clause). Copyright(c) 2010, SharpVectorGraphics. All rights reserved.");
                 SendMessageToOutput("beezdemand R Package - GPLv2 Licensed. Copyright (c) 2016, Brent Kaplan.");
                 SendMessageToOutput("");
                 SendMessageToOutput("License information is also provided in Information > Licenses > ... as well as in the install directory of this program (under Resources).");
@@ -583,6 +586,22 @@ namespace small_n_stats_WPF.ViewModels
             {
                 licenseTitle = "License - nlmrt",
                 licenseText = Properties.Resources.License_nlmrt
+            };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Show();
+        }
+
+        /// <summary>
+        /// License window
+        /// </summary>
+        private void SharpVectorGraphicsLicenseInformationWindow()
+        {
+            var window = new License();
+            window.DataContext = new LicenseViewModel
+            {
+                licenseTitle = "License (BSD 3-clause) - SharpVectors",
+                licenseText = Properties.Resources.License_SharpVectorGraphics
             };
             window.Owner = MainWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;

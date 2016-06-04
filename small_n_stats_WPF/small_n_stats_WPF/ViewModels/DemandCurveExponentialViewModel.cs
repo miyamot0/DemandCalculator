@@ -48,6 +48,8 @@
 */
 
 using RDotNet;
+using SharpVectors.Converters;
+using SharpVectors.Renderers.Wpf;
 using small_n_stats_WPF.Mathematics;
 using small_n_stats_WPF.Utilities;
 using small_n_stats_WPF.Views;
@@ -114,6 +116,8 @@ namespace small_n_stats_WPF.ViewModels
         }
 
         private double kValueDouble = 0;
+
+        string path1 = null, path2 = null;
 
         private Brush xBrush = Brushes.White;
         public Brush XBrush
@@ -334,6 +338,16 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void ViewClosed()
         {
+            if (path1 != null && File.Exists(path1))
+            {
+                File.Delete(path1);
+            }
+
+            if (path2 != null && File.Exists(path2))
+            {
+                File.Delete(path2);
+            }
+
             Properties.Settings.Default.Save();
         }
 
@@ -1102,35 +1116,56 @@ namespace small_n_stats_WPF.ViewModels
                             engine.Evaluate(DemandFunctionSolvers.GetExponentiatedGraphingFunction());
                         }
 
+                        WpfDrawingSettings settings = new WpfDrawingSettings();
+                        settings.IncludeRuntime = true;
+                        settings.TextAsGeometry = false;
+
                         string output = engine.Evaluate("demandString").AsVector().First().ToString();
 
-                        byte[] bytes = Convert.FromBase64String(output);
+                            byte[] bytes = Convert.FromBase64String(output);
 
-                        BitmapImage bi = new BitmapImage();
-                        bi.BeginInit();
-                        bi.StreamSource = new MemoryStream(bytes);
-                        bi.EndInit();
+                            path1 = Path.GetTempFileName();
 
-                        var iWindow = new ImageWindow();
-                        iWindow.imageHolder.Source = bi;
-                        iWindow.images = bi;
-                        iWindow.Owner = mWindow;
-                        iWindow.Show();
+                            if (File.Exists(path1))
+                            {
+                                File.Delete(path1);
+                            }
+
+                            File.WriteAllBytes(path1, bytes);
+
+                            FileSvgReader converter1 = new FileSvgReader(settings);
+                            DrawingGroup drawing1 = converter1.Read(path1);
+
+                            if (drawing1 != null)
+                            {
+                                var iWindow1 = new ImageWindow();
+                                iWindow1.filePath = path1;
+                                iWindow1.imageHolder.Source = new DrawingImage(drawing1);
+                                iWindow1.Show();
+                            }
 
                         string output2 = engine.Evaluate("workString").AsVector().First().ToString();
 
-                        byte[] bytes2 = Convert.FromBase64String(output2);
+                            byte[] bytes2 = Convert.FromBase64String(output2);
+                            path2 = Path.GetTempFileName();
 
-                        BitmapImage bi2 = new BitmapImage();
-                        bi2.BeginInit();
-                        bi2.StreamSource = new MemoryStream(bytes2);
-                        bi2.EndInit();
+                            if (File.Exists(path2))
+                            {
+                                File.Delete(path2);
+                            }
 
-                        var iWindow2 = new ImageWindow();
-                        iWindow2.imageHolder.Source = bi2;
-                        iWindow2.images = bi2;
-                        iWindow.Owner = mWindow;
-                        iWindow2.Show();
+                            File.WriteAllBytes(path2, bytes2);
+
+                            FileSvgReader converter2 = new FileSvgReader(settings);
+                            DrawingGroup drawing2 = converter2.Read(path2);
+
+                            if (drawing2 != null)
+                            {
+                                var iWindow2 = new ImageWindow();
+                                iWindow2.filePath = path2;
+                                iWindow2.imageHolder.Source = new DrawingImage(drawing2);
+                                iWindow2.Show();
+                            }
                     }
                     catch (Exception e)
                     {
