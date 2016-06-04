@@ -16,6 +16,7 @@ The Small N Stats Demand Calculator uses a number of open source projects to wor
 * R Statistical Package - GPLv2 Licensed. Copyright (C) 2000-16. The R Core Team [Site](https://www.r-project.org/)
 * RdotNet: Interface for the R Statistical Package - New BSD License (BSD 2-Clause). Copyright(c) 2010, RecycleBin. All rights reserved [Github](https://github.com/jmp75/rdotnet)
 * RdotNet/Dynamic Interop - MIT Licensed. Copyright (c) 2015 Jean-Michel Perraud, Copyright (c) 2014 Daniel Collins, CSIRO, Copyright (c) 2013 Kosei, evolvedmicrobe. [Github](https://github.com/jmp75/dynamic-interop-dll)
+* SharpVectors: Vector graphics rendering for WPF - New BSD License (BSD 3-Clause). Copyright(c) 2010, SharpVectorGraphics. All rights reserved [Codeplex](http://sharpvectors.codeplex.com/)
 * EPPlus - GPLv2 Licensed. Copyright (c) 2016 Jan Källman. [Codeplex](http://epplus.codeplex.com/)
 
 ### Referenced Works (R packages/scripts)
@@ -25,7 +26,7 @@ The Small N Stats Demand Calculator uses a number of open source projects to wor
 * nlstools R Package - GPLv2 Licensed. Copyright(C) 2015 Florent Baty and Marie-Laure Delignette - Muller, with contributions from Sandrine Charles, Jean - Pierre Flandrois, and Christian Ritz
 * ggplot2 R Package - GPLv2 Licensed. Copyright (c) 2016, Hadley Wickham
 * reshape2 R Package - MIT Licensed. Copyright (c) 2014, Hadley Wickham
-* beezdemand Package R package - GPLv2 Licensed. Copyright (c) 2016, Brent Kaplan [Github](https://github.com/bkaplan4/beezdemand)
+* beezdemand Package R package - GPLv2 Licensed. Copyright (c) 2016, Brent Kaplan [Github](https://github.com/brentkaplan/beezdemand)
 
 ### Referenced Works (academic works)
 The Small N Stats Demand Calculator is based on the following academic works:
@@ -33,7 +34,7 @@ The Small N Stats Demand Calculator is based on the following academic works:
 * Koffarnus, M. N., Franck, C. T., Stein, J. and Bickel, W. K. (2015). A modified exponential behavioral economic demand model to better describe consumption data. Experimental Clinical Psychopharmacology, 23, 504-512.
 
 ### Acknowledgements and Credits
-* Brent Kaplan, Applied Behavioral Economics Laboratory, University of Kansas (www.behavioraleconlab.com) [Github](https://github.com/bkaplan4)
+* Brent Kaplan, Applied Behavioral Economics Laboratory, University of Kansas (www.behavioraleconlab.com) [Github](https://github.com/brentkaplan)
 * Derek D. Reed, Applied Behavioral Economics Laboratory, University of Kansas (www.behavioraleconlab.com) [Github](https://github.com/derekdreed)
 * Donald A. Hantula, Decision Making Laboratory, Temple University [Site](http://astro.temple.edu/~hantula/)
 * Chris Franck, Laboratory for Interdisciplinary Statistical Analysis - Virginia Tech
