@@ -27,8 +27,8 @@ The nlmrt R Package is licensed under the GPL, version 2, Copyright (C) 2016. Jo
 	https://cran.r-project.org/web/packages/nlmrt/
 
 The beezdemand R Package is licensed under the GPL, version 2, Copyright (c) 2016, Brent Kaplan
-	You may view the script and license here:
-	https://github.com/miyamot0/BayesianModelSelector/blob/master/BayesianModeling/Resources/FranckComputation.txt
+	You may view the package here:
+	https://github.com/brentkaplan/beezdemand
 
 The ggplot2 R Package is licensed under the GPL, version 2, Copyright (c) 2016, Hadley Wickham
 	You can visit the ggplot2 package website here:
