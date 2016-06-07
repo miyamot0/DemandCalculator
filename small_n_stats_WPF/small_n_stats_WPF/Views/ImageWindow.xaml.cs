@@ -30,8 +30,6 @@ using SharpVectors.Converters;
 using SharpVectors.Renderers.Wpf;
 using System.IO;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace small_n_stats_WPF.Views
 {
@@ -84,7 +82,7 @@ namespace small_n_stats_WPF.Views
             }
             else if (mExt.Equals(".svg"))
             {
-                File.Copy(filePath, saveFileDialog1.FileName);
+                File.Copy(filePath, saveFileDialog1.FileName, true);
             }
         }
 
