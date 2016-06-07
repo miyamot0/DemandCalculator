@@ -33,7 +33,7 @@
 
     <Window.Resources>
         <ItemsPanelTemplate x:Key="MenuItemTemplates">
-            <StackPanel Margin="-25,0,0,0" Background="White"/>
+            <StackPanel Margin="-15,0,0,0" Background="White"/>
         </ItemsPanelTemplate>
 
         <Style TargetType="{x:Type MenuItem}">
@@ -159,6 +159,11 @@
                     <MenuItem Header="_Credits" 
                               x:Name="credits" 
                               Command="{Binding InformationWindowCommand}">
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_FAQ"
+                              Command="{Binding HelpCommand}">
                     </MenuItem>
                 </MenuItem>
             </Menu>

@@ -136,6 +136,7 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand FileCloseCommand { get; set; }
         public RelayCommand FileSaveNoDialogCommand { get; set; }
         public RelayCommand RecentsClearCommand { get; set; }
+        public RelayCommand HelpCommand { get; set; }
 
         public RelayCommand ViewLoadedCommand { get; set; }
         public RelayCommand ViewClosingCommand { get; set; }
@@ -190,6 +191,7 @@ namespace small_n_stats_WPF.ViewModels
             FileSaveNoDialogCommand = new RelayCommand(param => SaveFileWithoutDialog(), param => true);
             FileOpenNoDialogCommand = new RelayCommand(param => FileOpenNoDialog(param), param => true);
 
+            HelpCommand = new RelayCommand(param => OpenHelpWindow(), param => true);
 
             RecentsClearCommand = new RelayCommand(param => ClearRecents(), param => true);
             
@@ -732,6 +734,16 @@ namespace small_n_stats_WPF.ViewModels
             var mWin = new InformationWindow();
             mWin.Owner = MainWindow;
             mWin.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            mWin.Show();
+        }
+
+        /// <summary>
+        /// Help window
+        /// </summary>
+        private void OpenHelpWindow()
+        {
+            var mWin = new HelpWindow();
+            mWin.Owner = MainWindow;
             mWin.Show();
         }
 
