@@ -1076,8 +1076,7 @@ namespace small_n_stats_WPF.ViewModels
                 mVM.RowViewModels[7].values[0] = "Y Behavior: " + Decisions.GetYBehaviorDescription(yBehavior);
                 mVM.RowViewModels[8].values[0] = "X Behavior: " + Decisions.GetXBehaviorDescription(xBehavior);
                 mVM.RowViewModels[9].values[0] = "K Behavior: " + Decisions.GetKBehaviorDescription(kBehavior);
-
-
+                
                 mWin.Owner = mWindow;
                 mWin.Show();
 
@@ -1172,6 +1171,15 @@ namespace small_n_stats_WPF.ViewModels
                         Console.WriteLine(e.ToString());
                     }
                 }
+
+                mWindow.OutputEvents("Please remember to cite the packages used in this process!");
+                mWindow.OutputEvents("Citation:: " + string.Join("", engine.Evaluate("citation()$textVersion").AsCharacter().ToArray()));
+                mWindow.OutputEvents("Citation:: " + string.Join("", engine.Evaluate("citation('ggplot2')$textVersion").AsCharacter().ToArray()));
+                mWindow.OutputEvents("Citation:: " + string.Join("", engine.Evaluate("citation('gridExtra')$textVersion").AsCharacter().ToArray()));
+                mWindow.OutputEvents("Citation:: " + string.Join("", engine.Evaluate("citation('nlmrt')$textVersion").AsCharacter().ToArray()));
+                mWindow.OutputEvents("Citation:: " + string.Join("", engine.Evaluate("citation('nlstools')$textVersion").AsCharacter().ToArray()));
+                mWindow.OutputEvents("Citation:: " + string.Join("", engine.Evaluate("citation('base64enc')$textVersion").AsCharacter().ToArray()));
+                mWindow.OutputEvents("Citation:: " + string.Join("", engine.Evaluate("citation('reshape2')$textVersion").AsCharacter().ToArray()));
 
             }
             catch (ParseException pe)
