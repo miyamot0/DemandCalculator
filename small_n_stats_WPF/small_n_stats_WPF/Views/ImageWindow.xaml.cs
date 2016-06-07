@@ -50,7 +50,7 @@ namespace small_n_stats_WPF.Views
         private void saveMenuItem_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "TIFF Image|*.tiff|PNG Image|*.png|Jpeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif";
+            saveFileDialog1.Filter = "SVG Image|*.svg|TIFF Image|*.tiff|PNG Image|*.png|JPEG Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif";
             saveFileDialog1.Title = "Save an Image File";
             saveFileDialog1.ShowDialog();
 
@@ -81,6 +81,10 @@ namespace small_n_stats_WPF.Views
             {
                 converter.EncoderType = ImageEncoderType.TiffBitmap;
                 converter.Convert(filePath, saveFileDialog1.FileName);
+            }
+            else if (mExt.Equals(".svg"))
+            {
+                File.Copy(filePath, saveFileDialog1.FileName);
             }
         }
 
