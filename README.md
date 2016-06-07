@@ -9,7 +9,10 @@ Features include:
   - Full range of BE outcome metrics (empirical and derived), saveable in common spreadsheet file formats
 
 ### Version
-1.0.0.32
+1.0.0.28
+
+### Changelog
+ * 1.0.0.28 - Upstream: add help menu, citation, SVG saving
 
 ### Referenced Works (F/OSS software)
 The Small N Stats Demand Calculator uses a number of open source projects to work properly:
