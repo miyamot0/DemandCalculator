@@ -643,16 +643,39 @@ namespace small_n_stats_WPF.ViewModels
                 SendMessageToOutput("TLDR: Demand Curve Calculator is made possible by the following software.");
                 SendMessageToOutput("");
                 SendMessageToOutput("R Statistical Package - GPL v2 Licensed. Copyright (C) 2000-16. The R Core Team");
-                SendMessageToOutput("nlmrt R Package - GPLv2 Licensed. Copyright (C) 2016. John C. Nash.");
-                SendMessageToOutput("nlstools R Package - GPLv2 Licensed. Copyright(C) 2015 Florent Baty and Marie-Laure Delignette - Muller, with contributions from Sandrine Charles, Jean - Pierre Flandrois, and Christian Ritz.");
+                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation()$textVersion").AsCharacter().ToArray()));
+                SendMessageToOutput("");
+
                 SendMessageToOutput("ggplot2 R Package - GPLv2 Licensed. Copyright (c) 2016, Hadley Wickham.");
+                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('ggplot2')$textVersion").AsCharacter().ToArray()));
+                SendMessageToOutput("");
+
+                SendMessageToOutput("gridExtra R Package - GPLv2+ Licensed. Copyright (c) 2016, Baptiste Auguie.");
+                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('gridExtra')$textVersion").AsCharacter().ToArray()));
+                SendMessageToOutput("");
+
+                SendMessageToOutput("nlmrt R Package - GPLv2 Licensed. Copyright (C) 2016. John C. Nash.");
+                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('nlmrt')$textVersion").AsCharacter().ToArray()));
+                SendMessageToOutput("");
+
+                SendMessageToOutput("nlstools R Package - GPLv2 Licensed. Copyright(C) 2015 Florent Baty and Marie-Laure Delignette - Muller, with contributions from Sandrine Charles, Jean - Pierre Flandrois, and Christian Ritz.");
+                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('nlstools')$textVersion").AsCharacter().ToArray()));
+                SendMessageToOutput("");
+
                 SendMessageToOutput("reshape2 R Package - MIT Licensed. Copyright (c) 2014, Hadley Wickham.");
-                SendMessageToOutput("base64enc R Package - GPLv2 Licensed. Copyright (c) 2015, Simon Urbanek.");
+                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('reshape2')$textVersion").AsCharacter().ToArray()));
+                SendMessageToOutput("");
+
+                SendMessageToOutput("base64enc R Package - GPLv2+ Licensed. Copyright (c) 2015, Simon Urbanek.");
+                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('base64enc')$textVersion").AsCharacter().ToArray()));
+                SendMessageToOutput("");
+
                 SendMessageToOutput("EPPlus - GPLv2 Licensed. Copyright (c) 2016 Jan Källman.");
                 SendMessageToOutput("RdotNet: Interface for the R Statistical Package - New BSD License (BSD 2-Clause). Copyright(c) 2010, RecycleBin. All rights reserved.");
                 SendMessageToOutput("SharpVectors: Library for rendering SVG - New BSD License (BSD 3-Clause). Copyright(c) 2010, SharpVectorGraphics. All rights reserved.");
                 SendMessageToOutput("beezdemand R Package - GPLv2 Licensed. Copyright (c) 2016, Brent Kaplan.");
                 SendMessageToOutput("");
+
                 SendMessageToOutput("License information is also provided in Information > Licenses > ... as well as in the install directory of this program (under Resources).");
             }
         }
