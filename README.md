@@ -9,9 +9,10 @@ Features include:
   - Full range of BE outcome metrics (empirical and derived), saveable in common spreadsheet file formats
 
 ### Version
-1.0.0.28
+1.0.0.29
 
 ### Changelog
+ * 1.0.0.29 - Upstream: overwrite bugs squashed
  * 1.0.0.28 - Upstream: add help menu, citation, SVG saving
 
 ### Referenced Works (F/OSS software)
