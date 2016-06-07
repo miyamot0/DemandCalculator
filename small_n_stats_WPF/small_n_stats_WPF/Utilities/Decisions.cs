@@ -289,7 +289,7 @@ namespace small_n_stats_WPF.Utilities
         /// </returns>
         public static KValueDecisions GetKBehaviorGroup(Window windowRef)
         {
-            var kValueWindow = new SelectionWindow(new string[] { "Fit K as parameter", "Use derived K (group)", "Use Custom Ks" }, "Fit K as parameter");
+            var kValueWindow = new SelectionWindow(new string[] { "Fit K as parameter", "Use derived K (group)", "Use Custom Ks" }, "Use derived K (group)");
             kValueWindow.Title = "How do you want to derive K values";
             kValueWindow.MessageLabel.Text = "Please select how to ascertain K:";
             kValueWindow.Owner = windowRef;
