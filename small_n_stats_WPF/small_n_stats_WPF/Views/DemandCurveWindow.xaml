@@ -111,6 +111,7 @@
                      IsReadOnly="True"
                      Margin="10"
                      Text="{Binding XRangeValues}"
+                     VerticalContentAlignment="Center"
                      Background="{Binding Path=XBrush}">
                          <TextBox.ContextMenu>
                              <ContextMenu>
@@ -134,6 +135,7 @@
                      IsReadOnly="True"
                      Margin="10"
                      Text="{Binding YRangeValues}"
+                     VerticalContentAlignment="Center"
                      Background="{Binding Path=YBrush}">
                          <TextBox.ContextMenu>
                              <ContextMenu>
