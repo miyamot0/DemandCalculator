@@ -47,6 +47,9 @@ You will need the R open-source statistical package for model fitting/charting t
 Once DemandCalculator is installed, it will perform a one-time install the necessary R packages (internet required).
 DemandCalculator is a ClickOnce application, the program will automatically update as the program is refined.
 
+### Download
+All downloads, if/when posted, will be hosted at [Small N Stats](http://www.smallnstats.com/DemandAnalysis.html). 
+
 ### Development
 Want to contribute? Great! Emails or PM's are welcome.
 
@@ -55,4 +58,4 @@ Want to contribute? Great! Emails or PM's are welcome.
 
 ### License
 ----
-GPL-Version 2
+Demand Calculator - Copyright 2016, Shawn P. Gilroy. GPL-Version 2
