@@ -79,6 +79,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace small_n_stats_WPF.ViewModels
@@ -453,6 +454,8 @@ namespace small_n_stats_WPF.ViewModels
 
             try
             {
+                introWindow.checkNet.Foreground = Brushes.Green;
+
                 REngine.SetEnvironmentVariables();
 
                 SendMessageToOutput("Attempting to link with R installation.");
@@ -463,6 +466,9 @@ namespace small_n_stats_WPF.ViewModels
 
                 engine.Initialize();
                 engine.AutoPrint = false;
+
+                introWindow.checkR.Foreground = Brushes.Green;
+                introWindow.checkR2.Foreground = Brushes.Green;
 
             }
             catch (Exception e)
@@ -484,14 +490,148 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     SendMessageToOutput("");
                     SendMessageToOutput("R is found and running");
+                    
+                    introWindow.loadText.Text = "Loading R Packages";
 
-                    engine.Evaluate("if (!require(ggplot2)) { install.packages('ggplot2', repos = 'http://cran.us.r-project.org') }");
-                    engine.Evaluate("if (!require(reshape2)) { install.packages('reshape2', repos = 'http://cran.us.r-project.org') }");
-                    engine.Evaluate("if (!require(nlstools)) { install.packages('nlstools', repos = 'http://cran.us.r-project.org') }");
-                    engine.Evaluate("if (!require(nlmrt)) { install.packages('nlmrt', repos = 'http://cran.us.r-project.org') }");
-                    engine.Evaluate("if (!require(base64enc)) { install.packages('base64enc', repos = 'http://cran.us.r-project.org') }");
+                    bool loadedGgplot = engine.Evaluate("require(ggplot2)").AsLogical().First();
 
-                    SendMessageToOutput("All required packages have been found.  Ready to proceed.");
+                    if (loadedGgplot)
+                    {
+                        introWindow.checkGgplot.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install ggplot2 packages for first time!");
+                        introWindow.loadText.Text = "Downloading ggplot2...";
+                        engine.Evaluate("if (!require(ggplot2)) { install.packages('ggplot2', repos = 'http://cran.us.r-project.org') }");
+
+                        loadedGgplot = engine.Evaluate("require(ggplot2)").AsLogical().First();
+
+                        if (loadedGgplot)
+                        {
+                            introWindow.checkGgplot.Foreground = Brushes.Green;
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    bool loadedNlmrt = engine.Evaluate("require(nlmrt)").AsLogical().First();
+
+                    if (loadedNlmrt)
+                    {
+                        introWindow.checkNlmrt.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install nlmrt packages for first time!");
+                        introWindow.loadText.Text = "Downloading nlmrt...";
+                        engine.Evaluate("if (!require(nlmrt)) { install.packages('nlmrt', repos = 'http://cran.us.r-project.org') }");
+
+                        loadedNlmrt = engine.Evaluate("require(nlmrt)").AsLogical().First();
+
+                        if (loadedNlmrt)
+                        {
+                            introWindow.checkNlmrt.Foreground = Brushes.Green;
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    bool loadedNlstools = engine.Evaluate("require(nlstools)").AsLogical().First();
+
+                    if (loadedNlstools)
+                    {
+                        introWindow.checkNlstools.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install nlstools packages for first time!");
+                        introWindow.loadText.Text = "Downloading nlstools...";
+                        engine.Evaluate("if (!require(nlstools)) { install.packages('nlstools', repos = 'http://cran.us.r-project.org') }");
+
+                        loadedNlstools = engine.Evaluate("require(nlstools)").AsLogical().First();
+
+                        if (loadedNlstools)
+                        {
+                            introWindow.checkNlstools.Foreground = Brushes.Green;
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    bool loadedReshape = engine.Evaluate("require(reshape2)").AsLogical().First();
+
+                    if (loadedReshape)
+                    {
+                        introWindow.checkReshape2.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install reshape2 packages for first time!");
+                        introWindow.loadText.Text = "Downloading reshape2...";
+                        engine.Evaluate("if (!require(reshape2)) { install.packages('reshape2', repos = 'http://cran.us.r-project.org') }");
+
+                        loadedReshape = engine.Evaluate("require(reshape2)").AsLogical().First();
+
+                        if (loadedReshape)
+                        {
+                            introWindow.checkReshape2.Foreground = Brushes.Green;
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    bool loadedGrid = engine.Evaluate("require(gridExtra)").AsLogical().First();
+
+                    if (loadedGrid)
+                    {
+                        introWindow.checkGridExtra.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install gridExtra packages for first time!");
+                        introWindow.loadText.Text = "Downloading gridExtra...";
+                        engine.Evaluate("if (!require(gridExtra)) { install.packages('gridExtra', repos = 'http://cran.us.r-project.org') }");
+
+                        loadedGrid = engine.Evaluate("require(gridExtra)").AsLogical().First();
+
+                        if (loadedGrid)
+                        {
+                            introWindow.checkGridExtra.Foreground = Brushes.Green;
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    bool loadedBase64 = engine.Evaluate("require(base64enc)").AsLogical().First();
+
+                    if (loadedBase64)
+                    {
+                        introWindow.checkBase64enc.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install base64enc packages for first time!");
+                        introWindow.loadText.Text = "Downloading base64enc...";
+                        engine.Evaluate("if (!require(base64enc)) { install.packages('base64enc', repos = 'http://cran.us.r-project.org') }");
+
+                        loadedBase64 = engine.Evaluate("require(base64enc)").AsLogical().First();
+
+                        if (loadedBase64)
+                        {
+                            introWindow.checkBase64enc.Foreground = Brushes.Green;
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    if (loadedGgplot && loadedGrid && loadedReshape && loadedBase64 && loadedNlstools && loadedNlmrt && !failed)
+                    {
+                        introWindow.loadText.Text = "All necessary components found!";
+                        introWindow.loadText.Foreground = Brushes.Green;
+                        SendMessageToOutput("All required packages have been found.  Ready to proceed.");
+                    }
+
                 }
                 else
                 {
