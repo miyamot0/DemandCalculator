@@ -1088,22 +1088,13 @@ namespace small_n_stats_WPF.ViewModels
                         engine.Evaluate("library(reshape2)");
                         engine.Evaluate("library(gridExtra)");
 
-                        if (kBehavior == KValueDecisions.FitK)
-                        {
-                            engine.Evaluate("fittedKBool <- TRUE");
-                            engine.Evaluate("textOmax <- '\n Derived oMax'");
-                            engine.Evaluate("textPmax <- '\n Derived pMax'");
-                            engine.Evaluate("graphingOmax <- fitFrame[fitFrame$p==1,]$OmaxD");
-                            engine.Evaluate("graphingPmax <- fitFrame[fitFrame$p==1,]$PmaxD");
-                        }
-                        else
-                        {
-                            engine.Evaluate("fittedKBool <- FALSE");
-                            engine.Evaluate("textOmax <- '\n Empirical oMax'");
-                            engine.Evaluate("textPmax <- '\n Empirical pMax'");
-                            engine.Evaluate("graphingOmax <- fitFrame[fitFrame$p==1,]$OmaxE");
-                            engine.Evaluate("graphingPmax <- fitFrame[fitFrame$p==1,]$PmaxE");
-                        }
+                        engine.Evaluate("textOmax <- '\n Empirical oMax: " + mVM.RowViewModels[1].values[11] +
+                            "\n Derived oMax: " + String.Format("{0:0.##}", double.Parse(mVM.RowViewModels[1].values[17])) + "'");
+                        engine.Evaluate("textPmax <- '\n Empirical pMax: " + mVM.RowViewModels[1].values[12] +
+                            "\n Derived pMax: " + String.Format("{0:0.##}", double.Parse(mVM.RowViewModels[1].values[18])) + "'");
+
+                        engine.Evaluate("graphingOmax <- fitFrame[fitFrame$p==1,]$OmaxD");
+                        engine.Evaluate("graphingPmax <- fitFrame[fitFrame$p==1,]$PmaxD");
 
                         if (modelArraySelection == "Exponential")
                         {

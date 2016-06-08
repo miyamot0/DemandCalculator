@@ -38,11 +38,7 @@ for (j in 1:max(SourceFrame$p))
     
     graphFrame[ graphFrame$Individual==j & graphFrame$DemandSeries==as.numeric(i),]$YSeries <- log10(qTemp) + kTemp * (exp(-aTemp*qTemp*xDraw[i])-1)
     graphFrame[ graphFrame$Individual==j & graphFrame$DemandSeries==as.numeric(i),]$XSeries <- xDraw[i]
-
-	if (fittedKBool == TRUE)
-	{
-		graphFrame[ graphFrame$Individual==j & graphFrame$DemandSeries==as.numeric(i),]$OSeries <- xDraw[i] * 10^(log10(qTemp) + kTemp * (exp(-aTemp*qTemp*xDraw[i])-1))
-	}
+	graphFrame[ graphFrame$Individual==j & graphFrame$DemandSeries==as.numeric(i),]$OSeries <- xDraw[i] * 10^(log10(qTemp) + kTemp * (exp(-aTemp*qTemp*xDraw[i])-1))
   }
 }
 
@@ -62,7 +58,6 @@ logChart <- ggplot() +
   expand_limits(y=0) +
   theme_bw() +
   theme(panel.grid.minor = element_blank()) +
-  geom_vline(xintercept = graphingPmax, linetype = "longdash") +
   geom_text(aes(x=graphingPmax, label=textPmax, y=0), colour="blue", angle=90, hjust = 0) +
   ggtitle("Fitted Demand Curves\n") +
   ylab("log10(Consumption)") +
@@ -86,9 +81,7 @@ workChart <- ggplot() +
   scale_color_manual(values=c("#781FB7")) +
   theme_bw() +
   theme(panel.grid.minor = element_blank()) +
-  geom_hline(yintercept = graphingOmax, linetype = "longdash") +
   geom_text(aes(x=min(pointFrame$X), label=textOmax, y=graphingOmax), colour="blue", angle=0, hjust = 0) +
-  geom_vline(xintercept = graphingPmax, linetype = "longdash") +
   geom_text(aes(x=graphingPmax, label=textPmax, y=0), colour="blue", angle=90, hjust = 0) +
   ggtitle("Output Curve\n") +
   expand_limits(y=0) +
@@ -104,10 +97,8 @@ workChart <- ggplot() +
   theme(panel.grid.minor = element_blank()) +
   theme(panel.grid.major = element_blank()) 
 
-  if (fittedKBool == TRUE)
-  {
-	  workChart <- workChart + geom_line(data=graphFrame, aes(x=XSeries, y=OSeries, group=Individual, colour = factor(Individual)))
-  }  svg(tempf1 <- tempfile(fileext = '.svg'), width = 9, height = 9)  print(logChart)
+  workChart <- workChart + geom_line(data=graphFrame, aes(x=XSeries, y=OSeries, group=Individual, colour = factor(Individual)))
+  svg(tempf1 <- tempfile(fileext = '.svg'), width = 9, height = 9)  print(logChart)
   dev.off()
 
   svg(tempf2 <- tempfile(fileext = '.svg'), width = 9, height = 9)
