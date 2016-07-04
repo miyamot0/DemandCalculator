@@ -144,8 +144,7 @@ namespace small_n_stats_WPF.ViewModels
 
         /* Menu Items */
 
-        public RelayCommand DemandCurveWindowCommand { get; set; }
-        public RelayCommand BatchDemandCurveWindowCommand { get; set; }
+        public RelayCommand UnifiedDemandCurveWindowCommand { get; set; }
         public RelayCommand InformationWindowCommand { get; set; }
 
         REngine engine;
@@ -253,8 +252,7 @@ namespace small_n_stats_WPF.ViewModels
 
             #region UICommands
 
-            DemandCurveWindowCommand = new RelayCommand(param => OpenDemandCurveWindow(), param => true);
-            BatchDemandCurveWindowCommand = new RelayCommand(param => OpenBatchDemandCurveWindow(), param => true);
+            UnifiedDemandCurveWindowCommand = new RelayCommand(param => OpenUnifiedDemandCurveWindow(), param => true);
             InformationWindowCommand = new RelayCommand(param => OpenInformationWindow(), param => true);
 
             #endregion
@@ -860,28 +858,12 @@ namespace small_n_stats_WPF.ViewModels
         /// <summary>
         /// Single mode analysis window
         /// </summary>
-        private void OpenDemandCurveWindow()
+        private void OpenUnifiedDemandCurveWindow()
         {
-            var mWin = new DemandCurveWindow();
-            mWin.Owner = MainWindow;
-            mWin.windowTitle.Text = "Demand Curve Analysis";
-            mWin.DataContext = new DemandCurveExponentialViewModel
-            {
-                mWindow = MainWindow,
-                windowRef = mWin
-            };
-            mWin.Show();
-        }
-
-        /// <summary>
-        /// Batch mode analysis window
-        /// </summary>
-        private void OpenBatchDemandCurveWindow()
-        {
-            var mWin = new BatchDemandCurveWindow();
+            var mWin = new DemandCurveUnifiedWindow();
             mWin.Owner = MainWindow;
             mWin.windowTitle.Text = "Batch Demand Curve Analysis";
-            mWin.DataContext = new BatchDemandCurveExponentialViewModel
+            mWin.DataContext = new UnifiedDemandCurveViewModel
             {
                 mWindow = MainWindow,
                 windowRef = mWin

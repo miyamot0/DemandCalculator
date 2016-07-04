@@ -1,0 +1,530 @@
+﻿<Window x:Class="small_n_stats_WPF.Views.DemandCurveUnifiedWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:small_n_stats_WPF.Views"
+        xmlns:settings="clr-namespace:small_n_stats_WPF.Properties"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        WindowStartupLocation="CenterOwner"
+        Title="Demand Curve Unified Window" 
+        ResizeMode="NoResize"
+        Height="525"
+        Width="850">
+
+    <Window.Style>
+        <Style TargetType="Window">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding AdvancedMenu}"  Value="True">
+                    <Setter Property="MinWidth" Value="850"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+
+    <!-- Grid with two sides, basic and an optional advanced view -->
+    <Grid>
+
+        <!-- Checkbox to disable after click -->
+        <Grid.Resources>
+            <Style TargetType="CheckBox" x:Key="unlockingKey">
+                <Style.Triggers>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter Property="IsEnabled" Value="False" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="CheckBox" x:Key="disableKey">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding PossibleFigures}"  Value="False">
+                        <Setter Property="IsEnabled" Value="False" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+
+        <!-- Pre-sized main display, advanced window to claim unused space on resize -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Column="0"
+              Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                x:Name="windowTitle"
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                FontSize="18"
+                Text="Demand Curve Analysis"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            </TextBlock>
+
+            <Button Grid.Row="1" 
+                    Grid.Column="0"
+                    Margin="10"
+                    Content="Pricing"
+                    Command="{Binding GetXRangeCommand}">
+            </Button>
+
+            <TextBox
+                Name="xRange"
+                Grid.Row="1" 
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                IsReadOnly="True"
+                Focusable="False"
+                AcceptsTab="False"
+                CharacterCasing="Upper" 
+                Margin="10"
+                VerticalContentAlignment="Center"
+                Text="{Binding XRangeValues}"
+                Background="{Binding Path=XBrush}"
+                MouseUp="xRange_MouseUp">
+            </TextBox>
+
+            <Button Grid.Row="2" 
+                    Grid.Column="0"
+                    Margin="10"
+                    Content="Consumption"
+                    Command="{Binding GetYRangeCommand}">
+            </Button>
+
+            <TextBox
+                Name="yRange"
+                Grid.Row="2" 
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                IsReadOnly="True"
+                Focusable="False"
+                AcceptsTab="False"
+                CharacterCasing="Upper" 
+                Margin="10"
+                VerticalContentAlignment="Center"
+                Text="{Binding YRangeValues}"
+                Background="{Binding Path=YBrush}"
+                MouseUp="yRange_MouseUp">
+            </TextBox>
+
+            <Grid Grid.Row="3"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="4"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Center">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <RadioButton 
+                    x:Name="rowSelectionButton"
+                    Grid.Column="0"
+                    GroupName="Selections"
+                    Content="Horizontal Data (Left to Right)"
+                    Width="Auto"
+                    Margin="20,5,5,5"
+                    IsChecked="{Binding Path=RowModeRadio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                </RadioButton>
+
+                <RadioButton 
+                    Grid.Column="2"
+                    GroupName="Selections"
+                    Content="Vertical Data (Top to Bottom)"
+                    Width="Auto"
+                    Margin="20,5,5,5"
+                    IsChecked="{Binding Path=ColumnModeRadio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                </RadioButton>
+            </Grid>            
+            
+            <Grid Grid.Row="4"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="4"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Center">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <RadioButton 
+                    x:Name="singleCalculationButton"
+                    Grid.Column="0"
+                    GroupName="Setting"
+                    Content="Single Calculation"
+                    Width="Auto"
+                    Margin="20,5,5,5"
+                    IsChecked="{Binding Path=SingleModeRadio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                </RadioButton>
+
+                <RadioButton 
+                    Grid.Column="2"
+                    GroupName="Setting"
+                    Content="Grouped Calculations"
+                    Width="Auto"
+                    Margin="20,5,5,5"
+                    IsChecked="{Binding Path=BatchModeRadio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                </RadioButton>
+            </Grid>
+
+            <Grid Grid.Row="5"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="4"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Center">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal"
+                        Grid.Column="0"
+                        Margin="15,5,5,5">
+                    <CheckBox Grid.Row="4"
+                                  Grid.Column="2"
+                                  Grid.ColumnSpan="2"
+                                  Margin="5,0,0,0"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Left"
+                                  Content=""
+                                  Style="{DynamicResource disableKey}"
+                                  IsChecked="{Binding Path=OutputFigures, Mode=TwoWay}">
+                    </CheckBox>
+                    <Label Content="Output Model Figures?"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                        Grid.Column="1"
+                        Margin="15,5,5,5">
+                    <CheckBox
+                            Grid.Row="4"
+                            Grid.Column="2"
+                            Grid.ColumnSpan="2"
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Style="{DynamicResource unlockingKey}"
+                            Content=""
+                            IsChecked="{Binding Path=AdvancedMenu, Mode=TwoWay}">
+                    </CheckBox>
+                    <Label Content="Advanced Settings?"/>
+                </StackPanel>
+
+            </Grid>
+
+            <FlowDocumentScrollViewer
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                Grid.Row="6"
+                Grid.RowSpan="3"
+                IsSelectionEnabled="False"
+                VerticalScrollBarVisibility="Hidden">
+                <FlowDocument>
+                    <FlowDocument.Resources>
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="Padding" Value="0"/>
+                        </Style>
+                    </FlowDocument.Resources>
+                    <Paragraph FontSize="12" FontFamily="Segoe UI">
+                        <Bold>Directions:</Bold>
+                    </Paragraph>
+                    <Paragraph FontSize="12" FontFamily="Segoe UI" Padding="0,5,0,0">
+                        To calculate demand curves, users need to select a range of 
+                        Pricing Values and Consumption Values.  Data may be horizontal (Left
+                        to Right) or vertical (Top to Bottom) and calculations may be 
+                        customized for individual or grouped batches.  Advanced users may
+                        also select either the Exponential Demand Function (Hursh &amp; 
+                        Silberburg, 2008) or the Exponentiated Demand Function (Koffarnus, 
+                        Franck, Stein &amp; Bickel, 2015).  Whenever possible, users are 
+                        urged to proceed with the assigned defaults.
+                    </Paragraph>
+                </FlowDocument>
+            </FlowDocumentScrollViewer>
+
+            <Button Name="calculateButton" 
+                    Grid.Row="7" 
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4"
+                    Margin="10"
+                    Content="Calculate"
+                    Command="{Binding CalculateScoresCommand}">
+            </Button>
+        </Grid>
+
+        <!-- Advanced Settings Grid -->
+
+        <Grid Grid.Column="1"              
+              Grid.Row="0"
+              x:Name="AdvWindow">
+
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AdvancedMenu}"
+                                     Value="False">
+                            <Setter Property="Visibility" 
+                                    Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding AdvancedMenu}" 
+                                     Value="True">
+                            <Setter Property="Visibility" 
+                                    Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="55"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                FontSize="18"
+                Text="Advanced Settings"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            </TextBlock>
+
+            <Grid Grid.Row="1"
+                  Grid.RowSpan="2"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="4"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Center">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Content="Model to use in curve-fitting software (each has individual settings)?"
+                       Margin="20,0,5,0"
+                       FontWeight="Bold"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2">                    
+                </Label>
+                
+                <RadioButton 
+                    x:Name="hurshRadioButton"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    GroupName="Model"
+                    Content="Use Exponential Model"
+                    Width="Auto"
+                    Margin="20,5,5,5"
+                    IsChecked="{Binding Path=HurshModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                </RadioButton>
+
+                <RadioButton 
+                    x:Name="koffRadioButton"
+                    Grid.Column="2"
+                    Grid.Row="1"
+                    GroupName="Model"
+                    Content="Use Exponentiated Model"
+                    Width="Auto"
+                    Margin="20,5,5,5"
+                    IsChecked="{Binding Path=KoffarnusModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                </RadioButton>
+            </Grid>
+
+            <StackPanel
+                Grid.Row="3"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Left"
+                Margin="15,5,5,5">
+
+                <Label FontWeight="Bold">Response to values where X == 0?</Label>
+                <RadioButton GroupName="Xsettings" 
+                             Content="Keep Value" 
+                             IsChecked="{Binding Path=KeepXValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+                <RadioButton GroupName="Xsettings" 
+                             Content="Drop Value" 
+                             IsChecked="{Binding Path=DropXValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="5"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Left"
+                Margin="15,5,5,5">
+
+                <Label FontWeight="Bold">Response to values where Y == 0?</Label>
+                <RadioButton GroupName="Ysettings" 
+                             Content="Keep Value" 
+                             IsChecked="{Binding Path=KeepYValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+                
+                <RadioButton GroupName="Ysettings" 
+                             Content="Drop Value" 
+                             IsChecked="{Binding Path=DropYValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+                
+                <RadioButton GroupName="Ysettings" 
+                             Content="Change Value" 
+                             IsChecked="{Binding Path=ModYValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0"/>
+                
+                <RadioButton x:Name="yModTenth"
+                             GroupName="YsettingsTwo" 
+                             Content="0.1" 
+                             IsChecked="{Binding Path=ModYValueTenth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="35,0,0,0"/>
+
+                <RadioButton x:Name="yModHundredth"
+                             GroupName="YsettingsTwo" 
+                             Content="0.01" 
+                             IsChecked="{Binding Path=ModYValuesHundredth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="35,0,0,0"/>
+
+                <RadioButton x:Name="yModCustom"
+                             GroupName="YsettingsTwo" 
+                             Content="Custom" 
+                             IsChecked="{Binding Path=ModYValuesCustom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="35,0,0,0"/>
+
+                <TextBox x:Name="YsettingsCustom" 
+                         Margin="35,0,0,0" 
+                         Text="{Binding YModValues}"/>
+
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="3"
+                Grid.RowSpan="5"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Left"
+                Margin="15,5,5,5">
+
+                <Label FontWeight="Bold">How to derive free parameter (k)?</Label>
+
+                <Label>Shared k Options</Label>
+                
+                <RadioButton x:Name="groupKSetting1"
+                             GroupName="Ksettings" 
+                             Content="Group Empirical Log Range" 
+                             IsChecked="{Binding Path=GroupEmpirical, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0"/>
+                <RadioButton x:Name="groupKSetting2"
+                             GroupName="Ksettings" 
+                             Content="Mean of Empirical K" 
+                             IsChecked="{Binding Path=GroupEmpiricalAverage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+                <RadioButton x:Name="groupKSetting3"
+                             GroupName="Ksettings" 
+                             Content="Fitted K from Pooled data" 
+                             IsChecked="{Binding Path=GroupFitted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+
+                <Label Margin="0,10,0,0">Individualized k Options</Label>
+
+                <RadioButton GroupName="Ksettings" 
+                             Content="Individual Empirical Log Range" 
+                             IsChecked="{Binding Path=IndivEmpirical, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+                <RadioButton GroupName="Ksettings" 
+                             Content="Fit K from Individual data" 
+                             IsChecked="{Binding Path=IndivFitted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+                <RadioButton GroupName="Ksettings" 
+                             Content="User Supplied K" 
+                             IsChecked="{Binding Path=CustomK, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+
+                <TextBox x:Name="kRange"
+                         Margin="10"
+                         VerticalContentAlignment="Center"
+                         Text="{Binding KValue}">
+                </TextBox>
+            </StackPanel>
+
+            <FlowDocumentScrollViewer
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                Grid.Row="8"
+                Grid.RowSpan="2"
+                IsSelectionEnabled="False"
+                VerticalScrollBarVisibility="Hidden">
+                <FlowDocument>
+                    <FlowDocument.Resources>
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="Padding" Value="0"/>
+                        </Style>
+                    </FlowDocument.Resources>
+                    <Paragraph FontSize="12" FontFamily="Segoe UI">
+                        <Bold>Notes (Here be dragons):</Bold>
+                    </Paragraph>
+                    <Paragraph FontSize="12" FontFamily="Segoe UI" Padding="0,5,0,0">
+                        Users are urged to remain with defaults, most especially for 0-valued
+                        behavior.  The current models are limited in their ability to handle these
+                        values (they'll likely fail if the supplied values of ill-suited), though
+                        a range of techniques for determining the free parameter are provided.
+                    </Paragraph>
+                </FlowDocument>
+            </FlowDocumentScrollViewer>            
+            
+        </Grid>
+    </Grid>
+</Window>

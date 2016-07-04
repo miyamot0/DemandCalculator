@@ -67,11 +67,6 @@ fitFrameTemp <- data.frame(
   q0high=rep(NA,nSimulated),
   alow=rep(NA,nSimulated),
   ahigh=rep(NA,nSimulated),
-  OmaxE=rep(NA,nSimulated),
-  PmaxE=rep(NA,nSimulated),
-  Q0e=rep(NA,nSimulated),
-  BP0=rep(NA,nSimulated),
-  BP1=rep(NA,nSimulated),
   EV=rep(NA,nSimulated),
   OmaxD=rep(NA,nSimulated),
   PmaxD=rep(NA,nSimulated))
@@ -90,35 +85,12 @@ fitFrame <- data.frame(
   q0high=rep(NA,1),
   alow=rep(NA,1),
   ahigh=rep(NA,1),
-  OmaxE=rep(NA,1),
-  PmaxE=rep(NA,1),
-  Q0e=rep(NA,1),
-  BP0=rep(NA,1),
-  BP1=rep(NA,1),
   EV=rep(NA,1),
   OmaxD=rep(NA,1),
   PmaxD=rep(NA,1))
 
   dataHolder <- NULL
   dataHolder <- SourceFrame
-  dataHolder$expend <- (dataHolder$x * dataHolder$y)
-
-  fitFrame[1,]$OmaxE <- max(dataHolder$expend)
-  fitFrame[1,]$PmaxE <- max(dataHolder[dataHolder$expend == max(dataHolder$expend),]$x)
-
-  xMin <- min(dataHolder$x)
-  
-  fitFrame[1,]$Q0e <- min(dataHolder[dataHolder$x == xMin,]$y)
-  
-  if (length(dataHolder[dataHolder$y == 0,]$x) > 0)
-  {
-    fitFrame[1,]$BP0 <- min(dataHolder[dataHolder$y == 0,]$x)
-  }
-
-  if (sum(dataHolder$y > 0))
-  {
-    fitFrame[1,]$BP1 <- max(dataHolder[dataHolder$y != 0,]$x)
-  }
 
   fit <- NULL
   try(fit <- wrapnls(data=dataHolder, (log(y)/log(10)) ~ (log(q0)/log(10)) + k * (exp(-alpha*q0*x)-1), start=c(q0=10, alpha=0.000000001),
@@ -138,51 +110,17 @@ fitFrame <- data.frame(
     fitFrame[1,]$q0high <- confint2(fit)[3]
     fitFrame[1,]$alow <- confint2(fit)[2]
     fitFrame[1,]$ahigh <- confint2(fit)[4]
-    
-    if (length(dataHolder[dataHolder$y == 0,]$x) > 0)
-    {
-      fitFrame[1,]$BP0 <- min(dataHolder[dataHolder$y == 0,]$x)
-    }
-    
-    if (sum(dataHolder$y > 0))
-    {
-      fitFrame[1,]$BP1 <- max(dataHolder[dataHolder$y != 0,]$x)
-    }
-    
     fitFrame[1,]$EV <- 1/(fitFrame[1,]$alpha * (fitFrame[1,]$k ^ 1.5) * 100)
     fitFrame[1,]$PmaxD <- 1/(fitFrame[1,]$q0 * fitFrame[1,]$alpha * (fitFrame[1,]$k ^ 1.5)) * (0.083 * fitFrame[1,]$k + 0.65)
     fitFrame[1,]$OmaxD <- (10^(log10(fitFrame[1,]$q0) + (fitFrame[1,]$k * (exp(-fitFrame[1,]$alpha * fitFrame[1,]$q0 * fitFrame[1,]$PmaxD) - 1)))) * fitFrame[1,]$PmaxD
     fitFrame[1,]$PmaxD <- 1/(fitFrame[1,]$q0 * fitFrame[1,]$alpha * (fitFrame[1,]$k ^ 1.5)) * (0.083 * fitFrame[1,]$k + 0.65)
     fitFrame[1,]$OmaxD <- (fitFrame[1,]$q0 * (10^(fitFrame[1,]$k * (exp(-fitFrame[1,]$alpha * fitFrame[1,]$q0 * fitFrame[1,]$PmaxD) - 1)))) * fitFrame[1,]$PmaxD
-    
   }
 
 for (i in 1:nSimulated)
 {
   dataHolder <- NULL
   dataHolder <- SourceFrame[SourceFrame$p==i,]
-  dataHolder$expend <- (dataHolder$x * dataHolder$y)
-  
-  ### These measures computed even if model fails/is not appropriate
-  
-  fitFrameTemp[fitFrameTemp$p==i,]$OmaxE <- max(dataHolder$expend)
-  fitFrameTemp[fitFrameTemp$p==i,]$PmaxE <- max(dataHolder[dataHolder$expend == max(dataHolder$expend),]$x)
-  
-  xMin <- min(dataHolder$x)
-  
-  fitFrameTemp[fitFrameTemp$p==i,]$Q0e <- min(dataHolder[dataHolder$x == xMin,]$y)
-  
-  if (length(dataHolder[dataHolder$y == 0,]$x) > 0)
-  {
-    fitFrameTemp[fitFrameTemp$p==i,]$BP0 <- min(dataHolder[dataHolder$y == 0,]$x)
-  }
-  
-  if (sum(dataHolder$y > 0))
-  {
-    fitFrameTemp[fitFrameTemp$p==i,]$BP1 <- max(dataHolder[dataHolder$y != 0,]$x)
-  }
-  
-  ###
   
   fit <- NULL
   try(fit <- wrapnls(data=dataHolder, (log(y)/log(10)) ~ (log(q0)/log(10)) + k * (exp(-alpha*q0*x)-1), start=c(q0=10, alpha=0.000000001),
@@ -202,24 +140,10 @@ for (i in 1:nSimulated)
     fitFrameTemp[fitFrameTemp$p==i,]$q0high <- confint2(fit)[3]
     fitFrameTemp[fitFrameTemp$p==i,]$alow <- confint2(fit)[2]
     fitFrameTemp[fitFrameTemp$p==i,]$ahigh <- confint2(fit)[4]
-    
-    ## Model Fit need not happen for these to be observed
-    
-    if (length(dataHolder[dataHolder$y == 0,]$x) > 0)
-    {
-      fitFrameTemp[fitFrameTemp$p==i,]$BP0 <- min(dataHolder[dataHolder$y == 0,]$x)
-    }
-    
-    if (sum(dataHolder$y > 0))
-    {
-      fitFrameTemp[fitFrameTemp$p==i,]$BP1 <- max(dataHolder[dataHolder$y != 0,]$x)
-    }
-    
     fitFrameTemp[fitFrameTemp$p==i,]$EV <- 1/(fitFrameTemp[fitFrameTemp$p==i,]$alpha * (fitFrameTemp[fitFrameTemp$p==i,]$k ^ 1.5) * 100)
     fitFrameTemp[fitFrameTemp$p==i,]$PmaxD <- 1/(fitFrameTemp[fitFrameTemp$p==i,]$q0 * fitFrameTemp[fitFrameTemp$p==i,]$alpha * (fitFrameTemp[fitFrameTemp$p==i,]$k ^ 1.5)) * (0.083 * fitFrameTemp[fitFrameTemp$p==i,]$k + 0.65)
     fitFrameTemp[fitFrameTemp$p==i,]$OmaxD <- (10^(log10(fitFrameTemp[fitFrameTemp$p==i,]$q0) + (fitFrameTemp[fitFrameTemp$p==i,]$k * (exp(-fitFrameTemp[fitFrameTemp$p==i,]$alpha * fitFrameTemp[fitFrameTemp$p==i,]$q0 * fitFrameTemp[fitFrameTemp$p==i,]$PmaxD) - 1)))) * fitFrameTemp[fitFrameTemp$p==i,]$PmaxD
     fitFrameTemp[fitFrameTemp$p==i,]$PmaxD <- 1/(fitFrameTemp[fitFrameTemp$p==i,]$q0 * fitFrameTemp[fitFrameTemp$p==i,]$alpha * (fitFrameTemp[fitFrameTemp$p==i,]$k ^ 1.5)) * (0.083 * fitFrameTemp[fitFrameTemp$p==i,]$k + 0.65)
     fitFrameTemp[fitFrameTemp$p==i,]$OmaxD <- (fitFrameTemp[fitFrameTemp$p==i,]$q0 * (10^(fitFrameTemp[fitFrameTemp$p==i,]$k * (exp(-fitFrameTemp[fitFrameTemp$p==i,]$alpha * fitFrameTemp[fitFrameTemp$p==i,]$q0 * fitFrameTemp[fitFrameTemp$p==i,]$PmaxD) - 1)))) * fitFrameTemp[fitFrameTemp$p==i,]$PmaxD
-    
   }
 }

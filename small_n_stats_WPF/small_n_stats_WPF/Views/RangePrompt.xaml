@@ -27,16 +27,22 @@
         Title="Range Prompt" 
         Height="150" 
         Width="300">
-    <StackPanel VerticalAlignment="Bottom" 
-                    Margin="5"
-                    FocusManager.FocusedElement="{Binding ElementName=RangeText}">
-        <TextBlock Text="Enter the custom Range (e.g., B1:B10)"
-                   ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                   Margin="5"/>
-        <TextBox x:Name="RangeText"
-                     Margin="5" />
-        <Button Content="Select"
-                    Margin="5" 
-                    Click="Button_Click" />
+    <StackPanel 
+        VerticalAlignment="Bottom" 
+        Margin="5"
+        FocusManager.FocusedElement="{Binding ElementName=RangeText}">
+        <TextBlock 
+            x:Name="questionText"
+            Text="Enter the custom Range (e.g., B1:B10)"
+            ScrollViewer.VerticalScrollBarVisibility="Disabled"
+            Margin="5"/>
+        <TextBox 
+            x:Name="RangeText"
+            CharacterCasing="Upper" 
+            Margin="5" />
+        <Button 
+            Content="Select"
+            Margin="5" 
+            Click="Button_Click" />
     </StackPanel>
 </Window>

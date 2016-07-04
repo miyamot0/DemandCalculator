@@ -94,11 +94,8 @@
                 <MenuItem Header="_Modeling">
 
                     <MenuItem Header="Demand Analysis">
-                        <MenuItem Header="_Demand Curve Fitting" 
-                              Command="{Binding DemandCurveWindowCommand}">
-                        </MenuItem>
-                        <MenuItem Header="_Batch Demand Curve Fitting" 
-                              Command="{Binding BatchDemandCurveWindowCommand}">
+                        <MenuItem Header="_Unified Demand Curve Fitting" 
+                              Command="{Binding UnifiedDemandCurveWindowCommand}">
                         </MenuItem>
                     </MenuItem>
                 </MenuItem>
@@ -161,6 +158,7 @@
                               Command="{Binding InformationWindowCommand}">
                     </MenuItem>
                 </MenuItem>
+                
                 <MenuItem Header="_Help">
                     <MenuItem Header="_FAQ"
                               Command="{Binding HelpCommand}">

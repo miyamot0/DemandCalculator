@@ -37,7 +37,9 @@ namespace small_n_stats_WPF.Utilities
     {
         DoNothing,
         DropZeros,
+        ChangeTenth,
         ChangeHundredth,
+        ChangeCustom,
         OnePercentLowest
     }
 
@@ -58,6 +60,7 @@ namespace small_n_stats_WPF.Utilities
     {
         DeriveValuesIndividual,
         DeriveValuesGroup,
+        AverageLogValuesGroup,
         UseSuppliedValues,
         FitK
     }
@@ -75,6 +78,14 @@ namespace small_n_stats_WPF.Utilities
 
             switch (decision)
             {
+                case YValueDecisions.ChangeCustom:
+                    holderString = "Zero Y values : Custom Value ";
+                    break;
+
+                case YValueDecisions.ChangeTenth:
+                    holderString = "Zero Y values : Changed to 0.1";
+                    break;
+
                 case YValueDecisions.ChangeHundredth:
                     holderString = "Zero Y values : Changed to 0.01";
                     break;
@@ -133,20 +144,24 @@ namespace small_n_stats_WPF.Utilities
 
             switch(decision)
             {
-                case KValueDecisions.DeriveValuesGroup:
-                    holderString = "K values : Derived from whole sample";
-                    break;
-
                 case KValueDecisions.DeriveValuesIndividual:
                     holderString = "K values : Derived from individual series";
                     break;
 
-                case KValueDecisions.FitK:
-                    holderString = "K values : Fitted with other parameters";
+                case KValueDecisions.DeriveValuesGroup:
+                    holderString = "K values : Derived from whole sample";
+                    break;
+
+                case KValueDecisions.AverageLogValuesGroup:
+                    holderString = "K values : Averaged Empirical Logs";
                     break;
 
                 case KValueDecisions.UseSuppliedValues:
                     holderString = "K values : User supplied K";
+                    break;
+
+                case KValueDecisions.FitK:
+                    holderString = "K values : Fitted with other parameters";
                     break;
             }
 
@@ -166,7 +181,7 @@ namespace small_n_stats_WPF.Utilities
         {
             string recommended = (modelType == "Exponential") ? "Drop Zeroes" : "Do Nothing";
 
-            var yValueWindow = new SelectionWindow(new string[] { "Drop Zeroes", "Change Hundredth", "One Percent of Lowest", "Do Nothing" }, recommended);
+            var yValueWindow = new SelectionWindow(new string[] { "Drop Zeroes", "Change Hundredth", "Change Tenth", "Custom Value", "Do Nothing" }, recommended);
             yValueWindow.Title = "How do you want to treat 0 Consumption values";
             yValueWindow.MessageLabel.Text = "Please select how to manage the zero Y values";
             yValueWindow.Owner = windowRef;
@@ -187,9 +202,62 @@ namespace small_n_stats_WPF.Utilities
                 }
                 else if (output == 2)
                 {
-                    return YValueDecisions.OnePercentLowest;
+                    return YValueDecisions.ChangeTenth;
                 }
                 else if (output == 3)
+                {
+                    return YValueDecisions.ChangeCustom;
+                }
+                else if (output == 4)
+                {
+                    return YValueDecisions.DoNothing;
+                }
+            }
+
+            return YValueDecisions.DoNothing;
+        }
+
+        /// <summary>
+        /// Query's user about how to address certain values
+        /// </summary>
+        /// <param name="modelType">
+        /// modelType informs the "default", recommended option
+        /// </param>
+        /// <returns>
+        /// Decision enum
+        /// </returns>
+        public static YValueDecisions GetYBehavior(bool isHursh, Window windowRef)
+        {
+            string recommended = (isHursh) ? "Drop Zeroes" : "Do Nothing";
+
+            var yValueWindow = new SelectionWindow(new string[] { "Drop Zeroes", "Change Hundredth", "Change Tenth", "Custom Value", "Do Nothing" }, recommended);
+            yValueWindow.Title = "How do you want to treat 0 Consumption values";
+            yValueWindow.MessageLabel.Text = "Please select how to manage the zero Y values";
+            yValueWindow.Owner = windowRef;
+            yValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            yValueWindow.Topmost = true;
+
+            if (yValueWindow.ShowDialog() == true)
+            {
+                int output = yValueWindow.MessageOptions.SelectedIndex;
+
+                if (output == 0)
+                {
+                    return YValueDecisions.DropZeros;
+                }
+                else if (output == 1)
+                {
+                    return YValueDecisions.ChangeHundredth;
+                }
+                else if (output == 2)
+                {
+                    return YValueDecisions.ChangeTenth;
+                }
+                else if (output == 3)
+                {
+                    return YValueDecisions.ChangeCustom;
+                }
+                else if (output == 4)
                 {
                     return YValueDecisions.DoNothing;
                 }
@@ -211,7 +279,7 @@ namespace small_n_stats_WPF.Utilities
         {
             string recommended = (modelType == "Exponential") ? "Drop Zeroes" : "Do Nothing";
 
-            var xValueWindow = new SelectionWindow(new string[] { "Change Hundredth", "Drop Zeroes", "Do Nothing" }, recommended);
+            var xValueWindow = new SelectionWindow(new string[] { "Drop Zeroes", "Do Nothing" }, recommended);
             xValueWindow.Title = "How do you want to treat 0 Pricing (free) values";
             xValueWindow.MessageLabel.Text = "Please select how to manage the zero X values";
             xValueWindow.Owner = windowRef;
@@ -224,13 +292,46 @@ namespace small_n_stats_WPF.Utilities
 
                 if (output == 0)
                 {
-                    return XValueDecisions.ChangeHundredth;
+                    return XValueDecisions.DropZeros;
                 }
                 else if (output == 1)
                 {
+                    return XValueDecisions.DoNothing;
+                }
+            }
+
+            return XValueDecisions.DoNothing;
+        }
+
+        /// <summary>
+        /// Query's user about how to address certain values
+        /// </summary>
+        /// <param name="modelType">
+        /// modelType informs the "default", recommended option
+        /// </param>
+        /// <returns>
+        /// Decision enum
+        /// </returns>
+        public static XValueDecisions GetXBehavior(bool isHursh, Window windowRef)
+        {
+            string recommended = (isHursh) ? "Drop Zeroes" : "Do Nothing";
+
+            var xValueWindow = new SelectionWindow(new string[] { "Drop Zeroes", "Do Nothing" }, recommended);
+            xValueWindow.Title = "How do you want to treat 0 Pricing (free) values";
+            xValueWindow.MessageLabel.Text = "Please select how to manage the zero X values";
+            xValueWindow.Owner = windowRef;
+            xValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            xValueWindow.Topmost = true;
+
+            if (xValueWindow.ShowDialog() == true)
+            {
+                int output = xValueWindow.MessageOptions.SelectedIndex;
+
+                if (output == 0)
+                {
                     return XValueDecisions.DropZeros;
                 }
-                else if (output == 2)
+                else if (output == 1)
                 {
                     return XValueDecisions.DoNothing;
                 }
@@ -289,7 +390,8 @@ namespace small_n_stats_WPF.Utilities
         /// </returns>
         public static KValueDecisions GetKBehaviorGroup(Window windowRef)
         {
-            var kValueWindow = new SelectionWindow(new string[] { "Fit K as parameter", "Use derived K (group)", "Use Custom Ks" }, "Use derived K (group)");
+            var kValueWindow = new SelectionWindow(new string[] { "Fit K as parameter", "Use derived K (group)", "Use derived K (individual)", "Average derived K", "Use Custom Ks" }, 
+                "Use derived K (group)");
             kValueWindow.Title = "How do you want to derive K values";
             kValueWindow.MessageLabel.Text = "Please select how to ascertain K:";
             kValueWindow.Owner = windowRef;
@@ -310,11 +412,19 @@ namespace small_n_stats_WPF.Utilities
                 }
                 else if (output == 2)
                 {
+                    return KValueDecisions.DeriveValuesIndividual;
+                }
+                else if (output == 3)
+                {
+                    return KValueDecisions.AverageLogValuesGroup;
+                }
+                else if (output == 4)
+                {
                     return KValueDecisions.UseSuppliedValues;
                 }
             }
 
-            return KValueDecisions.FitK;
+            return KValueDecisions.DeriveValuesGroup;
         }
 
     }

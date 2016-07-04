@@ -1,5 +1,5 @@
-//----------------------------------------------------------------------------------------------
-// <copyright file="DemandCurveWindow.cs" 
+﻿//----------------------------------------------------------------------------------------------
+// <copyright file="DemandCurveUnifiedWindow.cs" 
 // Copyright 2016 Shawn Gilroy
 //
 // This file is part of Demand Curve Calculator.
@@ -31,11 +31,11 @@ using System.Windows;
 namespace small_n_stats_WPF.Views
 {
     /// <summary>
-    /// Interaction logic for DemandCurveWindow.xaml
+    /// Interaction logic for DemandCurveUnifiedWindow.xaml
     /// </summary>
-    public partial class DemandCurveWindow : Window
+    public partial class DemandCurveUnifiedWindow : Window
     {
-        public DemandCurveWindow()
+        public DemandCurveUnifiedWindow()
         {
             InitializeComponent();
         }
@@ -47,7 +47,7 @@ namespace small_n_stats_WPF.Views
         /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var viewModel = (DemandCurveExponentialViewModel)DataContext;
+            var viewModel = (UnifiedDemandCurveViewModel)DataContext;
 
             if (viewModel.ViewLoadedCommand.CanExecute(null))
                 viewModel.ViewLoadedCommand.Execute(null);
@@ -60,10 +60,36 @@ namespace small_n_stats_WPF.Views
         /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var viewModel = (DemandCurveExponentialViewModel)DataContext;
+            var viewModel = (UnifiedDemandCurveViewModel)DataContext;
 
             if (viewModel.ViewClosingCommand.CanExecute(null))
                 viewModel.ViewClosingCommand.Execute(null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void xRange_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var viewModel = (UnifiedDemandCurveViewModel)DataContext;
+
+            if (viewModel.PricingRangeCommand.CanExecute(null))
+                viewModel.PricingRangeCommand.Execute(null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void yRange_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var viewModel = (UnifiedDemandCurveViewModel)DataContext;
+
+            if (viewModel.ConsumptionRangeCommand.CanExecute(null))
+                viewModel.ConsumptionRangeCommand.Execute(null);
         }
     }
 }

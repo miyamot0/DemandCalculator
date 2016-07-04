@@ -31,7 +31,7 @@
     <SuiteName>Demand Calculator</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
-    <ApplicationRevision>31</ApplicationRevision>
+    <ApplicationRevision>32</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -156,6 +156,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Mathematics\DemandFunctionSolvers.cs" />
+    <Compile Include="Models\DemandCoordinate.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -168,10 +169,13 @@
     <Compile Include="Utilities\OpenXMLHelper.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="Utilities\Settings.cs" />
-    <Compile Include="ViewModels\DemandCurveExponentialViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\UnifiedDemandCurveViewModel.cs" />
     <Compile Include="Views\CheckWindow.xaml.cs">
       <DependentUpon>CheckWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DemandCurveUnifiedWindow.xaml.cs">
+      <DependentUpon>DemandCurveUnifiedWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
@@ -185,14 +189,7 @@
     <Compile Include="ViewModels\ResultsViewModel.cs" />
     <Compile Include="ViewModels\RowViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\BatchDemandCurveExponentialViewModel.cs" />
     <Compile Include="ViewModels\LicenseViewModel.cs" />
-    <Compile Include="Views\BatchDemandCurveWindow.xaml.cs">
-      <DependentUpon>BatchDemandCurveWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\DemandCurveWindow.xaml.cs">
-      <DependentUpon>DemandCurveWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\InformationWindow.xaml.cs">
       <DependentUpon>InformationWindow.xaml</DependentUpon>
     </Compile>
@@ -269,6 +266,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\DemandCurveUnifiedWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -280,14 +281,6 @@
     <Page Include="Views\ProgressDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\BatchDemandCurveWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DemandCurveWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\InformationWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -339,12 +332,12 @@
   <ItemGroup>
     <PublishFile Include="Source\small-n-stats-WPF-master-e73fd4c3a57571d634ae08c83f588852883873d9.zip">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
