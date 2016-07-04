@@ -12,7 +12,7 @@
         Title="Demand Curve Unified Window" 
         ResizeMode="NoResize"
         Height="525"
-        Width="850">
+        Width="415">
 
     <Window.Style>
         <Style TargetType="Window">
@@ -285,6 +285,7 @@
 
         <Grid Grid.Column="1"              
               Grid.Row="0"
+              Margin="0,0,10,0"
               x:Name="AdvWindow">
 
             <Grid.Style>
@@ -457,7 +458,7 @@
                 HorizontalAlignment="Left"
                 Margin="15,5,5,5">
 
-                <Label FontWeight="Bold">How to derive free parameter (k)?</Label>
+                <Label FontWeight="Bold">How to derive free parameter (k)</Label>
 
                 <Label>Shared k Options</Label>
                 
