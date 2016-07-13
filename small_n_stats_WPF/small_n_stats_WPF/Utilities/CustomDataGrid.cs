@@ -107,6 +107,8 @@ namespace small_n_stats_WPF.Utilities
 
             var itemSource = ItemsSource as ObservableCollection<RowViewModel>;
 
+            if (itemSource == null) return;
+
             for (int i = lowRow; (i <= highRow) && (pasteContentRowIterator < rowData.Count); i++)
             {
                 if (i == highRow)

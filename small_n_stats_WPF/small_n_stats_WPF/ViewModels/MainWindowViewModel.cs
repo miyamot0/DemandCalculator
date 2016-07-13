@@ -272,9 +272,9 @@ namespace small_n_stats_WPF.ViewModels
             BeezdemandLicenseWindowCommand = new RelayCommand(param => BeezdemandLicenseInformationWindow(), param => true);
             LicenseWindowCommand = new RelayCommand(param => LicenseInformationWindow(), param => true);
 
-        #endregion
+            #endregion
 
-        RowViewModels = new ObservableCollection<RowViewModel>();
+            RowViewModels = new ObservableCollection<RowViewModel>();
 
             ObservableCollection<RowViewModel> temp = new ObservableCollection<RowViewModel>();
 
@@ -404,7 +404,7 @@ namespace small_n_stats_WPF.ViewModels
                 string holdClip = string.Join("\t", holdPreClip);
                 Clipboard.SetText(holdClip);
 
-                foreach (System.Windows.Controls.DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
+                foreach (DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
                 {
                     var rvm = obj.Item as RowViewModel;
 

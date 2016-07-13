@@ -91,11 +91,27 @@ namespace small_n_stats_WPF.Mathematics
         }
 
         /// <summary>
+        /// Graphing code for logged exponential model
+        /// </summary>
+        public static string GetExponentialGraphingFunctionFaceted()
+        {
+            return Properties.Resources.GraphingExponentialFaceted;
+        }
+
+        /// <summary>
         /// Graphing code for logged exponentiated model
         /// </summary>
         public static string GetExponentiatedGraphingFunction()
         {
             return Properties.Resources.GraphingExponentiated;
+        }
+
+        /// <summary>
+        /// Graphing code for logged exponentiated model
+        /// </summary>
+        public static string GetExponentiatedGraphingFunctionFaceted()
+        {
+            return Properties.Resources.GraphingExponentiatedFaceted;
         }
 
         /// <summary>

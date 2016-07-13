@@ -1860,6 +1860,16 @@ namespace small_n_stats_WPF.ViewModels
 
                 if (outputFigures)
                 {
+                    xRange = new List<double>(array[0]);
+                    yRange = new List<double>(array[1]);
+
+                    engine.Evaluate("SourceFrame<-data.frame(x=c(" + string.Join(",", xRange)+ ")," + 
+                        "y=c(" + string.Join(",", yRange) + "))");
+                    engine.Evaluate("SourceFrame$p <- 1");
+
+                    //List<double> xRange = new List<double>(array[0]);
+                    //List<double> yRange = new List<double>(array[1]);
+
                     try
                     {
                         engine.Evaluate("library(ggplot2)");
@@ -1874,14 +1884,30 @@ namespace small_n_stats_WPF.ViewModels
                         engine.Evaluate("graphingOmax <- fitFrame[fitFrame$p==1,]$OmaxD");
                         engine.Evaluate("graphingPmax <- fitFrame[fitFrame$p==1,]$PmaxD");
 
+                        engine.Evaluate("empP <- " + DemandFunctionSolvers.GetPmaxE(demandPoints));
+                        engine.Evaluate("derP <- " + engine.Evaluate("fitFrame[fitFrame$p==1,]$PmaxD").AsVector().First().ToString());
+
                         if (HurshModel)
                         {
-                            engine.Evaluate(DemandFunctionSolvers.GetExponentialGraphingFunction());
-
+                            if (xRange.Contains(0))
+                            {
+                                engine.Evaluate(DemandFunctionSolvers.GetExponentialGraphingFunctionFaceted());
+                            }
+                            else
+                            {
+                                engine.Evaluate(DemandFunctionSolvers.GetExponentialGraphingFunction());
+                            }
                         }
                         else if (KoffarnusModel)
                         {
-                            engine.Evaluate(DemandFunctionSolvers.GetExponentiatedGraphingFunction());
+                            if (xRange.Contains(0))
+                            {
+                                engine.Evaluate(DemandFunctionSolvers.GetExponentiatedGraphingFunctionFaceted());
+                            }
+                            else
+                            {
+                                engine.Evaluate(DemandFunctionSolvers.GetExponentiatedGraphingFunction());
+                            }
                         }
 
                         WpfDrawingSettings settings = new WpfDrawingSettings();
@@ -1912,6 +1938,8 @@ namespace small_n_stats_WPF.ViewModels
                             iWindow1.Show();
                         }
 
+                        /*
+
                         string output2 = engine.Evaluate("workString").AsVector().First().ToString();
 
                         byte[] bytes2 = Convert.FromBase64String(output2);
@@ -1935,8 +1963,10 @@ namespace small_n_stats_WPF.ViewModels
                             iWindow2.Show();
                         }
 
+                        */
+
                         filesList.Add(path1);
-                        filesList.Add(path2);
+                        //filesList.Add(path2);
                     }
                     catch (Exception e)
                     {
