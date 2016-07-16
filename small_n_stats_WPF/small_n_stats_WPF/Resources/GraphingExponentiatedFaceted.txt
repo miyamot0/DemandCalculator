@@ -120,7 +120,10 @@ logChart <- ggplot(pointFrame,aes(x=X,y=Y)) +
                                     fill=FALSE, 
                                     size=0),
         axis.line.x = element_line(colour = "black"),
-        axis.line.y = element_line(colour = "black")) + 
+        axis.line.y = element_line(colour = "black"),
+		axis.text.x=element_text(colour="black"),
+		axis.text.y=element_text(colour="black"),
+		text = element_text(size=16)) + 
     annotation_logticks2(sides="l", data = data.frame(X= NA, mask = 0)) +
     annotation_logticks2(sides="b", data = data.frame(X= NA, mask = 1)) +
     labs(x = "Unit Price", y = "Consumption")

@@ -68,6 +68,9 @@ logChart <- ggplot(graphFrame,aes(x=XSeries,y=YSeries)) +
         panel.grid.minor = element_blank(),
         axis.line.x = element_line(colour = "black"),
         axis.line.y = element_line(colour = "black"),
+		axis.text.x=element_text(colour="black"),
+		axis.text.y=element_text(colour="black"),
+		text = element_text(size=16),
         panel.border = element_rect(colour = "black", 
                                     fill=NA, 
                                     size=0)) +
