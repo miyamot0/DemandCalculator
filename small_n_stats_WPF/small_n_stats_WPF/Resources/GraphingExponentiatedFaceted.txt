@@ -99,18 +99,17 @@ annotation_logticks2 <- function(base = 10, sides = "bl", scaled = TRUE,
 }
 
 logChart <- ggplot(pointFrame,aes(x=X,y=Y)) +
-  geom_point(data=pointFrame, aes(x=pointFrame$X, y=log10(pointFrame$Y), color="black"), size=2) +
-  geom_point(data=pointFrame, aes(x=pointFrame$X, y=log10(pointFrame$Y), color="black2"), size=1.5) +
+  geom_point(data=pointFrame, aes(x=pointFrame$X, y=log10(pointFrame$Y)), size=2, shape=21, show.legend=F) +
   facet_grid(.~mask, scales="free_x", space="free") +  
   geom_line(data=graphFrame, aes(x=XSeries,y=YSeries)) +
   scale_x_log10(breaks=c(0.00001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000),
                 labels=c("QFree",  0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000)) +
   scale_y_log10(breaks=c(0.01, 0.1, 1, 10, 100, 1000, 10000, 100000),
                 labels=c(0.01, 0.1, 1, 10, 100, 1000, 10000, 100000)) +
-  geom_segment(data=empiricalFrame, aes(x=Xs, xend=Xe, y=Ys, yend=Ye), inherit.aes=FALSE, linetype = 1) +
-  geom_segment(data=derivedFrame, aes(x=Xs, xend=Xe, y=Ys, yend=Ye), inherit.aes=FALSE, linetype = 2) +
-  scale_color_manual(values = c("#000000", "#FFFFFF"), guide = FALSE) +
-  coord_cartesian(ylim=c(0.1,10)) +
+  geom_segment(data=empiricalFrame, aes(x=Xs, xend=Xe, y=Ys, yend=Ye, linetype="black3"), inherit.aes=FALSE, show.legend = T) +
+  geom_segment(data=derivedFrame, aes(x=Xs, xend=Xe, y=Ys, yend=Ye, linetype="black4"), inherit.aes=FALSE, show.legend = T) +
+  scale_linetype_manual("", labels=c("Empirical Pmax  ", "Derived Pmax  "), values = c("solid", "dashed")) +  
+  coord_cartesian(ylim=c(0.1, max(SourceFrame$y))) +
   theme(strip.background = element_blank(), 
         strip.text = element_blank(),
         panel.background = element_blank(),
@@ -123,7 +122,9 @@ logChart <- ggplot(pointFrame,aes(x=X,y=Y)) +
         axis.line.y = element_line(colour = "black"),
 		axis.text.x=element_text(colour="black"),
 		axis.text.y=element_text(colour="black"),
-		text = element_text(size=16)) + 
+		text = element_text(size=16),
+        legend.position = "bottom",
+        legend.key = element_rect(fill = "transparent", colour = "transparent")) + 
     annotation_logticks2(sides="l", data = data.frame(X= NA, mask = 0)) +
     annotation_logticks2(sides="b", data = data.frame(X= NA, mask = 1)) +
     labs(x = "Unit Price", y = "Consumption")
