@@ -862,7 +862,7 @@ namespace small_n_stats_WPF.ViewModels
         {
             var mWin = new DemandCurveUnifiedWindow();
             mWin.Owner = MainWindow;
-            mWin.windowTitle.Text = "Batch Demand Curve Analysis";
+            mWin.windowTitle.Text = "Demand Curve Analysis";
             mWin.DataContext = new UnifiedDemandCurveViewModel
             {
                 mWindow = MainWindow,
