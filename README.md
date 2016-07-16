@@ -9,9 +9,10 @@ Features include:
   - Full range of BE outcome metrics (empirical and derived), saveable in common spreadsheet file formats
 
 ### Version
-1.0.0.33
+1.0.0.34
 
 ### Changelog
+ * 1.0.0.34 - Updated graphics, consistent with BE depictions of demand curves
  * 1.0.0.33 - Combined analyses, rewrote empirical outputs, alternative preferences and extended data entry options
  * 1.0.0.31 - Graphics for all individualized series
  * 1.0.0.30 - Tweak K calculation defaults
