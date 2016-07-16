@@ -92,7 +92,7 @@
                 </MenuItem>
 
                 <MenuItem Header="_Modeling">
-                    <MenuItem Header="_Unified Demand Curve Fitting" 
+                    <MenuItem Header="_Demand Curve Fitting" 
                             Command="{Binding UnifiedDemandCurveWindowCommand}">
                     </MenuItem>
                 </MenuItem>
