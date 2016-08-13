@@ -853,6 +853,7 @@ namespace small_n_stats_WPF.ViewModels
                 windowRef.KRangeHigh.IsEnabled = true;
                 windowRef.fitKNormal.IsEnabled = true;
                 windowRef.fitKBounded.IsEnabled = true;
+                windowRef.kRange.IsEnabled = false;
             }
             else
             {
