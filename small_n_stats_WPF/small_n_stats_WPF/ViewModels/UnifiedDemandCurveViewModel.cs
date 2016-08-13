@@ -129,6 +129,8 @@ namespace small_n_stats_WPF.ViewModels
 
         #endregion
 
+        #region AdvancedBindings
+
         private bool fitQ0 = false;
         public bool FitQ0
         {
@@ -243,6 +245,8 @@ namespace small_n_stats_WPF.ViewModels
                 OnPropertyChanged("BoundKValueHigh");
             }
         }
+
+        #endregion
 
         #region ModelModes
 
@@ -563,7 +567,7 @@ namespace small_n_stats_WPF.ViewModels
 
         #endregion
 
-        /* Math */
+        #region Math
 
         REngine engine;
 
@@ -587,7 +591,9 @@ namespace small_n_stats_WPF.ViewModels
 
         string path1 = null, path2 = null;
 
-        /* Commands */
+        #endregion
+
+        #region Commands
 
         public RelayCommand ViewLoadedCommand { get; set; }
         public RelayCommand ViewClosingCommand { get; set; }
@@ -602,7 +608,9 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand PricingRangeCommand { get; set; }
         public RelayCommand ConstantRangeCommand { get; set; }
         public RelayCommand ResetConstantRangeCommand { get; set; }
-        
+
+        #endregion
+
         private List<string> filesList = new List<string>();
 
         /// <summary>
@@ -2139,9 +2147,6 @@ namespace small_n_stats_WPF.ViewModels
                         "y=c(" + string.Join(",", yRange) + "))");
                     engine.Evaluate("SourceFrame$p <- 1");
 
-                    //List<double> xRange = new List<double>(array[0]);
-                    //List<double> yRange = new List<double>(array[1]);
-
                     try
                     {
                         engine.Evaluate("library(ggplot2)");
@@ -2665,7 +2670,7 @@ namespace small_n_stats_WPF.ViewModels
             List<double> kRange = new List<double>();
             List<double> pRange = new List<double>();
 
-            if (yBehavior == YValueDecisions.ChangeCustom)
+            if (yBehavior == YValueDecisions.ChangeCustom && !AdvancedMenu)
             {
                 var mYprompt = new RangePrompt();
                 mYprompt.Topmost = true;
@@ -2686,7 +2691,7 @@ namespace small_n_stats_WPF.ViewModels
                 }
             }
 
-            if (kBehavior == KValueDecisions.UseSuppliedValues)
+            if (kBehavior == KValueDecisions.UseSuppliedValues && !AdvancedMenu)
             {
                 var mKprompt = new RangePrompt();
                 mKprompt.Topmost = true;
@@ -2967,7 +2972,6 @@ namespace small_n_stats_WPF.ViewModels
                         }
                         else
                         {
-                            //engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunction());
                             engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunctionKSet());
                         }
                     }
@@ -2988,7 +2992,6 @@ namespace small_n_stats_WPF.ViewModels
                         }
                         else
                         {
-                            //engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunction());
                             engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunctionKSet());
                         }
 
