@@ -585,8 +585,6 @@ namespace small_n_stats_WPF.ViewModels
             lowColK = -1,
             highColK = -1;
 
-        double q0Fixed, q0BoundLow, q0BoundHigh; 
-
         string path1 = null, path2 = null;
 
         /* Commands */

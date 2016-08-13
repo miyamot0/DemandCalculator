@@ -740,30 +740,6 @@ namespace small_n_stats_WPF.ViewModels
 
                     introWindow.loadText.Text = "Loading R Packages";
 
-                    bool loadedNls2 = engine.Evaluate("require(nls2)").AsLogical().First();
-
-                    if (loadedNls2)
-                    {
-                        introWindow.nls2.Foreground = Brushes.Green;
-                    }
-                    else
-                    {
-                        SendMessageToOutput("Attempting to install nls2 packages for first time!");
-                        introWindow.loadText.Text = "Downloading nls2...";
-                        engine.Evaluate("if (!require(nls2)) { install.packages('nls2', repos = 'http://cran.us.r-project.org') }");
-
-                        loadedNls2 = engine.Evaluate("require(nls2)").AsLogical().First();
-
-                        if (loadedNls2)
-                        {
-                            introWindow.nls2.Foreground = Brushes.Green;
-                        }
-                    }
-
-
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
                     if (loadedGgplot && loadedGrid && loadedReshape && loadedBase64 && loadedNlstools && loadedNlmrt && !failed)
                     {
                         introWindow.loadText.Text = "All necessary components found!";

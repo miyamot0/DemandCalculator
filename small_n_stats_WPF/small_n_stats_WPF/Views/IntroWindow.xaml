@@ -97,11 +97,6 @@
                             base64enc (R package)
                         </Paragraph>
                     </ListItem>
-                    <ListItem x:Name="nls2" TextBlock.Foreground="Red">
-                        <Paragraph>
-                            nls2 (R package)
-                        </Paragraph>
-                    </ListItem>                    
                 </List>
                 <Paragraph>
                     <Run Text="Status:" />
