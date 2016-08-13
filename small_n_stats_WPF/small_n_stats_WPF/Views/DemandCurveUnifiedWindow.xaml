@@ -12,7 +12,7 @@
         Title="Demand Curve Fitting" 
         ResizeMode="NoResize"
         Height="555"
-        Width="850">
+        Width="415">
 
     <Window.Style>
         <Style TargetType="Window">
@@ -489,7 +489,7 @@
                              IsChecked="{Binding Path=IndivFitted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Margin="15,0,0,0" />
                 <RadioButton GroupName="Ksettings" 
-                             Content="User Supplied K" 
+                             Content="Fix K to custom value" 
                              IsChecked="{Binding Path=CustomK, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Margin="15,0,0,0" />
 

@@ -842,13 +842,27 @@ namespace small_n_stats_WPF.ViewModels
             if (CustomK)
             {
                 windowRef.kRange.IsEnabled = true;
+                windowRef.fitKNormal.IsEnabled = false;
+                windowRef.fitKBounded.IsEnabled = false;
+                windowRef.KRangeLow.IsEnabled = false;
+                windowRef.KRangeHigh.IsEnabled = false;
+            }
+            else if (GroupFitted || indivFitted)
+            {
+                windowRef.KRangeLow.IsEnabled = true;
+                windowRef.KRangeHigh.IsEnabled = true;
+                windowRef.fitKNormal.IsEnabled = true;
+                windowRef.fitKBounded.IsEnabled = true;
             }
             else
             {
                 if (loaded)
                 {
                     windowRef.kRange.IsEnabled = false;
-                    KValue = "";
+                    windowRef.KRangeLow.IsEnabled = false;
+                    windowRef.KRangeHigh.IsEnabled = false;
+                    windowRef.fitKNormal.IsEnabled = false;
+                    windowRef.fitKBounded.IsEnabled = false;
                 }
             }
         }
