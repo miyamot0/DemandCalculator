@@ -11,8 +11,8 @@
         WindowStartupLocation="CenterOwner"
         Title="Demand Curve Fitting" 
         ResizeMode="NoResize"
-        Height="525"
-        Width="415">
+        Height="555"
+        Width="850">
 
     <Window.Style>
         <Style TargetType="Window">
@@ -391,7 +391,7 @@
                 HorizontalAlignment="Left"
                 Margin="15,5,5,5">
 
-                <Label FontWeight="Bold">Response to values where X == 0?</Label>
+                <Label FontWeight="Bold">Rule for values when X == 0?</Label>
                 <RadioButton GroupName="Xsettings" 
                              Content="Keep Value" 
                              IsChecked="{Binding Path=KeepXValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -410,7 +410,7 @@
                 HorizontalAlignment="Left"
                 Margin="15,5,5,5">
 
-                <Label FontWeight="Bold">Response to values where Y == 0?</Label>
+                <Label FontWeight="Bold">Rule for values when Y == 0?</Label>
                 <RadioButton GroupName="Ysettings" 
                              Content="Keep Value" 
                              IsChecked="{Binding Path=KeepYValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -452,7 +452,7 @@
 
             <StackPanel
                 Grid.Row="3"
-                Grid.RowSpan="5"
+                Grid.RowSpan="7"
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Left"
@@ -474,7 +474,7 @@
                              Margin="15,0,0,0" />
                 <RadioButton x:Name="groupKSetting3"
                              GroupName="Ksettings" 
-                             Content="Fitted K from Pooled data" 
+                             Content="Fit K from Pooled data" 
                              IsChecked="{Binding Path=GroupFitted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Margin="15,0,0,0" />
 
@@ -494,12 +494,128 @@
                              Margin="15,0,0,0" />
 
                 <TextBox x:Name="kRange"
-                         Margin="10"
+                         Margin="15,0,0,0" 
                          VerticalContentAlignment="Center"
                          Text="{Binding KValue}">
                 </TextBox>
+                
+
+                <Label Margin="0,10,0,0" FontWeight="Bold">K Fitting (Advanced)</Label>
+
+                <RadioButton x:Name="fitKNormal"
+                             GroupName="KsettingsBounds" 
+                             Content="Fit parameter freely" 
+                             IsChecked="{Binding Path=FitK, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0"/>
+
+                <RadioButton x:Name="fitKBounded"
+                             GroupName="KsettingsBounds" 
+                             Content="Bound parameter" 
+                             IsChecked="{Binding Path=BoundK, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+                
+                <StackPanel Orientation="Horizontal"
+                            Width="Auto">
+                    <Label Margin="15,0,0,0"
+                           Width="55">Lower:</Label>
+                    <TextBox x:Name="KRangeLow"
+                         Margin="15,0,0,0" 
+                         VerticalContentAlignment="Center"
+                             HorizontalContentAlignment="Stretch"
+                             HorizontalAlignment="Stretch"
+                             Width="90"
+                         Text="{Binding BoundKValueLow}">
+                    </TextBox>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            Width="Auto">
+                    <Label Margin="15,0,0,0"
+                           Width="55">Higher:</Label>
+                    <TextBox x:Name="KRangeHigh"
+                         Margin="15,0,0,0" 
+                         VerticalContentAlignment="Center"
+                             HorizontalContentAlignment="Stretch"
+                             HorizontalAlignment="Stretch"
+                             Width="90"
+                         Text="{Binding BoundKValueHigh}">
+                    </TextBox>
+                </StackPanel>
+
+                <!--
+
+                    -->
+
+
+
+
             </StackPanel>
 
+            <StackPanel
+                Grid.Row="8"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Left"
+                Margin="15,5,5,5">
+
+                <Label FontWeight="Bold">Q0 Fitting (Advanced)</Label>
+
+                <RadioButton x:Name="q0Setting1"
+                             GroupName="Qsettings" 
+                             Content="Fit parameter" 
+                             IsChecked="{Binding Path=FitQ0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0"/>
+                
+                <RadioButton x:Name="q0Setting2"
+                             GroupName="Qsettings" 
+                             Content="Fix to value" 
+                             IsChecked="{Binding Path=FixQ0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+
+                <TextBox x:Name="qFixedValue"
+                         Margin="15,0,0,0" 
+                         VerticalContentAlignment="Center"
+                         Text="{Binding FixedQ0Value}">
+                </TextBox>
+
+                <RadioButton x:Name="q0Setting3"
+                             GroupName="Qsettings" 
+                             Content="Fit parameter (bounded)" 
+                             IsChecked="{Binding Path=BoundQ0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+
+                <StackPanel Orientation="Horizontal"
+                            Width="Auto">
+                    <Label Margin="15,0,0,0"
+                           Width="55">Lower:</Label>
+                    <TextBox x:Name="QRangeLow"
+                         Margin="15,0,0,0" 
+                         VerticalContentAlignment="Center"
+                             HorizontalContentAlignment="Stretch"
+                             HorizontalAlignment="Stretch"
+                             Width="90"
+                         Text="{Binding BoundQ0ValueLow}">
+                    </TextBox>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            Width="Auto">
+                    <Label Margin="15,0,0,0" 
+                           Width="55">Upper:</Label>
+                    <TextBox x:Name="QRangeHigh"
+                         Margin="15,0,0,0" 
+                         VerticalContentAlignment="Center"
+                         HorizontalContentAlignment="Stretch"
+                         HorizontalAlignment="Stretch"
+                         Width="90"
+                         Text="{Binding BoundQ0ValueHigh}">
+                    </TextBox>
+                </StackPanel>
+            </StackPanel>
+
+            <!--
+            
             <FlowDocumentScrollViewer
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
@@ -524,7 +640,8 @@
                         a range of techniques for determining the free parameter are provided.
                     </Paragraph>
                 </FlowDocument>
-            </FlowDocumentScrollViewer>            
+            </FlowDocumentScrollViewer>
+            -->
             
         </Grid>
     </Grid>

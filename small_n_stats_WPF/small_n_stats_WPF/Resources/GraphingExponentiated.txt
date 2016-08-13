@@ -100,7 +100,9 @@ logChart <- ggplot(graphFrame,aes(x=XSeries,y=YSeries)) +
 #  theme(panel.grid.major = element_blank()) 
 
 #  workChart <- workChart + geom_line(data=graphFrame, aes(x=XSeries, y=OSeries, group=Individual, colour = factor(Individual)))
-  svg(tempf1 <- tempfile(fileext = '.svg'), width = 9, height = 9)  print(logChart)
+
+  svg(tempf1 <- tempfile(fileext = '.svg'), width = 9, height = 9)
+  print(logChart)
   dev.off()
 
 #  svg(tempf2 <- tempfile(fileext = '.svg'), width = 9, height = 9)

@@ -34,6 +34,15 @@ namespace small_n_stats_WPF.Mathematics
 {
     class DemandFunctionSolvers
     {
+
+        /// <summary>
+        /// Hursh & Silverburg's exponetial function is called from resources here (as string), for use in R function calls
+        /// </summary>
+        public static string GetSolver()
+        {
+            return Properties.Resources.CurveFitting;
+        }
+
         /// <summary>
         /// Hursh & Silverburg's exponetial function is called from resources here (as string), for use in R function calls
         /// </summary>

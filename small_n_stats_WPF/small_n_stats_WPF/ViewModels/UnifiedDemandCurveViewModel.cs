@@ -129,6 +129,121 @@ namespace small_n_stats_WPF.ViewModels
 
         #endregion
 
+        private bool fitQ0 = false;
+        public bool FitQ0
+        {
+            get { return fitQ0; }
+            set
+            {
+                fitQ0 = value;
+                OnPropertyChanged("FitQ0");
+                UpdateQ0Selectors();
+            }
+        }
+
+        private bool fixQ0 = false;
+        public bool FixQ0
+        {
+            get { return fixQ0; }
+            set
+            {
+                fixQ0 = value;
+                OnPropertyChanged("FixQ0");
+                UpdateQ0Selectors();
+            }
+        }
+
+        private string fixedQ0Value = "";
+        public string FixedQ0Value
+        {
+            get { return fixedQ0Value; }
+            set
+            {
+                fixedQ0Value = value;
+                OnPropertyChanged("FixedQ0Value");
+                UpdateQ0Selectors();
+            }
+        }
+
+        private bool boundQ0 = false;
+        public bool BoundQ0
+        {
+            get { return boundQ0; }
+            set
+            {
+                boundQ0 = value;
+                OnPropertyChanged("BoundQ0");
+            }
+        }
+
+        private string boundQ0ValueLow = "";
+        public string BoundQ0ValueLow
+        {
+            get { return boundQ0ValueLow; }
+            set
+            {
+                boundQ0ValueLow = value;
+                OnPropertyChanged("BoundQ0ValueLow");
+            }
+        }
+
+        private string boundQ0ValueHigh = "";
+        public string BoundQ0ValueHigh
+        {
+            get { return boundQ0ValueHigh; }
+            set
+            {
+                boundQ0ValueHigh = value;
+                OnPropertyChanged("BoundQ0ValueHigh");
+            }
+        }
+
+        private bool fitK = false;
+        public bool FitK
+        {
+            get { return fitK; }
+            set
+            {
+                fitK = value;
+                OnPropertyChanged("FitK");
+                UpdateKBoundingSelectors();
+            }
+        }
+
+        private bool boundK = false;
+        public bool BoundK
+        {
+            get { return boundK; }
+            set
+            {
+                boundK = value;
+                OnPropertyChanged("BoundK");
+                UpdateKBoundingSelectors();
+            }
+        }
+
+        private string boundKValueLow = "";
+        public string BoundKValueLow
+        {
+            get { return boundKValueLow; }
+            set
+            {
+                boundKValueLow = value;
+                OnPropertyChanged("BoundKValueLow");
+            }
+        }
+
+        private string boundKValueHigh = "";
+        public string BoundKValueHigh
+        {
+            get { return boundKValueHigh; }
+            set
+            {
+                boundKValueHigh = value;
+                OnPropertyChanged("BoundKValueHigh");
+            }
+        }
+
         #region ModelModes
 
         private bool hurshModel = false;
@@ -470,6 +585,8 @@ namespace small_n_stats_WPF.ViewModels
             lowColK = -1,
             highColK = -1;
 
+        double q0Fixed, q0BoundLow, q0BoundHigh; 
+
         string path1 = null, path2 = null;
 
         /* Commands */
@@ -677,6 +794,43 @@ namespace small_n_stats_WPF.ViewModels
         /// <summary>
         /// Update interface
         /// </summary>
+        private void UpdateQ0Selectors()
+        {
+            if (FitQ0)
+            {
+                windowRef.qFixedValue.IsEnabled = false;
+                //FixedQ0Value = "";
+
+                windowRef.QRangeLow.IsEnabled = false;
+                //BoundQ0ValueLow = "";
+                windowRef.QRangeHigh.IsEnabled = false;
+                //BoundQ0ValueHigh = "";
+            }
+            else if (FixQ0)
+            {
+                windowRef.qFixedValue.IsEnabled = true;
+                //FixedQ0Value = "";
+
+                windowRef.QRangeLow.IsEnabled = false;
+                //BoundQ0ValueLow = "";
+                windowRef.QRangeHigh.IsEnabled = false;
+                //BoundQ0ValueHigh = "";
+            }
+            else if (BoundQ0)
+            {
+                windowRef.qFixedValue.IsEnabled = false;
+                //FixedQ0Value = "";
+
+                windowRef.QRangeLow.IsEnabled = true;
+                //BoundQ0ValueLow = "";
+                windowRef.QRangeHigh.IsEnabled = true;
+                //BoundQ0ValueHigh = "";
+            }
+        }
+
+        /// <summary>
+        /// Update interface
+        /// </summary>
         private void UpdateKSelectors()
         {
             if (CustomK)
@@ -689,6 +843,26 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     windowRef.kRange.IsEnabled = false;
                     KValue = "";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Update interface
+        /// </summary>
+        private void UpdateKBoundingSelectors()
+        {
+            if (FitK)
+            {
+                windowRef.KRangeLow.IsEnabled = false;
+                windowRef.KRangeHigh.IsEnabled = false;
+            }
+            else
+            {
+                if (loaded)
+                {
+                    windowRef.KRangeLow.IsEnabled = true;
+                    windowRef.KRangeHigh.IsEnabled = true;
                 }
             }
         }
@@ -915,11 +1089,15 @@ namespace small_n_stats_WPF.ViewModels
                 SingleModeRadio = true;
                 HurshModel = true;
                 IndivEmpirical = true;
+                FitQ0 = true;
 
                 windowRef.singleCalculationButton.IsChecked = true;
                 loaded = true;
                 UpdateYSelectors();
                 UpdateKSelectors();
+                FitK = true;
+                UpdateKBoundingSelectors();
+                UpdateQ0Selectors();
             }
 
             DefaultFieldsToGray();
@@ -1152,7 +1330,7 @@ namespace small_n_stats_WPF.ViewModels
                         lowRowY = -1;
                         highColY = -1;
                         highRowY = -1;
-                        MessageBox.Show("Please select a matrix of consumption values, with one row of values with at least three individual points of data (i.e., 3x3).");
+                        MessageBox.Show("Please select a matrix of consumption values, with one row of values with at least three individual points of data (i.e., 1 x ... ).");
 
                         return;
                     }
@@ -1169,7 +1347,7 @@ namespace small_n_stats_WPF.ViewModels
                         lowRowY = -1;
                         highColY = -1;
                         highRowY = -1;
-                        MessageBox.Show("Please select a matrix of consumption values, with one column of values with at least three individual points of data (i.e., 3x3).");
+                        MessageBox.Show("Please select a matrix of consumption values, with one column of values with at least three individual points of data (i.e., 1 x ... ).");
 
                         return;
                     }
@@ -1239,7 +1417,7 @@ namespace small_n_stats_WPF.ViewModels
                 CalculateBatchScores();
             }
         }
-        
+
         /// <summary>
         /// Command-call to calculate based on supplied ranges and reference values (max value).
         /// Will reference user-selected options (figures, outputs, etc.) throughout calls to R
@@ -1249,6 +1427,8 @@ namespace small_n_stats_WPF.ViewModels
             mWindow.dataGrid.CommitEdit();
 
             if (failed) return;
+
+            if (lowColX < 0 || lowColY < 0) return;
 
             double derivedK = -1;
 
@@ -1282,6 +1462,8 @@ namespace small_n_stats_WPF.ViewModels
             YValueDecisions yBehavior = YValueDecisions.DropZeros;
             XValueDecisions xBehavior;
             KValueDecisions kBehavior = KValueDecisions.DeriveValuesIndividual;
+
+            #region AdvancedMenuCustomizations
 
             if (advancedMenu)
             {
@@ -1367,7 +1549,7 @@ namespace small_n_stats_WPF.ViewModels
                     {
                         KValue = mKprompt.ResponseText;
                     }
-                    
+
                     if (!double.TryParse(KValue, out kValueDouble))
                     {
                         mWindow.OutputEvents("Your supplied K value does not appear correct.");
@@ -1376,6 +1558,10 @@ namespace small_n_stats_WPF.ViewModels
                     }
                 }
             }
+
+            #endregion
+
+            #region DataAdjustments
 
             mWindow.OutputEvents("---------------------------------------------------");
 
@@ -1456,6 +1642,62 @@ namespace small_n_stats_WPF.ViewModels
                     pTemp.RemoveAt(index);
                 }
             }
+
+            #endregion
+
+            #region KBoundChecks
+
+            double boundLowKtemp = double.NaN;
+            double boundHighKtemp = double.NaN;
+
+            if (BoundK && !(double.TryParse(BoundKValueLow, out boundLowKtemp) && double.TryParse(BoundKValueHigh, out boundHighKtemp)))
+            {
+                mWindow.OutputEvents("Your supplied K bounds are not valid.");
+                MessageBox.Show("Your supplied K bounds are not valid.");
+                return;
+            }
+            else if (boundLowKtemp >= boundHighKtemp)
+            {
+                mWindow.OutputEvents("Your supplied K bounds seem reversed?");
+                MessageBox.Show("Your supplied K bounds seem reversed?");
+                return;
+            }
+
+            #endregion
+
+            #region Q0BoundChecks
+
+            double boundLowQtemp = double.NaN;
+            double boundHighQtemp = double.NaN;
+            double fixedQ0temp = double.NaN;
+
+            if (FixQ0 && !double.TryParse(FixedQ0Value, out fixedQ0temp))
+            {
+                mWindow.OutputEvents("Your supplied Q0 is not valid.");
+                MessageBox.Show("Your supplied Q0 is not valid.");
+                return;
+            }
+            else if (fixedQ0temp <= 0)
+            {
+                mWindow.OutputEvents("Your supplied Q0 must be greater than 0.");
+                MessageBox.Show("Your supplied Q0 must be greater than 0.");
+                return;
+            }
+
+            if (BoundQ0 && !(double.TryParse(BoundQ0ValueHigh, out boundHighQtemp) && double.TryParse(BoundQ0ValueLow, out boundLowQtemp)))
+            {
+                mWindow.OutputEvents("Your supplied Q0 bounds are not valid.");
+                MessageBox.Show("Your supplied Q0 bounds are not valid.");
+                return;
+            }
+            else if (boundLowQtemp >= boundHighQtemp)
+            {
+                mWindow.OutputEvents("Your supplied Q0 bounds seem reversed?");
+                MessageBox.Show("Your supplied Q0 bounds seem reversed?");
+                return;
+            }
+
+            #endregion
 
             #region SteinTest
 
@@ -1741,6 +1983,38 @@ namespace small_n_stats_WPF.ViewModels
                 xValues = engine.CreateNumericVector(xRange.ToArray());
                 engine.SetSymbol("xLoad", xValues);
 
+                if (FixQ0)
+                {
+                    engine.Evaluate("FixedQ0 <- " + FixedQ0Value.ToString());
+                }
+                else
+                {
+                    engine.Evaluate("FixedQ0 <- NULL");
+                }
+
+                if (BoundQ0)
+                {
+                    engine.Evaluate("minQ0 <- " + BoundQ0ValueLow.ToString());
+                    engine.Evaluate("maxQ0 <- " + BoundQ0ValueHigh.ToString());
+                }
+                else
+                {
+                    engine.Evaluate("minQ0 <- 0.01");
+                    engine.Evaluate("maxQ0 <- Inf");
+                }
+
+                if (BoundK)
+                {
+                    engine.Evaluate("maxK <- " + boundKValueHigh.ToString());
+                    engine.Evaluate("minK <- " + boundKValueLow.ToString());
+                }
+                else
+                {
+                    engine.Evaluate("maxK <- " + yValues.Max().ToString());
+                    engine.Evaluate("minK <- 0.1");
+                }
+
+
                 if (HurshModel)
                 {
                     if (kBehavior == KValueDecisions.FitK)
@@ -1863,7 +2137,7 @@ namespace small_n_stats_WPF.ViewModels
                     xRange = new List<double>(array[0]);
                     yRange = new List<double>(array[1]);
 
-                    engine.Evaluate("SourceFrame<-data.frame(x=c(" + string.Join(",", xRange)+ ")," + 
+                    engine.Evaluate("SourceFrame<-data.frame(x=c(" + string.Join(",", xRange) + ")," +
                         "y=c(" + string.Join(",", yRange) + "))");
                     engine.Evaluate("SourceFrame$p <- 1");
 
@@ -1989,6 +2263,7 @@ namespace small_n_stats_WPF.ViewModels
                 Console.WriteLine(pe.ToString());
             }
 
+            mWindow.dataGrid.IsReadOnly = false;
             #endregion
 
         }
@@ -2002,6 +2277,8 @@ namespace small_n_stats_WPF.ViewModels
             mWindow.dataGrid.CommitEdit();
 
             if (failed) return;
+
+            if (lowColX < 0 || lowColY < 0) return;
 
             double derivedK = -1;
 
@@ -2059,6 +2336,8 @@ namespace small_n_stats_WPF.ViewModels
 
             double lowY = valueRange.Where(v => v > 0).OrderBy(v => v).First();
             double highY = valueRange.Where(v => v > 0).OrderBy(v => v).Last();
+
+            #region AdvancedMenuCustomizations
 
             if (AdvancedMenu)
             {
@@ -2140,6 +2419,8 @@ namespace small_n_stats_WPF.ViewModels
                 kBehavior = Decisions.GetKBehaviorGroup(windowRef);
             }
 
+            #endregion
+
             #region FittingHeuristic
 
             engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
@@ -2213,6 +2494,60 @@ namespace small_n_stats_WPF.ViewModels
                     xTemp.RemoveAt(index);
                     pTemp.RemoveAt(index);
                 }
+            }
+
+            #endregion
+
+            #region KBoundChecks
+
+            double boundLowKtemp = double.NaN;
+            double boundHighKtemp = double.NaN;
+
+            if (BoundK && !(double.TryParse(BoundKValueLow, out boundLowKtemp) && double.TryParse(BoundKValueHigh, out boundHighKtemp)))
+            {
+                mWindow.OutputEvents("Your supplied K bounds are not valid.");
+                MessageBox.Show("Your supplied K bounds are not valid.");
+                return;
+            }
+            else if (boundLowKtemp >= boundHighKtemp)
+            {
+                mWindow.OutputEvents("Your supplied K bounds seem reversed?");
+                MessageBox.Show("Your supplied K bounds seem reversed?");
+                return;
+            }
+
+            #endregion
+
+            #region Q0BoundChecks
+
+            double boundLowQtemp = double.NaN;
+            double boundHighQtemp = double.NaN;
+            double fixedQ0temp = double.NaN;
+
+            if (FixQ0 && !double.TryParse(FixedQ0Value, out fixedQ0temp))
+            {
+                mWindow.OutputEvents("Your supplied Q0 is not valid.");
+                MessageBox.Show("Your supplied Q0 is not valid.");
+                return;
+            }
+            else if (fixedQ0temp <= 0)
+            {
+                mWindow.OutputEvents("Your supplied Q0 must be greater than 0.");
+                MessageBox.Show("Your supplied Q0 must be greater than 0.");
+                return;
+            }
+
+            if (BoundQ0 && !(double.TryParse(BoundQ0ValueHigh, out boundHighQtemp) && double.TryParse(BoundQ0ValueLow, out boundLowQtemp)))
+            {
+                mWindow.OutputEvents("Your supplied Q0 bounds are not valid.");
+                MessageBox.Show("Your supplied Q0 bounds are not valid.");
+                return;
+            }
+            else if (boundLowQtemp >= boundHighQtemp)
+            {
+                mWindow.OutputEvents("Your supplied Q0 bounds seem reversed?");
+                MessageBox.Show("Your supplied Q0 bounds seem reversed?");
+                return;
             }
 
             #endregion
@@ -2380,6 +2715,8 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     demandPoints = new List<DemandCoordinate>();
 
+                    #region SequencedKCalculations
+
                     for (int i = 0; i < wholeRange.GetLength(0); i++)
                     {
                         if (double.TryParse(wholeRange[i, mIndex], out holder))
@@ -2421,209 +2758,243 @@ namespace small_n_stats_WPF.ViewModels
                     }
                 }
 
-                NumericVector yValues = null;
-                NumericVector xValues = null;
+                #endregion
 
-                if (yBehavior == YValueDecisions.DoNothing)
-                {
-                    // Nothing different
-                }
-                else if (yBehavior == YValueDecisions.ChangeCustom)
-                {
-                    List<double> yCopy = new List<double>();
+                    NumericVector yValues = null;
+                    NumericVector xValues = null;
 
-                    foreach (double y in yRange)
+                    #region DataAdjustments
+
+                    if (yBehavior == YValueDecisions.DoNothing)
                     {
-                        if (y == 0)
+                        // Nothing different
+                    }
+                    else if (yBehavior == YValueDecisions.ChangeCustom)
+                    {
+                        List<double> yCopy = new List<double>();
+
+                        foreach (double y in yRange)
                         {
-                            yCopy.Add(yModValue);
+                            if (y == 0)
+                            {
+                                yCopy.Add(yModValue);
+                            }
+                            else
+                            {
+                                yCopy.Add(y);
+                            }
                         }
-                        else
+
+                        yRange = new List<double>(yCopy);
+                    }
+                    else if (yBehavior == YValueDecisions.ChangeHundredth)
+                    {
+                        List<double> yCopy = new List<double>();
+
+                        foreach (double y in yRange)
                         {
-                            yCopy.Add(y);
+                            if (y == 0)
+                            {
+                                yCopy.Add(0.01);
+                            }
+                            else
+                            {
+                                yCopy.Add(y);
+                            }
+                        }
+
+                        yRange = new List<double>(yCopy);
+                    }
+                    else if (yBehavior == YValueDecisions.ChangeTenth)
+                    {
+                        List<double> yCopy = new List<double>();
+
+                        foreach (double y in yRange)
+                        {
+                            if (y == 0)
+                            {
+                                yCopy.Add(0.1);
+                            }
+                            else
+                            {
+                                yCopy.Add(y);
+                            }
+                        }
+
+                        yRange = new List<double>(yCopy);
+                    }
+                    else if (yBehavior == YValueDecisions.OnePercentLowest)
+                    {
+                        double yLow = yRange.Where(y => y > 0).Min(y => y);
+                        yLow = yLow / 100;
+
+                        List<double> yCopy = new List<double>();
+
+                        foreach (double y in yRange)
+                        {
+                            if (y == 0)
+                            {
+                                yCopy.Add(yLow);
+                            }
+                            else
+                            {
+                                yCopy.Add(y);
+                            }
+                        }
+
+                        yRange = new List<double>(yCopy);
+                    }
+
+                    if (xBehavior == XValueDecisions.DoNothing)
+                    {
+                        // Do nothing different
+                    }
+                    else if (xBehavior == XValueDecisions.ChangeHundredth)
+                    {
+                        for (int i = 0; i < xRangeShadow.Count(); i++)
+                        {
+                            if (xRangeShadow[i] == 0.0)
+                            {
+                                xRangeShadow[i] = 0.01;
+                            }
                         }
                     }
 
-                    yRange = new List<double>(yCopy);
-                }
-                else if (yBehavior == YValueDecisions.ChangeHundredth)
-                {
-                    List<double> yCopy = new List<double>();
+                    indicesToRemove.Clear();
 
-                    foreach (double y in yRange)
+                    xTemp = new List<double>(xRangeShadow);
+                    yTemp = new List<double>(yRange);
+                    pTemp = new List<double>(pRange);
+                    List<double> kTemp = new List<double>(kRange);
+
+                    for (int i = 0; i < xTemp.Count; i++)
                     {
-                        if (y == 0)
+                        if (xBehavior == XValueDecisions.DropZeros && xTemp[i] == 0)
                         {
-                            yCopy.Add(0.01);
+                            indicesToRemove.Add(i);
                         }
-                        else
+                        else if (yBehavior == YValueDecisions.DropZeros && yTemp[i] == 0)
                         {
-                            yCopy.Add(y);
-                        }
-                    }
-
-                    yRange = new List<double>(yCopy);
-                }
-                else if (yBehavior == YValueDecisions.ChangeTenth)
-                {
-                    List<double> yCopy = new List<double>();
-
-                    foreach (double y in yRange)
-                    {
-                        if (y == 0)
-                        {
-                            yCopy.Add(0.1);
-                        }
-                        else
-                        {
-                            yCopy.Add(y);
+                            indicesToRemove.Add(i);
                         }
                     }
 
-                    yRange = new List<double>(yCopy);
-                }
-                else if (yBehavior == YValueDecisions.OnePercentLowest)
-                {
-                    double yLow = yRange.Where(y => y > 0).Min(y => y);
-                    yLow = yLow / 100;
-
-                    List<double> yCopy = new List<double>();
-
-                    foreach (double y in yRange)
+                    if (indicesToRemove.Count > 0)
                     {
-                        if (y == 0)
+                        indicesToRemove.Sort();
+                        indicesToRemove.Reverse();
+
+                        foreach (int index in indicesToRemove)
                         {
-                            yCopy.Add(yLow);
+                            yTemp.RemoveAt(index);
+                            xTemp.RemoveAt(index);
+                            pTemp.RemoveAt(index);
+
+                            if (kBehavior != KValueDecisions.FitK)
+                            {
+                                kTemp.RemoveAt(index);
+                            }
                         }
-                        else
-                        {
-                            yCopy.Add(y);
-                        }
-                    }
 
-                    yRange = new List<double>(yCopy);
-                }
-
-                if (xBehavior == XValueDecisions.DoNothing)
-                {
-                    // Do nothing different
-                }
-                else if (xBehavior == XValueDecisions.ChangeHundredth)
-                {
-                    for (int i = 0; i < xRangeShadow.Count(); i++)
-                    {
-                        if (xRangeShadow[i] == 0.0)
-                        {
-                            xRangeShadow[i] = 0.01;
-                        }
-                    }
-                }
-
-                indicesToRemove.Clear();
-
-                xTemp = new List<double>(xRangeShadow);
-                yTemp = new List<double>(yRange);
-                pTemp = new List<double>(pRange);
-                List<double> kTemp = new List<double>(kRange);
-
-                for (int i = 0; i < xTemp.Count; i++)
-                {
-                    if (xBehavior == XValueDecisions.DropZeros && xTemp[i] == 0)
-                    {
-                        indicesToRemove.Add(i);
-                    }
-                    else if (yBehavior == YValueDecisions.DropZeros && yTemp[i] == 0)
-                    {
-                        indicesToRemove.Add(i);
-                    }
-                }
-
-                if (indicesToRemove.Count > 0)
-                {
-                    indicesToRemove.Sort();
-                    indicesToRemove.Reverse();
-
-                    foreach (int index in indicesToRemove)
-                    {
-                        yTemp.RemoveAt(index);
-                        xTemp.RemoveAt(index);
-                        pTemp.RemoveAt(index);
+                        yRange = new List<double>(yTemp);
+                        xRangeShadow = new List<double>(xTemp);
+                        pRange = new List<double>(pTemp);
 
                         if (kBehavior != KValueDecisions.FitK)
                         {
-                            kTemp.RemoveAt(index);
+                            kRange = new List<double>(kTemp);
                         }
                     }
 
-                    yRange = new List<double>(yTemp);
-                    xRangeShadow = new List<double>(xTemp);
-                    pRange = new List<double>(pTemp);
+                #endregion
 
-                    if (kBehavior != KValueDecisions.FitK)
-                    {
-                        kRange = new List<double>(kTemp);
-                    }
-                }
+                    NumericVector kValues = engine.CreateNumericVector(kRange.ToArray());
+                    engine.SetSymbol("kLoad", kValues);
 
-                NumericVector kValues = engine.CreateNumericVector(kRange.ToArray());
-                engine.SetSymbol("kLoad", kValues);
+                    NumericVector participantValues = engine.CreateNumericVector(pRange.ToArray());
+                    engine.SetSymbol("pLoad", participantValues);
 
-                NumericVector participantValues = engine.CreateNumericVector(pRange.ToArray());
-                engine.SetSymbol("pLoad", participantValues);
-
-                if (HurshModel)
-                {
                     yValues = engine.CreateNumericVector(yRange.ToArray());
                     engine.SetSymbol("yLoad", yValues);
 
                     xValues = engine.CreateNumericVector(xRangeShadow.ToArray());
                     engine.SetSymbol("xLoad", xValues);
 
-                    if (kBehavior == KValueDecisions.FitK)
+
+                if (FixQ0)
                     {
-                        if (IndivFitted)
+                        engine.Evaluate("FixedQ0 <- " + FixedQ0Value.ToString());
+                    }
+                    else
+                    {
+                        engine.Evaluate("FixedQ0 <- NULL");
+                    }
+
+                    if (BoundQ0)
+                    {
+                        engine.Evaluate("minQ0 <- " + BoundQ0ValueLow.ToString());
+                        engine.Evaluate("maxQ0 <- " + BoundQ0ValueHigh.ToString());
+                    }
+                    else
+                    {
+                        engine.Evaluate("minQ0 <- 0.01");
+                        engine.Evaluate("maxQ0 <- Inf");
+                    }
+
+                    if (BoundK)
+                    {
+                        engine.Evaluate("maxK <- " + boundKValueHigh.ToString());
+                        engine.Evaluate("minK <- " + boundKValueLow.ToString());
+                    }
+                    else
+                    {
+                        engine.Evaluate("maxK <- " + yValues.Max().ToString());
+                        engine.Evaluate("minK <- 0.1");
+                    }
+
+                if (HurshModel)
+                    {
+                        if (kBehavior == KValueDecisions.FitK)
                         {
-                            engine.Evaluate("fittingFlag <- 2");
+                            if (IndivFitted)
+                            {
+                                engine.Evaluate("fittingFlag <- 2");
+                            }
+                            else
+                            {
+                                engine.Evaluate("fittingFlag <- 1");
+                            }
+
+                            engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunctionKFittings());
                         }
                         else
                         {
-                            engine.Evaluate("fittingFlag <- 1");
+                            //engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunction());
+                            engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunctionKSet());
                         }
-
-                        engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunctionKFittings());
                     }
-                    else
+                    else if (KoffarnusModel)
                     {
-                        engine.Evaluate(DemandFunctionSolvers.GetExponentialDemandFunctionKSet());
-                    }
-                }
-                else if (KoffarnusModel)
-                {
-                    yValues = engine.CreateNumericVector(yRange.ToArray());
-                    engine.SetSymbol("yLoad", yValues);
-
-                    xValues = engine.CreateNumericVector(xRangeShadow.ToArray());
-                    engine.SetSymbol("xLoad", xValues);
-
-                    if (kBehavior == KValueDecisions.FitK)
-                    {
-                        if (IndivFitted)
+                        if (kBehavior == KValueDecisions.FitK)
                         {
-                            engine.Evaluate("fittingFlag <- 2");
+                            if (IndivFitted)
+                            {
+                                engine.Evaluate("fittingFlag <- 2");
+                            }
+                            else if (GroupFitted)
+                            {
+                                engine.Evaluate("fittingFlag <- 1");
+                            }
+
+                            engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunctionKFittings());
                         }
-                        else if (GroupFitted)
+                        else
                         {
-                            engine.Evaluate("fittingFlag <- 1");
+                            //engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunction());
+                            engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunctionKSet());
                         }
 
-                        engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunctionKFittings());
                     }
-                    else
-                    {
-                        engine.Evaluate(DemandFunctionSolvers.GetExponentiatedDemandFunctionKSet());
-                    }
-
-                }
 
                 mVM.RowViewModels[0].values[0] = "Results of Fitting";
                 mVM.RowViewModels[0].values[1] = "K Value";

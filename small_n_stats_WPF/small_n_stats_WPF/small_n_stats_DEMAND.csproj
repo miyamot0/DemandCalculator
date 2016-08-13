@@ -31,7 +31,7 @@
     <SuiteName>Demand Calculator</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
-    <ApplicationRevision>36</ApplicationRevision>
+    <ApplicationRevision>37</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -259,6 +259,7 @@
     <None Include="AUTHORS" />
     <None Include="Resources\GraphingExponentialFaceted.txt" />
     <None Include="Resources\GraphingExponentiatedFaceted.txt" />
+    <None Include="Resources\CurveFitting.txt" />
     <Content Include="Source\DemandCalculator-master.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

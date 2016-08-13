@@ -68,6 +68,7 @@
 
 using Microsoft.Win32;
 using RDotNet;
+using small_n_stats_WPF.Mathematics;
 using small_n_stats_WPF.Utilities;
 using small_n_stats_WPF.Views;
 using System;
@@ -168,6 +169,7 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand ClearLogsWindowCommand { get; set; }
         public RelayCommand DeleteSelectedCommand { get; set; }
         public RelayCommand CutSelectedCommand { get; set; }
+        public RelayCommand PasteInvertedCommand { get; set; }
 
         #endregion
 
@@ -240,6 +242,7 @@ namespace small_n_stats_WPF.ViewModels
 
             DeleteSelectedCommand = new RelayCommand(param => DeleteSelected(), param => true);
             CutSelectedCommand = new RelayCommand(param => CutSelected(), param => true);
+            PasteInvertedCommand = new RelayCommand(param => PasteInverted(), param => true);
 
             #endregion
 
@@ -388,7 +391,13 @@ namespace small_n_stats_WPF.ViewModels
         {
             if (MainWindow.dataGrid.SelectedCells.Count > 0)
             {
+                // Cells
                 List<string> holdPreClip = new List<string>();
+
+                // Rows
+                List<string> holdPostClip = new List<string>();
+
+                int rowHolder = -1;
 
                 foreach (DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
                 {
@@ -397,12 +406,36 @@ namespace small_n_stats_WPF.ViewModels
                     if (rvm != null)
                     {
                         int x = RowViewModels.IndexOf(rvm);
-                        holdPreClip.Add(RowViewModels[x].values[obj.Column.DisplayIndex]);
+
+                        if (rowHolder == -1)
+                        {
+                            rowHolder = x;
+                        }
+
+                        if (rowHolder == x)
+                        {
+                            // Same row, continue
+                            holdPreClip.Add(RowViewModels[x].values[obj.Column.DisplayIndex]);
+                        }
+                        else
+                        {
+                            // Different
+                            rowHolder = x;
+                            string holdClip = string.Join("\t", holdPreClip);
+                            holdPostClip.Add(holdClip);
+
+                            holdPreClip.Clear();
+                            holdPreClip.Add(RowViewModels[x].values[obj.Column.DisplayIndex]);
+                        }
+
                     }
                 }
 
-                string holdClip = string.Join("\t", holdPreClip);
-                Clipboard.SetText(holdClip);
+                string lastRowClip = string.Join("\t", holdPreClip);
+                holdPostClip.Add(lastRowClip);
+
+                string holdPostClipText = string.Join("\r\n", holdPostClip);
+                Clipboard.SetText(holdPostClipText);
 
                 foreach (DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
                 {
@@ -415,6 +448,90 @@ namespace small_n_stats_WPF.ViewModels
                         RowViewModels[x].ForcePropertyUpdate(obj.Column.DisplayIndex);
                     }
                 }
+            }
+        }
+
+        static List<string[]> CreateTransposedList(List<string[]> arrayList)
+        {
+            int lengthTemp = arrayList[0].Length;
+            string[,] tempMatrix = new string[arrayList.Count, lengthTemp];
+
+            for (int i = 0; i < arrayList.Count; i++)
+            {
+                string[] tempArray = arrayList[i];
+
+                if (tempArray.Length != lengthTemp)
+                {
+                    return null;
+                }
+                for (int j = 0; j < lengthTemp; j++)
+                {
+                    tempMatrix[i, j] = tempArray[j];
+                }
+            }
+
+            string[,] transposedMatrix = new string[tempMatrix.GetLength(1), tempMatrix.GetLength(0)];
+            for (int i = 0; i < tempMatrix.GetLength(1); i++)
+            {
+                for (int j = 0; j < tempMatrix.GetLength(0); j++)
+                {
+                    transposedMatrix[i, j] = tempMatrix[j, i];
+                }
+            }
+
+            List<string[]> returnList = new List<string[]>();
+
+            string[] holder;
+            for (int i=0; i<transposedMatrix.GetLength(0); i++)
+            {
+                holder = new string[transposedMatrix.GetLength(1)];
+                for (int j=0; j<transposedMatrix.GetLength(1); j++)
+                {
+                    holder[j] = transposedMatrix[i, j];
+                }
+                returnList.Add(holder);
+            }
+
+            return returnList;
+        }
+
+        private void PasteInverted()
+        {
+            List<string[]> rowData = ClipboardTools.ReadAndParseClipboardData();
+
+            int lowRow = MainWindow.dataGrid.Items.IndexOf(MainWindow.dataGrid.CurrentItem),        // Current highlighted cell's row
+                highRow = MainWindow.dataGrid.Items.Count - 1,                                      // Highest row in table
+                lowCol = MainWindow.dataGrid.Columns.IndexOf(MainWindow.dataGrid.CurrentColumn),    // Current highlighted cell's column
+                pasteContentRowIterator = 0,
+                pasteContentColumnIterator = 0;
+
+            var itemSource = MainWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
+
+            if (itemSource == null) return;
+
+            rowData = CreateTransposedList(rowData);
+
+            if (rowData == null) return;
+            
+            for (int i = lowRow; (i <= highRow) && (pasteContentRowIterator < rowData.Count); i++)
+            {
+                if (i == highRow)
+                {
+                    itemSource.Add(new RowViewModel());
+                    highRow = (pasteContentRowIterator + 1 < rowData.Count) ? highRow + 1 : highRow;
+                }
+
+                pasteContentColumnIterator = 0;
+
+                for (int j = lowCol; (j < 99) && (pasteContentColumnIterator < rowData[pasteContentRowIterator].Length); j++)
+                {
+                    itemSource[i].values[j] = rowData[pasteContentRowIterator][pasteContentColumnIterator];
+                    itemSource[i].ForcePropertyUpdate(j);
+
+                    pasteContentColumnIterator++;
+                }
+
+                pasteContentRowIterator++;
             }
         }
 
@@ -623,6 +740,30 @@ namespace small_n_stats_WPF.ViewModels
 
                     introWindow.loadText.Text = "Loading R Packages";
 
+                    bool loadedNls2 = engine.Evaluate("require(nls2)").AsLogical().First();
+
+                    if (loadedNls2)
+                    {
+                        introWindow.nls2.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install nls2 packages for first time!");
+                        introWindow.loadText.Text = "Downloading nls2...";
+                        engine.Evaluate("if (!require(nls2)) { install.packages('nls2', repos = 'http://cran.us.r-project.org') }");
+
+                        loadedNls2 = engine.Evaluate("require(nls2)").AsLogical().First();
+
+                        if (loadedNls2)
+                        {
+                            introWindow.nls2.Foreground = Brushes.Green;
+                        }
+                    }
+
+
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
                     if (loadedGgplot && loadedGrid && loadedReshape && loadedBase64 && loadedNlstools && loadedNlmrt && !failed)
                     {
                         introWindow.loadText.Text = "All necessary components found!";
@@ -676,6 +817,7 @@ namespace small_n_stats_WPF.ViewModels
 
                 SendMessageToOutput("License information is also provided in Information > Licenses > ... as well as in the install directory of this program (under Resources).");
             }
+
         }
 
         /// <summary>
