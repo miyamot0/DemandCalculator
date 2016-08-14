@@ -1,0 +1,275 @@
+# 
+#    Copyright 2016 Shawn Gilroy
+#
+#    This file is part of Demand Analysis.
+#
+#    Demand Analysis is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 2.
+#
+#    Demand Analysis is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with Demand Analysis.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+#
+#    Demand Analysis incorporates source from Beezdemand to compute the following  
+#    demand measures:
+#        OmaxE
+#        PmaxE
+#        Q0e
+#        BP0
+#        BP1
+#        EV
+#        OmaxD
+#        PmaxD
+#
+#    ================================================================================
+# 
+#    Beezdemand is distributed under this license:
+#
+#    Copyright 2016 Brent Kaplan
+#
+#    Beezdemand is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, version 2.
+#
+#    Beezdemand is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with Beezdemand.  If not, see <http://www.gnu.org/licenses/gpl-2.0.html>.
+#
+
+#tempHack
+if (0 %in% SourceFrame$y) {
+	SourceFrame[SourceFrame$y == 0,]$y <- 0.01
+}
+
+#tempHack
+SourceFrame[SourceFrame$x == 0,]$x <- 0.25
+
+nSimulated <- length(unique(SourceFrame$g))
+
+fitFrameTemp <- data.frame(
+  p=seq(1,nSimulated,1),
+  g=as.vector(unique(SourceFrame$g)),
+  q0=rep(NA,nSimulated),
+  q0err=rep(NA,nSimulated),
+  alpha=rep(NA,nSimulated),
+  alphaerr=rep(NA,nSimulated),
+  k=rep(NA,nSimulated),
+  r2=rep(NA,nSimulated),
+  absSS=rep(NA,nSimulated),
+  sdResid=rep(NA,nSimulated),
+  q0low=rep(NA,nSimulated),
+  q0high=rep(NA,nSimulated),
+  alow=rep(NA,nSimulated),
+  ahigh=rep(NA,nSimulated),
+  OmaxE=rep(NA,nSimulated),
+  PmaxE=rep(NA,nSimulated),
+  Q0e=rep(NA,nSimulated),
+  BP0=rep(NA,nSimulated),
+  BP1=rep(NA,nSimulated),
+  EV=rep(NA,nSimulated),
+  OmaxD=rep(NA,nSimulated),
+  PmaxD=rep(NA,nSimulated))
+
+for (i in fitFrameTemp$g)
+{
+  dataHolder <- NULL
+  dataHolder <- SourceFrame[SourceFrame$g==i,]
+
+  startList <- list(q0=3, alpha=0.000000001)
+  upperList <- c(q0=maxQ0, alpha = 1)
+  lowerList <- c(q0=minQ0, alpha = -1)
+  
+  if (!is.null(FixedQ0))
+  {
+    q0 <<- FixedQ0  
+    
+    itemNames <- names(startList)
+    index <- which(itemNames == "q0")
+    
+    startList <- startList[-index]
+    upperList <- upperList[-index]
+    lowerList <- lowerList[-index]
+  }
+  
+  fit <- NULL
+  try(fit <- wrapnls(data=dataHolder, (log(y)/log(10)) ~ (log(q0)/log(10)) + StaticK * (exp(-alpha*q0*x)-1), 
+                     start= startList,
+                     upper= upperList,
+                     lower= lowerList,
+                     control = list(maxiter = 1000)), silent=FALSE)
+  
+  if (!is.null(fit))
+  {
+    fitFrameTemp[fitFrameTemp$g==i,]$g <- min(dataHolder$g)
+    fitFrameTemp[fitFrameTemp$g==i,]$alpha <- as.numeric(coef(fit)["alpha"])
+    
+    varNames <- attr(summary(fit)$coefficients, "dimnames")[[1]]
+    index <- which(varNames == "alpha")   
+    fitFrameTemp[fitFrameTemp$g==i,]$alphaerr <- summary(fit)[[10]][index,2]    
+    
+    varNames <- attr(confint2(fit), "dimnames")[[1]]
+    index <- which(varNames == "alpha")
+    fitFrameTemp[fitFrameTemp$g==i,]$alow <- confint2(fit)[index,1]
+    fitFrameTemp[fitFrameTemp$g==i,]$ahigh <- confint2(fit)[index,2]
+    
+    if (!is.null(FixedQ0)) {
+      fitFrameTemp[fitFrameTemp$g==i,]$q0 <- q0
+    } else {
+      fitFrameTemp[fitFrameTemp$g==i,]$q0 <- as.numeric(coef(fit)["q0"])
+      varNames <- attr(summary(fit)$coefficients, "dimnames")[[1]]
+      index <- which(varNames == "q0")         
+      fitFrameTemp[fitFrameTemp$g==i,]$q0err <- summary(fit)[[10]][index,2]
+      
+      varNames <- attr(confint2(fit), "dimnames")[[1]]
+      index <- which(varNames == "q0")
+      fitFrameTemp[fitFrameTemp$g==i,]$q0low <- confint2(fit)[index,1]
+      fitFrameTemp[fitFrameTemp$g==i,]$q0high <- confint2(fit)[index,2]      
+    }
+    
+    fitFrameTemp[fitFrameTemp$g==i,]$k <- StaticK
+    fitFrameTemp[fitFrameTemp$g==i,]$r2 <- 1.0 -(deviance(fit)/sum((log(dataHolder$y)/log(10)-mean(log(dataHolder$y)/log(10)))^2))
+    fitFrameTemp[fitFrameTemp$g==i,]$absSS <- deviance(fit)
+    fitFrameTemp[fitFrameTemp$g==i,]$sdResid <- sqrt(deviance(fit)/df.residual(fit))
+    fitFrameTemp[fitFrameTemp$g==i,]$EV <- 1/(fitFrameTemp[fitFrameTemp$g==i,]$alpha * (fitFrameTemp[fitFrameTemp$g==i,]$k ^ 1.5) * 100)
+    fitFrameTemp[fitFrameTemp$g==i,]$PmaxD <- 1/(fitFrameTemp[fitFrameTemp$g==i,]$q0 * fitFrameTemp[fitFrameTemp$g==i,]$alpha * (fitFrameTemp[fitFrameTemp$g==i,]$k ^ 1.5)) * (0.083 * fitFrameTemp[fitFrameTemp$g==i,]$k + 0.65)
+    fitFrameTemp[fitFrameTemp$g==i,]$OmaxD <- (10^(log10(fitFrameTemp[fitFrameTemp$g==i,]$q0) + (fitFrameTemp[fitFrameTemp$g==i,]$k * (exp(-fitFrameTemp[fitFrameTemp$g==i,]$alpha * fitFrameTemp[fitFrameTemp$g==i,]$q0 * fitFrameTemp[fitFrameTemp$g==i,]$PmaxD) - 1)))) * fitFrameTemp[fitFrameTemp$g==i,]$PmaxD
+  }
+}
+
+if (actuallyChart) {
+	xDraw <- seq(min(SourceFrame$x), max(SourceFrame$x), 1)
+
+	p.rep <- seq(1,max(SourceFrame$p),1)
+
+	graphFrame<-data.frame(
+	  Individual=rep(seq(min(p.rep), max(p.rep),1),each=length(xDraw)),
+	  DemandSeries=rep(seq(1:length(xDraw)-1),length(p.rep)),
+	  YSeries=rep(seq(1:length(xDraw)-1),length(p.rep)),
+	  XSeries=rep(seq(1:length(xDraw)-1),length(p.rep)),
+	  OSeries=rep(NA,length(p.rep)),
+	  Group=rep(NA,length(p.rep))
+	)
+
+	for (j in 1:max(SourceFrame$p))
+	{
+	  for (i in 1:length(xDraw))
+	  {
+		qTemp <- fitFrameTemp[j,]$q0
+		aTemp <- fitFrameTemp[j,]$alpha
+		kTemp <- fitFrameTemp[j,]$k
+		gTemp <- fitFrameTemp[j,]$g
+    
+		graphFrame[ graphFrame$Individual==j & graphFrame$DemandSeries==as.numeric(i),]$Group <- gTemp    
+		graphFrame[ graphFrame$Individual==j & graphFrame$DemandSeries==as.numeric(i),]$YSeries <- log10(qTemp) + kTemp * (exp(-aTemp*qTemp*xDraw[i])-1)
+		graphFrame[ graphFrame$Individual==j & graphFrame$DemandSeries==as.numeric(i),]$XSeries <- xDraw[i]
+		graphFrame[ graphFrame$Individual==j & graphFrame$DemandSeries==as.numeric(i),]$OSeries <- xDraw[i] * 10^(log10(qTemp) + kTemp * (exp(-aTemp*qTemp*xDraw[i])-1))
+	  }
+	}
+
+	pointFrame <- data.frame(X=SourceFrame$x, Y=SourceFrame$y, Individual=SourceFrame$p, Group=SourceFrame$g)
+
+	#print(graphFrame)
+	#print(pointFrame)
+
+	#hackback
+	if (0.01 %in% SourceFrame$y) {
+		SourceFrame[SourceFrame$y == 0.01,]$y <- 0
+	}
+
+	pointFrame[pointFrame$X == 0.25,]$X <- 0
+
+	# return to normal space
+	graphFrame$YSeries <- 10^graphFrame$YSeries
+	#pointFrame$Y <- 10^pointFrame$Y
+	pointFrame$mask <- 1
+
+	pointFrame[pointFrame$X == 0,]$mask <- 0
+	pointFrame[pointFrame$X == 0,]$X <- 0.00001
+
+	graphFrame$premask = 1
+	graphFrame$mask = 1
+
+	annotation_logticks2 <- function(base = 10, sides = "bl", scaled = TRUE,
+									short = unit(0.1, "cm"), 
+									mid = unit(0.2, "cm"), 
+									long = unit(0.3, "cm"),
+									colour = "black", 
+									size = 0.5, 
+									linetype = 1, 
+									alpha = 1, 
+									data =data.frame(x = NA),
+									color = NULL, ...) {
+	  if (!is.null(color))
+		colour <- color
+  
+	  layer(
+		data = data,
+		mapping = NULL,
+		stat = StatIdentity,
+		geom = GeomLogticks,
+		position = PositionIdentity,
+		show.legend = FALSE,
+		inherit.aes = FALSE,
+		params = list(
+		  base = base,
+		  sides = sides,
+		  scaled = scaled,
+		  short = short,
+		  mid = mid,
+		  long = long,
+		  colour = colour,
+		  size = size,
+		  linetype = linetype,
+		  alpha = alpha,
+		  ...
+		)
+	  )
+	}
+
+	logChart <- ggplot(data=pointFrame, aes(x=X, y=Y, colour=factor(Group))) +
+	  geom_point(size=2, shape=21, show.legend=T) +
+	  facet_grid(.~mask, scales="free_x", space="free") +  
+	  geom_line(data=graphFrame, aes(x=XSeries,y=YSeries)) +
+	  scale_x_log10(breaks=c(0.00001,  0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000),
+					labels=c("QFree",  0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000)) +
+	  scale_y_log10(breaks=c(0.01, 0.1, 1, 10, 100, 1000, 10000, 100000),
+					labels=c(0.01, 0.1, 1, 10, 100, 1000, 10000, 100000)) +
+	  coord_cartesian(ylim=c(0.1, max(SourceFrame$y)*2)) +
+	  theme(strip.background = element_blank(), 
+			strip.text = element_blank(),
+			panel.background = element_blank(),
+			panel.grid.major = element_blank(), 
+			panel.grid.minor = element_blank(),
+			panel.border = element_rect(colour = "white", 
+										fill=FALSE, 
+										size=0),
+			axis.line.x = element_line(colour = "black"),
+			axis.line.y = element_line(colour = "black"),
+			axis.text.x=element_text(colour="black"),
+			axis.text.y=element_text(colour="black"),
+			text = element_text(size=16),
+			legend.position = "bottom",
+			legend.title=element_blank(),
+			legend.key = element_rect(fill = "transparent", colour = "transparent")) + 
+	  annotation_logticks2(sides="l", data = data.frame(X= NA, mask = 0)) +
+	  annotation_logticks2(sides="b", data = data.frame(X= NA, mask = 1)) +
+	  labs(x = "Unit Price", y = "Consumption")
+
+	  svg(tempf1 <- tempfile(fileext = '.svg'), width = 9, height = 9)
+	  print(logChart)
+	  dev.off()
+
+	  require('base64enc')
+	  demandString <- base64encode(readBin(tempf1, 'raw', file.info(tempf1)[1, 'size']), 'txt')
+
+	  unlink(tempf1)
+}

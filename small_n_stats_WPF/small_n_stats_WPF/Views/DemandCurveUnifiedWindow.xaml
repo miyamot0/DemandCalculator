@@ -12,7 +12,7 @@
         Title="Demand Curve Fitting" 
         ResizeMode="NoResize"
         Height="555"
-        Width="415">
+        Width="850">
 
     <Window.Style>
         <Style TargetType="Window">
@@ -60,8 +60,9 @@
               Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"></RowDefinition>
-                <RowDefinition Height="50"></RowDefinition>
-                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>                
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
@@ -133,7 +134,31 @@
                 MouseUp="yRange_MouseUp">
             </TextBox>
 
-            <Grid Grid.Row="3"
+            <Button x:Name="gRangeButton"
+                    Grid.Row="3" 
+                    Grid.Column="0"
+                    Margin="10"
+                    Content="Groupings"
+                    Command="{Binding GetGRangeCommand}">
+            </Button>
+
+            <TextBox
+                x:Name="gRange"
+                Grid.Row="3" 
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                IsReadOnly="True"
+                Focusable="False"
+                AcceptsTab="False"
+                CharacterCasing="Upper" 
+                Margin="10"
+                VerticalContentAlignment="Center"
+                Text="{Binding GRangeValues}"
+                Background="{Binding Path=GBrush}"
+                MouseUp="gRange_MouseUp">
+            </TextBox>            
+            
+            <Grid Grid.Row="4"
                   Grid.Column="0"
                   Grid.ColumnSpan="4"
                   HorizontalAlignment="Stretch"
@@ -164,7 +189,7 @@
                 </RadioButton>
             </Grid>            
             
-            <Grid Grid.Row="4"
+            <Grid Grid.Row="5"
                   Grid.Column="0"
                   Grid.ColumnSpan="4"
                   HorizontalAlignment="Stretch"
@@ -195,7 +220,7 @@
                 </RadioButton>
             </Grid>
 
-            <Grid Grid.Row="5"
+            <Grid Grid.Row="6"
                   Grid.Column="0"
                   Grid.ColumnSpan="4"
                   HorizontalAlignment="Stretch"
@@ -216,7 +241,6 @@
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Left"
                                   Content=""
-                                  Style="{DynamicResource disableKey}"
                                   IsChecked="{Binding Path=OutputFigures, Mode=TwoWay}">
                     </CheckBox>
                     <Label Content="Output Model Figures?"/>
@@ -244,7 +268,7 @@
             <FlowDocumentScrollViewer
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
-                Grid.Row="6"
+                Grid.Row="7"
                 Grid.RowSpan="3"
                 IsSelectionEnabled="False"
                 VerticalScrollBarVisibility="Hidden">
@@ -272,7 +296,7 @@
             </FlowDocumentScrollViewer>
 
             <Button Name="calculateButton" 
-                    Grid.Row="7" 
+                    Grid.Row="8" 
                     Grid.Column="0"
                     Grid.ColumnSpan="4"
                     Margin="10"

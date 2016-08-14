@@ -49,12 +49,14 @@ SourceFrame <- data.frame(
   p=pLoad,
   y=yLoad,
   x=xLoad,
-  k=kLoad)
+  k=kLoad,
+  g=gLoad)
 
 nSimulated <- length(SourceFrame$p)
 
 fitFrame <- data.frame(
   p=seq(1,nSimulated,1),
+  g=rep(NA,nSimulated),
   q0=rep(NA,nSimulated),
   q0err=rep(NA,nSimulated),
   alpha=rep(NA,nSimulated),
@@ -81,7 +83,7 @@ for (i in 1:nSimulated)
   dataHolder <- NULL
   dataHolder <- SourceFrame[SourceFrame$p==i,]
   dataHolder$expend <- (dataHolder$x * dataHolder$y)
-
+  
   ### These measures computed even if model fails/is not appropriate
 
   fitFrame[fitFrame$p==i,]$OmaxE <- max(dataHolder$expend)
@@ -103,7 +105,7 @@ for (i in 1:nSimulated)
 
   ###
   startList <- list(q0=3, alpha=0.000000001)
-  upperList <- c(q0=maxQ0, alpha = Inf)
+  upperList <- c(q0=maxQ0, alpha = 1)
   lowerList <- c(q0=minQ0, alpha = -1)
 
   if (!is.null(FixedQ0))
@@ -126,52 +128,53 @@ for (i in 1:nSimulated)
   ###
 
   fit <- NULL
-  try(fit <- wrapnls(data=dataHolder, (log(y)/log(10)) ~ (log(q0)/log(10)) + k * (exp(-alpha*q0*x)-1), 
+  try(fit <- wrapnls(data=dataHolder, y ~ q0 * 10^(k * (exp(-alpha*q0*x)-1)), 
 	start= startList,
 	upper= upperList,
 	lower= lowerList,
 	control = list(maxiter = 1000)), silent=TRUE)
-  
+
   if (!is.null(fit))
   {
-    fitFrame[fitFrame$p==i,]$alpha <- as.numeric(coef(fit)["alpha"])
+      fitFrame[fitFrame$p==i,]$alpha <- as.numeric(coef(fit)["alpha"])
 
-	varNames <- attr(summary(fit)$coefficients, "dimnames")[[1]]
-    index <- which(varNames == "alpha")   
-    fitFrame[fitFrame$p==i,]$alphaerr <- summary(fit)[[10]][index,2]    
+	  varNames <- attr(summary(fit)$coefficients, "dimnames")[[1]]
+      index <- which(varNames == "alpha")   
+      fitFrame[fitFrame$p==i,]$alphaerr <- summary(fit)[[10]][index,2]   
 
-    varNames <- attr(confint2(fit), "dimnames")[[1]]
-    index <- which(varNames == "alpha")
-    fitFrame[fitFrame$p==i,]$alow <- confint2(fit)[index,1]
-    fitFrame[fitFrame$p==i,]$ahigh <- confint2(fit)[index,2]
-
-    if (!is.null(FixedQ0)) {
-      fitFrame[fitFrame$p==i,]$q0 <- q0
-    } else {
-      fitFrame[fitFrame$p==i,]$q0 <- as.numeric(coef(fit)["q0"])
-      varNames <- attr(summary(fit)$coefficients, "dimnames")[[1]]
-      index <- which(varNames == "q0")         
-      fitFrame[fitFrame$p==i,]$q0err <- summary(fit)[[10]][index,2]
-      
       varNames <- attr(confint2(fit), "dimnames")[[1]]
-      index <- which(varNames == "q0")
-      fitFrame[fitFrame$p==i,]$q0low <- confint2(fit)[index,1]
-      fitFrame[fitFrame$p==i,]$q0high <- confint2(fit)[index,2]      
-    }
-	
-    #fitFrame[fitFrame$p==i,]$q0 <- as.numeric(coef(fit)["q0"])
-    fitFrame[fitFrame$p==i,]$k <- min(dataHolder$k)
-    #fitFrame[fitFrame$p==i,]$q0err <- summary(fit)[[10]][1,2]
-    #fitFrame[fitFrame$p==i,]$alphaerr <- summary(fit)[[10]][2,2]
-    fitFrame[fitFrame$p==i,]$r2 <- 1.0 -(deviance(fit)/sum((log(dataHolder$y)/log(10)-mean(log(dataHolder$y)/log(10)))^2))
-    fitFrame[fitFrame$p==i,]$absSS <- deviance(fit)
-    fitFrame[fitFrame$p==i,]$sdResid <- sqrt(deviance(fit)/df.residual(fit))
-    #fitFrame[fitFrame$p==i,]$q0low <- confint2(fit)[1]
-    #fitFrame[fitFrame$p==i,]$q0high <- confint2(fit)[3]
-    #fitFrame[fitFrame$p==i,]$alow <- confint2(fit)[2]
-    #fitFrame[fitFrame$p==i,]$ahigh <- confint2(fit)[4]
-    fitFrame[fitFrame$p==i,]$EV <- 1/(fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5) * 100)
-    fitFrame[fitFrame$p==i,]$PmaxD <- 1/(fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5)) * (0.083 * fitFrame[fitFrame$p==i,]$k + 0.65)
-    fitFrame[fitFrame$p==i,]$OmaxD <- (10^(log10(fitFrame[fitFrame$p==i,]$q0) + (fitFrame[fitFrame$p==i,]$k * (exp(-fitFrame[fitFrame$p==i,]$alpha * fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$PmaxD) - 1)))) * fitFrame[fitFrame$p==i,]$PmaxD
+      index <- which(varNames == "alpha")
+      fitFrame[fitFrame$p==i,]$alow <- confint2(fit)[index,1]
+      fitFrame[fitFrame$p==i,]$ahigh <- confint2(fit)[index,2]
+
+      if (!is.null(FixedQ0)) {
+        fitFrame[fitFrame$p==i,]$q0 <- q0
+      } else {
+        fitFrame[fitFrame$p==i,]$q0 <- as.numeric(coef(fit)["q0"])
+        varNames <- attr(summary(fit)$coefficients, "dimnames")[[1]]
+        index <- which(varNames == "q0")         
+        fitFrame[fitFrame$p==i,]$q0err <- summary(fit)[[10]][index,2]
+      
+        varNames <- attr(confint2(fit), "dimnames")[[1]]
+        index <- which(varNames == "q0")
+        fitFrame[fitFrame$p==i,]$q0low <- confint2(fit)[index,1]
+        fitFrame[fitFrame$p==i,]$q0high <- confint2(fit)[index,2]      
+      }
+
+	  #fitFrame[fitFrame$p==i,]$q0 <- as.numeric(coef(fit)["q0"])
+	  #fitFrame[fitFrame$p==i,]$alpha <- as.numeric(coef(fit)["alpha"])
+	  fitFrame[fitFrame$p==i,]$k <- min(SourceFrame$k)
+	  #fitFrame[fitFrame$p==i,]$q0err <- summary(fit)[[10]][1,2]
+	  #fitFrame[fitFrame$p==i,]$alphaerr <- summary(fit)[[10]][2,2]
+	  fitFrame[fitFrame$p==i,]$r2 <- 1.0 -(deviance(fit)/sum((SourceFrame[SourceFrame$p==i,]$y-mean(SourceFrame[SourceFrame$p==i,]$y))^2))
+	  fitFrame[fitFrame$p==i,]$absSS <- deviance(fit)  
+	  fitFrame[fitFrame$p==i,]$sdResid <- sqrt(deviance(fit)/df.residual(fit))
+	  #fitFrame[fitFrame$p==i,]$q0low <- confint2(fit)[1]
+	  #fitFrame[fitFrame$p==i,]$q0high <- confint2(fit)[3]
+	  #fitFrame[fitFrame$p==i,]$alow <- confint2(fit)[2]
+	  #fitFrame[fitFrame$p==i,]$ahigh <- confint2(fit)[4]  
+	  fitFrame[fitFrame$p==i,]$EV <- 1/(fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5) * 100)
+	  fitFrame[fitFrame$p==i,]$PmaxD <- 1/(fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5)) * (0.083 * fitFrame[fitFrame$p==i,]$k + 0.65)
+      fitFrame[fitFrame$p==i,]$OmaxD <- (fitFrame[fitFrame$p==i,]$q0 * (10^(fitFrame[fitFrame$p==i,]$k * (exp(-fitFrame[fitFrame$p==i,]$alpha * fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$PmaxD) - 1)))) * fitFrame[fitFrame$p==i,]$PmaxD
   }
 }

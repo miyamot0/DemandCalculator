@@ -49,12 +49,14 @@ SourceFrame <- data.frame(
   p=pLoad,
   y=yLoad,
   x=xLoad,
-  k=kLoad)
+  k=kLoad,
+  g=gLoad)
 
 nSimulated <- length(SourceFrame$p)
 
 fitFrame <- data.frame(
   p=seq(1,nSimulated,1),
+  g=rep(NA,nSimulated),
   q0=rep(NA,nSimulated),
   q0err=rep(NA,nSimulated),
   alpha=rep(NA,nSimulated),

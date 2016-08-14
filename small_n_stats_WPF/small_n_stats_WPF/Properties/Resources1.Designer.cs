@@ -75,9 +75,9 @@ namespace small_n_stats_WPF.Properties {
         ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string CurveFitting {
+        internal static string ExponentialDemandScoring {
             get {
-                return ResourceManager.GetString("CurveFitting", resourceCulture);
+                return ResourceManager.GetString("ExponentialDemandScoring", resourceCulture);
             }
         }
         
@@ -96,9 +96,9 @@ namespace small_n_stats_WPF.Properties {
         ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExponentialDemandFunctions {
+        internal static string ExponentialDemandScoringFitted {
             get {
-                return ResourceManager.GetString("ExponentialDemandFunctions", resourceCulture);
+                return ResourceManager.GetString("ExponentialDemandScoringFitted", resourceCulture);
             }
         }
         
@@ -117,9 +117,9 @@ namespace small_n_stats_WPF.Properties {
         ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExponentialDemandFunctionsKFitted {
+        internal static string ExponentialDemandScoringSet {
             get {
-                return ResourceManager.GetString("ExponentialDemandFunctionsKFitted", resourceCulture);
+                return ResourceManager.GetString("ExponentialDemandScoringSet", resourceCulture);
             }
         }
         
@@ -138,9 +138,9 @@ namespace small_n_stats_WPF.Properties {
         ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExponentialDemandFunctionsKSet {
+        internal static string ExponentiatedDemandScoring {
             get {
-                return ResourceManager.GetString("ExponentialDemandFunctionsKSet", resourceCulture);
+                return ResourceManager.GetString("ExponentiatedDemandScoring", resourceCulture);
             }
         }
         
@@ -159,9 +159,9 @@ namespace small_n_stats_WPF.Properties {
         ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExponentiatedDemandFunctionKSet {
+        internal static string ExponentiatedDemandScoringFitted {
             get {
-                return ResourceManager.GetString("ExponentiatedDemandFunctionKSet", resourceCulture);
+                return ResourceManager.GetString("ExponentiatedDemandScoringFitted", resourceCulture);
             }
         }
         
@@ -180,9 +180,9 @@ namespace small_n_stats_WPF.Properties {
         ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExponentiatedDemandFunctions {
+        internal static string ExponentiatedDemandScoringSet {
             get {
-                return ResourceManager.GetString("ExponentiatedDemandFunctions", resourceCulture);
+                return ResourceManager.GetString("ExponentiatedDemandScoringSet", resourceCulture);
             }
         }
         
@@ -201,9 +201,72 @@ namespace small_n_stats_WPF.Properties {
         ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
         ///#    GNU Ge [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ExponentiatedDemandFunctionsKFitted {
+        internal static string GraphingAggregateExponentialBasic {
             get {
-                return ResourceManager.GetString("ExponentiatedDemandFunctionsKFitted", resourceCulture);
+                return ResourceManager.GetString("GraphingAggregateExponentialBasic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # 
+        ///#    Copyright 2016 Shawn Gilroy
+        ///#
+        ///#    This file is part of Demand Analysis.
+        ///#
+        ///#    Demand Analysis is free software: you can redistribute it and/or modify
+        ///#    it under the terms of the GNU General Public License as published by
+        ///#    the Free Software Foundation, version 2.
+        ///#
+        ///#    Demand Analysis is distributed in the hope that it will be useful,
+        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string GraphingAggregateExponentialFaceted {
+            get {
+                return ResourceManager.GetString("GraphingAggregateExponentialFaceted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # 
+        ///#    Copyright 2016 Shawn Gilroy
+        ///#
+        ///#    This file is part of Demand Analysis.
+        ///#
+        ///#    Demand Analysis is free software: you can redistribute it and/or modify
+        ///#    it under the terms of the GNU General Public License as published by
+        ///#    the Free Software Foundation, version 2.
+        ///#
+        ///#    Demand Analysis is distributed in the hope that it will be useful,
+        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string GraphingAggregateExponentiatedBasic {
+            get {
+                return ResourceManager.GetString("GraphingAggregateExponentiatedBasic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # 
+        ///#    Copyright 2016 Shawn Gilroy
+        ///#
+        ///#    This file is part of Demand Analysis.
+        ///#
+        ///#    Demand Analysis is free software: you can redistribute it and/or modify
+        ///#    it under the terms of the GNU General Public License as published by
+        ///#    the Free Software Foundation, version 2.
+        ///#
+        ///#    Demand Analysis is distributed in the hope that it will be useful,
+        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string GraphingAggregateExponentiatedFaceted {
+            get {
+                return ResourceManager.GetString("GraphingAggregateExponentiatedFaceted", resourceCulture);
             }
         }
         
@@ -510,16 +573,6 @@ namespace small_n_stats_WPF.Properties {
         internal static string License_SharpVectorGraphics {
             get {
                 return ResourceManager.GetString("License_SharpVectorGraphics", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap SNS {
-            get {
-                object obj = ResourceManager.GetObject("SNS", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

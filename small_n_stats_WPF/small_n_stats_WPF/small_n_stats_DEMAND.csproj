@@ -31,7 +31,7 @@
     <SuiteName>Demand Calculator</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
-    <ApplicationRevision>38</ApplicationRevision>
+    <ApplicationRevision>39</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -157,7 +157,7 @@
     </Compile>
     <Compile Include="Mathematics\DemandFunctionSolvers.cs" />
     <Compile Include="Models\DemandCoordinate.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
+    <Compile Include="Properties\Resources1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -223,8 +223,7 @@
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
@@ -240,7 +239,6 @@
     <None Include="Resources\License_ggplot2.txt" />
     <None Include="Resources\License_R.txt" />
     <None Include="Resources\License-RdotNet.txt" />
-    <None Include="Resources\DemandFunctions.txt" />
     <None Include="Resources\ExponentiatedDemandFunctions.txt" />
     <None Include="COPYING">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -259,7 +257,16 @@
     <None Include="AUTHORS" />
     <None Include="Resources\GraphingExponentialFaceted.txt" />
     <None Include="Resources\GraphingExponentiatedFaceted.txt" />
-    <None Include="Resources\CurveFitting.txt" />
+    <None Include="Resources\GraphingAggregateExponentialBasic.txt" />
+    <None Include="Resources\GraphingAggregateExponentiatedBasic.txt" />
+    <None Include="Resources\ExponentialDemandScoring.txt" />
+    <None Include="Resources\ExponentialDemandScoringFitted.txt" />
+    <None Include="Resources\ExponentialDemandScoringSet.txt" />
+    <None Include="Resources\ExponentiatedDemandScoring.txt" />
+    <None Include="Resources\ExponentiatedDemandScoringFitted.txt" />
+    <None Include="Resources\ExponentiatedDemandScoringSet.txt" />
+    <None Include="Resources\GraphingAggregateExponentialFaceted.txt" />
+    <None Include="Resources\GraphingAggregateExponentiatedFaceted.txt" />
     <Content Include="Source\DemandCalculator-master.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

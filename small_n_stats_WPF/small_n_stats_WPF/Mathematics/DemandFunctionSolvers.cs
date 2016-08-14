@@ -34,13 +34,24 @@ namespace small_n_stats_WPF.Mathematics
 {
     class DemandFunctionSolvers
     {
-
-        /// <summary>
-        /// Hursh & Silverburg's exponetial function is called from resources here (as string), for use in R function calls
-        /// </summary>
-        public static string GetSolver()
+        public static string GetAggregateExponentialGraphing()
         {
-            return Properties.Resources.CurveFitting;
+            return Properties.Resources.GraphingAggregateExponentialBasic;
+        }
+
+        public static string GetAggregateExponentialGraphingFaceted()
+        {
+            return Properties.Resources.GraphingAggregateExponentialFaceted;
+        }
+
+        public static string GetAggregateExponentiatedGraphing()
+        {
+            return Properties.Resources.GraphingAggregateExponentiatedBasic;
+        }
+
+        public static string GetAggregateExponentiatedGraphingFaceted()
+        {
+            return Properties.Resources.GraphingAggregateExponentiatedFaceted;
         }
 
         /// <summary>
@@ -48,7 +59,7 @@ namespace small_n_stats_WPF.Mathematics
         /// </summary>
         public static string GetExponentialDemandFunction()
         {
-            return Properties.Resources.ExponentialDemandFunctions;
+            return Properties.Resources.ExponentialDemandScoring;
         }
 
         /// <summary>
@@ -56,7 +67,7 @@ namespace small_n_stats_WPF.Mathematics
         /// </summary>
         public static string GetExponentialDemandFunctionKFittings()
         {
-            return Properties.Resources.ExponentialDemandFunctionsKFitted;
+            return Properties.Resources.ExponentialDemandScoringFitted;
         }
 
         /// <summary>
@@ -64,7 +75,7 @@ namespace small_n_stats_WPF.Mathematics
         /// </summary>
         public static string GetExponentialDemandFunctionKSet()
         {
-            return Properties.Resources.ExponentialDemandFunctionsKSet;
+            return Properties.Resources.ExponentialDemandScoringSet;
         }
 
         /// <summary>
@@ -72,7 +83,7 @@ namespace small_n_stats_WPF.Mathematics
         /// </summary>
         public static string GetExponentiatedDemandFunction()
         {
-            return Properties.Resources.ExponentiatedDemandFunctions;
+            return Properties.Resources.ExponentiatedDemandScoring;
         }
 
         /// <summary>
@@ -80,7 +91,7 @@ namespace small_n_stats_WPF.Mathematics
         /// </summary>
         public static string GetExponentiatedDemandFunctionKFittings()
         {
-            return Properties.Resources.ExponentiatedDemandFunctionsKFitted;
+            return Properties.Resources.ExponentiatedDemandScoringFitted;
         }
 
         /// <summary>
@@ -88,7 +99,7 @@ namespace small_n_stats_WPF.Mathematics
         /// </summary>
         public static string GetExponentiatedDemandFunctionKSet()
         {
-            return Properties.Resources.ExponentiatedDemandFunctionKSet;
+            return Properties.Resources.ExponentiatedDemandScoringSet;
         }
 
         /// <summary>
