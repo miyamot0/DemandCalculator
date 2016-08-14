@@ -2588,6 +2588,8 @@ namespace small_n_stats_WPF.ViewModels
             double lowY = valueRange.Where(v => v > 0).OrderBy(v => v).First();
             double highY = valueRange.Where(v => v > 0).OrderBy(v => v).Last();
 
+            mWindow.OutputEvents("Applying settings...");
+
             #region AdvancedMenuCustomizations
 
             if (AdvancedMenu)
@@ -2672,6 +2674,8 @@ namespace small_n_stats_WPF.ViewModels
 
             #endregion
 
+            mWindow.OutputEvents("Applying heuristics...");
+
             #region FittingHeuristic
 
             engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
@@ -2749,6 +2753,8 @@ namespace small_n_stats_WPF.ViewModels
 
             #endregion
 
+            mWindow.OutputEvents("Applying bounds and start values...");
+
             #region KBoundChecks
 
             double boundLowKtemp = double.NaN;
@@ -2802,6 +2808,8 @@ namespace small_n_stats_WPF.ViewModels
             }
 
             #endregion
+
+            mWindow.OutputEvents("Beginning Stein's Tests...");
 
             #region SteinTest
 
@@ -2960,6 +2968,8 @@ namespace small_n_stats_WPF.ViewModels
                     return;
                 }
             }
+
+            mWindow.OutputEvents("Beginning low-level analyses...");
 
             try
             {
@@ -3872,7 +3882,7 @@ namespace small_n_stats_WPF.ViewModels
 
             #endregion
 
-            mWindow.OutputEvents("Intermediate Calculations Completed!");
+            mWindow.OutputEvents("Beginning high-level analyses...");
 
             try
             {
@@ -4082,6 +4092,8 @@ namespace small_n_stats_WPF.ViewModels
 
                 if (OutputFigures)
                 {
+                    mWindow.OutputEvents("Constructing figures...");
+
                     WpfDrawingSettings settings = new WpfDrawingSettings();
                     settings.IncludeRuntime = true;
                     settings.TextAsGeometry = false;
@@ -4118,6 +4130,8 @@ namespace small_n_stats_WPF.ViewModels
             {
                 Console.WriteLine(e.ToString());
             }
+
+            mWindow.OutputEvents("Calculations complete!");
 
             mWindow.OutputEvents("Please remember to cite the packages used in this process!");
             mWindow.OutputEvents("Citation:: " + string.Join("", engine.Evaluate("citation()$textVersion").AsCharacter().ToArray()));
