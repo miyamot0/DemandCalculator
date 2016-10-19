@@ -322,7 +322,7 @@ namespace small_n_stats_WPF.ViewModels
 
             if (!workingRecents.Contains(filePath))
             {
-                workingRecents.Add(filePath);
+                workingRecents.Insert(0, filePath);
                 Properties.Settings.Default.RecentFiles = string.Join(";", workingRecents.ToArray());
                 Properties.Settings.Default.Save();
 
