@@ -1751,8 +1751,25 @@ namespace small_n_stats_WPF.ViewModels
                 engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
 
                 yBehavior = Decisions.GetYBehavior(HurshModel, windowRef);
+
+                if (yBehavior == YValueDecisions.Cancel)
+                {
+                    return;
+                }
+
                 xBehavior = Decisions.GetXBehavior(HurshModel, windowRef);
+
+                if (xBehavior == XValueDecisions.Cancel)
+                {
+                    return;
+                }
+
                 kBehavior = Decisions.GetKBehaviorIndividual(windowRef);
+
+                if (kBehavior == KValueDecisions.Cancel)
+                {
+                    return;
+                }
 
                 if (kBehavior == KValueDecisions.DeriveValuesIndividual)
                 {
@@ -1979,12 +1996,11 @@ namespace small_n_stats_WPF.ViewModels
             winHack.Width = 650;
             winHack.Height = 400;
 
-            if (winHack.ShowDialog() == true)
+            winHack.ShowDialog();
+
+            if (winHack.MessageOptions.SelectedValue.ToString().Contains("review") || !winHack.GotClicked)
             {
-                if (winHack.MessageOptions.SelectedIndex == 1)
-                {
-                    return;
-                }
+                return;
             }
 
             engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");
@@ -2672,8 +2688,25 @@ namespace small_n_stats_WPF.ViewModels
             else
             {
                 yBehavior = Decisions.GetYBehavior(HurshModel, windowRef);
+
+                if (yBehavior == YValueDecisions.Cancel)
+                {
+                    return;
+                }
+
                 xBehavior = Decisions.GetXBehavior(HurshModel, windowRef);
+
+                if (xBehavior == XValueDecisions.Cancel)
+                {
+                    return;
+                }
+
                 kBehavior = Decisions.GetKBehaviorGroup(windowRef);
+
+                if (kBehavior == KValueDecisions.Cancel)
+                {
+                    return;
+                }
             }
 
             #endregion
@@ -2870,12 +2903,11 @@ namespace small_n_stats_WPF.ViewModels
             winHack.Width = 650;
             winHack.Height = 400;
 
-            if (winHack.ShowDialog() == true)
+            winHack.ShowDialog();
+
+            if (winHack.MessageOptions.SelectedValue.ToString().Contains("review") || !winHack.GotClicked)
             {
-                if (winHack.MessageOptions.SelectedIndex == 1)
-                {
-                    return;
-                }
+                return;
             }
 
             engine.Evaluate("rm(list = setdiff(ls(), lsf.str()))");

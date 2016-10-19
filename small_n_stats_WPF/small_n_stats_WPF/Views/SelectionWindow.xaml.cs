@@ -34,6 +34,8 @@ namespace small_n_stats_WPF.Views
     /// </summary>
     public partial class SelectionWindow : Window
     {
+        public bool GotClicked { get; set; }
+
         public SelectionWindow(string[] options, string defaultItem)
         {
             InitializeComponent();
@@ -44,10 +46,14 @@ namespace small_n_stats_WPF.Views
             }
 
             MessageOptions.SelectedItem = defaultItem;
+
+            GotClicked = false;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            GotClicked = true;
+
             DialogResult = true;
         }
     }

@@ -40,7 +40,8 @@ namespace small_n_stats_WPF.Utilities
         ChangeTenth,
         ChangeHundredth,
         ChangeCustom,
-        OnePercentLowest
+        OnePercentLowest,
+        Cancel
     }
 
     /// <summary>
@@ -50,7 +51,8 @@ namespace small_n_stats_WPF.Utilities
     {
         DoNothing,
         ChangeHundredth,
-        DropZeros
+        DropZeros,
+        Cancel
     }
 
     /// <summary>
@@ -62,7 +64,8 @@ namespace small_n_stats_WPF.Utilities
         DeriveValuesGroup,
         AverageLogValuesGroup,
         UseSuppliedValues,
-        FitK
+        FitK,
+        Cancel
     }
 
     public class Decisions
@@ -187,34 +190,40 @@ namespace small_n_stats_WPF.Utilities
             yValueWindow.Owner = windowRef;
             yValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             yValueWindow.Topmost = true;
+            
+            yValueWindow.ShowDialog();
 
-            if (yValueWindow.ShowDialog() == true)
+            if (!yValueWindow.GotClicked)
             {
-                int output = yValueWindow.MessageOptions.SelectedIndex;
-
-                if (output == 0)
-                {
-                    return YValueDecisions.DropZeros;
-                }
-                else if (output == 1)
-                {
-                    return YValueDecisions.ChangeHundredth;
-                }
-                else if (output == 2)
-                {
-                    return YValueDecisions.ChangeTenth;
-                }
-                else if (output == 3)
-                {
-                    return YValueDecisions.ChangeCustom;
-                }
-                else if (output == 4)
-                {
-                    return YValueDecisions.DoNothing;
-                }
+                return YValueDecisions.Cancel;
             }
 
-            return YValueDecisions.DoNothing;
+            int output = yValueWindow.MessageOptions.SelectedIndex;
+
+            if (output == 0)
+            {
+                return YValueDecisions.DropZeros;
+            }
+            else if (output == 1)
+            {
+                return YValueDecisions.ChangeHundredth;
+            }
+            else if (output == 2)
+            {
+                return YValueDecisions.ChangeTenth;
+            }
+            else if (output == 3)
+            {
+                return YValueDecisions.ChangeCustom;
+            }
+            else if (output == 4)
+            {
+                return YValueDecisions.DoNothing;
+            }
+            else
+            {
+                return YValueDecisions.DoNothing;
+            }
         }
 
         /// <summary>
@@ -237,33 +246,40 @@ namespace small_n_stats_WPF.Utilities
             yValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             yValueWindow.Topmost = true;
 
-            if (yValueWindow.ShowDialog() == true)
-            {
-                int output = yValueWindow.MessageOptions.SelectedIndex;
+            yValueWindow.ShowDialog();
 
-                if (output == 0)
-                {
-                    return YValueDecisions.DropZeros;
-                }
-                else if (output == 1)
-                {
-                    return YValueDecisions.ChangeHundredth;
-                }
-                else if (output == 2)
-                {
-                    return YValueDecisions.ChangeTenth;
-                }
-                else if (output == 3)
-                {
-                    return YValueDecisions.ChangeCustom;
-                }
-                else if (output == 4)
-                {
-                    return YValueDecisions.DoNothing;
-                }
+            if (!yValueWindow.GotClicked)
+            {
+                return YValueDecisions.Cancel;
             }
 
-            return YValueDecisions.DoNothing;
+            int output = yValueWindow.MessageOptions.SelectedIndex;
+
+            if (output == 0)
+            {
+                return YValueDecisions.DropZeros;
+            }
+            else if (output == 1)
+            {
+                return YValueDecisions.ChangeHundredth;
+            }
+            else if (output == 2)
+            {
+                return YValueDecisions.ChangeTenth;
+            }
+            else if (output == 3)
+            {
+                return YValueDecisions.ChangeCustom;
+            }
+            else if (output == 4)
+            {
+                return YValueDecisions.DoNothing;
+            }
+            else
+            {
+                return YValueDecisions.DoNothing;
+            }
+
         }
 
         /// <summary>
@@ -286,21 +302,28 @@ namespace small_n_stats_WPF.Utilities
             xValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             xValueWindow.Topmost = true;
 
-            if (xValueWindow.ShowDialog() == true)
-            {
-                int output = xValueWindow.MessageOptions.SelectedIndex;
+            xValueWindow.ShowDialog();
 
-                if (output == 0)
-                {
-                    return XValueDecisions.DropZeros;
-                }
-                else if (output == 1)
-                {
-                    return XValueDecisions.DoNothing;
-                }
+            if (!xValueWindow.GotClicked)
+            {
+                return XValueDecisions.Cancel;
             }
 
-            return XValueDecisions.DoNothing;
+            int output = xValueWindow.MessageOptions.SelectedIndex;
+
+            if (output == 0)
+            {
+                return XValueDecisions.DropZeros;
+            }
+            else if (output == 1)
+            {
+                return XValueDecisions.DoNothing;
+            }
+            else
+            {
+                return XValueDecisions.DoNothing;
+            }
+
         }
 
         /// <summary>
@@ -323,21 +346,28 @@ namespace small_n_stats_WPF.Utilities
             xValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             xValueWindow.Topmost = true;
 
-            if (xValueWindow.ShowDialog() == true)
-            {
-                int output = xValueWindow.MessageOptions.SelectedIndex;
+            xValueWindow.ShowDialog();
 
-                if (output == 0)
-                {
-                    return XValueDecisions.DropZeros;
-                }
-                else if (output == 1)
-                {
-                    return XValueDecisions.DoNothing;
-                }
+            if (!xValueWindow.GotClicked)
+            {
+                return XValueDecisions.Cancel;
             }
 
-            return XValueDecisions.DoNothing;
+            int output = xValueWindow.MessageOptions.SelectedIndex;
+
+            if (output == 0)
+            {
+                return XValueDecisions.DropZeros;
+            }
+            else if (output == 1)
+            {
+                return XValueDecisions.DoNothing;
+            }
+            else
+            {
+                return XValueDecisions.DoNothing;
+            }
+
         }
 
         /// <summary>
@@ -358,25 +388,32 @@ namespace small_n_stats_WPF.Utilities
             kValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             kValueWindow.Topmost = true;
 
-            if (kValueWindow.ShowDialog() == true)
-            {
-                int output = kValueWindow.MessageOptions.SelectedIndex;
+            kValueWindow.ShowDialog();
 
-                if (output == 0)
-                {
-                    return KValueDecisions.DeriveValuesIndividual;
-                }
-                else if (output == 1)
-                {
-                    return KValueDecisions.FitK;
-                }
-                else if (output == 2)
-                {
-                    return KValueDecisions.UseSuppliedValues;
-                }
+            if (!kValueWindow.GotClicked)
+            {
+                return KValueDecisions.Cancel;
             }
 
-            return KValueDecisions.DeriveValuesIndividual;
+            int output = kValueWindow.MessageOptions.SelectedIndex;
+
+            if (output == 0)
+            {
+                return KValueDecisions.DeriveValuesIndividual;
+            }
+            else if (output == 1)
+            {
+                return KValueDecisions.FitK;
+            }
+            else if (output == 2)
+            {
+                return KValueDecisions.UseSuppliedValues;
+            }
+            else
+            {
+                return KValueDecisions.DeriveValuesIndividual;
+            }
+
         }
 
         /// <summary>
@@ -398,33 +435,40 @@ namespace small_n_stats_WPF.Utilities
             kValueWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             kValueWindow.Topmost = true;
 
-            if (kValueWindow.ShowDialog() == true)
-            {
-                int output = kValueWindow.MessageOptions.SelectedIndex;
+            kValueWindow.ShowDialog();
 
-                if (output == 0)
-                {
-                    return KValueDecisions.FitK;
-                }
-                else if (output == 1)
-                {
-                    return KValueDecisions.DeriveValuesGroup;
-                }
-                else if (output == 2)
-                {
-                    return KValueDecisions.DeriveValuesIndividual;
-                }
-                else if (output == 3)
-                {
-                    return KValueDecisions.AverageLogValuesGroup;
-                }
-                else if (output == 4)
-                {
-                    return KValueDecisions.UseSuppliedValues;
-                }
+            if (!kValueWindow.GotClicked)
+            {
+                return KValueDecisions.Cancel;
             }
 
-            return KValueDecisions.DeriveValuesGroup;
+            int output = kValueWindow.MessageOptions.SelectedIndex;
+
+            if (output == 0)
+            {
+                return KValueDecisions.FitK;
+            }
+            else if (output == 1)
+            {
+                return KValueDecisions.DeriveValuesGroup;
+            }
+            else if (output == 2)
+            {
+                return KValueDecisions.DeriveValuesIndividual;
+            }
+            else if (output == 3)
+            {
+                return KValueDecisions.AverageLogValuesGroup;
+            }
+            else if (output == 4)
+            {
+                return KValueDecisions.UseSuppliedValues;
+            }
+            else
+            {
+                return KValueDecisions.DeriveValuesGroup;
+            }
+
         }
 
     }
