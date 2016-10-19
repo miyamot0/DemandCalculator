@@ -246,6 +246,39 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        private bool useBIC = false;
+        public bool UseBIC
+        {
+            get { return useBIC; }
+            set
+            {
+                useBIC = value;
+                OnPropertyChanged("UseBIC");
+            }
+        }
+
+        private bool useAIC = false;
+        public bool UseAIC
+        {
+            get { return useAIC; }
+            set
+            {
+                useAIC = value;
+                OnPropertyChanged("UseAIC");
+            }
+        }
+
+        private bool useR2 = false;
+        public bool UseR2
+        {
+            get { return useR2; }
+            set
+            {
+                useR2 = value;
+                OnPropertyChanged("UseR2");
+            }
+        }
+
         #endregion
 
         #region ModelModes
@@ -667,6 +700,7 @@ namespace small_n_stats_WPF.ViewModels
 
             HurshModel = true;
             RowModeRadio = true;
+            UseR2 = true;
         }
 
         /// <summary>
@@ -2043,7 +2077,20 @@ namespace small_n_stats_WPF.ViewModels
                 mVM.RowViewModels[0].values[6] = "Q0 (95% CI)";
                 mVM.RowViewModels[0].values[7] = "alpha (95% CI)";
 
-                mVM.RowViewModels[0].values[8] = "R-Squared";
+
+                if (UseBIC)
+                {
+                    mVM.RowViewModels[0].values[8] = "BIC";
+                }
+                else if (UseAIC)
+                {
+                    mVM.RowViewModels[0].values[8] = "AIC";
+                }
+                else if (UseR2)
+                {
+                    mVM.RowViewModels[0].values[8] = "R-Squared";
+                }
+
                 mVM.RowViewModels[0].values[9] = "Abs. Sum Squares";
                 mVM.RowViewModels[0].values[10] = "Resid. SD";
 
@@ -2328,7 +2375,20 @@ namespace small_n_stats_WPF.ViewModels
 
                     mVM.RowViewModels[1].values[6] = qLow + " - " + qHigh;
                     mVM.RowViewModels[1].values[7] = aLow + " - " + aHigh;
-                    mVM.RowViewModels[1].values[8] = engine.Evaluate("fitFrame[fitFrame$p==1,]$r2").AsVector().First().ToString();
+
+                    if (UseBIC)
+                    {
+                        mVM.RowViewModels[1].values[8] = engine.Evaluate("fitFrame[fitFrame$p==1,]$BIC").AsVector().First().ToString();
+                    }
+                    else if (UseAIC)
+                    {
+                        mVM.RowViewModels[1].values[8] = engine.Evaluate("fitFrame[fitFrame$p==1,]$AIC").AsVector().First().ToString();
+                    }
+                    else if (UseR2)
+                    {
+                        mVM.RowViewModels[1].values[8] = engine.Evaluate("fitFrame[fitFrame$p==1,]$r2").AsVector().First().ToString();
+                    }
+
                     mVM.RowViewModels[1].values[9] = engine.Evaluate("fitFrame[fitFrame$p==1,]$absSS").AsVector().First().ToString();
                     mVM.RowViewModels[1].values[10] = engine.Evaluate("fitFrame[fitFrame$p==1,]$sdResid").AsVector().First().ToString();
 
