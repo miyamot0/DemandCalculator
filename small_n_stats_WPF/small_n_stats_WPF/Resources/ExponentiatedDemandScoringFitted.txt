@@ -70,7 +70,9 @@ fitFrameTemp <- data.frame(
   ahigh=rep(NA,nSimulated),
   EV=rep(NA,nSimulated),
   OmaxD=rep(NA,nSimulated),
-  PmaxD=rep(NA,nSimulated))
+  PmaxD=rep(NA,nSimulated),
+  AIC=rep(NA,nSimulated),
+  BIC=rep(NA,nSimulated))
 
 fitFrame <- data.frame(
   p=seq(1,1,1),
@@ -89,7 +91,9 @@ fitFrame <- data.frame(
   ahigh=rep(NA,1),
   EV=rep(NA,1),
   OmaxD=rep(NA,1),
-  PmaxD=rep(NA,1))
+  PmaxD=rep(NA,1),
+  AIC=rep(NA,nSimulated),
+  BIC=rep(NA,nSimulated))
 
   fittedK <- NULL
 
@@ -162,6 +166,8 @@ fitFrame <- data.frame(
     #fitFrame[1,]$q0high <- confint2(fit)[4]
     #fitFrame[1,]$alow <- confint2(fit)[3]
     #fitFrame[1,]$ahigh <- confint2(fit)[6]    
+	fitFrame[1,]$AIC<-AIC(fit)
+	fitFrame[1,]$BIC<-BIC(fit)
 
 	fittedK <<- as.numeric(coef(fit)["k"])
 
@@ -250,6 +256,9 @@ for (i in 1:nSimulated)
 		#fitFrameTemp[fitFrameTemp$p==i,]$q0high <- confint2(fit)[3]
 		#fitFrameTemp[fitFrameTemp$p==i,]$alow <- confint2(fit)[2]
 		#fitFrameTemp[fitFrameTemp$p==i,]$ahigh <- confint2(fit)[4]
+		fitFrameTemp[fitFrameTemp$p==i,]$AIC<-AIC(fit)
+		fitFrameTemp[fitFrameTemp$p==i,]$BIC<-BIC(fit)
+
 		fitFrameTemp[fitFrameTemp$p==i,]$EV <- 1/(fitFrameTemp[fitFrameTemp$p==i,]$alpha * (fitFrameTemp[fitFrameTemp$p==i,]$k ^ 1.5) * 100)
 		fitFrameTemp[fitFrameTemp$p==i,]$PmaxD <- 1/(fitFrameTemp[fitFrameTemp$p==i,]$q0 * fitFrameTemp[fitFrameTemp$p==i,]$alpha * (fitFrameTemp[fitFrameTemp$p==i,]$k ^ 1.5)) * (0.083 * fitFrameTemp[fitFrameTemp$p==i,]$k + 0.65)
 		fitFrameTemp[fitFrameTemp$p==i,]$OmaxD <- (10^(log10(fitFrameTemp[fitFrameTemp$p==i,]$q0) + (fitFrameTemp[fitFrameTemp$p==i,]$k * (exp(-fitFrameTemp[fitFrameTemp$p==i,]$alpha * fitFrameTemp[fitFrameTemp$p==i,]$q0 * fitFrameTemp[fitFrameTemp$p==i,]$PmaxD) - 1)))) * fitFrameTemp[fitFrameTemp$p==i,]$PmaxD
@@ -294,6 +303,9 @@ for (i in 1:nSimulated)
 		#fitFrameTemp[fitFrameTemp$p==i,]$q0high <- confint2(fit)[4]
 		#fitFrameTemp[fitFrameTemp$p==i,]$alow <- confint2(fit)[3]
 		#fitFrameTemp[fitFrameTemp$p==i,]$ahigh <- confint2(fit)[6]   
+		fitFrameTemp[fitFrameTemp$p==i,]$AIC<-AIC(fit)
+		fitFrameTemp[fitFrameTemp$p==i,]$BIC<-BIC(fit)
+
 		fitFrameTemp[fitFrameTemp$p==i,]$EV <- 1/(fitFrameTemp[fitFrameTemp$p==i,]$alpha * (fitFrameTemp[fitFrameTemp$p==i,]$k ^ 1.5) * 100)
 		fitFrameTemp[fitFrameTemp$p==i,]$PmaxD <- 1/(fitFrameTemp[fitFrameTemp$p==i,]$q0 * fitFrameTemp[fitFrameTemp$p==i,]$alpha * (fitFrameTemp[fitFrameTemp$p==i,]$k ^ 1.5)) * (0.083 * fitFrameTemp[fitFrameTemp$p==i,]$k + 0.65)
 		fitFrameTemp[fitFrameTemp$p==i,]$OmaxD <- (fitFrameTemp[fitFrameTemp$p==i,]$q0 * (10^(fitFrameTemp[fitFrameTemp$p==i,]$k * (exp(-fitFrameTemp[fitFrameTemp$p==i,]$alpha * fitFrameTemp[fitFrameTemp$p==i,]$q0 * fitFrameTemp[fitFrameTemp$p==i,]$PmaxD) - 1)))) * fitFrameTemp[fitFrameTemp$p==i,]$PmaxD

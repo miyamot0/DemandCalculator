@@ -2208,7 +2208,11 @@ namespace small_n_stats_WPF.ViewModels
                 xValues = engine.CreateNumericVector(xRange.ToArray());
                 engine.SetSymbol("xLoad", xValues);
 
-                engine.Evaluate("gLoad <- rep(1," + kRange.Count.ToString() + ")");
+                /// A clone of p essentially, since single
+                NumericVector gValues = engine.CreateNumericVector(pRange.ToArray());
+                engine.SetSymbol("gLoad", gValues);
+
+                //engine.Evaluate("gLoad <- rep(1," + kRange.Count.ToString() + ")");
 
                 if (FixQ0)
                 {

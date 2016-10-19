@@ -76,7 +76,9 @@ fitFrame <- data.frame(
   BP1=rep(NA,nSimulated),
   EV=rep(NA,nSimulated),
   OmaxD=rep(NA,nSimulated),
-  PmaxD=rep(NA,nSimulated))
+  PmaxD=rep(NA,nSimulated),
+  AIC=rep(NA,nSimulated),
+  BIC=rep(NA,nSimulated))
 
 for (i in 1:nSimulated)
 {
@@ -173,6 +175,9 @@ for (i in 1:nSimulated)
 	  #fitFrame[fitFrame$p==i,]$q0high <- confint2(fit)[3]
 	  #fitFrame[fitFrame$p==i,]$alow <- confint2(fit)[2]
 	  #fitFrame[fitFrame$p==i,]$ahigh <- confint2(fit)[4]  
+	  fitFrame[fitFrame$p==i,]$AIC<-AIC(fit)
+	  fitFrame[fitFrame$p==i,]$BIC<-BIC(fit)
+
 	  fitFrame[fitFrame$p==i,]$EV <- 1/(fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5) * 100)
 	  fitFrame[fitFrame$p==i,]$PmaxD <- 1/(fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$alpha * (fitFrame[fitFrame$p==i,]$k ^ 1.5)) * (0.083 * fitFrame[fitFrame$p==i,]$k + 0.65)
       fitFrame[fitFrame$p==i,]$OmaxD <- (fitFrame[fitFrame$p==i,]$q0 * (10^(fitFrame[fitFrame$p==i,]$k * (exp(-fitFrame[fitFrame$p==i,]$alpha * fitFrame[fitFrame$p==i,]$q0 * fitFrame[fitFrame$p==i,]$PmaxD) - 1)))) * fitFrame[fitFrame$p==i,]$PmaxD
