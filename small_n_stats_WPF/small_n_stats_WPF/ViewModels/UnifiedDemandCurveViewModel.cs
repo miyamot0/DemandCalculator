@@ -3468,85 +3468,242 @@ namespace small_n_stats_WPF.ViewModels
                     if (isGrouping)
                     {
                         bool isAnova = engine.Evaluate("isAnova").AsLogical().First();
+                        bool isParamGood = engine.Evaluate("!is.null(output)").AsLogical().First();
+                        bool isNonParamGood = engine.Evaluate("!is.null(outputNP)").AsLogical().First();
 
                         if (!isAnova)
                         {
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Method";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$method").AsVector().First().ToString();
-                            rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "T:";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$statistic").AsVector().First().ToString();
-                            rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "df:";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$parameter").AsVector().First().ToString();
-                            rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "p:";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$p.value").AsVector().First().ToString();
-                            rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "95% CI";
 
-                            double loCI = engine.Evaluate("output$conf.int[1]").AsNumeric().FirstOrDefault();
-                            double hiCI = engine.Evaluate("output$conf.int[2]").AsNumeric().FirstOrDefault();
-                            string ciRange = loCI.ToString("0.0000") + "-" + hiCI.ToString("0.0000");
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Method";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$method").AsVector().First().ToString();
+                            }
 
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = ciRange;
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[6] = "Method";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[7] = engine.Evaluate("outputNP$method").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Mean 1";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$estimate[1]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "T:";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$statistic").AsVector().First().ToString();
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[6] = "W:";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[7] = engine.Evaluate("outputNP$statistic").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Mean 2";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$estimate[2]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "df:";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$parameter").AsVector().First().ToString();
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[6] = "p:";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[7] = engine.Evaluate("outputNP$p.value").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
-                            rowNumber++;
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "p:";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$p.value").AsVector().First().ToString();
+                                rowNumber++;
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "95% CI";
+
+                                double loCI = engine.Evaluate("output$conf.int[1]").AsNumeric().FirstOrDefault();
+                                double hiCI = engine.Evaluate("output$conf.int[2]").AsNumeric().FirstOrDefault();
+                                string ciRange = loCI.ToString("0.0000") + "-" + hiCI.ToString("0.0000");
+
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = ciRange;
+                                rowNumber++;
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Mean 1";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$estimate[1]").AsVector().First().ToString();
+                                rowNumber++;
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Mean 2";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$estimate[2]").AsVector().First().ToString();
+                                rowNumber++;
+                                rowNumber++;
+                            }
 
                         }
                         else
                         {
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Method: One-way Anova";
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Method: One-way Anova";
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[7] = "Method: Kruskal-Wall RST";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "group:";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "group:";
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[7] = "alpha by group:";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "residuals:";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "residuals:";
+                            }
+
                             rowNumber++;
 
                             rowNumber -= 3;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = "df";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = "df";
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[8] = "chi-squared";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output[[1]][['Df']][1]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output[[1]][['Df']][1]").AsVector().First().ToString();
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[8] = engine.Evaluate("outputNP$statistic").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output[[1]][['Df']][2]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output[[1]][['Df']][2]").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
 
                             rowNumber -= 3;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[2] = "Sum Sq";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[2] = "Sum Sq";
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[9] = "df";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[2] = engine.Evaluate("output[[1]][['Sum Sq']][1]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[2] = engine.Evaluate("output[[1]][['Sum Sq']][1]").AsVector().First().ToString();
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[9] = engine.Evaluate("outputNP$parameter").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[2] = engine.Evaluate("output[[1]][['Sum Sq']][2]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[2] = engine.Evaluate("output[[1]][['Sum Sq']][2]").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
 
                             rowNumber -= 3;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[3] = "Mean Sq";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[3] = "Mean Sq";
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[10] = "p value";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[3] = engine.Evaluate("output[[1]][['Mean Sq']][1]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[3] = engine.Evaluate("output[[1]][['Mean Sq']][1]").AsVector().First().ToString();
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[10] = engine.Evaluate("outputNP$p.value").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[3] = engine.Evaluate("output[[1]][['Mean Sq']][2]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[3] = engine.Evaluate("output[[1]][['Mean Sq']][2]").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
 
                             rowNumber -= 3;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[4] = "F value";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[4] = "F value";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[4] = engine.Evaluate("output[[1]][['F value']][1]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[4] = engine.Evaluate("output[[1]][['F value']][1]").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
                             rowNumber++;
 
                             rowNumber -= 3;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[5] = "Pr(>F)";
-                            rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[5] = engine.Evaluate("output[[1]][['Pr(>F)']][1]").AsVector().First().ToString();
-                            rowNumber++;
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[5] = "Pr(>F)";
+                            }
+
                             rowNumber++;
 
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[5] = engine.Evaluate("output[[1]][['Pr(>F)']][1]").AsVector().First().ToString();
+                            }
+
+                            rowNumber++;
+                            rowNumber++;
                             rowNumber++;
 
                         }
@@ -3749,85 +3906,242 @@ namespace small_n_stats_WPF.ViewModels
                     if (isGrouping)
                     {
                         bool isAnova = engine.Evaluate("isAnova").AsLogical().First();
+                        bool isParamGood = engine.Evaluate("!is.null(output)").AsLogical().First();
+                        bool isNonParamGood = engine.Evaluate("!is.null(outputNP)").AsLogical().First();
 
                         if (!isAnova)
                         {
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Method";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$method").AsVector().First().ToString();
-                                rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "T:";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$statistic").AsVector().First().ToString();
-                                rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "df:";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$parameter").AsVector().First().ToString();
-                                rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "p:";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$p.value").AsVector().First().ToString();
-                                rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "95% CI";
 
-                            double loCI = engine.Evaluate("output$conf.int[1]").AsNumeric().FirstOrDefault();
-                            double hiCI = engine.Evaluate("output$conf.int[2]").AsNumeric().FirstOrDefault();
-                            string ciRange = loCI.ToString("0.0000") + "-" + hiCI.ToString("0.0000");
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Method";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$method").AsVector().First().ToString();
+                            }
 
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = ciRange;
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[6] = "Method";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[7] = engine.Evaluate("outputNP$method").AsVector().First().ToString();
+                            }
+
+                            rowNumber++;
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "T:";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$statistic").AsVector().First().ToString();
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[6] = "W:";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[7] = engine.Evaluate("outputNP$statistic").AsVector().First().ToString();
+                            }
+
+                            rowNumber++;
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "df:";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$parameter").AsVector().First().ToString();
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[6] = "p:";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[7] = engine.Evaluate("outputNP$p.value").AsVector().First().ToString();
+                            }
+
+                            rowNumber++;
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "p:";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$p.value").AsVector().First().ToString();
                                 rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Mean 1";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$estimate[1]").AsVector().First().ToString();
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "95% CI";
+
+                                double loCI = engine.Evaluate("output$conf.int[1]").AsNumeric().FirstOrDefault();
+                                double hiCI = engine.Evaluate("output$conf.int[2]").AsNumeric().FirstOrDefault();
+                                string ciRange = loCI.ToString("0.0000") + "-" + hiCI.ToString("0.0000");
+
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = ciRange;
                                 rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Mean 2";
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$estimate[2]").AsVector().First().ToString();
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Mean 1";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$estimate[1]").AsVector().First().ToString();
+                                rowNumber++;
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Mean 2";
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output$estimate[2]").AsVector().First().ToString();
                                 rowNumber++;
                                 rowNumber++;
+                            }
 
                         }
                         else
                         {
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Method: One-way Anova";
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "Method: One-way Anova";
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[7] = "Method: Kruskal-Wall RST";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "group:";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "group:";
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[7] = "alpha by group:";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "residuals:";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[0] = "residuals:";
+                            }
+
                             rowNumber++;
 
                             rowNumber -= 3;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = "df";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = "df";
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[8] = "chi-squared";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output[[1]][['Df']][1]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output[[1]][['Df']][1]").AsVector().First().ToString();
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[8] = engine.Evaluate("outputNP$statistic").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output[[1]][['Df']][2]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[1] = engine.Evaluate("output[[1]][['Df']][2]").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
 
                             rowNumber -= 3;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[2] = "Sum Sq";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[2] = "Sum Sq";
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[9] = "df";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[2] = engine.Evaluate("output[[1]][['Sum Sq']][1]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[2] = engine.Evaluate("output[[1]][['Sum Sq']][1]").AsVector().First().ToString();
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[9] = engine.Evaluate("outputNP$parameter").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[2] = engine.Evaluate("output[[1]][['Sum Sq']][2]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[2] = engine.Evaluate("output[[1]][['Sum Sq']][2]").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
 
                             rowNumber -= 3;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[3] = "Mean Sq";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[3] = "Mean Sq";
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[10] = "p value";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[3] = engine.Evaluate("output[[1]][['Mean Sq']][1]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[3] = engine.Evaluate("output[[1]][['Mean Sq']][1]").AsVector().First().ToString();
+                            }
+
+                            if (isNonParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[10] = engine.Evaluate("outputNP$p.value").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[3] = engine.Evaluate("output[[1]][['Mean Sq']][2]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[3] = engine.Evaluate("output[[1]][['Mean Sq']][2]").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
 
                             rowNumber -= 3;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[4] = "F value";
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[4] = "F value";
+                            }
+
                             rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[4] = engine.Evaluate("output[[1]][['F value']][1]").AsVector().First().ToString();
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[4] = engine.Evaluate("output[[1]][['F value']][1]").AsVector().First().ToString();
+                            }
+
                             rowNumber++;
                             rowNumber++;
 
                             rowNumber -= 3;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[5] = "Pr(>F)";
-                            rowNumber++;
-                            mVM.RowViewModels[rowNumber + rowBuffer].values[5] = engine.Evaluate("output[[1]][['Pr(>F)']][1]").AsVector().First().ToString();
-                            rowNumber++;
+
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[5] = "Pr(>F)";
+                            }
+
                             rowNumber++;
 
+                            if (isParamGood)
+                            {
+                                mVM.RowViewModels[rowNumber + rowBuffer].values[5] = engine.Evaluate("output[[1]][['Pr(>F)']][1]").AsVector().First().ToString();
+                            }
+
+                            rowNumber++;
+                            rowNumber++;
                             rowNumber++;
 
                         }

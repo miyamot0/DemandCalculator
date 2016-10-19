@@ -68,7 +68,6 @@
 
 using Microsoft.Win32;
 using RDotNet;
-using small_n_stats_WPF.Mathematics;
 using small_n_stats_WPF.Utilities;
 using small_n_stats_WPF.Views;
 using System;
@@ -1233,8 +1232,20 @@ namespace small_n_stats_WPF.ViewModels
                         UpdateTitle(openFileDialog1.SafeFileName);
                         haveFileLoaded = true;
                     }
+                    else
+                    {
+                        return;
+                    }
 
-                    AddToRecents(@openFileDialog1.FileName);
+                    if (workingSheet != string.Empty)
+                    {
+                        AddToRecents(@openFileDialog1.FileName);
+                    }
+                    else
+                    {
+                        title = "Discounting Model Selection - New File";
+                    }
+
                 }
                 catch (IOException e)
                 {
@@ -1275,10 +1286,26 @@ namespace small_n_stats_WPF.ViewModels
                 if (mExt.Equals(".xlsx"))
                 {
                     ObservableCollection<RowViewModel> temp = OpenXMLHelper.ReadFromExcelFile(filePath, out workingSheet);
+
+                    if (temp == null)
+                    {
+                        CloseFileUIProgressWindow();
+                        return;
+                    }
+
                     RowViewModels = new ObservableCollection<RowViewModel>(temp);
 
-                    UpdateTitle(Path.GetFileName(filePath));
-                    haveFileLoaded = true;
+                    if (workingSheet != string.Empty)
+                    {
+                        UpdateTitle(Path.GetFileName(filePath));
+                        haveFileLoaded = true;
+                    }
+                    else
+                    {
+                        title = "Discounting Model Selection - New File";
+                        haveFileLoaded = false;
+                    }
+
                 }
                 else if (mExt.Equals(".csv"))
                 {

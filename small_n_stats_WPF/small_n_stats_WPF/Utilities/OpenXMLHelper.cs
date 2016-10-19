@@ -103,6 +103,14 @@ namespace small_n_stats_WPF.Utilities
         {
             FileInfo existingFile = new FileInfo(filePath);
             ObservableCollection<RowViewModel> temp = new ObservableCollection<RowViewModel>();
+
+            int currRows = 50;
+
+            for (int i = 0; i < currRows; i++)
+            {
+                temp.Add(new RowViewModel());
+            }
+
             sheet = string.Empty;
 
             using (ExcelPackage package = new ExcelPackage(existingFile))
@@ -110,6 +118,11 @@ namespace small_n_stats_WPF.Utilities
                 var wsMult = package.Workbook.Worksheets;
 
                 List<string> workSheets = new List<string>();
+
+                if (wsMult == null || wsMult.Count < 1)
+                {
+                    return temp;
+                }
 
                 foreach (ExcelWorksheet sheetPeek in wsMult)
                 {
@@ -139,13 +152,6 @@ namespace small_n_stats_WPF.Utilities
                 }
 
                 var ws = package.Workbook.Worksheets[sheetWindow.MessageOptions.SelectedIndex + 1];
-
-                int currRows = 50;
-
-                for (int i = 0; i < currRows; i++)
-                {
-                    temp.Add(new RowViewModel());
-                }
 
                 var cellsUsed = ws.Cells;
 

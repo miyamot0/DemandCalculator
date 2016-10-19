@@ -308,12 +308,18 @@ if (length(uniqueGroups) > 1) {
   isGrouped <- TRUE
   isAnova <- NULL
 
+  output <- NULL
+  outputNP <- NULL
+
   if (length(uniqueGroups) == 2) {
-    output <- t.test(fitFrameTemp[fitFrameTemp$g == uniqueGroups[1],]$alpha, fitFrameTemp[fitFrameTemp$g == uniqueGroups[2],]$alpha, var.equal = FALSE)  
+    try(output <- t.test(fitFrameTemp[fitFrameTemp$g == uniqueGroups[1],]$alpha, fitFrameTemp[fitFrameTemp$g == uniqueGroups[2],]$alpha, var.equal = FALSE), silent = TRUE)  
+	try(outputNP <- wilcox.test(alpha ~ g, data = fitFrameTemp), silent = true)
+
 	isAnova <- FALSE
 
   } else if (length(uniqueGroups) > 2) {
-    output <- summary(aov(alpha ~ g, data = fitFrameTemp))
+    try(output <- summary(aov(alpha ~ g, data = fitFrameTemp)), silent = true)
+	try(outputNP <- kruskal.test(alpha ~ g, data = fitFrameTemp), silent = true)
 
 	isAnova <- TRUE
   }  

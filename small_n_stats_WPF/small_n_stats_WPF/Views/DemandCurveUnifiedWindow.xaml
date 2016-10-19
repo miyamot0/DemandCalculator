@@ -12,7 +12,7 @@
         Title="Demand Curve Fitting" 
         ResizeMode="NoResize"
         Height="555"
-        Width="850">
+        Width="415">
 
     <Window.Style>
         <Style TargetType="Window">
