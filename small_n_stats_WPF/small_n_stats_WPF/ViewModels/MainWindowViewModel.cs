@@ -739,13 +739,81 @@ namespace small_n_stats_WPF.ViewModels
 
                     introWindow.loadText.Text = "Loading R Packages";
 
+                    bool loadedDevTools = engine.Evaluate("require(devtools)").AsLogical().First();
+
+                    if (loadedDevTools)
+                    {
+                        introWindow.checkBase64enc.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install devtools packages for first time!");
+                        introWindow.loadText.Text = "Downloading devtools...";
+                        engine.Evaluate("if (!require(devtools)) { install.packages('devtools', repos = 'http://cran.us.r-project.org') }");
+
+                        loadedDevTools = engine.Evaluate("require(devtools)").AsLogical().First();
+
+                        if (loadedDevTools)
+                        {
+                            // TODO
+                            //Tag for devtools
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    bool loadedDigest = engine.Evaluate("require(digest)").AsLogical().First();
+
+                    if (loadedDigest)
+                    {
+                        introWindow.checkBase64enc.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install digest packages for first time!");
+                        introWindow.loadText.Text = "Downloading digest...";
+                        engine.Evaluate("if (!require(digest)) { install.packages('digest', repos = 'http://cran.us.r-project.org') }");
+
+                        loadedDigest = engine.Evaluate("require(digest)").AsLogical().First();
+
+                        if (loadedDigest)
+                        {
+                            // TODO
+                            //Tag for digest
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    bool loadedRepository = engine.Evaluate("require(beezdemand)").AsLogical().First();
+
+                    if (loadedRepository)
+                    {
+                        introWindow.checkBase64enc.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install digest packages for first time!");
+                        introWindow.loadText.Text = "Downloading digest...";
+                        engine.Evaluate("if (!require(beezdemand)) { devtools::install_github('miyamot0/beezdemand') }");
+
+                        loadedRepository = engine.Evaluate("require(beezdemand)").AsLogical().First();
+
+                        if (loadedRepository)
+                        {
+                            // TODO
+                            //Tag for repo
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
                     if (loadedGgplot && loadedGrid && loadedReshape && loadedBase64 && loadedNlstools && loadedNlmrt && !failed)
                     {
                         introWindow.loadText.Text = "All necessary components found!";
                         introWindow.loadText.Foreground = Brushes.Green;
                         SendMessageToOutput("All required packages have been found.  Ready to proceed.");
                     }
-
                 }
                 else
                 {
@@ -784,10 +852,13 @@ namespace small_n_stats_WPF.ViewModels
                 SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('base64enc')$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
 
+                SendMessageToOutput("beezdemand R Package - GPLv2+ Licensed. Copyright (c) 2015, Brent Kaplan.");
+                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('beezdemand')$textVersion").AsCharacter().ToArray()));
+                SendMessageToOutput("");
+
                 SendMessageToOutput("EPPlus - GPLv2 Licensed. Copyright (c) 2016 Jan Källman.");
                 SendMessageToOutput("RdotNet: Interface for the R Statistical Package - New BSD License (BSD 2-Clause). Copyright(c) 2010, RecycleBin. All rights reserved.");
                 SendMessageToOutput("SharpVectors: Library for rendering SVG - New BSD License (BSD 3-Clause). Copyright(c) 2010, SharpVectorGraphics. All rights reserved.");
-                SendMessageToOutput("beezdemand R Package - GPLv2 Licensed. Copyright (c) 2016, Brent Kaplan.");
                 SendMessageToOutput("");
 
                 SendMessageToOutput("License information is also provided in Information > Licenses > ... as well as in the install directory of this program (under Resources).");
