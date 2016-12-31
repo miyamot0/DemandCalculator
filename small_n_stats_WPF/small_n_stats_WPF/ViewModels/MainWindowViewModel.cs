@@ -150,14 +150,13 @@ namespace small_n_stats_WPF.ViewModels
         REngine engine;
 
         public RelayCommand RDotNetLicenseWindowCommand { get; set; }
-        public RelayCommand SharpVectorGraphicsLicenseWindowCommand { get; set; }
-        public RelayCommand Ggplot2LicenseWindowCommand { get; set; }
         public RelayCommand NlmrtLicenseWindowCommand { get; set; }
         public RelayCommand NlstoolsLicenseWindowCommand { get; set; }
         public RelayCommand RLicenseWindowCommand { get; set; }
-        public RelayCommand BaseEncodeLicenseWindowCommand { get; set; }
         public RelayCommand EPPLicenseWindowCommand { get; set; }
         public RelayCommand BeezdemandLicenseWindowCommand { get; set; }
+        public RelayCommand DevtoolsLicenseWindowCommand { get; set; }
+        public RelayCommand DigestLicenseWindowCommand { get; set; }
         public RelayCommand LicenseWindowCommand { get; set; }
 
         /* End Menu Items */
@@ -262,16 +261,15 @@ namespace small_n_stats_WPF.ViewModels
             #region LicenseCommands
             
             RDotNetLicenseWindowCommand = new RelayCommand(param => RdotNetLicenseInformationWindow(), param => true);
-            SharpVectorGraphicsLicenseWindowCommand = new RelayCommand(param => SharpVectorGraphicsLicenseInformationWindow(), param => true);
-            Ggplot2LicenseWindowCommand = new RelayCommand(param => Ggplot2LicenseInformationWindow(), param => true);
             NlmrtLicenseWindowCommand = new RelayCommand(param => NlmrtLicenseInformationWindow(), param => true);
             NlstoolsLicenseWindowCommand = new RelayCommand(param => NlsToolsLicenseInformationWindow(), param => true);
             RLicenseWindowCommand = new RelayCommand(param => RLicenseInformationWindow(), param => true);
-
-            BaseEncodeLicenseWindowCommand = new RelayCommand(param => BaseEncodeLicenseInformationWindow(), param => true);
             EPPLicenseWindowCommand = new RelayCommand(param => EPPLicenseWindow(), param => true);
-
             BeezdemandLicenseWindowCommand = new RelayCommand(param => BeezdemandLicenseInformationWindow(), param => true);
+
+            DevtoolsLicenseWindowCommand = new RelayCommand(param => DevtoolsLicenseInformationWindow(), param => true);
+            DigestLicenseWindowCommand = new RelayCommand(param => DigestLicenseInformationWindow(), param => true);
+
             LicenseWindowCommand = new RelayCommand(param => LicenseInformationWindow(), param => true);
 
             #endregion
@@ -316,6 +314,9 @@ namespace small_n_stats_WPF.ViewModels
         /// </param>
         private void AddToRecents(string filePath)
         {
+            var pathDir = Path.GetDirectoryName(filePath);
+            Properties.Settings.Default.LastDirectory = pathDir;
+
             recentsArray = Properties.Settings.Default.RecentFiles.Split(';');
 
             List<string> workingRecents = recentsArray.Select(item => item).Where(item => item.Trim().Length > 1).ToList();
@@ -369,7 +370,7 @@ namespace small_n_stats_WPF.ViewModels
         {
             if (MainWindow.dataGrid.SelectedCells.Count > 0)
             {
-                foreach (System.Windows.Controls.DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
+                foreach (DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
                 {
                     var rvm = obj.Item as RowViewModel;
 
@@ -450,6 +451,11 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Transposition a-la matrix, but list of arrays
+        /// </summary>
+        /// <param name="arrayList"></param>
+        /// <returns></returns>
         static List<string[]> CreateTransposedList(List<string[]> arrayList)
         {
             int lengthTemp = arrayList[0].Length;
@@ -481,10 +487,10 @@ namespace small_n_stats_WPF.ViewModels
             List<string[]> returnList = new List<string[]>();
 
             string[] holder;
-            for (int i=0; i<transposedMatrix.GetLength(0); i++)
+            for (int i = 0; i < transposedMatrix.GetLength(0); i++)
             {
                 holder = new string[transposedMatrix.GetLength(1)];
-                for (int j=0; j<transposedMatrix.GetLength(1); j++)
+                for (int j = 0; j < transposedMatrix.GetLength(1); j++)
                 {
                     holder[j] = transposedMatrix[i, j];
                 }
@@ -494,6 +500,9 @@ namespace small_n_stats_WPF.ViewModels
             return returnList;
         }
 
+        /// <summary>
+        /// Custom paste operation, swapping V/H loopings to make a transposition
+        /// </summary>
         private void PasteInverted()
         {
             List<string[]> rowData = ClipboardTools.ReadAndParseClipboardData();
@@ -511,7 +520,7 @@ namespace small_n_stats_WPF.ViewModels
             rowData = CreateTransposedList(rowData);
 
             if (rowData == null) return;
-            
+
             for (int i = lowRow; (i <= highRow) && (pasteContentRowIterator < rowData.Count); i++)
             {
                 if (i == highRow)
@@ -607,23 +616,67 @@ namespace small_n_stats_WPF.ViewModels
                     
                     introWindow.loadText.Text = "Loading R Packages";
 
-                    bool loadedGgplot = engine.Evaluate("require(ggplot2)").AsLogical().First();
+                    bool loadedDevTools = engine.Evaluate("require(devtools)").AsLogical().First();
 
-                    if (loadedGgplot)
+                    if (loadedDevTools)
                     {
-                        introWindow.checkGgplot.Foreground = Brushes.Green;
+                        introWindow.checkDevtools.Foreground = Brushes.Green;
                     }
                     else
                     {
-                        SendMessageToOutput("Attempting to install ggplot2 packages for first time!");
-                        introWindow.loadText.Text = "Downloading ggplot2...";
-                        engine.Evaluate("if (!require(ggplot2)) { install.packages('ggplot2', repos = 'http://cran.us.r-project.org') }");
+                        SendMessageToOutput("Attempting to install devtools packages for first time!");
+                        introWindow.loadText.Text = "Downloading devtools...";
+                        engine.Evaluate("if (!require(devtools)) { install.packages('devtools', repos = 'http://cran.us.r-project.org') }");
 
-                        loadedGgplot = engine.Evaluate("require(ggplot2)").AsLogical().First();
+                        loadedDevTools = engine.Evaluate("require(devtools)").AsLogical().First();
 
-                        if (loadedGgplot)
+                        if (loadedDevTools)
                         {
-                            introWindow.checkGgplot.Foreground = Brushes.Green;
+                            introWindow.checkDevtools.Foreground = Brushes.Green;
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    bool loadedDigest = engine.Evaluate("require(digest)").AsLogical().First();
+
+                    if (loadedDigest)
+                    {
+                        introWindow.checkDigest.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install digest packages for first time!");
+                        introWindow.loadText.Text = "Downloading digest...";
+                        engine.Evaluate("if (!require(digest)) { install.packages('digest', repos = 'http://cran.us.r-project.org') }");
+
+                        loadedDigest = engine.Evaluate("require(digest)").AsLogical().First();
+
+                        if (loadedDigest)
+                        {
+                            introWindow.checkDigest.Foreground = Brushes.Green;
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    bool loadedRepository = engine.Evaluate("require(beezdemand)").AsLogical().First();
+
+                    if (loadedRepository)
+                    {
+                        introWindow.checkBeezdemand.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install digest packages for first time!");
+                        introWindow.loadText.Text = "Downloading digest...";
+                        engine.Evaluate("if (!require(beezdemand)) { devtools::install_github('miyamot0/beezdemand') }");
+
+                        loadedRepository = engine.Evaluate("require(beezdemand)").AsLogical().First();
+
+                        if (loadedRepository)
+                        {
+                            introWindow.checkBeezdemand.Foreground = Brushes.Green;
                         }
                     }
 
@@ -670,145 +723,8 @@ namespace small_n_stats_WPF.ViewModels
                             introWindow.checkNlstools.Foreground = Brushes.Green;
                         }
                     }
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
-                    bool loadedReshape = engine.Evaluate("require(reshape2)").AsLogical().First();
-
-                    if (loadedReshape)
-                    {
-                        introWindow.checkReshape2.Foreground = Brushes.Green;
-                    }
-                    else
-                    {
-                        SendMessageToOutput("Attempting to install reshape2 packages for first time!");
-                        introWindow.loadText.Text = "Downloading reshape2...";
-                        engine.Evaluate("if (!require(reshape2)) { install.packages('reshape2', repos = 'http://cran.us.r-project.org') }");
-
-                        loadedReshape = engine.Evaluate("require(reshape2)").AsLogical().First();
-
-                        if (loadedReshape)
-                        {
-                            introWindow.checkReshape2.Foreground = Brushes.Green;
-                        }
-                    }
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
-                    bool loadedGrid = engine.Evaluate("require(gridExtra)").AsLogical().First();
-
-                    if (loadedGrid)
-                    {
-                        introWindow.checkGridExtra.Foreground = Brushes.Green;
-                    }
-                    else
-                    {
-                        SendMessageToOutput("Attempting to install gridExtra packages for first time!");
-                        introWindow.loadText.Text = "Downloading gridExtra...";
-                        engine.Evaluate("if (!require(gridExtra)) { install.packages('gridExtra', repos = 'http://cran.us.r-project.org') }");
-
-                        loadedGrid = engine.Evaluate("require(gridExtra)").AsLogical().First();
-
-                        if (loadedGrid)
-                        {
-                            introWindow.checkGridExtra.Foreground = Brushes.Green;
-                        }
-                    }
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
-                    bool loadedBase64 = engine.Evaluate("require(base64enc)").AsLogical().First();
-
-                    if (loadedBase64)
-                    {
-                        introWindow.checkBase64enc.Foreground = Brushes.Green;
-                    }
-                    else
-                    {
-                        SendMessageToOutput("Attempting to install base64enc packages for first time!");
-                        introWindow.loadText.Text = "Downloading base64enc...";
-                        engine.Evaluate("if (!require(base64enc)) { install.packages('base64enc', repos = 'http://cran.us.r-project.org') }");
-
-                        loadedBase64 = engine.Evaluate("require(base64enc)").AsLogical().First();
-
-                        if (loadedBase64)
-                        {
-                            introWindow.checkBase64enc.Foreground = Brushes.Green;
-                        }
-                    }
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
-                    bool loadedDevTools = engine.Evaluate("require(devtools)").AsLogical().First();
-
-                    if (loadedDevTools)
-                    {
-                        introWindow.checkBase64enc.Foreground = Brushes.Green;
-                    }
-                    else
-                    {
-                        SendMessageToOutput("Attempting to install devtools packages for first time!");
-                        introWindow.loadText.Text = "Downloading devtools...";
-                        engine.Evaluate("if (!require(devtools)) { install.packages('devtools', repos = 'http://cran.us.r-project.org') }");
-
-                        loadedDevTools = engine.Evaluate("require(devtools)").AsLogical().First();
-
-                        if (loadedDevTools)
-                        {
-                            // TODO
-                            //Tag for devtools
-                        }
-                    }
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
-                    bool loadedDigest = engine.Evaluate("require(digest)").AsLogical().First();
-
-                    if (loadedDigest)
-                    {
-                        introWindow.checkBase64enc.Foreground = Brushes.Green;
-                    }
-                    else
-                    {
-                        SendMessageToOutput("Attempting to install digest packages for first time!");
-                        introWindow.loadText.Text = "Downloading digest...";
-                        engine.Evaluate("if (!require(digest)) { install.packages('digest', repos = 'http://cran.us.r-project.org') }");
-
-                        loadedDigest = engine.Evaluate("require(digest)").AsLogical().First();
-
-                        if (loadedDigest)
-                        {
-                            // TODO
-                            //Tag for digest
-                        }
-                    }
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
-                    bool loadedRepository = engine.Evaluate("require(beezdemand)").AsLogical().First();
-
-                    if (loadedRepository)
-                    {
-                        introWindow.checkBase64enc.Foreground = Brushes.Green;
-                    }
-                    else
-                    {
-                        SendMessageToOutput("Attempting to install digest packages for first time!");
-                        introWindow.loadText.Text = "Downloading digest...";
-                        engine.Evaluate("if (!require(beezdemand)) { devtools::install_github('miyamot0/beezdemand') }");
-
-                        loadedRepository = engine.Evaluate("require(beezdemand)").AsLogical().First();
-
-                        if (loadedRepository)
-                        {
-                            // TODO
-                            //Tag for repo
-                        }
-                    }
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
-                    if (loadedGgplot && loadedGrid && loadedReshape && loadedBase64 && loadedNlstools && loadedNlmrt && !failed)
+                    
+                    if (loadedNlstools && loadedNlmrt && !failed)
                     {
                         introWindow.loadText.Text = "All necessary components found!";
                         introWindow.loadText.Foreground = Brushes.Green;
@@ -828,28 +744,12 @@ namespace small_n_stats_WPF.ViewModels
                 SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation()$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
 
-                SendMessageToOutput("ggplot2 R Package - GPLv2 Licensed. Copyright (c) 2016, Hadley Wickham.");
-                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('ggplot2')$textVersion").AsCharacter().ToArray()));
-                SendMessageToOutput("");
-
-                SendMessageToOutput("gridExtra R Package - GPLv2+ Licensed. Copyright (c) 2016, Baptiste Auguie.");
-                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('gridExtra')$textVersion").AsCharacter().ToArray()));
-                SendMessageToOutput("");
-
                 SendMessageToOutput("nlmrt R Package - GPLv2 Licensed. Copyright (C) 2016. John C. Nash.");
                 SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('nlmrt')$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
 
                 SendMessageToOutput("nlstools R Package - GPLv2 Licensed. Copyright(C) 2015 Florent Baty and Marie-Laure Delignette - Muller, with contributions from Sandrine Charles, Jean - Pierre Flandrois, and Christian Ritz.");
                 SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('nlstools')$textVersion").AsCharacter().ToArray()));
-                SendMessageToOutput("");
-
-                SendMessageToOutput("reshape2 R Package - MIT Licensed. Copyright (c) 2014, Hadley Wickham.");
-                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('reshape2')$textVersion").AsCharacter().ToArray()));
-                SendMessageToOutput("");
-
-                SendMessageToOutput("base64enc R Package - GPLv2+ Licensed. Copyright (c) 2015, Simon Urbanek.");
-                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('base64enc')$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
 
                 SendMessageToOutput("beezdemand R Package - GPLv2+ Licensed. Copyright (c) 2015, Brent Kaplan.");
@@ -946,54 +846,6 @@ namespace small_n_stats_WPF.ViewModels
         /// <summary>
         /// License window
         /// </summary>
-        private void SharpVectorGraphicsLicenseInformationWindow()
-        {
-            var window = new License();
-            window.DataContext = new LicenseViewModel
-            {
-                licenseTitle = "License (BSD 3-clause) - SharpVectors",
-                licenseText = Properties.Resources.License_SharpVectorGraphics
-            };
-            window.Owner = MainWindow;
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.Show();
-        }
-
-        /// <summary>
-        /// License window
-        /// </summary>
-        private void Ggplot2LicenseInformationWindow()
-        {
-            var window = new License();
-            window.DataContext = new LicenseViewModel
-            {
-                licenseTitle = "License - ggplot2",
-                licenseText = Properties.Resources.License_ggplot2
-            };
-            window.Owner = MainWindow;
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.Show();
-        }
-
-        /// <summary>
-        /// License window
-        /// </summary>
-        private void BaseEncodeLicenseInformationWindow()
-        {
-            var window = new License();
-            window.DataContext = new LicenseViewModel
-            {
-                licenseTitle = "License (GPLv2+) - base64enc",
-                licenseText = Properties.Resources.License_base64enc
-            };
-            window.Owner = MainWindow;
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.Show();
-        }
-
-        /// <summary>
-        /// License window
-        /// </summary>
         private void RdotNetLicenseInformationWindow()
         {
             var window = new License();
@@ -1017,6 +869,38 @@ namespace small_n_stats_WPF.ViewModels
             {
                 licenseTitle = "License - Beezdemand",
                 licenseText = Properties.Resources.License_Beezdemand
+            };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Show();
+        }
+
+        /// <summary>
+        /// License window
+        /// </summary>
+        private void DigestLicenseInformationWindow()
+        {
+            var window = new License();
+            window.DataContext = new LicenseViewModel
+            {
+                licenseTitle = "License - Digest",
+                licenseText = Properties.Resources.License_Digest
+            };
+            window.Owner = MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Show();
+        }
+
+        /// <summary>
+        /// License window
+        /// </summary>
+        private void DevtoolsLicenseInformationWindow()
+        {
+            var window = new License();
+            window.DataContext = new LicenseViewModel
+            {
+                licenseTitle = "License - Devtools",
+                licenseText = Properties.Resources.License_Devtools
             };
             window.Owner = MainWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;

@@ -58,5 +58,17 @@ namespace small_n_stats_WPF.Properties {
                 this["RecentFiles"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastDirectory {
+            get {
+                return ((string)(this["LastDirectory"]));
+            }
+            set {
+                this["LastDirectory"] = value;
+            }
+        }
     }
 }

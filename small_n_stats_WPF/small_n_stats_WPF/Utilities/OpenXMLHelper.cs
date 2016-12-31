@@ -58,6 +58,7 @@ namespace small_n_stats_WPF.Utilities
 {
     public class OpenXMLHelper
     {
+
         /// <summary>
         /// Reads from CSV file
         /// </summary>
@@ -117,12 +118,12 @@ namespace small_n_stats_WPF.Utilities
             {
                 var wsMult = package.Workbook.Worksheets;
 
-                List<string> workSheets = new List<string>();
-
                 if (wsMult == null || wsMult.Count < 1)
                 {
                     return temp;
                 }
+
+                List<string> workSheets = new List<string>();
 
                 foreach (ExcelWorksheet sheetPeek in wsMult)
                 {
@@ -146,7 +147,7 @@ namespace small_n_stats_WPF.Utilities
                     sheet = workSheetsArray[sheetWindow.MessageOptions.SelectedIndex];
                 }
 
-                if (output == -1)
+                if (output == -1 || !sheetWindow.hadClick)
                 {
                     return null;
                 }
@@ -261,9 +262,7 @@ namespace small_n_stats_WPF.Utilities
                 {
                     for (int j = 0; j < 100; j++)
                     {
-                        //                        ws.Cells[i + 1, j + 1].Style.
                         ws.Cells[i + 1, j + 1].Value = rowCollection[i].values[j];
-                        //Console.WriteLine("Row: {0} Column: {1} Value: {2}", i, j, rowCollection[i].values[j].ToString());
                     }
                 }
 

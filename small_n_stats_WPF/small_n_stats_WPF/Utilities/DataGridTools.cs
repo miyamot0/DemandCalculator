@@ -148,7 +148,7 @@ namespace small_n_stats_WPF.Utilities
 
             return array;
         }
-        
+
         /// <summary>
         /// Walk through ranged values as needed, finding necessary pairs
         /// </summary>

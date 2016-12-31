@@ -67,9 +67,19 @@
                                        RequestNavigate="Hyperlink_RequestNavigate">R Statistical Package</Hyperlink>
                         </Paragraph>
                     </ListItem>
-                    <ListItem x:Name="checkGgplot" TextBlock.Foreground="Red">
+                    <ListItem x:Name="checkDevtools" TextBlock.Foreground="Red">
                         <Paragraph>
-                            ggplot2 (R package)
+                            devtools (R package)
+                        </Paragraph>
+                    </ListItem>
+                    <ListItem x:Name="checkDigest" TextBlock.Foreground="Red">
+                        <Paragraph>
+                            digest (R package)
+                        </Paragraph>
+                    </ListItem>
+                    <ListItem x:Name="checkBeezdemand" TextBlock.Foreground="Red">
+                        <Paragraph>
+                            beezdemand (R package)
                         </Paragraph>
                     </ListItem>
                     <ListItem x:Name="checkNlmrt" TextBlock.Foreground="Red">
@@ -80,21 +90,6 @@
                     <ListItem x:Name="checkNlstools" TextBlock.Foreground="Red">
                         <Paragraph>
                             nlstools (R package)
-                        </Paragraph>
-                    </ListItem>
-                    <ListItem x:Name="checkReshape2" TextBlock.Foreground="Red">
-                        <Paragraph>
-                            reshape2 (R package)
-                        </Paragraph>
-                    </ListItem>
-                    <ListItem x:Name="checkGridExtra" TextBlock.Foreground="Red">
-                        <Paragraph>
-                            gridExtra (R package)
-                        </Paragraph>
-                    </ListItem>
-                    <ListItem x:Name="checkBase64enc" TextBlock.Foreground="Red">
-                        <Paragraph>
-                            base64enc (R package)
                         </Paragraph>
                     </ListItem>
                 </List>
@@ -110,9 +105,7 @@
                     Questions, feedback and bug reports can be submitted to shawn (dot) gilroy (at) temple.edu.
                 </Paragraph>
             </FlowDocument>
-        </FlowDocumentScrollViewer>
-
-        
+        </FlowDocumentScrollViewer>        
 
         <Label x:Name="versionLabel" 
                Content="" 

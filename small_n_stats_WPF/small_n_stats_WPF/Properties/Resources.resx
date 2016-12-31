@@ -118,56 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ExponentialDemandScoring" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ExponentialDemandScoring.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="ExponentialDemandScoringFitted" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ExponentialDemandScoringFitted.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="ExponentialDemandScoringSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ExponentialDemandScoringSet.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="ExponentiatedDemandScoring" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ExponentiatedDemandScoring.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="ExponentiatedDemandScoringFitted" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ExponentiatedDemandScoringFitted.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="ExponentiatedDemandScoringSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ExponentiatedDemandScoringSet.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="GraphingAggregateExponentialBasic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GraphingAggregateExponentialBasic.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="GraphingAggregateExponentiatedBasic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GraphingAggregateExponentiatedBasic.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="GraphingExponential" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\graphingexponential.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="GraphingExponentialFaceted" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\graphingexponentialfaceted.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="GraphingExponentiated" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\graphingexponentiated.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="GraphingExponentiatedFaceted" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\graphingexponentiatedfaceted.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="LICENSE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\license.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="License_base64enc" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\license_base64enc.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="License_Beezdemand" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\license_beezdemand.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="License_EPPlus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\license_epplus.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="License_ggplot2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\license_ggplot2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="License_GNOME_icons" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\license_gnome_icons.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -184,16 +142,10 @@
   <data name="License_RdotNet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\license-rdotnet.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="License_SharpVectorGraphics" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\license_sharpvectorgraphics.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="License_Devtools" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\License_Devtools.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="SteinSystematicCheck" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\steinsystematiccheck.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="GraphingAggregateExponentialFaceted" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GraphingAggregateExponentialFaceted.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="GraphingAggregateExponentiatedFaceted" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GraphingAggregateExponentiatedFaceted.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="License_Digest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\License_Digest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

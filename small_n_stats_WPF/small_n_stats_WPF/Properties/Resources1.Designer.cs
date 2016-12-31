@@ -61,300 +61,6 @@ namespace small_n_stats_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ExponentialDemandScoring {
-            get {
-                return ResourceManager.GetString("ExponentialDemandScoring", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ExponentialDemandScoringFitted {
-            get {
-                return ResourceManager.GetString("ExponentialDemandScoringFitted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ExponentialDemandScoringSet {
-            get {
-                return ResourceManager.GetString("ExponentialDemandScoringSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ExponentiatedDemandScoring {
-            get {
-                return ResourceManager.GetString("ExponentiatedDemandScoring", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ExponentiatedDemandScoringFitted {
-            get {
-                return ResourceManager.GetString("ExponentiatedDemandScoringFitted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ExponentiatedDemandScoringSet {
-            get {
-                return ResourceManager.GetString("ExponentiatedDemandScoringSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingAggregateExponentialBasic {
-            get {
-                return ResourceManager.GetString("GraphingAggregateExponentialBasic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingAggregateExponentialFaceted {
-            get {
-                return ResourceManager.GetString("GraphingAggregateExponentialFaceted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingAggregateExponentiatedBasic {
-            get {
-                return ResourceManager.GetString("GraphingAggregateExponentiatedBasic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingAggregateExponentiatedFaceted {
-            get {
-                return ResourceManager.GetString("GraphingAggregateExponentiatedFaceted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingExponential {
-            get {
-                return ResourceManager.GetString("GraphingExponential", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingExponentialFaceted {
-            get {
-                return ResourceManager.GetString("GraphingExponentialFaceted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingExponentiated {
-            get {
-                return ResourceManager.GetString("GraphingExponentiated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingExponentiatedFaceted {
-            get {
-                return ResourceManager.GetString("GraphingExponentiatedFaceted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Demand Curve Calculator is Copyright (C) 2016 Shawn Gilroy
         ///Contact: Shawn Gilroy (shawn.gilroy@temple.edu)
         ///
@@ -372,27 +78,6 @@ namespace small_n_stats_WPF.Properties {
         internal static string LICENSE {
             get {
                 return ResourceManager.GetString("LICENSE", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 		    GNU GENERAL PUBLIC LICENSE
-        ///		       Version 2, June 1991
-        ///
-        /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
-        ///                       59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-        /// Everyone is permitted to copy and distribute verbatim copies
-        /// of this license document, but changing it is not allowed.
-        ///
-        ///			    Preamble
-        ///
-        ///  The licenses for most software are designed to take away your
-        ///freedom to share and change it.  By contrast, the GNU General Public
-        ///License is intended to guara [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string License_base64enc {
-            get {
-                return ResourceManager.GetString("License_base64enc", resourceCulture);
             }
         }
         
@@ -432,9 +117,9 @@ namespace small_n_stats_WPF.Properties {
         ///freedom to share and change it.  By contrast, the GNU General Public
         ///License is intended to guara [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string License_EPPlus {
+        internal static string License_Devtools {
             get {
-                return ResourceManager.GetString("License_EPPlus", resourceCulture);
+                return ResourceManager.GetString("License_Devtools", resourceCulture);
             }
         }
         
@@ -443,7 +128,7 @@ namespace small_n_stats_WPF.Properties {
         ///		       Version 2, June 1991
         ///
         /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
-        ///                       51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+        ///                       59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
         /// Everyone is permitted to copy and distribute verbatim copies
         /// of this license document, but changing it is not allowed.
         ///
@@ -451,11 +136,32 @@ namespace small_n_stats_WPF.Properties {
         ///
         ///  The licenses for most software are designed to take away your
         ///freedom to share and change it.  By contrast, the GNU General Public
-        ///License is intended to guar [rest of string was truncated]&quot;;.
+        ///License is intended to guara [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string License_ggplot2 {
+        internal static string License_Digest {
             get {
-                return ResourceManager.GetString("License_ggplot2", resourceCulture);
+                return ResourceManager.GetString("License_Digest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 		    GNU GENERAL PUBLIC LICENSE
+        ///		       Version 2, June 1991
+        ///
+        /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+        ///                       59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+        /// Everyone is permitted to copy and distribute verbatim copies
+        /// of this license document, but changing it is not allowed.
+        ///
+        ///			    Preamble
+        ///
+        ///  The licenses for most software are designed to take away your
+        ///freedom to share and change it.  By contrast, the GNU General Public
+        ///License is intended to guara [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string License_EPPlus {
+            get {
+                return ResourceManager.GetString("License_EPPlus", resourceCulture);
             }
         }
         
@@ -557,43 +263,6 @@ namespace small_n_stats_WPF.Properties {
         internal static string License_RdotNet {
             get {
                 return ResourceManager.GetString("License_RdotNet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Copyright (c) 2010, SharpVectorGraphics
-        ///All rights reserved.
-        ///
-        ///Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-        ///
-        ///* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-        ///
-        ///* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other material [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string License_SharpVectorGraphics {
-            get {
-                return ResourceManager.GetString("License_SharpVectorGraphics", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string SteinSystematicCheck {
-            get {
-                return ResourceManager.GetString("SteinSystematicCheck", resourceCulture);
             }
         }
     }

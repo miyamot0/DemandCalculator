@@ -14,10 +14,6 @@ The RdotNet Community Program is licensed under the new BSD License (2-Clause), 
 	You can visit the RdotNet Community program website here:
 	http://rdotnet.codeplex.com/
 
-The SharpVectors Program is licensed under the new BSD License (3-Clause), Copyright(c) 2010, SharpVectorGraphics. All rights reserved
-	You can visit the SharpVectors program website here:
-	http://sharpvectors.codeplex.com/
-
 The EPPlus program is licensed under the GPL, version 2, Copyright (c) 2016 Jan Källman
 	You can visit the EPPlus program website here:
 	http://epplus.codeplex.com/
@@ -30,22 +26,10 @@ The beezdemand R Package is licensed under the GPL, version 2, Copyright (c) 201
 	You may view the package here:
 	https://github.com/brentkaplan/beezdemand
 
-The ggplot2 R Package is licensed under the GPL, version 2, Copyright (c) 2016, Hadley Wickham
-	You can visit the ggplot2 package website here:
-	https://cran.r-project.org/web/packages/ggplot2/
+The devtools R Package is licensed under the GPL, version 2, Copyright (c) 2016, Hadley Wickham, Winston Chang, R Core Team
+	You may view the package here:
+	https://cran.r-project.org/web/packages/devtools/
 
-The gridExtra R Package is licensed under the GPL, version 2, Copyright (c) 2016, Baptiste Auguie
-	You can visit the gridExtra package website here:
-	https://cran.r-project.org/web/packages/gridExtra/
-
-The base64enc R Package is licensed under the GPL, version 2, Copyright (c) 2015, Simon Urbanek
-	You can visit the base64enc package website here:
-	https://cran.r-project.org/web/packages/base64enc/
-
-The reshape2 R Package is licensed under the MIT license, Copyright (c) 2014, Hadley Wickham
-	You can visit the reshape2 package website here:
-	https://cran.r-project.org/web/packages/reshape2/
-
-The scales R Package is licensed under the MIT license, Copyright (c) 2010-2014, Hadley Wickham
-	You can visit the scales package website here:
-	https://cran.r-project.org/web/packages/scales/
+The digest R Package is licensed under the GPL, version 2, Copyright (c) 2016, Dirk Eddelbuettel with contributions by Antoine Lucas, Jarek Tuszynski, Henrik Bengtsson, Simon Urbanek, Mario Frasca, Bryan Lewis, Murray Stokely, Hannes Muehleisen, Duncan Murdoch, Jim Hester, Wush Wu, Qiang Kou, Thierry Onkelinx, Michel Lang and Viliam Simko
+	You may view the package here:
+	https://cran.r-project.org/web/packages/digest/

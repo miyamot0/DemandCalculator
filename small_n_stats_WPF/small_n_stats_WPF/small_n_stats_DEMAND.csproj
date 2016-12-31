@@ -155,17 +155,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Mathematics\DemandFunctionSolvers.cs" />
-    <Compile Include="Models\DemandCoordinate.cs" />
     <Compile Include="Properties\Resources1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Tags\Conventions.cs" />
     <Compile Include="Utilities\ClipboardTools.cs" />
     <Compile Include="Utilities\CustomDataGrid.cs" />
     <Compile Include="Utilities\DataGridTools.cs" />
-    <Compile Include="Utilities\Decisions.cs" />
     <Compile Include="Utilities\OpenXMLHelper.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="Utilities\Settings.cs" />
@@ -236,37 +234,16 @@
     <None Include="small_n_stats_DEMAND_TemporaryKey.pfx" />
     <None Include="small_n_stats_WPF_TemporaryKey.pfx" />
     <None Include="Resources\License_GNOME_icons.txt" />
-    <None Include="Resources\License_ggplot2.txt" />
     <None Include="Resources\License_R.txt" />
     <None Include="Resources\License-RdotNet.txt" />
-    <None Include="Resources\ExponentiatedDemandFunctions.txt" />
     <None Include="COPYING">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\License_Beezdemand.txt" />
-    <None Include="Resources\GraphingExponential.txt" />
-    <None Include="Resources\GraphingExponentiated.txt" />
-    <None Include="Resources\SteinSystematicCheck.txt" />
-    <None Include="Resources\ExponentialDemandFunctionsKFitted.txt" />
-    <None Include="Resources\ExponentiatedDemandFunctionsKFitted.txt" />
-    <None Include="Resources\ExponentialDemandFunctionsKSet.txt" />
-    <None Include="Resources\ExponentiatedDemandFunctionKSet.txt" />
-    <None Include="Resources\License_base64enc.txt" />
     <None Include="Resources\License_EPPlus.txt" />
-    <None Include="Resources\License_SharpVectorGraphics.txt" />
     <None Include="AUTHORS" />
-    <None Include="Resources\GraphingExponentialFaceted.txt" />
-    <None Include="Resources\GraphingExponentiatedFaceted.txt" />
-    <None Include="Resources\GraphingAggregateExponentialBasic.txt" />
-    <None Include="Resources\GraphingAggregateExponentiatedBasic.txt" />
-    <None Include="Resources\ExponentialDemandScoring.txt" />
-    <None Include="Resources\ExponentialDemandScoringFitted.txt" />
-    <None Include="Resources\ExponentialDemandScoringSet.txt" />
-    <None Include="Resources\ExponentiatedDemandScoring.txt" />
-    <None Include="Resources\ExponentiatedDemandScoringFitted.txt" />
-    <None Include="Resources\ExponentiatedDemandScoringSet.txt" />
-    <None Include="Resources\GraphingAggregateExponentialFaceted.txt" />
-    <None Include="Resources\GraphingAggregateExponentiatedFaceted.txt" />
+    <None Include="Resources\License_Devtools.txt" />
+    <None Include="Resources\License_Digest.txt" />
     <Content Include="Source\DemandCalculator-master.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
