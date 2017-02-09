@@ -83,10 +83,6 @@
       <HintPath>..\packages\DynamicInterop.0.7.4\lib\net40\DynamicInterop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="RDotNet, Version=1.6.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\R.NET.Community.1.6.5\lib\net40\RDotNet.dll</HintPath>
@@ -141,6 +137,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="unvell.ReoGrid, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\unvell.ReoGridWPF.dll.2.0.1.0\lib\20\unvell.ReoGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -155,6 +155,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Dialogs\NamingDialog.xaml.cs">
+      <DependentUpon>NamingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ResizeDialog.xaml.cs">
+      <DependentUpon>ResizeDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\YesNoDialog.xaml.cs">
+      <DependentUpon>YesNoDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -162,13 +171,12 @@
     </Compile>
     <Compile Include="Tags\Conventions.cs" />
     <Compile Include="Utilities\ClipboardTools.cs" />
-    <Compile Include="Utilities\CustomDataGrid.cs" />
     <Compile Include="Utilities\DataGridTools.cs" />
-    <Compile Include="Utilities\OpenXMLHelper.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="Utilities\Settings.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\UnifiedDemandCurveViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelResultsWindow.cs" />
     <Compile Include="Views\CheckWindow.xaml.cs">
       <DependentUpon>CheckWindow.xaml</DependentUpon>
     </Compile>
@@ -184,8 +192,6 @@
     <Compile Include="Views\ProgressDialog.xaml.cs">
       <DependentUpon>ProgressDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\ResultsViewModel.cs" />
-    <Compile Include="ViewModels\RowViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\LicenseViewModel.cs" />
     <Compile Include="Views\InformationWindow.xaml.cs">
@@ -203,8 +209,8 @@
     <Compile Include="Views\RangePrompt.xaml.cs">
       <DependentUpon>RangePrompt.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ResultsWindow.xaml.cs">
-      <DependentUpon>ResultsWindow.xaml</DependentUpon>
+    <Compile Include="Views\ResultsGridWindow.xaml.cs">
+      <DependentUpon>ResultsGridWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SelectionWindow.xaml.cs">
       <DependentUpon>SelectionWindow.xaml</DependentUpon>
@@ -244,11 +250,45 @@
     <None Include="AUTHORS" />
     <None Include="Resources\License_Devtools.txt" />
     <None Include="Resources\License_Digest.txt" />
+    <Resource Include="Resources\Edit_UndoHS.png" />
+    <Resource Include="Resources\Files_7954.png" />
+    <Resource Include="Resources\NewDocumentHS.png" />
+    <Resource Include="Resources\Offline_16xLG.png" />
+    <Resource Include="Resources\OpenFile.png" />
+    <Resource Include="Resources\openHS.png" />
+    <Resource Include="Resources\PasteHS.png" />
+    <Resource Include="Resources\Procedure_8937.png" />
+    <Resource Include="Resources\ProcedureMissing_8939.png" />
+    <Resource Include="Resources\PropertiesHS.png" />
+    <Resource Include="Resources\RepeatHS.png" />
+    <Resource Include="Resources\saveHS.png" />
+    <Resource Include="Resources\ScriptFile_452.png" />
+    <Resource Include="Resources\SNS.png" />
+    <Resource Include="Resources\Textfile_818_16x.png" />
+    <Resource Include="Resources\WorkItemQueryNodeOffline_11949.png" />
+    <Resource Include="Resources\action_add_16xLG.png" />
+    <Resource Include="Resources\book_Open_16xLG.png" />
+    <Resource Include="Resources\Component_16xLG.png" />
+    <Resource Include="Resources\CopyHS.png" />
+    <Resource Include="Resources\CutHS.png" />
+    <Resource Include="Resources\Edit_RedoHS.png" />
     <Content Include="Source\DemandCalculator-master.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Dialogs\NamingDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\ResizeDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\YesNoDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\CheckWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -289,7 +329,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ResultsWindow.xaml">
+    <Page Include="Views\ResultsGridWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -297,9 +337,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\SNS.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

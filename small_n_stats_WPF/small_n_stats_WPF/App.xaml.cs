@@ -28,6 +28,7 @@
 using small_n_stats_WPF.ViewModels;
 using small_n_stats_WPF.Views;
 using System.Windows;
+using unvell.ReoGrid;
 
 namespace small_n_stats_WPF
 {
@@ -36,16 +37,30 @@ namespace small_n_stats_WPF
     /// </summary>
     public partial class App : Application
     {
+        public static MainWindow ApplicationWindow;
+
+        private static ReoGridControl workbook;
+        public static ReoGridControl Workbook
+        {
+            get
+            {
+                return ApplicationWindow.reoGridControl;
+            }
+            set
+            {
+                workbook = value;
+            }
+        }
+
+        public static bool IsSearchingForPick = false;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            MainWindow window = new MainWindow();
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            window.DataContext = new MainWindowViewModel()
-            {
-                MainWindow = window,
-            };
-            window.Show();
+            ApplicationWindow = new MainWindow();
+            ApplicationWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            ApplicationWindow.DataContext = new MainWindowViewModel();
+            ApplicationWindow.Show();
         }
     }
 }

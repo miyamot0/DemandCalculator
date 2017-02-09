@@ -12,7 +12,7 @@
         Title="Demand Curve Fitting" 
         ResizeMode="NoResize"
         Height="560"
-        Width="830">
+        Width="410">
 
     <Window.Style>
         <Style TargetType="Window">
@@ -63,8 +63,8 @@
                 <RowDefinition Height="45"></RowDefinition>
                 <RowDefinition Height="45"></RowDefinition>
                 <RowDefinition Height="45"></RowDefinition>                
-                <RowDefinition Height="35"></RowDefinition>
-                <RowDefinition Height="35"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="35"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>

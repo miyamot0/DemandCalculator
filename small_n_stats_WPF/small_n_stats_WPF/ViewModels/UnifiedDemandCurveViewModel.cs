@@ -50,6 +50,8 @@
 using RDotNet;
 using small_n_stats_WPF.Tags;
 using small_n_stats_WPF.Utilities;
+using small_n_stats_WPF.View;
+using small_n_stats_WPF.ViewModel;
 using small_n_stats_WPF.Views;
 using System;
 using System.Collections;
@@ -647,8 +649,6 @@ namespace small_n_stats_WPF.ViewModels
             lowRowG = highRowG = lowColG = highColG = -1;
             YBrush = Brushes.LightGray;
             GRangeValues = "";
-
-            mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_Y;
         }
 
         /// <summary>
@@ -715,6 +715,9 @@ namespace small_n_stats_WPF.ViewModels
                     {
                         if ((sNum - fNum) == 0)
                         {
+                            sNum--;
+                            fNum--;
+
                             XBrush = Brushes.LightBlue;
                             XRangeValues = firstChars + firstNums + ":" + secondChars + secondNums;
 
@@ -733,6 +736,10 @@ namespace small_n_stats_WPF.ViewModels
                     {
                         if ((DataGridTools.GetColumnIndex(secondChars) - DataGridTools.GetColumnIndex(firstChars)) == 0)
                         {
+
+                            sNum--;
+                            fNum--;
+
                             XBrush = Brushes.LightBlue;
                             XRangeValues = firstChars + firstNums + ":" + secondChars + secondNums;
 
@@ -1043,72 +1050,74 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void GetXRange()
         {
-            mWindow.dataGrid.CommitEdit();
+            if (App.IsSearchingForPick)
+            {
+                return;
+            }
 
+            App.IsSearchingForPick = true;
+
+            App.Workbook.PickRange((inst, range) =>
+            {
+                if (ColumnModeRadio)
+                {
+                    if (range.Cols < 1)
+                    {
+                        MessageBox.Show("Please add at least 3 series to the batch");
+
+                        lowColX = -1;
+                        lowRowX = -1;
+                        highColX = -1;
+                        highRowX = -1;
+
+                        App.Workbook.EndPickRange();
+                        App.IsSearchingForPick = false;
+
+                        DefaultFieldsToGray();
+
+                        return false;
+                    }
+                }
+                else if (RowModeRadio)
+                {
+                    if (range.Rows < 1)
+                    {
+                        MessageBox.Show("Please add at least 3 series to the batch");
+
+                        lowColX = -1;
+                        lowRowX = -1;
+                        highColX = -1;
+                        highRowX = -1;
+
+                        App.Workbook.EndPickRange();
+                        App.IsSearchingForPick = false;
+
+                        DefaultFieldsToGray();
+
+                        return false;
+                    }
+                }
+
+                XBrush = Brushes.LightBlue;
+                XRangeValues = DataGridTools.GetColumnName(range.Col) + range.Row.ToString() + ":" + DataGridTools.GetColumnName(range.EndCol) + range.EndRow.ToString();
+
+                lowColX = range.Col;
+                lowRowX = range.Row;
+                highColX = range.EndCol;
+                highRowX = range.EndRow;
+
+                App.IsSearchingForPick = false;
+
+                DefaultFieldsToGray();
+
+                return true;
+
+            }, Cursors.Hand);
+            
             DefaultFieldsToGray();
 
             XBrush = Brushes.Yellow;
             XRangeValues = "Select pricing values on spreadsheet";
-
-            mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_X;
-        }
-
-        /// <summary>
-        /// Delegate after highlighting takes place on datagrid (call back specific to values).
-        /// </summary>
-        private void DataGrid_PreviewMouseUp_X(object sender, MouseButtonEventArgs e)
-        {
-            List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
-
-            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
-
-            if (cells.Count < 1 || itemSource.Count < 1) return;
-
-            lowRowX = cells.Min(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
-            highRowX = cells.Max(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
-
-            lowColX = cells.Min(i => i.Column.DisplayIndex);
-            highColX = cells.Max(i => i.Column.DisplayIndex);
-
-            if (RowModeRadio)
-            {
-                if ((highRowX - lowRowX) > 0)
-                {
-                    DefaultFieldsToGray();
-
-                    mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_X;
-
-                    lowColX = -1;
-                    lowRowX = -1;
-                    highColX = -1;
-                    highRowX = -1;
-                    MessageBox.Show("Please select a single horizontal row.  You can have many columns, but just one row of pricing values.");
-
-                    return;
-                }
-            }
-            else if (ColumnModeRadio)
-            {
-                if ((highColX - lowColX) > 0)
-                {
-                    DefaultFieldsToGray();
-
-                    mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_X;
-
-                    lowColX = -1;
-                    lowRowX = -1;
-                    highColX = -1;
-                    highRowX = -1;
-                    MessageBox.Show("Please select a single vertical column.  You can have many rows, but just one column of pricing values.");
-
-                    return;
-                }
-            }
-
-            mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_X;
-
-            XBrush = Brushes.LightBlue;
-            XRangeValues = DataGridTools.GetColumnName(lowColX) + lowRowX.ToString() + ":" + DataGridTools.GetColumnName(highColX) + highRowX.ToString();
         }
 
         /// <summary>
@@ -1116,36 +1125,74 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void GetYRange()
         {
-            mWindow.dataGrid.CommitEdit();
+            if (App.IsSearchingForPick)
+            {
+                return;
+            }
+
+            App.IsSearchingForPick = true;
+
+            App.Workbook.PickRange((inst, range) =>
+            {
+                if (ColumnModeRadio)
+                {
+                    if (range.Cols < 1)
+                    {
+                        MessageBox.Show("Please add at least 3 series to the batch");
+
+                        lowColY = -1;
+                        lowRowY = -1;
+                        highColY = -1;
+                        highRowY = -1;
+
+                        App.Workbook.EndPickRange();
+                        App.IsSearchingForPick = false;
+
+                        DefaultFieldsToGray();
+
+                        return false;
+                    }
+                }
+                else if (RowModeRadio)
+                {
+                    if (range.Rows < 1)
+                    {
+                        MessageBox.Show("Please add at least 3 series to the batch");
+
+                        lowColY = -1;
+                        lowRowY = -1;
+                        highColY = -1;
+                        highRowY = -1;
+
+                        App.Workbook.EndPickRange();
+                        App.IsSearchingForPick = false;
+
+                        DefaultFieldsToGray();
+
+                        return false;
+                    }
+                }
+
+                YBrush = Brushes.LightGreen;
+                YRangeValues = DataGridTools.GetColumnName(range.Col) + range.Row.ToString() + ":" + DataGridTools.GetColumnName(range.EndCol) + range.EndRow.ToString();
+
+                lowColY = range.Col;
+                lowRowY = range.Row;
+                highColY = range.EndCol;
+                highRowY = range.EndRow;
+
+                App.IsSearchingForPick = false;
+
+                DefaultFieldsToGray();
+
+                return true;
+
+            }, Cursors.Hand);
 
             DefaultFieldsToGray();
 
             YBrush = Brushes.Yellow;
             YRangeValues = "Select consumption values on spreadsheet";
-
-            mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_Y;
-        }
-
-        /// <summary>
-        /// Delegate after highlighting takes place on datagrid (call back specific to delays).
-        /// </summary>
-        private void DataGrid_PreviewMouseUp_Y(object sender, MouseButtonEventArgs e)
-        {
-            List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
-            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
-
-            if (cells.Count < 1 || itemSource.Count < 1) return;
-
-            lowRowY = cells.Min(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
-            highRowY = cells.Max(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
-
-            lowColY = cells.Min(i => i.Column.DisplayIndex);
-            highColY = cells.Max(i => i.Column.DisplayIndex);
-
-            mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_Y;
-
-            YBrush = Brushes.LightGreen;
-            YRangeValues = DataGridTools.GetColumnName(lowColY) + lowRowY.ToString() + ":" + DataGridTools.GetColumnName(highColY) + highRowY.ToString();
         }
 
         /// <summary>
@@ -1153,77 +1200,10 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void GetGRange()
         {
-            mWindow.dataGrid.CommitEdit();
-
             DefaultFieldsToGray();
 
             GBrush = Brushes.Yellow;
             GRangeValues = "Select consumption values on spreadsheet";
-
-            mWindow.dataGrid.PreviewMouseUp += DataGrid_PreviewMouseUp_G;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DataGrid_PreviewMouseUp_G(object sender, MouseButtonEventArgs e)
-        {
-            List<DataGridCellInfo> cells = mWindow.dataGrid.SelectedCells.ToList();
-            var itemSource = mWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
-
-            if (cells.Count < 1 || itemSource.Count < 1) return;
-
-            lowRowG = cells.Min(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
-            highRowG = cells.Max(i => DataGridTools.GetIndexViewModel((RowViewModel)i.Item, itemSource));
-
-            lowColG = cells.Min(i => i.Column.DisplayIndex);
-            highColG = cells.Max(i => i.Column.DisplayIndex);
-
-            if (RowModeRadio)
-            {
-                // if selecting rows, only ONE column
-
-                if ((highColG - lowColG) > 0 || (highRowG - lowRowG) < 2)
-                {
-                    DefaultFieldsToGray();
-
-                    mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_G;
-
-                    lowColG = -1;
-                    lowRowG = -1;
-                    highColG = -1;
-                    highRowG = -1;
-                    MessageBox.Show("Please select a matrix of consumption values, with more than one row of values with at least three individual points of data (i.e., 3x3).");
-
-                    return;
-                }
-            }
-            else if (ColumnModeRadio)
-            {
-                // if selecting columns, only ONE row
-
-                if ((highRowG - lowRowG) > 0 || (highColG - lowColG) < 2)
-                {
-                    DefaultFieldsToGray();
-
-                    mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_G;
-
-                    lowColG = -1;
-                    lowRowG = -1;
-                    highColG = -1;
-                    highRowG = -1;
-                    MessageBox.Show("Please select a matrix of consumption values, with more than one column of values with at least three individual points of data (i.e., 3x3).");
-
-                    return;
-                }
-            }
- 
-            mWindow.dataGrid.PreviewMouseUp -= DataGrid_PreviewMouseUp_G;
-
-            GBrush = Brushes.LightSalmon;
-            GRangeValues = DataGridTools.GetColumnName(lowColG) + lowRowG.ToString() + ":" + DataGridTools.GetColumnName(highColG) + highRowG.ToString();
         }
 
         /// <summary>
@@ -1261,8 +1241,6 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void CalculateScores()
         {
-            mWindow.dataGrid.CommitEdit();
-
             if (failed) return;
 
             if (lowColX < 0 || lowColY < 0) return;
@@ -1291,7 +1269,7 @@ namespace small_n_stats_WPF.ViewModels
 
                 if (nRows == 0)
                 {
-                    array = DataGridTools.GetRangedValuesHorizontal(lowColX, highColX, lowRowX, lowColY, highColY, lowRowY, mWindow.dataGrid.ItemsSource);
+                    array = DataGridTools.GetRangedValuesHorizontal(lowColX, highColX, lowRowX, lowColY, highColY, lowRowY);
 
                     xRange = new List<double>(array[0]);
                     yRange = new List<double>(array[1]);
@@ -1301,8 +1279,8 @@ namespace small_n_stats_WPF.ViewModels
                 }
                 else
                 {
-                    var tmpXRange = DataGridTools.GetRangedValuesVM(lowColX, highColX, lowRowX, mWindow.dataGrid.ItemsSource);
-                    string[,] wholeRange = DataGridTools.ParseBulkRangeStringsVM(lowRowY, highRowY, lowColY, highColY, mWindow.dataGrid.ItemsSource);
+                    var tmpXRange = DataGridTools.GetRangedValuesVM(lowColX, highColX, lowRowX);
+                    string[,] wholeRange = DataGridTools.ParseBulkRangeStringsVM(lowRowY, highRowY, lowColY, highColY);
 
                     xRange = new List<double>();
                     yRange = new List<double>();
@@ -1332,7 +1310,7 @@ namespace small_n_stats_WPF.ViewModels
 
                 if (nRows == 0)
                 {
-                    array = DataGridTools.GetRangedValuesVertical(lowRowX, highRowX, lowColX, lowRowY, highRowY, lowColY, mWindow.dataGrid.ItemsSource);
+                    array = DataGridTools.GetRangedValuesVertical(lowRowX, highRowX, lowColX, lowRowY, highRowY, lowColY);
 
                     xRange = new List<double>(array[0]);
                     yRange = new List<double>(array[1]);
@@ -1342,10 +1320,8 @@ namespace small_n_stats_WPF.ViewModels
                 }
                 else
                 {
-                    var tmpXRange = DataGridTools.GetRangedValuesVerticalVM(lowRowX, highRowX, lowColX, mWindow.dataGrid.ItemsSource);
-                    string[,] wholeRange = DataGridTools.ParseBulkRangeStringsVerticalVM(lowRowY, highRowY, lowColY, highColY, mWindow.dataGrid.ItemsSource);
-
-                    Console.WriteLine("whole range 0: " + wholeRange.GetLength(0) + " 1: " + wholeRange.GetLength(1));
+                    var tmpXRange = DataGridTools.GetRangedValuesVerticalVM(lowRowX, highRowX, lowColX);
+                    string[,] wholeRange = DataGridTools.ParseBulkRangeStringsVerticalVM(lowRowY, highRowY, lowColY, highColY);
 
                     xRange = new List<double>();
                     yRange = new List<double>();
@@ -1513,37 +1489,45 @@ namespace small_n_stats_WPF.ViewModels
             {
                 engine.Evaluate(evaluateString);
 
-                if (true)
-                {
-                    engine.Evaluate(string.Format("print({0})", Conventions.FittedDataFrame));
-                }
+                //if (true)
+                //{
+                //    engine.Evaluate(string.Format("print({0})", Conventions.FittedDataFrame));
+                //}
 
                 DataFrame fittedDataFrame = engine.Evaluate(Conventions.FittedDataFrame).AsDataFrame();
 
                 string[] rColNames = fittedDataFrame.ColumnNames;
                 string[] rRowNames = fittedDataFrame.RowNames;
 
-                var mResultsWindow = new ResultsWindow();
-                var mResultsVM = new ResultsViewModel();
+                var mResultsWindow = new ResultsGridWindow();
+                var mResultsVM = new ViewModelResultsWindow
+                {
+                    ResultsBook = mResultsWindow.reoGridControl
+                };
                 mResultsWindow.DataContext = mResultsVM;
 
+                /*
                 for (int i = 0; i < nRows + 10; i++)
                 {
                     mResultsVM.RowViewModels.Add(new RowViewModel());
                 }
+                */
 
-                mResultsVM.RowViewModels[0].values[0] = "Results of Fitting";
+                mResultsVM.ResultsBook.CurrentWorksheet.AppendRows(nRows + 10);
+                mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(0, 0).Data = "Results of Fitting";
 
                 for (int i=0; i < rColNames.Length; i++)
                 {
-                    mResultsVM.RowViewModels[1].values[i] = rColNames[i].Trim();
+                    mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(1, i).Data = rColNames[i].Trim();
+                    //mResultsVM.RowViewModels[1].values[i] = rColNames[i].Trim();
                 }
 
                 for (int i = 0; i < rRowNames.Length; i++)
                 {
                     for (int j = 0; j < rColNames.Length; j++)
                     {
-                        mResultsVM.RowViewModels[2 + i].values[j] = fittedDataFrame[i, j].ToString().Trim();
+                        mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(2 + i, j).Data = fittedDataFrame[i, j].ToString().Trim();
+                        //mResultsVM.RowViewModels[2 + i].values[j] = fittedDataFrame[i, j].ToString().Trim();
                     }
                 }
 
@@ -1551,10 +1535,8 @@ namespace small_n_stats_WPF.ViewModels
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                mWindow.OutputEvents(e.ToString());
             }
-
-            mWindow.dataGrid.IsReadOnly = false;
         }
     }
 }
