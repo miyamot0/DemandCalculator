@@ -25,10 +25,8 @@
 // </summary>
 //----------------------------------------------------------------------------------------------
 
-using small_n_stats_WPF.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace small_n_stats_WPF.Utilities
@@ -204,8 +202,6 @@ namespace small_n_stats_WPF.Utilities
             {
                 string mRowItem = itemSource.CreateAndGetCell(startRow, i).Data.ToString();
 
-                //string mRowItem = itemSource[startRow, i].ToString();
-
                 if (!Double.TryParse(mRowItem, out test))
                 {
                     return null;
@@ -238,7 +234,6 @@ namespace small_n_stats_WPF.Utilities
             for (int i = startRow; i <= endRow; i++)
             {
                 string mRowItemCell = itemSource.CreateAndGetCell(i, col).Data.ToString();
-                //string mRowItemCell = itemSource[i].values[col];
 
                 if (!Double.TryParse(mRowItemCell, out test))
                 {
@@ -280,7 +275,6 @@ namespace small_n_stats_WPF.Utilities
                     for (int j = lowColValue; j <= highColValue; j++)
                     {
                         string mRowItem = itemSource.CreateAndGetCell(i, j).Data.ToString();
-                        //string mRowItem = itemSource[i].values[j];
                         mDouble[j - lowColValue, i - lowRowValue] = mRowItem;
 
                         if (double.TryParse(mRowItem, out tempHolder))
@@ -323,13 +317,11 @@ namespace small_n_stats_WPF.Utilities
 
             try
             {
-
                 for (int i = lowRowValue; i <= highRowValue; i++)
                 {
                     for (int j = lowColValue; j <= highColValue; j++)
                     {
                         string mRowItem = itemSource.CreateAndGetCell(i, j).Data.ToString();
-                        //string mRowItem = itemSource[i].values[j];
                         mDouble[i - lowRowValue, j - lowColValue] = mRowItem;
 
                         if (double.TryParse(mRowItem, out tempHolder))

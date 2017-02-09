@@ -1221,16 +1221,6 @@ namespace small_n_stats_WPF.ViewModels
 
             engine.Evaluate("require(beezdemand)");
 
-            #region Output debug
-
-            if (true)
-            {
-                // Debug
-                engine.Evaluate(string.Format("print({0})", Conventions.NamedDataFrame));
-            }
-
-            #endregion
-
             // Build descriptive output
             #region Descriptives Assessment
 
@@ -1369,6 +1359,8 @@ namespace small_n_stats_WPF.ViewModels
                 mResultsVM.ResultsBook.CurrentWorksheet.AppendRows(nRows + 10);
                 mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(0, 0).Data = "Results of Fitting";
 
+                // Output general metrics
+
                 for (int i=0; i < rColNames.Length; i++)
                 {
                     mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(1, i).Data = rColNames[i].Trim();
@@ -1382,7 +1374,22 @@ namespace small_n_stats_WPF.ViewModels
                     }
                 }
 
-                for (int colCount = 0; colCount < rColNames.Length; colCount++)
+                // Output stein metrics (optionally?)
+
+                for (int i=0; i < sColNames.Length; i++)
+                {
+                    mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(1, i + rColNames.Length).Data = sColNames[i].Trim();
+                }
+
+                for (int i = 0; i < sRowNames.Length; i++)
+                {
+                    for (int j = 0; j < sColNames.Length; j++)
+                    {
+                        mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(2 + i, j + rColNames.Length + 1).Data = steinMetrics[i, j].ToString().Trim();
+                    }
+                }
+
+                for (int colCount = 0; colCount < rColNames.Length + sColNames.Length; colCount++)
                 {
                     mResultsVM.ResultsBook.CurrentWorksheet.AutoFitColumnWidth(colCount, false);
                 }
