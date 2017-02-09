@@ -674,6 +674,7 @@ namespace small_n_stats_WPF.ViewModels
                         //package_deps("rNVD3", repos = "ramnathv/rNVD3")
                         //engine.Evaluate("devtools::update_packages('beezdemand')");
                         engine.Evaluate("devtools::package_deps('beezdemand', repos='miyamot0/beezdemand')");
+                        engine.Evaluate("devtools::update_packages('beezdemand')");
 
                         introWindow.checkBeezdemand.Foreground = Brushes.Green;
                     }
@@ -681,7 +682,9 @@ namespace small_n_stats_WPF.ViewModels
                     {
                         SendMessageToOutput("Attempting to install beezdemand packages for first time!");
                         introWindow.loadText.Text = "Downloading beezdemand...";
+
                         engine.Evaluate("devtools::package_deps('beezdemand', repos='miyamot0/beezdemand')");
+                        engine.Evaluate("devtools::update_packages('beezdemand')");
                         //engine.Evaluate("if (!require(beezdemand)) { devtools::install_github('miyamot0/beezdemand') }");
 
                         loadedRepository = engine.Evaluate("require(beezdemand)").AsLogical().First();
@@ -689,6 +692,7 @@ namespace small_n_stats_WPF.ViewModels
                         if (loadedRepository)
                         {
                             // Update as needed
+                            engine.Evaluate("devtools::package_deps('beezdemand', repos='miyamot0/beezdemand')");
                             engine.Evaluate("devtools::update_packages('beezdemand')");
 
                             introWindow.checkBeezdemand.Foreground = Brushes.Green;
