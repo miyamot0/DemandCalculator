@@ -513,18 +513,7 @@ namespace small_n_stats_WPF.ViewModels
                 OnPropertyChanged("YRangeValues");
             }
         }
-
-        private string gRangeValues = "";
-        public string GRangeValues
-        {
-            get { return gRangeValues; }
-            set
-            {
-                gRangeValues = value;
-                OnPropertyChanged("GRangeValues");
-            }
-        }
-        
+                
         private string kValue = "";
         public string KValue
         {
@@ -557,18 +546,7 @@ namespace small_n_stats_WPF.ViewModels
                 OnPropertyChanged("YBrush");
             }
         }
-
-        private Brush gBrush = Brushes.White;
-        public Brush GBrush
-        {
-            get { return gBrush; }
-            set
-            {
-                gBrush = value;
-                OnPropertyChanged("GBrush");
-            }
-        }
-
+        
         #endregion
 
         #region Math
@@ -588,11 +566,6 @@ namespace small_n_stats_WPF.ViewModels
             lowColY = -1,
             highColY = -1;
 
-        int lowRowG = -1,
-            highRowG = -1,
-            lowColG = -1,
-            highColG = -1;
-
         #endregion
 
         #region Commands
@@ -601,7 +574,6 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand ViewClosingCommand { get; set; }
         public RelayCommand GetXRangeCommand { get; set; }
         public RelayCommand GetYRangeCommand { get; set; }
-        public RelayCommand GetGRangeCommand { get; set; }
         public RelayCommand GetKRangeCommand { get; set; }
 
         public RelayCommand CalculateScoresCommand { get; set; }
@@ -609,7 +581,6 @@ namespace small_n_stats_WPF.ViewModels
 
         public RelayCommand ConsumptionRangeCommand { get; set; }
         public RelayCommand PricingRangeCommand { get; set; }
-        public RelayCommand GroupingRangeCommand { get; set; }
 
         #endregion
 
@@ -624,14 +595,12 @@ namespace small_n_stats_WPF.ViewModels
             ViewClosingCommand = new RelayCommand(param => ViewClosed(), param => true);
             GetXRangeCommand = new RelayCommand(param => GetXRange(), param => true);
             GetYRangeCommand = new RelayCommand(param => GetYRange(), param => true);
-            GetGRangeCommand = new RelayCommand(param => GetGRange(), param => true);
 
             CalculateScoresCommand = new RelayCommand(param => CalculateScores(), param => true);
             AdvancedSettings = new RelayCommand(param => UpdateSettings(), param => true);
 
             ConsumptionRangeCommand = new RelayCommand(param => UpdateConsumptionRange(), param => true);
             PricingRangeCommand = new RelayCommand(param => UpdatePricingRange(), param => true);
-            GroupingRangeCommand = new RelayCommand(param => UpdateGroupingRange(), param => true);
 
             HurshModel = true;
             RowModeRadio = true;
@@ -645,10 +614,6 @@ namespace small_n_stats_WPF.ViewModels
             lowRowY = highRowY = lowColY = highColY = -1;
             YBrush = Brushes.LightGray;
             YRangeValues = "";
-
-            lowRowG = highRowG = lowColG = highColG = -1;
-            YBrush = Brushes.LightGray;
-            GRangeValues = "";
         }
 
         /// <summary>
@@ -658,11 +623,9 @@ namespace small_n_stats_WPF.ViewModels
         {
             lowRowX = highRowX = lowColX = highColX = -1;
             lowRowY = highRowY = lowColY = highColY = -1;
-            lowRowG = highRowG = lowColG = highColG = -1;
 
             XRangeValues = "";
             YRangeValues = "";
-            GRangeValues = "";
 
             DefaultFieldsToGray();
         }
@@ -752,84 +715,6 @@ namespace small_n_stats_WPF.ViewModels
                         else
                         {
                             MessageBox.Show("Please ensure that only a single column is selected");
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Parse error!");
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void UpdateGroupingRange()
-        {
-            var mWin = new RangePrompt();
-            mWin.Topmost = true;
-            mWin.Owner = windowRef;
-            mWin.ResponseText = GRangeValues;
-            mWin.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-            if (mWin.ShowDialog() == true)
-            {
-                if (mWin.ResponseText.Trim().Length == 0)
-                {
-                    GBrush = Brushes.LightGray;
-                    GRangeValues = "";
-                    lowColG = highColG = lowRowG = highRowG = -1;
-                }
-
-                string[] addresses = mWin.ResponseText.Split(':');
-
-                if (addresses.Length != 2) return;
-
-                var firstChars = new String(addresses[0].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
-                var firstNums = new String(addresses[0].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
-
-                var secondChars = new String(addresses[1].ToCharArray().Where(c => !Char.IsDigit(c)).ToArray());
-                var secondNums = new String(addresses[1].ToCharArray().Where(c => Char.IsDigit(c)).ToArray());
-
-                int fNum, sNum;
-
-                if (int.TryParse(firstNums, out fNum) && int.TryParse(secondNums, out sNum) && firstChars.Length > 0 && secondChars.Length > 0)
-                {
-                    if (RowModeRadio)
-                    {
-                        if ((DataGridTools.GetColumnIndex(firstChars) - DataGridTools.GetColumnIndex(secondChars)) == 0)
-                        {
-                            GBrush = Brushes.LightSalmon;
-                            GRangeValues = firstChars + firstNums + ":" + secondChars + secondNums;
-
-                            lowColG = DataGridTools.GetColumnIndex(firstChars);
-                            highColG = DataGridTools.GetColumnIndex(secondChars);
-
-                            lowRowG = fNum;
-                            highRowG = sNum;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Please ensure that only a single column is selected");
-                        }
-                    }
-                    else if (ColumnModeRadio)
-                    {
-                        if ((sNum - fNum) == 0)
-                        {
-                            GBrush = Brushes.LightSalmon;
-                            GRangeValues = firstChars + firstNums + ":" + secondChars + secondNums;
-
-                            lowColG = DataGridTools.GetColumnIndex(firstChars);
-                            highColG = DataGridTools.GetColumnIndex(secondChars);
-
-                            lowRowG = fNum;
-                            highRowG = sNum;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Please ensure that only a single row is selected");
                         }
                     }
                 }
@@ -1037,12 +922,6 @@ namespace small_n_stats_WPF.ViewModels
                 XBrush = Brushes.LightGray;
                 XRangeValues = string.Empty;
             }
-
-            if (GRangeValues.Length < 1 || GRangeValues.ToLower().Contains("spreadsheet"))
-            {
-                GBrush = Brushes.LightGray;
-                GRangeValues = string.Empty;
-            }
         }
 
         /// <summary>
@@ -1193,17 +1072,6 @@ namespace small_n_stats_WPF.ViewModels
 
             YBrush = Brushes.Yellow;
             YRangeValues = "Select consumption values on spreadsheet";
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void GetGRange()
-        {
-            DefaultFieldsToGray();
-
-            GBrush = Brushes.Yellow;
-            GRangeValues = "Select consumption values on spreadsheet";
         }
 
         /// <summary>
@@ -1407,8 +1275,6 @@ namespace small_n_stats_WPF.ViewModels
 
             StringBuilder steinSb = new StringBuilder();
 
-            // TODO stein settings
-
             // Invoke methods for stein
             engine.Evaluate(string.Format("{0} <- NULL",
                 Conventions.SteinDataFrame));
@@ -1463,7 +1329,6 @@ namespace small_n_stats_WPF.ViewModels
 
             if (AdvancedMenu)
             {
-                //FitCurves <- function(dat, equation, k, remq0e = FALSE, replfree = NULL, rem0 = FALSE, nrepl = NULL, replnum = NULL, plotcurves = FALSE, vartext = NULL)
                 evaluateString = string.Format("{0} <- FitCurves(dat = {1}, equation = {2}, k = {3}, remq0e = {4}, replfree = {5}, rem0 = {6}, nrepl = {7}, replnum = {8}, plotcurves = {9}, vartext = {10})",
                     Conventions.FittedDataFrame,
                     Conventions.NamedDataFrame,
@@ -1489,11 +1354,6 @@ namespace small_n_stats_WPF.ViewModels
             {
                 engine.Evaluate(evaluateString);
 
-                //if (true)
-                //{
-                //    engine.Evaluate(string.Format("print({0})", Conventions.FittedDataFrame));
-                //}
-
                 DataFrame fittedDataFrame = engine.Evaluate(Conventions.FittedDataFrame).AsDataFrame();
 
                 string[] rColNames = fittedDataFrame.ColumnNames;
@@ -1506,20 +1366,12 @@ namespace small_n_stats_WPF.ViewModels
                 };
                 mResultsWindow.DataContext = mResultsVM;
 
-                /*
-                for (int i = 0; i < nRows + 10; i++)
-                {
-                    mResultsVM.RowViewModels.Add(new RowViewModel());
-                }
-                */
-
                 mResultsVM.ResultsBook.CurrentWorksheet.AppendRows(nRows + 10);
                 mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(0, 0).Data = "Results of Fitting";
 
                 for (int i=0; i < rColNames.Length; i++)
                 {
                     mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(1, i).Data = rColNames[i].Trim();
-                    //mResultsVM.RowViewModels[1].values[i] = rColNames[i].Trim();
                 }
 
                 for (int i = 0; i < rRowNames.Length; i++)
@@ -1527,8 +1379,12 @@ namespace small_n_stats_WPF.ViewModels
                     for (int j = 0; j < rColNames.Length; j++)
                     {
                         mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(2 + i, j).Data = fittedDataFrame[i, j].ToString().Trim();
-                        //mResultsVM.RowViewModels[2 + i].values[j] = fittedDataFrame[i, j].ToString().Trim();
                     }
+                }
+
+                for (int colCount = 0; colCount < rColNames.Length; colCount++)
+                {
+                    mResultsVM.ResultsBook.CurrentWorksheet.AutoFitColumnWidth(colCount, false);
                 }
 
                 mResultsWindow.Show();
