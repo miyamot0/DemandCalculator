@@ -670,6 +670,9 @@ namespace small_n_stats_WPF.ViewModels
 
                     if (loadedRepository)
                     {
+                        // Update as needed
+                        engine.Evaluate("devtools::update_packages('beezdemand')");
+
                         introWindow.checkBeezdemand.Foreground = Brushes.Green;
                     }
                     else
