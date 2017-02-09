@@ -91,13 +91,5 @@ namespace small_n_stats_WPF.Views
             if (viewModel.ConsumptionRangeCommand.CanExecute(null))
                 viewModel.ConsumptionRangeCommand.Execute(null);
         }
-
-        private void gRange_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var viewModel = (UnifiedDemandCurveViewModel)DataContext;
-
-            if (viewModel.GroupingRangeCommand.CanExecute(null))
-                viewModel.GroupingRangeCommand.Execute(null);
-        }
     }
 }

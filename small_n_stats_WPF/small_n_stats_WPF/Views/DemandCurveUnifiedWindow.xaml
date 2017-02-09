@@ -11,14 +11,14 @@
         WindowStartupLocation="CenterOwner"
         Title="Demand Curve Fitting" 
         ResizeMode="NoResize"
-        Height="560"
+        Height="500"
         Width="415">
 
     <Window.Style>
         <Style TargetType="Window">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding AdvancedMenu}"  Value="True">
-                    <Setter Property="MinWidth" Value="850"/>
+                    <Setter Property="MinWidth" Value="900"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -63,9 +63,9 @@
                 <RowDefinition Height="45"></RowDefinition>
                 <RowDefinition Height="45"></RowDefinition>
                 <RowDefinition Height="45"></RowDefinition>                
-                <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="35"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
             </Grid.RowDefinitions>
@@ -134,31 +134,7 @@
                 MouseUp="yRange_MouseUp">
             </TextBox>
 
-            <Button x:Name="gRangeButton"
-                    Grid.Row="3" 
-                    Grid.Column="0"
-                    Margin="10"
-                    Content="Groupings"
-                    Command="{Binding GetGRangeCommand}">
-            </Button>
-
-            <TextBox
-                x:Name="gRange"
-                Grid.Row="3" 
-                Grid.Column="1"
-                Grid.ColumnSpan="3"
-                IsReadOnly="True"
-                Focusable="False"
-                AcceptsTab="False"
-                CharacterCasing="Upper" 
-                Margin="10"
-                VerticalContentAlignment="Center"
-                Text="{Binding GRangeValues}"
-                Background="{Binding Path=GBrush}"
-                MouseUp="gRange_MouseUp">
-            </TextBox>            
-            
-            <Grid Grid.Row="4"
+            <Grid Grid.Row="3"
                   Grid.Column="0"
                   Grid.ColumnSpan="4"
                   HorizontalAlignment="Stretch"
@@ -173,7 +149,7 @@
                     x:Name="rowSelectionButton"
                     Grid.Column="0"
                     GroupName="Selections"
-                    Content="Horizontal Data (Left to Right)"
+                    Content="Horizontal Data (L to R)"
                     Width="Auto"
                     Margin="20,5,5,5"
                     IsChecked="{Binding Path=RowModeRadio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -182,45 +158,14 @@
                 <RadioButton 
                     Grid.Column="2"
                     GroupName="Selections"
-                    Content="Vertical Data (Top to Bottom)"
+                    Content="Vertical Data (T to B)"
                     Width="Auto"
                     Margin="20,5,5,5"
                     IsChecked="{Binding Path=ColumnModeRadio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 </RadioButton>
             </Grid>            
-            
-            <Grid Grid.Row="5"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="4"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Center">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <RadioButton 
-                    x:Name="singleCalculationButton"
-                    Grid.Column="0"
-                    GroupName="Setting"
-                    Content="Single Calculation"
-                    Width="Auto"
-                    Margin="20,5,5,5"
-                    IsChecked="{Binding Path=SingleModeRadio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                </RadioButton>
-
-                <RadioButton 
-                    Grid.Column="2"
-                    GroupName="Setting"
-                    Content="Grouped Calculations"
-                    Width="Auto"
-                    Margin="20,5,5,5"
-                    IsChecked="{Binding Path=BatchModeRadio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                </RadioButton>
-            </Grid>
-
-            <Grid Grid.Row="6"
+            <Grid Grid.Row="4"
                   Grid.Column="0"
                   Grid.ColumnSpan="4"
                   HorizontalAlignment="Stretch"
@@ -268,7 +213,7 @@
             <FlowDocumentScrollViewer
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
-                Grid.Row="7"
+                Grid.Row="5"
                 Grid.RowSpan="3"
                 IsSelectionEnabled="False"
                 VerticalScrollBarVisibility="Hidden">
@@ -309,7 +254,6 @@
 
         <Grid Grid.Column="1"              
               Grid.Row="0"
-              Margin="0,0,10,0"
               x:Name="AdvWindow">
 
             <Grid.Style>
@@ -330,23 +274,20 @@
             </Grid.Style>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
-                <RowDefinition Height="25"></RowDefinition>
-                <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
-                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition Height="80"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="55"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
             <TextBlock
@@ -364,7 +305,7 @@
                   Grid.Column="0"
                   Grid.ColumnSpan="4"
                   HorizontalAlignment="Stretch"
-                  VerticalAlignment="Center">
+                  VerticalAlignment="Top">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
@@ -374,14 +315,15 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Content="Model to use in curve-fitting software (each has individual settings)?"
+                <Label Content="Model to use in curve-fitting software?"
                        Margin="20,0,5,0"
                        FontWeight="Bold"
                        Grid.Row="0"
                        Grid.Column="0"
-                       Grid.ColumnSpan="2">                    
+                       Grid.ColumnSpan="4">                    
                 </Label>
                 
                 <RadioButton 
@@ -389,21 +331,39 @@
                     Grid.Column="0"
                     Grid.Row="1"
                     GroupName="Model"
-                    Content="Use Exponential Model"
+                    Content="Exponential"
                     Width="Auto"
                     Margin="20,5,5,5"
-                    IsChecked="{Binding Path=HurshModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    IsChecked="{Binding Path=HurshModel, 
+                        Mode=TwoWay, 
+                        UpdateSourceTrigger=PropertyChanged}">
                 </RadioButton>
 
                 <RadioButton 
                     x:Name="koffRadioButton"
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    GroupName="Model"
+                    Content="Exponentiated"
+                    Width="Auto"
+                    Margin="20,5,5,5"
+                    IsChecked="{Binding Path=KoffarnusModel, 
+                        Mode=TwoWay, 
+                        UpdateSourceTrigger=PropertyChanged}">
+                </RadioButton>
+
+                <RadioButton 
+                    x:Name="linearRadioButton"
                     Grid.Column="2"
                     Grid.Row="1"
                     GroupName="Model"
-                    Content="Use Exponentiated Model"
+                    Content="Linear"
                     Width="Auto"
                     Margin="20,5,5,5"
-                    IsChecked="{Binding Path=KoffarnusModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    IsEnabled="False"
+                    IsChecked="{Binding Path=LinearModel, 
+                        Mode=TwoWay, 
+                        UpdateSourceTrigger=PropertyChanged}">
                 </RadioButton>
             </Grid>
 
@@ -415,26 +375,44 @@
                 HorizontalAlignment="Left"
                 Margin="15,5,5,5">
 
-                <Label FontWeight="Bold">Rule for values when X == 0?</Label>
+                <Label FontWeight="Bold">Q0e Settings:</Label>
                 <RadioButton GroupName="Xsettings" 
-                             Content="Keep Value" 
-                             IsChecked="{Binding Path=KeepXValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Content="Drop Q0" 
+                             IsChecked="{Binding Path=DropXValues, 
+                                Mode=TwoWay, 
+                                UpdateSourceTrigger=PropertyChanged}"
                              Margin="15,0,0,0" />
+                
                 <RadioButton GroupName="Xsettings" 
-                             Content="Drop Value" 
-                             IsChecked="{Binding Path=DropXValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Content="Keep Q0" 
+                             IsChecked="{Binding Path=KeepXValues, 
+                                Mode=TwoWay, 
+                                UpdateSourceTrigger=PropertyChanged}"
                              Margin="15,0,0,0" />
+
+                <RadioButton GroupName="Xsettings" 
+                             Content="Modify Q0" 
+                             IsChecked="{Binding Path=modifyXValues, 
+                                Mode=TwoWay, 
+                                UpdateSourceTrigger=PropertyChanged}"
+                             Margin="15,0,0,0" />
+
+                <TextBox x:Name="q0eModifyValue"
+                         Margin="15,0,0,0" 
+                         VerticalContentAlignment="Center"
+                         Text="{Binding ModifiedQ0Value}">
+                </TextBox>
             </StackPanel>
 
             <StackPanel
-                Grid.Row="5"
+                Grid.Row="3"
                 Grid.RowSpan="3"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
+                Grid.Column="2"
+                Grid.ColumnSpan="1"
                 HorizontalAlignment="Left"
                 Margin="15,5,5,5">
 
-                <Label FontWeight="Bold">Rule for values when Y == 0?</Label>
+                <Label FontWeight="Bold">Rules when Y == 0</Label>
                 <RadioButton GroupName="Ysettings" 
                              Content="Keep Value" 
                              IsChecked="{Binding Path=KeepYValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -476,198 +454,57 @@
 
             <StackPanel
                 Grid.Row="3"
-                Grid.RowSpan="7"
-                Grid.Column="2"
+                Grid.RowSpan="3"
+                Grid.Column="1"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                
                 Margin="15,5,5,5">
 
-                <Label FontWeight="Bold">How to derive free parameter (k)</Label>
-
-                <Label>Shared k Options</Label>
-                
-                <RadioButton x:Name="groupKSetting1"
-                             GroupName="Ksettings" 
-                             Content="Group Empirical Log Range" 
-                             IsChecked="{Binding Path=GroupEmpirical, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="15,0,0,0"/>
-                <RadioButton x:Name="groupKSetting2"
-                             GroupName="Ksettings" 
-                             Content="Mean of Empirical K" 
-                             IsChecked="{Binding Path=GroupEmpiricalAverage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                <Label FontWeight="Bold">Rules for K</Label>
+                <RadioButton GroupName="Ksettings" 
+                             Content="Individual K" 
+                             IsChecked="{Binding Path=IndividualizedKValue, 
+                                Mode=TwoWay, 
+                                UpdateSourceTrigger=PropertyChanged}"
                              Margin="15,0,0,0" />
-                <RadioButton x:Name="groupKSetting3"
-                             GroupName="Ksettings" 
-                             Content="Fit K from Pooled data" 
-                             IsChecked="{Binding Path=GroupFitted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="15,0,0,0" />
-
-                <Label Margin="0,10,0,0">Individualized k Options</Label>
 
                 <RadioButton GroupName="Ksettings" 
-                             Content="Individual Empirical Log Range" 
-                             IsChecked="{Binding Path=IndivEmpirical, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Content="Fitted K" 
+                             IsChecked="{Binding Path=FitKValue, 
+                                Mode=TwoWay, 
+                                UpdateSourceTrigger=PropertyChanged}"
                              Margin="15,0,0,0" />
+
                 <RadioButton GroupName="Ksettings" 
-                             Content="Fit K from Individual data" 
-                             IsChecked="{Binding Path=IndivFitted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="15,0,0,0" />
-                <RadioButton GroupName="Ksettings" 
-                             Content="Fix K to custom value" 
-                             IsChecked="{Binding Path=CustomK, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="15,0,0,0" />
-
-                <TextBox x:Name="kRange"
-                         Margin="15,0,0,0" 
-                         VerticalContentAlignment="Center"
-                         Text="{Binding KValue}">
-                </TextBox>
-                
-
-                <Label Margin="0,10,0,0" FontWeight="Bold">K Fitting (Advanced)</Label>
-
-                <RadioButton x:Name="fitKNormal"
-                             GroupName="KsettingsBounds" 
-                             Content="Fit parameter freely" 
-                             IsChecked="{Binding Path=FitK, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Content="Shared K" 
+                             IsChecked="{Binding Path=SharedKValue, 
+                                Mode=TwoWay, 
+                                UpdateSourceTrigger=PropertyChanged}"
                              Margin="15,0,0,0"/>
 
-                <RadioButton x:Name="fitKBounded"
-                             GroupName="KsettingsBounds" 
-                             Content="Bound parameter" 
-                             IsChecked="{Binding Path=BoundK, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="15,0,0,0" />
-                
-                <StackPanel Orientation="Horizontal"
-                            Width="Auto">
-                    <Label Margin="15,0,0,0"
-                           Width="55">Lower:</Label>
-                    <TextBox x:Name="KRangeLow"
-                         Margin="15,0,0,0" 
-                         VerticalContentAlignment="Center"
-                             HorizontalContentAlignment="Stretch"
-                             HorizontalAlignment="Stretch"
-                             Width="90"
-                         Text="{Binding BoundKValueLow}">
-                    </TextBox>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal"
-                            Width="Auto">
-                    <Label Margin="15,0,0,0"
-                           Width="55">Higher:</Label>
-                    <TextBox x:Name="KRangeHigh"
-                         Margin="15,0,0,0" 
-                         VerticalContentAlignment="Center"
-                             HorizontalContentAlignment="Stretch"
-                             HorizontalAlignment="Stretch"
-                             Width="90"
-                         Text="{Binding BoundKValueHigh}">
-                    </TextBox>
-                </StackPanel>
-
-                <!--
-                
-                <Label Margin="0,10,0,0" FontWeight="Bold" Content="Fit Measures"/>
-
-                <RadioButton x:Name="gofBIC"
-                             GroupName="gofMeasure" 
-                             Content="Bayesian Information Criterion" 
-                             IsChecked="{Binding Path=UseBIC, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                <RadioButton GroupName="Ksettings" 
+                             Content="Custom K" 
+                             IsChecked="{Binding Path=CustomKValue, 
+                                Mode=TwoWay, 
+                                UpdateSourceTrigger=PropertyChanged}"
                              Margin="15,0,0,0"/>
 
-                <RadioButton x:Name="gofAIC"
-                             GroupName="gofMeasure" 
-                             Content="Akaike Information Criterion" 
-                             IsChecked="{Binding Path=UseAIC, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="15,0,0,0" />
-
-                <RadioButton x:Name="gofR2"
-                             GroupName="gofMeasure" 
-                             Content="R-squared approximation" 
-                             IsChecked="{Binding Path=UseR2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="15,0,0,0" />
-
-
-                    -->
-
-
-
+                <TextBox x:Name="kSettingsCustom" 
+                         Margin="35,0,0,0" 
+                         Text="{Binding CustomKValueField}"/>
 
             </StackPanel>
 
-            <StackPanel
-                Grid.Row="8"
-                Grid.RowSpan="2"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                HorizontalAlignment="Left"
-                Margin="15,5,5,5">
-
-                <Label FontWeight="Bold">Q0 Fitting (Advanced)</Label>
-
-                <RadioButton x:Name="q0Setting1"
-                             GroupName="Qsettings" 
-                             Content="Fit parameter" 
-                             IsChecked="{Binding Path=FitQ0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="15,0,0,0"/>
-                
-                <RadioButton x:Name="q0Setting2"
-                             GroupName="Qsettings" 
-                             Content="Fix to value" 
-                             IsChecked="{Binding Path=FixQ0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="15,0,0,0" />
-
-                <TextBox x:Name="qFixedValue"
-                         Margin="15,0,0,0" 
-                         VerticalContentAlignment="Center"
-                         Text="{Binding FixedQ0Value}">
-                </TextBox>
-
-                <RadioButton x:Name="q0Setting3"
-                             GroupName="Qsettings" 
-                             Content="Fit parameter (bounded)" 
-                             IsChecked="{Binding Path=BoundQ0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="15,0,0,0" />
-
-                <StackPanel Orientation="Horizontal"
-                            Width="Auto">
-                    <Label Margin="15,0,0,0"
-                           Width="55">Lower:</Label>
-                    <TextBox x:Name="QRangeLow"
-                         Margin="15,0,0,0" 
-                         VerticalContentAlignment="Center"
-                             HorizontalContentAlignment="Stretch"
-                             HorizontalAlignment="Stretch"
-                             Width="90"
-                         Text="{Binding BoundQ0ValueLow}">
-                    </TextBox>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal"
-                            Width="Auto">
-                    <Label Margin="15,0,0,0" 
-                           Width="55">Upper:</Label>
-                    <TextBox x:Name="QRangeHigh"
-                         Margin="15,0,0,0" 
-                         VerticalContentAlignment="Center"
-                         HorizontalContentAlignment="Stretch"
-                         HorizontalAlignment="Stretch"
-                         Width="90"
-                         Text="{Binding BoundQ0ValueHigh}">
-                    </TextBox>
-                </StackPanel>
-            </StackPanel>
-
-            <!--
-            
             <FlowDocumentScrollViewer
                 Grid.Column="0"
-                Grid.ColumnSpan="4"
-                Grid.Row="8"
-                Grid.RowSpan="2"
+                Grid.ColumnSpan="3"
+                Grid.Row="5"
+                Grid.RowSpan="5"
                 IsSelectionEnabled="False"
-                VerticalScrollBarVisibility="Hidden">
+                VerticalScrollBarVisibility="Hidden"
+                VerticalAlignment="Top">
                 <FlowDocument>
                     <FlowDocument.Resources>
                         <Style TargetType="{x:Type Paragraph}">
@@ -675,19 +512,19 @@
                             <Setter Property="Padding" Value="0"/>
                         </Style>
                     </FlowDocument.Resources>
-                    <Paragraph FontSize="12" FontFamily="Segoe UI">
-                        <Bold>Notes (Here be dragons):</Bold>
+                    <Paragraph FontSize="12" FontFamily="Segoe UI" Padding="0,0,0,0">
+                        <Bold>Notes:</Bold>
                     </Paragraph>
-                    <Paragraph FontSize="12" FontFamily="Segoe UI" Padding="0,5,0,0">
-                        Users are urged to remain with defaults, most especially for 0-valued
-                        behavior.  The current models are limited in their ability to handle these
-                        values (they'll likely fail if the supplied values of ill-suited), though
-                        a range of techniques for determining the free parameter are provided.
+                    <Paragraph FontSize="12" FontFamily="Segoe UI" Padding="0,0,0,0">
+                        Several of these settings can be overridden when the defaulted recommendations
+                        are either unsuited and undesired for a certain subset of data or research
+                        question.  Caution is emphasized in modifying these values without fully understanding
+                        the conceptual and methodological implications, as deviating from the defaults
+                        may produce biased analyses and/or questionable results if the user has not 
+                        has not received expert consultation or sufficient statistical training.
                     </Paragraph>
                 </FlowDocument>
             </FlowDocumentScrollViewer>
-            -->
-            
         </Grid>
     </Grid>
 </Window>

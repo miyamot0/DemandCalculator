@@ -47,27 +47,38 @@
     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
     OF SUCH DAMAGE.
 
-    ============================================================================
-    EPPlus is distributed under this license:
+ Demand Calculator utilizes Reogrid to leverage to load, save, and display data
 
-    Copyright (c) 2016 Jan Källman
+    Reogrid is distributed under this license:
 
-    EPPlus is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, version 2.
-
-    EPPlus is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with EPPlus.  If not, see <http://epplus.codeplex.com/license>.
+    MIT License
+    
+    Copyright(c) 2013-2016 Jing<lujing at unvell.com>
+    Copyright(c) 2013-2016 unvell.com, All rights reserved.
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
 
 */
 
 using Microsoft.Win32;
 using RDotNet;
+using small_n_stats_WPF.Dialogs;
 using small_n_stats_WPF.Utilities;
 using small_n_stats_WPF.Views;
 using System;
@@ -76,32 +87,16 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
+using System.Windows.Media.Imaging;
 
 namespace small_n_stats_WPF.ViewModels
 {
     class MainWindowViewModel : BaseViewModel
     {
-        public MainWindow MainWindow { get; set; }
-        Thread loadThread;
-        Window window;
-
         #region Observable Bindings
-
-        private ObservableCollection<RowViewModel> rowViewModels { get; set; } 
-        public ObservableCollection<RowViewModel> RowViewModels
-        {
-            get { return rowViewModels; }
-            set
-            {
-                rowViewModels = value;
-                OnPropertyChanged("RowViewModels");
-            }
-        }
 
         private ObservableCollection<MenuItem> recentStuff { get; set; }
         public ObservableCollection<MenuItem> RecentStuff
@@ -133,11 +128,24 @@ namespace small_n_stats_WPF.ViewModels
         public RelayCommand FileOpenCommand { get; set; }
         public RelayCommand FileOpenNoDialogCommand { get; set; }
         public RelayCommand FileSaveCommand { get; set; }
+
+        public RelayCommand FileCutCommand { get; set; }
+        public RelayCommand FileCopyCommand { get; set; }
+        public RelayCommand FilePasteCommand { get; set; }
+        public RelayCommand FilePasteInvertCommand { get; set; }
+        public RelayCommand FileUndoCommand { get; set; }
+        public RelayCommand FileRedoCommand { get; set; }
+
         public RelayCommand FileSaveAsCommand { get; set; }
         public RelayCommand FileCloseCommand { get; set; }
         public RelayCommand FileSaveNoDialogCommand { get; set; }
         public RelayCommand RecentsClearCommand { get; set; }
         public RelayCommand HelpCommand { get; set; }
+
+        public RelayCommand AddCommand { get; set; }
+        public RelayCommand RenameCommand { get; set; }
+        public RelayCommand ResizeCommand { get; set; }
+        public RelayCommand RemoveSheetCommand { get; set; }
 
         public RelayCommand ViewLoadedCommand { get; set; }
         public RelayCommand ViewClosingCommand { get; set; }
@@ -150,14 +158,13 @@ namespace small_n_stats_WPF.ViewModels
         REngine engine;
 
         public RelayCommand RDotNetLicenseWindowCommand { get; set; }
-        public RelayCommand SharpVectorGraphicsLicenseWindowCommand { get; set; }
-        public RelayCommand Ggplot2LicenseWindowCommand { get; set; }
         public RelayCommand NlmrtLicenseWindowCommand { get; set; }
         public RelayCommand NlstoolsLicenseWindowCommand { get; set; }
         public RelayCommand RLicenseWindowCommand { get; set; }
-        public RelayCommand BaseEncodeLicenseWindowCommand { get; set; }
-        public RelayCommand EPPLicenseWindowCommand { get; set; }
+        public RelayCommand ReogridLicenseWindowCommand { get; set; }
         public RelayCommand BeezdemandLicenseWindowCommand { get; set; }
+        public RelayCommand DevtoolsLicenseWindowCommand { get; set; }
+        public RelayCommand DigestLicenseWindowCommand { get; set; }
         public RelayCommand LicenseWindowCommand { get; set; }
 
         /* End Menu Items */
@@ -166,9 +173,9 @@ namespace small_n_stats_WPF.ViewModels
 
         public RelayCommand SaveLogsWindowCommand { get; set; }
         public RelayCommand ClearLogsWindowCommand { get; set; }
-        public RelayCommand DeleteSelectedCommand { get; set; }
-        public RelayCommand CutSelectedCommand { get; set; }
-        public RelayCommand PasteInvertedCommand { get; set; }
+        //public RelayCommand DeleteSelectedCommand { get; set; }
+        //public RelayCommand CutSelectedCommand { get; set; }
+        //public RelayCommand PasteInvertedCommand { get; set; }
 
         #endregion
 
@@ -189,8 +196,20 @@ namespace small_n_stats_WPF.ViewModels
             FileSaveAsCommand = new RelayCommand(param => SaveFileAs(), param => true);
             FileCloseCommand = new RelayCommand(param => CloseProgramWindow(param), param => true);
 
+            FileUndoCommand = new RelayCommand(param => App.Workbook.Undo(), param => true);
+            FileRedoCommand = new RelayCommand(param => App.Workbook.Redo(), param => true);
+            FileCutCommand = new RelayCommand(param => App.Workbook.CurrentWorksheet.Cut(), param => true);
+            FileCopyCommand = new RelayCommand(param => App.Workbook.CurrentWorksheet.Copy(), param => true);
+            FilePasteCommand = new RelayCommand(param => App.Workbook.CurrentWorksheet.Paste(), param => true);
+            FilePasteInvertCommand = new RelayCommand(param => PasteInverted(), param => true);
+
             FileSaveNoDialogCommand = new RelayCommand(param => SaveFileWithoutDialog(), param => true);
             FileOpenNoDialogCommand = new RelayCommand(param => FileOpenNoDialog(param), param => true);
+
+            AddCommand = new RelayCommand(param => AddSheet(), param => true);
+            ResizeCommand = new RelayCommand(param => ResizeCurrentSheet(), param => true);
+            RenameCommand = new RelayCommand(param => RenameSheet(), param => true);
+            RemoveSheetCommand = new RelayCommand(param => DeleteCurrentSheet(), param => true);
 
             HelpCommand = new RelayCommand(param => OpenHelpWindow(), param => true);
 
@@ -199,6 +218,8 @@ namespace small_n_stats_WPF.ViewModels
             RecentStuff = new ObservableCollection<MenuItem>();
 
             recentsArray = Properties.Settings.Default.RecentFiles.Trim().Split(';');
+
+            BitmapImage mIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Textfile_818_16x.png"));
 
             List<string> workingRecents = recentsArray.Select(item => item).Where(item => item.Trim().Length > 1).ToList();
 
@@ -217,7 +238,11 @@ namespace small_n_stats_WPF.ViewModels
                     {
                         Header = recentFileLocation,
                         Command = FileOpenNoDialogCommand,
-                        CommandParameter = recentFileLocation
+                        CommandParameter = recentFileLocation,
+                        Icon = new Image
+                        {
+                            Source = mIcon
+                        }
                     });
                 }
             }
@@ -234,14 +259,6 @@ namespace small_n_stats_WPF.ViewModels
 
             SaveLogsWindowCommand = new RelayCommand(param => SaveLogs(), param => true);
             ClearLogsWindowCommand = new RelayCommand(param => ClearLogs(), param => true);
-
-            #endregion
-
-            #region GridCommands
-
-            DeleteSelectedCommand = new RelayCommand(param => DeleteSelected(), param => true);
-            CutSelectedCommand = new RelayCommand(param => CutSelected(), param => true);
-            PasteInvertedCommand = new RelayCommand(param => PasteInverted(), param => true);
 
             #endregion
 
@@ -262,35 +279,153 @@ namespace small_n_stats_WPF.ViewModels
             #region LicenseCommands
             
             RDotNetLicenseWindowCommand = new RelayCommand(param => RdotNetLicenseInformationWindow(), param => true);
-            SharpVectorGraphicsLicenseWindowCommand = new RelayCommand(param => SharpVectorGraphicsLicenseInformationWindow(), param => true);
-            Ggplot2LicenseWindowCommand = new RelayCommand(param => Ggplot2LicenseInformationWindow(), param => true);
             NlmrtLicenseWindowCommand = new RelayCommand(param => NlmrtLicenseInformationWindow(), param => true);
             NlstoolsLicenseWindowCommand = new RelayCommand(param => NlsToolsLicenseInformationWindow(), param => true);
             RLicenseWindowCommand = new RelayCommand(param => RLicenseInformationWindow(), param => true);
-
-            BaseEncodeLicenseWindowCommand = new RelayCommand(param => BaseEncodeLicenseInformationWindow(), param => true);
-            EPPLicenseWindowCommand = new RelayCommand(param => EPPLicenseWindow(), param => true);
-
+            ReogridLicenseWindowCommand = new RelayCommand(param => ReogridLicenseWindow(), param => true);
             BeezdemandLicenseWindowCommand = new RelayCommand(param => BeezdemandLicenseInformationWindow(), param => true);
+
+            DevtoolsLicenseWindowCommand = new RelayCommand(param => DevtoolsLicenseInformationWindow(), param => true);
+            DigestLicenseWindowCommand = new RelayCommand(param => DigestLicenseInformationWindow(), param => true);
+
             LicenseWindowCommand = new RelayCommand(param => LicenseInformationWindow(), param => true);
 
             #endregion
 
-            RowViewModels = new ObservableCollection<RowViewModel>();
+            #region Context Menu
 
-            ObservableCollection<RowViewModel> temp = new ObservableCollection<RowViewModel>();
-
-            for (int i = 0; i < RowSpans; i++)
+            var mContextMenu = new ContextMenu();
+            mContextMenu.Items.Add(new MenuItem
             {
-                temp.Add(new RowViewModel());
-            }
+                Header = "Cut",
+                Command = FileCutCommand
+            });
+            mContextMenu.Items.Add(new MenuItem
+            {
+                Header = "Copy",
+                Command = FileCopyCommand
+            });
+            mContextMenu.Items.Add(new MenuItem
+            {
+                Header = "Paste",
+                Command = FilePasteCommand
+            });
+            mContextMenu.Items.Add(new MenuItem
+            {
+                Header = "Paste Inverted",
+                Command = FilePasteInvertCommand
+            });
 
-            /* Minor speedup, avoids many UI update calls */
+            App.Workbook.CellsContextMenu = mContextMenu;
 
-            RowViewModels = new ObservableCollection<RowViewModel>(temp);
+            App.Workbook.SheetTabNewButtonVisible = false;
+
+            #endregion
+
         }
 
         #region UI
+
+        /// <summary>
+        /// Add new sheet into workbook
+        /// </summary>
+        private void AddSheet()
+        {
+            var addNewSheet = new NamingDialog();
+            addNewSheet.Title = "Please name the new sheet";
+
+            addNewSheet.ShowDialog();
+
+            string mEntry = addNewSheet.nameBox.Text;
+
+            if (mEntry == null || mEntry.Trim().Length == 0)
+            {
+                MessageBox.Show("Invalid name");
+
+                return;
+            }
+            else
+            {
+                string mName = new string(mEntry.Take(24).ToArray());
+
+                if (!App.Workbook.Worksheets.Any(s => s.Name.Contains(mName)))
+                {
+                    var sheet = App.Workbook.CreateWorksheet(mName);
+                    App.Workbook.AddWorksheet(sheet);
+                }
+                else
+                {
+                    var sheet = App.Workbook.CreateWorksheet(mName + "1");
+                    App.Workbook.AddWorksheet(sheet);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Rename the current sheet
+        /// </summary>
+        private void RenameSheet()
+        {
+            var renameNewSheet = new NamingDialog();
+            renameNewSheet.Title = "Rename the current sheet";
+
+            renameNewSheet.ShowDialog();
+
+            string mEntry = renameNewSheet.nameBox.Text;
+
+            if (mEntry == null || mEntry.Trim().Length == 0)
+            {
+                MessageBox.Show("Invalid name");
+
+                return;
+            }
+            else
+            {
+                string mName = new string(mEntry.Take(24).ToArray());
+                App.Workbook.CurrentWorksheet.Name = mName;
+            }
+        }
+
+        /// <summary>
+        /// Calls to RG to increase or decrease cells
+        /// </summary>
+        private void ResizeCurrentSheet()
+        {
+            var getNewSizes = new ResizeDialog();
+            getNewSizes.rowBox.Text = App.Workbook.CurrentWorksheet.Rows.ToString();
+            getNewSizes.colBox.Text = App.Workbook.CurrentWorksheet.Columns.ToString();
+
+            getNewSizes.ShowDialog();
+
+            if (getNewSizes.rowBox.Text != "" && getNewSizes.colBox.Text != "")
+            {
+                App.Workbook.CurrentWorksheet.Resize(int.Parse(getNewSizes.rowBox.Text), int.Parse(getNewSizes.colBox.Text));
+            }
+        }
+
+        /// <summary>
+        /// Calls to RG to delete the currently selected sheet
+        /// </summary>
+        private void DeleteCurrentSheet()
+        {
+            if (App.Workbook.Worksheets.Count == 1)
+            {
+                MessageBox.Show("Only one sheet remains. All workbooks must have at least 1 sheet.");
+
+                return;
+            }
+
+            var confirmDelete = new YesNoDialog();
+            confirmDelete.Title = "Confirm Delete";
+            confirmDelete.QuestionText = "Are you sure you want to delete this sheet?";
+
+            confirmDelete.ShowDialog();
+
+            if (confirmDelete.ReturnedAnswer)
+            {
+                App.Workbook.RemoveWorksheet(App.Workbook.CurrentWorksheet);
+            }
+        }
 
         /// <summary>
         /// Clears the recents list, saving a blank string to settings
@@ -316,6 +451,9 @@ namespace small_n_stats_WPF.ViewModels
         /// </param>
         private void AddToRecents(string filePath)
         {
+            var pathDir = Path.GetDirectoryName(filePath);
+            Properties.Settings.Default.LastDirectory = pathDir;
+
             recentsArray = Properties.Settings.Default.RecentFiles.Split(';');
 
             List<string> workingRecents = recentsArray.Select(item => item).Where(item => item.Trim().Length > 1).ToList();
@@ -363,93 +501,10 @@ namespace small_n_stats_WPF.ViewModels
         }
 
         /// <summary>
-        /// Loop through selected/highlighted cells, clear cell contents through bound collections
+        /// Transposition a-la matrix, but list of arrays
         /// </summary>
-        private void DeleteSelected()
-        {
-            if (MainWindow.dataGrid.SelectedCells.Count > 0)
-            {
-                foreach (System.Windows.Controls.DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
-                {
-                    var rvm = obj.Item as RowViewModel;
-
-                    if (rvm != null)
-                    {
-                        int x = RowViewModels.IndexOf(rvm);
-                        RowViewModels[x].values[obj.Column.DisplayIndex] = "";
-                        RowViewModels[x].ForcePropertyUpdate(obj.Column.DisplayIndex);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Cut cells after copying to clipboard
-        /// </summary>
-        private void CutSelected()
-        {
-            if (MainWindow.dataGrid.SelectedCells.Count > 0)
-            {
-                // Cells
-                List<string> holdPreClip = new List<string>();
-
-                // Rows
-                List<string> holdPostClip = new List<string>();
-
-                int rowHolder = -1;
-
-                foreach (DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
-                {
-                    var rvm = obj.Item as RowViewModel;
-
-                    if (rvm != null)
-                    {
-                        int x = RowViewModels.IndexOf(rvm);
-
-                        if (rowHolder == -1)
-                        {
-                            rowHolder = x;
-                        }
-
-                        if (rowHolder == x)
-                        {
-                            // Same row, continue
-                            holdPreClip.Add(RowViewModels[x].values[obj.Column.DisplayIndex]);
-                        }
-                        else
-                        {
-                            // Different
-                            rowHolder = x;
-                            string holdClip = string.Join("\t", holdPreClip);
-                            holdPostClip.Add(holdClip);
-
-                            holdPreClip.Clear();
-                            holdPreClip.Add(RowViewModels[x].values[obj.Column.DisplayIndex]);
-                        }
-
-                    }
-                }
-
-                string lastRowClip = string.Join("\t", holdPreClip);
-                holdPostClip.Add(lastRowClip);
-
-                string holdPostClipText = string.Join("\r\n", holdPostClip);
-                Clipboard.SetText(holdPostClipText);
-
-                foreach (DataGridCellInfo obj in MainWindow.dataGrid.SelectedCells)
-                {
-                    var rvm = obj.Item as RowViewModel;
-
-                    if (rvm != null)
-                    {
-                        int x = RowViewModels.IndexOf(rvm);
-                        RowViewModels[x].values[obj.Column.DisplayIndex] = "";
-                        RowViewModels[x].ForcePropertyUpdate(obj.Column.DisplayIndex);
-                    }
-                }
-            }
-        }
-
+        /// <param name="arrayList"></param>
+        /// <returns></returns>
         static List<string[]> CreateTransposedList(List<string[]> arrayList)
         {
             int lengthTemp = arrayList[0].Length;
@@ -481,10 +536,10 @@ namespace small_n_stats_WPF.ViewModels
             List<string[]> returnList = new List<string[]>();
 
             string[] holder;
-            for (int i=0; i<transposedMatrix.GetLength(0); i++)
+            for (int i = 0; i < transposedMatrix.GetLength(0); i++)
             {
                 holder = new string[transposedMatrix.GetLength(1)];
-                for (int j=0; j<transposedMatrix.GetLength(1); j++)
+                for (int j = 0; j < transposedMatrix.GetLength(1); j++)
                 {
                     holder[j] = transposedMatrix[i, j];
                 }
@@ -492,46 +547,6 @@ namespace small_n_stats_WPF.ViewModels
             }
 
             return returnList;
-        }
-
-        private void PasteInverted()
-        {
-            List<string[]> rowData = ClipboardTools.ReadAndParseClipboardData();
-
-            int lowRow = MainWindow.dataGrid.Items.IndexOf(MainWindow.dataGrid.CurrentItem),        // Current highlighted cell's row
-                highRow = MainWindow.dataGrid.Items.Count - 1,                                      // Highest row in table
-                lowCol = MainWindow.dataGrid.Columns.IndexOf(MainWindow.dataGrid.CurrentColumn),    // Current highlighted cell's column
-                pasteContentRowIterator = 0,
-                pasteContentColumnIterator = 0;
-
-            var itemSource = MainWindow.dataGrid.ItemsSource as ObservableCollection<RowViewModel>;
-
-            if (itemSource == null) return;
-
-            rowData = CreateTransposedList(rowData);
-
-            if (rowData == null) return;
-            
-            for (int i = lowRow; (i <= highRow) && (pasteContentRowIterator < rowData.Count); i++)
-            {
-                if (i == highRow)
-                {
-                    itemSource.Add(new RowViewModel());
-                    highRow = (pasteContentRowIterator + 1 < rowData.Count) ? highRow + 1 : highRow;
-                }
-
-                pasteContentColumnIterator = 0;
-
-                for (int j = lowCol; (j < 99) && (pasteContentColumnIterator < rowData[pasteContentRowIterator].Length); j++)
-                {
-                    itemSource[i].values[j] = rowData[pasteContentRowIterator][pasteContentColumnIterator];
-                    itemSource[i].ForcePropertyUpdate(j);
-
-                    pasteContentColumnIterator++;
-                }
-
-                pasteContentRowIterator++;
-            }
         }
 
         #endregion
@@ -544,7 +559,7 @@ namespace small_n_stats_WPF.ViewModels
         private void ViewLoaded()
         {
             IntroWindow introWindow = new IntroWindow();
-            introWindow.Owner = MainWindow;
+            introWindow.Owner = App.ApplicationWindow;
             introWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             introWindow.Show();
 
@@ -607,23 +622,80 @@ namespace small_n_stats_WPF.ViewModels
                     
                     introWindow.loadText.Text = "Loading R Packages";
 
-                    bool loadedGgplot = engine.Evaluate("require(ggplot2)").AsLogical().First();
+                    bool loadedDevTools = engine.Evaluate("require(devtools)").AsLogical().First();
 
-                    if (loadedGgplot)
+                    if (loadedDevTools)
                     {
-                        introWindow.checkGgplot.Foreground = Brushes.Green;
+                        introWindow.checkDevtools.Foreground = Brushes.Green;
                     }
                     else
                     {
-                        SendMessageToOutput("Attempting to install ggplot2 packages for first time!");
-                        introWindow.loadText.Text = "Downloading ggplot2...";
-                        engine.Evaluate("if (!require(ggplot2)) { install.packages('ggplot2', repos = 'http://cran.us.r-project.org') }");
+                        SendMessageToOutput("Attempting to install devtools packages for first time!");
+                        introWindow.loadText.Text = "Downloading devtools...";
+                        engine.Evaluate("if (!require(devtools)) { install.packages('devtools', repos = 'http://cran.us.r-project.org') }");
 
-                        loadedGgplot = engine.Evaluate("require(ggplot2)").AsLogical().First();
+                        loadedDevTools = engine.Evaluate("require(devtools)").AsLogical().First();
 
-                        if (loadedGgplot)
+                        if (loadedDevTools)
                         {
-                            introWindow.checkGgplot.Foreground = Brushes.Green;
+                            introWindow.checkDevtools.Foreground = Brushes.Green;
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    bool loadedDigest = engine.Evaluate("require(digest)").AsLogical().First();
+
+                    if (loadedDigest)
+                    {
+                        introWindow.checkDigest.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install digest packages for first time!");
+                        introWindow.loadText.Text = "Downloading digest...";
+                        engine.Evaluate("if (!require(digest)) { install.packages('digest', repos = 'http://cran.us.r-project.org') }");
+
+                        loadedDigest = engine.Evaluate("require(digest)").AsLogical().First();
+
+                        if (loadedDigest)
+                        {
+                            introWindow.checkDigest.Foreground = Brushes.Green;
+                        }
+                    }
+
+                    introWindow.loadText.Text = "Loading R Packages";
+
+                    bool loadedRepository = engine.Evaluate("require(beezdemand)").AsLogical().First();
+
+                    if (loadedRepository)
+                    {
+                        // Update as needed
+                        //package_deps("rNVD3", repos = "ramnathv/rNVD3")
+                        //engine.Evaluate("devtools::update_packages('beezdemand')");
+                        engine.Evaluate("devtools::package_deps('beezdemand', repos='miyamot0/beezdemand')");
+                        engine.Evaluate("devtools::update_packages('beezdemand')");
+
+                        introWindow.checkBeezdemand.Foreground = Brushes.Green;
+                    }
+                    else
+                    {
+                        SendMessageToOutput("Attempting to install beezdemand packages for first time!");
+                        introWindow.loadText.Text = "Downloading beezdemand...";
+
+                        engine.Evaluate("devtools::package_deps('beezdemand', repos='miyamot0/beezdemand')");
+                        engine.Evaluate("devtools::update_packages('beezdemand')");
+                        //engine.Evaluate("if (!require(beezdemand)) { devtools::install_github('miyamot0/beezdemand') }");
+
+                        loadedRepository = engine.Evaluate("require(beezdemand)").AsLogical().First();
+
+                        if (loadedRepository)
+                        {
+                            // Update as needed
+                            engine.Evaluate("devtools::package_deps('beezdemand', repos='miyamot0/beezdemand')");
+                            engine.Evaluate("devtools::update_packages('beezdemand')");
+
+                            introWindow.checkBeezdemand.Foreground = Brushes.Green;
                         }
                     }
 
@@ -670,82 +742,13 @@ namespace small_n_stats_WPF.ViewModels
                             introWindow.checkNlstools.Foreground = Brushes.Green;
                         }
                     }
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
-                    bool loadedReshape = engine.Evaluate("require(reshape2)").AsLogical().First();
-
-                    if (loadedReshape)
-                    {
-                        introWindow.checkReshape2.Foreground = Brushes.Green;
-                    }
-                    else
-                    {
-                        SendMessageToOutput("Attempting to install reshape2 packages for first time!");
-                        introWindow.loadText.Text = "Downloading reshape2...";
-                        engine.Evaluate("if (!require(reshape2)) { install.packages('reshape2', repos = 'http://cran.us.r-project.org') }");
-
-                        loadedReshape = engine.Evaluate("require(reshape2)").AsLogical().First();
-
-                        if (loadedReshape)
-                        {
-                            introWindow.checkReshape2.Foreground = Brushes.Green;
-                        }
-                    }
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
-                    bool loadedGrid = engine.Evaluate("require(gridExtra)").AsLogical().First();
-
-                    if (loadedGrid)
-                    {
-                        introWindow.checkGridExtra.Foreground = Brushes.Green;
-                    }
-                    else
-                    {
-                        SendMessageToOutput("Attempting to install gridExtra packages for first time!");
-                        introWindow.loadText.Text = "Downloading gridExtra...";
-                        engine.Evaluate("if (!require(gridExtra)) { install.packages('gridExtra', repos = 'http://cran.us.r-project.org') }");
-
-                        loadedGrid = engine.Evaluate("require(gridExtra)").AsLogical().First();
-
-                        if (loadedGrid)
-                        {
-                            introWindow.checkGridExtra.Foreground = Brushes.Green;
-                        }
-                    }
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
-                    bool loadedBase64 = engine.Evaluate("require(base64enc)").AsLogical().First();
-
-                    if (loadedBase64)
-                    {
-                        introWindow.checkBase64enc.Foreground = Brushes.Green;
-                    }
-                    else
-                    {
-                        SendMessageToOutput("Attempting to install base64enc packages for first time!");
-                        introWindow.loadText.Text = "Downloading base64enc...";
-                        engine.Evaluate("if (!require(base64enc)) { install.packages('base64enc', repos = 'http://cran.us.r-project.org') }");
-
-                        loadedBase64 = engine.Evaluate("require(base64enc)").AsLogical().First();
-
-                        if (loadedBase64)
-                        {
-                            introWindow.checkBase64enc.Foreground = Brushes.Green;
-                        }
-                    }
-
-                    introWindow.loadText.Text = "Loading R Packages";
-
-                    if (loadedGgplot && loadedGrid && loadedReshape && loadedBase64 && loadedNlstools && loadedNlmrt && !failed)
+                    
+                    if (loadedNlstools && loadedNlmrt && !failed)
                     {
                         introWindow.loadText.Text = "All necessary components found!";
                         introWindow.loadText.Foreground = Brushes.Green;
                         SendMessageToOutput("All required packages have been found.  Ready to proceed.");
                     }
-
                 }
                 else
                 {
@@ -759,37 +762,19 @@ namespace small_n_stats_WPF.ViewModels
                 SendMessageToOutput("R Statistical Package - GPL v2 Licensed. Copyright (C) 2000-16. The R Core Team");
                 SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation()$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
-
-                SendMessageToOutput("ggplot2 R Package - GPLv2 Licensed. Copyright (c) 2016, Hadley Wickham.");
-                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('ggplot2')$textVersion").AsCharacter().ToArray()));
-                SendMessageToOutput("");
-
-                SendMessageToOutput("gridExtra R Package - GPLv2+ Licensed. Copyright (c) 2016, Baptiste Auguie.");
-                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('gridExtra')$textVersion").AsCharacter().ToArray()));
-                SendMessageToOutput("");
-
                 SendMessageToOutput("nlmrt R Package - GPLv2 Licensed. Copyright (C) 2016. John C. Nash.");
                 SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('nlmrt')$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
-
                 SendMessageToOutput("nlstools R Package - GPLv2 Licensed. Copyright(C) 2015 Florent Baty and Marie-Laure Delignette - Muller, with contributions from Sandrine Charles, Jean - Pierre Flandrois, and Christian Ritz.");
                 SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('nlstools')$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
-
-                SendMessageToOutput("reshape2 R Package - MIT Licensed. Copyright (c) 2014, Hadley Wickham.");
-                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('reshape2')$textVersion").AsCharacter().ToArray()));
+                SendMessageToOutput("beezdemand R Package - GPLv2+ Licensed. Copyright (c) 2015, Brent Kaplan.");
+                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('beezdemand')$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
-
-                SendMessageToOutput("base64enc R Package - GPLv2+ Licensed. Copyright (c) 2015, Simon Urbanek.");
-                SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('base64enc')$textVersion").AsCharacter().ToArray()));
-                SendMessageToOutput("");
-
-                SendMessageToOutput("EPPlus - GPLv2 Licensed. Copyright (c) 2016 Jan Källman.");
+                SendMessageToOutput("Reogrid - MIT Licensed. Copyright(c) 2013-2016 Jing {lujing at unvell.com}, Copyright(c) 2013-2016 unvell.com. ");
                 SendMessageToOutput("RdotNet: Interface for the R Statistical Package - New BSD License (BSD 2-Clause). Copyright(c) 2010, RecycleBin. All rights reserved.");
                 SendMessageToOutput("SharpVectors: Library for rendering SVG - New BSD License (BSD 3-Clause). Copyright(c) 2010, SharpVectorGraphics. All rights reserved.");
-                SendMessageToOutput("beezdemand R Package - GPLv2 Licensed. Copyright (c) 2016, Brent Kaplan.");
                 SendMessageToOutput("");
-
                 SendMessageToOutput("License information is also provided in Information > Licenses > ... as well as in the install directory of this program (under Resources).");
             }
 
@@ -802,6 +787,63 @@ namespace small_n_stats_WPF.ViewModels
         {
             Properties.Settings.Default.Save();
             engine.Dispose();
+        }
+
+        /// <summary>
+        /// Custom paste operation, swapping V/H loopings to make a transposition
+        /// </summary>
+        private void PasteInverted()
+        {
+            List<string[]> rowData = ClipboardTools.ReadAndParseClipboardData();
+
+            if (rowData == null)
+            {
+                return;
+            }
+
+            int lowRow = App.Workbook.CurrentWorksheet.FocusPos.Row,        // Current highlighted cell's row
+                highRow = App.Workbook.CurrentWorksheet.Rows,               // Highest row in table
+                lowCol = App.Workbook.CurrentWorksheet.FocusPos.Col,        // Current highlighted cell's column
+                highCol = App.Workbook.CurrentWorksheet.Columns,
+                pasteContentRowIterator = 0,
+                pasteContentColumnIterator = 0;
+
+            try
+            {
+                rowData = CreateTransposedList(rowData);
+            }
+            catch
+            {
+                // Error in constructing dimensions, fail out
+                return;
+            }
+
+            if (rowData == null) return;
+
+            for (int i = lowRow; (i <= highRow) && (pasteContentRowIterator < rowData.Count); i++)
+            {
+                if (i == highRow)
+                {
+                    App.Workbook.CurrentWorksheet.AppendRows(1);
+                    highRow = (pasteContentRowIterator + 1 < rowData.Count) ? highRow + 1 : highRow;
+                }
+
+                pasteContentColumnIterator = 0;
+
+                for (int j = lowCol; pasteContentColumnIterator < rowData[pasteContentRowIterator].Length; j++)
+                {
+                    if (j == highCol)
+                    {
+                        App.Workbook.CurrentWorksheet.AppendCols(1);
+                        highCol = (pasteContentColumnIterator + 1 < rowData[0].Length) ? highCol + 1 : highCol;
+                    }
+
+                    App.Workbook.CurrentWorksheet.CreateAndGetCell(i, j).Data = rowData[pasteContentRowIterator][pasteContentColumnIterator];
+                    pasteContentColumnIterator++;
+                }
+
+                pasteContentRowIterator++;
+            }
         }
 
         #endregion
@@ -819,7 +861,7 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - R Statistical Package",
                 licenseText = Properties.Resources.License_R
             };
-            window.Owner = MainWindow;
+            window.Owner = App.ApplicationWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
@@ -827,15 +869,15 @@ namespace small_n_stats_WPF.ViewModels
         /// <summary>
         /// License window
         /// </summary>
-        private void EPPLicenseWindow()
+        private void ReogridLicenseWindow()
         {
             var window = new License();
             window.DataContext = new LicenseViewModel
             {
-                licenseTitle = "License (GPLv2) - EPPlus",
-                licenseText = Properties.Resources.License_EPPlus
+                licenseTitle = "License - Reogrid",
+                licenseText = Properties.Resources.License_Reogrid
             };
-            window.Owner = MainWindow;
+            window.Owner = App.ApplicationWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
@@ -851,7 +893,7 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - nlstools",
                 licenseText = Properties.Resources.License_nlstools
             };
-            window.Owner = MainWindow;
+            window.Owner = App.ApplicationWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
@@ -867,55 +909,7 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - nlmrt",
                 licenseText = Properties.Resources.License_nlmrt
             };
-            window.Owner = MainWindow;
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.Show();
-        }
-
-        /// <summary>
-        /// License window
-        /// </summary>
-        private void SharpVectorGraphicsLicenseInformationWindow()
-        {
-            var window = new License();
-            window.DataContext = new LicenseViewModel
-            {
-                licenseTitle = "License (BSD 3-clause) - SharpVectors",
-                licenseText = Properties.Resources.License_SharpVectorGraphics
-            };
-            window.Owner = MainWindow;
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.Show();
-        }
-
-        /// <summary>
-        /// License window
-        /// </summary>
-        private void Ggplot2LicenseInformationWindow()
-        {
-            var window = new License();
-            window.DataContext = new LicenseViewModel
-            {
-                licenseTitle = "License - ggplot2",
-                licenseText = Properties.Resources.License_ggplot2
-            };
-            window.Owner = MainWindow;
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.Show();
-        }
-
-        /// <summary>
-        /// License window
-        /// </summary>
-        private void BaseEncodeLicenseInformationWindow()
-        {
-            var window = new License();
-            window.DataContext = new LicenseViewModel
-            {
-                licenseTitle = "License (GPLv2+) - base64enc",
-                licenseText = Properties.Resources.License_base64enc
-            };
-            window.Owner = MainWindow;
+            window.Owner = App.ApplicationWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
@@ -931,7 +925,7 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - R.Net",
                 licenseText = Properties.Resources.License_RdotNet
             };
-            window.Owner = MainWindow;
+            window.Owner = App.ApplicationWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
@@ -947,7 +941,39 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - Beezdemand",
                 licenseText = Properties.Resources.License_Beezdemand
             };
-            window.Owner = MainWindow;
+            window.Owner = App.ApplicationWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Show();
+        }
+
+        /// <summary>
+        /// License window
+        /// </summary>
+        private void DigestLicenseInformationWindow()
+        {
+            var window = new License();
+            window.DataContext = new LicenseViewModel
+            {
+                licenseTitle = "License - Digest",
+                licenseText = Properties.Resources.License_Digest
+            };
+            window.Owner = App.ApplicationWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Show();
+        }
+
+        /// <summary>
+        /// License window
+        /// </summary>
+        private void DevtoolsLicenseInformationWindow()
+        {
+            var window = new License();
+            window.DataContext = new LicenseViewModel
+            {
+                licenseTitle = "License - Devtools",
+                licenseText = Properties.Resources.License_Devtools
+            };
+            window.Owner = App.ApplicationWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
@@ -963,7 +989,7 @@ namespace small_n_stats_WPF.ViewModels
                 licenseTitle = "License - Small n Stats",
                 licenseText = Properties.Resources.LICENSE
             };
-            window.Owner = MainWindow;
+            window.Owner = App.ApplicationWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
@@ -978,11 +1004,11 @@ namespace small_n_stats_WPF.ViewModels
         private void OpenUnifiedDemandCurveWindow()
         {
             var mWin = new DemandCurveUnifiedWindow();
-            mWin.Owner = MainWindow;
+            mWin.Owner = App.ApplicationWindow;
             mWin.windowTitle.Text = "Demand Curve Analysis";
             mWin.DataContext = new UnifiedDemandCurveViewModel
             {
-                mWindow = MainWindow,
+                mWindow = App.ApplicationWindow,
                 windowRef = mWin
             };
             mWin.Show();
@@ -994,7 +1020,7 @@ namespace small_n_stats_WPF.ViewModels
         private void OpenInformationWindow()
         {
             var mWin = new InformationWindow();
-            mWin.Owner = MainWindow;
+            mWin.Owner = App.ApplicationWindow;
             mWin.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             mWin.Show();
         }
@@ -1005,7 +1031,7 @@ namespace small_n_stats_WPF.ViewModels
         private void OpenHelpWindow()
         {
             var mWin = new HelpWindow();
-            mWin.Owner = MainWindow;
+            mWin.Owner = App.ApplicationWindow;
             mWin.Show();
         }
 
@@ -1018,23 +1044,10 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void CreateNewFile()
         {
-            loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
-            loadThread.SetApartmentState(ApartmentState.STA);
-            loadThread.IsBackground = true;
-            loadThread.Start();
-
-            RowViewModels.Clear();
-            for (int i = 0; i < RowSpans; i++)
-            {
-                RowViewModels.Add(new RowViewModel());
-            }
-
             UpdateTitle("New File");
             workingSheet = "Sheet1";
 
             haveFileLoaded = false;
-
-            CloseFileUIProgressWindow();
         }
 
         /// <summary>
@@ -1042,8 +1055,6 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void SaveFile()
         {
-            MainWindow.dataGrid.CommitEdit();
-
             if (haveFileLoaded)
             {
                 SaveFileWithoutDialog();
@@ -1064,18 +1075,15 @@ namespace small_n_stats_WPF.ViewModels
 
                         if (mExt.Equals(".xlsx"))
                         {
-                            loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
-                            loadThread.SetApartmentState(ApartmentState.STA);
-                            loadThread.IsBackground = true;
-                            loadThread.Start();
-
-                            OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
-
-                            CloseFileUIProgressWindow();
+                            App.Workbook.Save(saveFileDialog1.FileName, unvell.ReoGrid.IO.FileFormat.Excel2007);
                         }
                         else if (mExt.Equals(".csv"))
                         {
-                            OpenXMLHelper.ExportToCSV(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
+                            App.Workbook.Save(saveFileDialog1.FileName, unvell.ReoGrid.IO.FileFormat.CSV);
+                        }
+                        else
+                        {
+                            return;
                         }
 
                         UpdateTitle(saveFileDialog1.SafeFileName);
@@ -1083,14 +1091,17 @@ namespace small_n_stats_WPF.ViewModels
                         path = Path.GetDirectoryName(saveFileDialog1.FileName);
 
                         haveFileLoaded = true;
+
+                        AddToRecents(@saveFileDialog1.FileName);
+
+
+                        SendMessageToOutput("Saved: " + @saveFileDialog1.FileName);
                     }
                     catch (Exception e)
                     {
                         MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
-                        Console.WriteLine(e.ToString());
+                        SendMessageToOutput("Error: " + e.ToString());
                     }
-
-                    workingSheet = "Demand Analysis Calculations";
                 }
             }
         }
@@ -1100,8 +1111,6 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void SaveFileAs()
         {
-            MainWindow.dataGrid.CommitEdit();
-
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
             saveFileDialog1.FileName = title;
@@ -1117,21 +1126,18 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     if (mExt.Equals(".xlsx"))
                     {
-                        loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
-                        loadThread.SetApartmentState(ApartmentState.STA);
-                        loadThread.IsBackground = true;
-                        loadThread.Start();
-
-                        OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
-
-                        CloseFileUIProgressWindow();
+                        App.Workbook.Save(saveFileDialog1.FileName, unvell.ReoGrid.IO.FileFormat.Excel2007);
                     }
                     else if (mExt.Equals(".csv"))
                     {
-                        OpenXMLHelper.ExportToCSV(new ObservableCollection<RowViewModel>(RowViewModels), saveFileDialog1.FileName);
+                        App.Workbook.Save(saveFileDialog1.FileName, unvell.ReoGrid.IO.FileFormat.CSV);
+                    }
+                    else
+                    {
+                        return;
                     }
 
-                    workingSheet = "Demand Analysis Calculations";
+                    workingSheet = "Model Selector";
 
                     UpdateTitle(saveFileDialog1.SafeFileName);
 
@@ -1139,15 +1145,16 @@ namespace small_n_stats_WPF.ViewModels
 
                     haveFileLoaded = true;
 
+                    AddToRecents(@saveFileDialog1.FileName);
 
+                    SendMessageToOutput("Saved: " + @saveFileDialog1.FileName);
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
-                    Console.WriteLine(e.ToString());
+                    SendMessageToOutput("Error: " + e.ToString());
                     haveFileLoaded = false;
                 }
-
             }
         }
 
@@ -1156,8 +1163,6 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void SaveFileWithoutDialog()
         {
-            MainWindow.dataGrid.CommitEdit();
-
             if (haveFileLoaded)
             {
                 try
@@ -1168,27 +1173,25 @@ namespace small_n_stats_WPF.ViewModels
 
                     if (mExt.Equals(".xlsx"))
                     {
-                        loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
-                        loadThread.SetApartmentState(ApartmentState.STA);
-                        loadThread.IsBackground = true;
-                        loadThread.Start();
-
-                        OpenXMLHelper.ExportToExcel(new ObservableCollection<RowViewModel>(RowViewModels), Path.Combine(path, title));
-
-                        CloseFileUIProgressWindow();
+                        App.Workbook.Save(Path.Combine(path, title), unvell.ReoGrid.IO.FileFormat.Excel2007);
                     }
                     else if (mExt.Equals(".csv"))
                     {
-                        OpenXMLHelper.ExportToCSV(new ObservableCollection<RowViewModel>(RowViewModels), Path.Combine(path, title));
+                        App.Workbook.Save(Path.Combine(path, title), unvell.ReoGrid.IO.FileFormat.CSV);
+                    }
+                    else
+                    {
+                        return;
                     }
 
                     UpdateTitle(title);
 
+                    SendMessageToOutput("Saved: " + Path.Combine(path, title));
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
-                    Console.WriteLine(e.ToString());
+                    SendMessageToOutput("Error: " + e.ToString());
                 }
             }
         }
@@ -1198,69 +1201,76 @@ namespace small_n_stats_WPF.ViewModels
         /// </summary>
         private void OpenFile()
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.Filter = "Spreadsheet Files (XLSX, CSV)|*.xlsx;*.csv";
-            openFileDialog1.Title = "Select an Excel File";
-
-            if (openFileDialog1.ShowDialog() == true)
+            try
             {
-                loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
-                loadThread.SetApartmentState(ApartmentState.STA);
-                loadThread.IsBackground = true;
-                loadThread.Start();
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-                string mExt = Path.GetExtension(openFileDialog1.FileName);
-
-                path = Path.GetDirectoryName(openFileDialog1.FileName);
-
-                try
+                if (Directory.Exists(Properties.Settings.Default.LastDirectory))
                 {
-                    if (mExt.Equals(".xlsx"))
-                    {
-                        ObservableCollection<RowViewModel> temp = OpenXMLHelper.ReadFromExcelFile(openFileDialog1.FileName, out workingSheet);
-                        RowViewModels = new ObservableCollection<RowViewModel>(temp);
-
-                        UpdateTitle(openFileDialog1.SafeFileName);
-                        haveFileLoaded = true;
-                    }
-                    else if (mExt.Equals(".csv"))
-                    {
-                        ObservableCollection<RowViewModel> temp = OpenXMLHelper.ReadFromCSVFile(openFileDialog1.FileName);
-                        RowViewModels = new ObservableCollection<RowViewModel>(temp);
-
-                        UpdateTitle(openFileDialog1.SafeFileName);
-                        haveFileLoaded = true;
-                    }
-                    else
-                    {
-                        return;
-                    }
-
-                    if (workingSheet != string.Empty)
-                    {
-                        AddToRecents(@openFileDialog1.FileName);
-                    }
-                    else
-                    {
-                        title = "Discounting Model Selection - New File";
-                    }
-
+                    openFileDialog1.InitialDirectory = Properties.Settings.Default.LastDirectory;
                 }
-                catch (IOException e)
+                else
                 {
-                    CloseFileUIProgressWindow();
-                    Console.WriteLine(e.ToString());
-                    MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
-                }
-                catch (Exception e)
-                {
-                    CloseFileUIProgressWindow();
-                    Console.WriteLine(e.ToString());
-                    MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
+                    openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 }
 
-                CloseFileUIProgressWindow();
+                openFileDialog1.Filter = "Spreadsheet Files (XLSX, CSV)|*.xlsx;*.csv";
+                openFileDialog1.Title = "Select a spreadsheet";
+
+                if (openFileDialog1.ShowDialog() == true)
+                {
+                    string mExt = Path.GetExtension(openFileDialog1.FileName);
+                    path = Path.GetDirectoryName(openFileDialog1.FileName);
+
+                    try
+                    {
+                        if (mExt.Equals(".xlsx"))
+                        {
+                            App.Workbook.Load(openFileDialog1.FileName, unvell.ReoGrid.IO.FileFormat._Auto);
+
+                            workingSheet = openFileDialog1.SafeFileName;
+                            UpdateTitle(openFileDialog1.SafeFileName);
+                            haveFileLoaded = true;
+                        }
+                        else if (mExt.Equals(".csv"))
+                        {
+                            App.Workbook.Load(openFileDialog1.FileName, unvell.ReoGrid.IO.FileFormat._Auto);
+
+                            workingSheet = openFileDialog1.SafeFileName;
+                            UpdateTitle(openFileDialog1.SafeFileName);
+                            haveFileLoaded = true;
+                        }
+                        else
+                        {
+                            return;
+                        }
+
+                        if (workingSheet != string.Empty)
+                        {
+                            AddToRecents(@openFileDialog1.FileName);
+                        }
+                        else
+                        {
+                            title = "Discounting Model Selection - New File";
+                        }
+
+                        SendMessageToOutput("Opened: " + @openFileDialog1.FileName);
+                    }
+                    catch (IOException e)
+                    {
+                        MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
+                        SendMessageToOutput("Error: " + e.ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
+                        SendMessageToOutput("Error: " + e.ToString());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                SendMessageToOutput("Error: " + e.ToString());
             }
         }
 
@@ -1272,11 +1282,6 @@ namespace small_n_stats_WPF.ViewModels
         /// </param>
         private void OpenFileNoDialog(string filePath)
         {
-            loadThread = new Thread(new ThreadStart(ShowFileUIProgressWindow));
-            loadThread.SetApartmentState(ApartmentState.STA);
-            loadThread.IsBackground = true;
-            loadThread.Start();
-
             string mExt = Path.GetExtension(@filePath);
 
             path = Path.GetDirectoryName(@filePath);
@@ -1285,53 +1290,37 @@ namespace small_n_stats_WPF.ViewModels
             {
                 if (mExt.Equals(".xlsx"))
                 {
-                    ObservableCollection<RowViewModel> temp = OpenXMLHelper.ReadFromExcelFile(filePath, out workingSheet);
+                    App.Workbook.Load(@filePath, unvell.ReoGrid.IO.FileFormat._Auto);
 
-                    if (temp == null)
-                    {
-                        CloseFileUIProgressWindow();
-                        return;
-                    }
-
-                    RowViewModels = new ObservableCollection<RowViewModel>(temp);
-
-                    if (workingSheet != string.Empty)
-                    {
-                        UpdateTitle(Path.GetFileName(filePath));
-                        haveFileLoaded = true;
-                    }
-                    else
-                    {
-                        title = "Discounting Model Selection - New File";
-                        haveFileLoaded = false;
-                    }
-
+                    UpdateTitle(Path.GetFileName(@filePath));
+                    haveFileLoaded = true;
                 }
                 else if (mExt.Equals(".csv"))
                 {
-                    ObservableCollection<RowViewModel> temp = OpenXMLHelper.ReadFromCSVFile(@filePath);
-                    RowViewModels = new ObservableCollection<RowViewModel>(temp);
+                    App.Workbook.Load(@filePath, unvell.ReoGrid.IO.FileFormat._Auto);
 
                     UpdateTitle(Path.GetFileName(filePath));
                     haveFileLoaded = true;
                 }
+                else
+                {
+                    return;
+                }
 
                 AddToRecents(@filePath);
+
+                SendMessageToOutput("Opened: " + @filePath);
             }
             catch (IOException e)
             {
-                CloseFileUIProgressWindow();
-                Console.WriteLine(e.ToString());
-                MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
+                SendMessageToOutput("Error: " + e.ToString());
+                MessageBox.Show("We weren't able to open the file.  Is the target file either open, missing or in use?");
             }
             catch (Exception e)
             {
-                CloseFileUIProgressWindow();
-                Console.WriteLine(e.ToString());
-                MessageBox.Show("We weren't able to save.  Is the target file either open, missing or in use?");
+                SendMessageToOutput("Error: " + e.ToString());
+                MessageBox.Show("We weren't able to open the file.  Is the target file either open, missing or in use?");
             }
-
-            CloseFileUIProgressWindow();
         }
 
         /// <summary>
@@ -1346,27 +1335,13 @@ namespace small_n_stats_WPF.ViewModels
 
             if (path != null)
             {
+                var item = RecentStuff.Where(r => r.Header.ToString() == path).FirstOrDefault();
+
+                RecentStuff.Remove(item);
+                RecentStuff.Insert(0, item);
+
                 OpenFileNoDialog(path);
             }
-        }
-
-        /// <summary>
-        /// Shows progress bar on another thread
-        /// </summary>
-        void ShowFileUIProgressWindow()
-        {
-            window = new ProgressDialog("Processing", "File operations ongoing...");
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            window.Show();
-            Dispatcher.Run();
-        }
-
-        /// <summary>
-        /// Closes progress bar on another thread
-        /// </summary>
-        void CloseFileUIProgressWindow()
-        {
-            window.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(window.Close));
         }
 
         /// <summary>
@@ -1389,17 +1364,17 @@ namespace small_n_stats_WPF.ViewModels
 
         public void SendMessageToOutput(string message)
         {
-            MainWindow.OutputEvents(message);
+            App.ApplicationWindow.OutputEvents(message);
         }
 
         private void SaveLogs()
         {
-            MainWindow.SaveLogs();
+            App.ApplicationWindow.SaveLogs();
         }
 
         private void ClearLogs()
         {
-            MainWindow.ClearLogs();
+            App.ApplicationWindow.ClearLogs();
         }
 
         #endregion Logging

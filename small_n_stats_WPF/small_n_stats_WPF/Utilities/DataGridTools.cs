@@ -25,10 +25,8 @@
 // </summary>
 //----------------------------------------------------------------------------------------------
 
-using small_n_stats_WPF.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace small_n_stats_WPF.Utilities
@@ -72,23 +70,6 @@ namespace small_n_stats_WPF.Utilities
         }
 
         /// <summary>
-        /// Linq companion for referencing object's location in collection.
-        /// </summary>
-        /// <param name="model">
-        /// Individual row model reference
-        /// </param>
-        /// <param name="coll">
-        /// Collection overall
-        /// </param>
-        /// <returns>
-        /// int-based index
-        /// </returns>
-        public static int GetIndexViewModel(RowViewModel model, ObservableCollection<RowViewModel> coll)
-        {
-            return coll.IndexOf(model);
-        }
-
-        /// <summary>
         /// Walk through ranged values as needed, finding necessary pairs
         /// </summary>
         /// <param name="startColDelay">
@@ -112,7 +93,7 @@ namespace small_n_stats_WPF.Utilities
         /// <returns>
         /// List of all range/value pairs that correspond
         /// </returns>
-        public static List<double>[] GetRangedValuesHorizontal(int startColDelay, int endColDelay, int rowDelay, int startColValue, int endColValue, int rowValue, object source)
+        public static List<double>[] GetRangedValuesHorizontal(int startColDelay, int endColDelay, int rowDelay, int startColValue, int endColValue, int rowValue)
         {
             List<double>[] array = new List<double>[2];
             array[0] = new List<double>();
@@ -126,15 +107,12 @@ namespace small_n_stats_WPF.Utilities
             int i = startColDelay,
                 j = startColValue;
 
-            var itemSource = source as ObservableCollection<RowViewModel>;
-
-            if (itemSource == null)
-                return null;
+            var itemSource = App.Workbook.CurrentWorksheet;
 
             for (; i <= endColDelay && j <= endColValue;)
             {
-                mCellDelay = itemSource[rowDelay].values[i];
-                mCellValue = itemSource[rowValue].values[j];
+                mCellDelay = itemSource.CreateAndGetCell(rowDelay, i).Data.ToString();
+                mCellValue = itemSource.CreateAndGetCell(rowValue, j).Data.ToString();
 
                 if (Double.TryParse(mCellDelay, out testDelay) && Double.TryParse(mCellValue, out testValue))
                 {
@@ -148,7 +126,7 @@ namespace small_n_stats_WPF.Utilities
 
             return array;
         }
-        
+
         /// <summary>
         /// Walk through ranged values as needed, finding necessary pairs
         /// </summary>
@@ -173,7 +151,7 @@ namespace small_n_stats_WPF.Utilities
         /// <returns>
         /// List of all range/value pairs that correspond
         /// </returns>
-        public static List<double>[] GetRangedValuesVertical(int startRowDelay, int endRowDelay, int colDelay, int startRowValue, int endRowValue, int colValue, object source)
+        public static List<double>[] GetRangedValuesVertical(int startRowDelay, int endRowDelay, int colDelay, int startRowValue, int endRowValue, int colValue)
         {
             List<double>[] array = new List<double>[2];
             array[0] = new List<double>();
@@ -187,15 +165,12 @@ namespace small_n_stats_WPF.Utilities
             int i = startRowDelay,
                 j = startRowValue;
 
-            var itemSource = source as ObservableCollection<RowViewModel>;
-
-            if (itemSource == null)
-                return null;
+            var itemSource = App.Workbook.CurrentWorksheet;
 
             for (; i <= endRowDelay && j <= endRowValue;)
             {
-                mCellDelay = itemSource[i].values[colDelay];
-                mCellValue = itemSource[j].values[colValue];
+                mCellDelay = itemSource.CreateAndGetCell(i, colDelay).Data.ToString();
+                mCellValue = itemSource.CreateAndGetCell(j, colValue).Data.ToString();
 
                 if (Double.TryParse(mCellDelay, out testDelay) && Double.TryParse(mCellValue, out testValue))
                 {
@@ -213,14 +188,11 @@ namespace small_n_stats_WPF.Utilities
         /// <summary>
         /// Function for parsing values of individual cells by referencing view model
         /// </summary>
-        public static List<double> GetRangedValuesVM(int startCol, int endCol, int startRow, object source)
+        public static List<double> GetRangedValuesVM(int startCol, int endCol, int startRow)
         {
             if (startCol == -1 || startRow == -1) return null;
 
-            var itemSource = source as ObservableCollection<RowViewModel>;
-
-            if (itemSource == null)
-                return null;
+            var itemSource = App.Workbook.CurrentWorksheet;
 
             List<double> mRange = new List<double>();
 
@@ -228,7 +200,7 @@ namespace small_n_stats_WPF.Utilities
 
             for (int i = startCol; i <= endCol; i++)
             {
-                string mRowItem = itemSource[startRow].values[i];
+                string mRowItem = itemSource.CreateAndGetCell(startRow, i).Data.ToString();
 
                 if (!Double.TryParse(mRowItem, out test))
                 {
@@ -246,7 +218,7 @@ namespace small_n_stats_WPF.Utilities
         /// <summary>
         /// Function for parsing values of individual cells by referencing view model
         /// </summary>
-        public static List<double> GetRangedValuesVerticalVM(int startRow, int endRow, int col, object source)
+        public static List<double> GetRangedValuesVerticalVM(int startRow, int endRow, int col)
         {
             List<double> mRange = new List<double>();
 
@@ -255,16 +227,13 @@ namespace small_n_stats_WPF.Utilities
                 return null;
             }
 
-            var itemSource = source as ObservableCollection<RowViewModel>;
-
-            if (itemSource == null)
-                return null;
+            var itemSource = App.Workbook.CurrentWorksheet;
 
             double test;
 
             for (int i = startRow; i <= endRow; i++)
             {
-                string mRowItemCell = itemSource[i].values[col];
+                string mRowItemCell = itemSource.CreateAndGetCell(i, col).Data.ToString();
 
                 if (!Double.TryParse(mRowItemCell, out test))
                 {
@@ -285,14 +254,11 @@ namespace small_n_stats_WPF.Utilities
         /// <param name="range">
         /// List of double values returned for use as delay or value points in Computation
         /// </param>
-        public static string[,] ParseBulkRangeStringsVM(int lowRowValue, int highRowValue, int lowColValue, int highColValue, object source)
+        public static string[,] ParseBulkRangeStringsVM(int lowRowValue, int highRowValue, int lowColValue, int highColValue)
         {
             string[,] mDouble = null;
 
-            var itemSource = source as ObservableCollection<RowViewModel>;
-
-            if (itemSource == null)
-                return null;
+            var itemSource = App.Workbook.CurrentWorksheet;
 
             double tempHolder;
             List<double> tempHolderList = new List<double>();
@@ -308,7 +274,7 @@ namespace small_n_stats_WPF.Utilities
                 {
                     for (int j = lowColValue; j <= highColValue; j++)
                     {
-                        string mRowItem = itemSource[i].values[j];
+                        string mRowItem = itemSource.CreateAndGetCell(i, j).Data.ToString();
                         mDouble[j - lowColValue, i - lowRowValue] = mRowItem;
 
                         if (double.TryParse(mRowItem, out tempHolder))
@@ -332,11 +298,11 @@ namespace small_n_stats_WPF.Utilities
         /// <param name="range">
         /// List of double values returned for use as delay or value points in Computation
         /// </param>
-        public static string[,] ParseBulkRangeStringsVerticalVM(int lowRowValue, int highRowValue, int lowColValue, int highColValue, object source)
+        public static string[,] ParseBulkRangeStringsVerticalVM(int lowRowValue, int highRowValue, int lowColValue, int highColValue)
         {
             string[,] mDouble = null;
 
-            var itemSource = source as ObservableCollection<RowViewModel>;
+            var itemSource = App.Workbook.CurrentWorksheet;
 
             if (itemSource == null)
                 return null;
@@ -351,12 +317,11 @@ namespace small_n_stats_WPF.Utilities
 
             try
             {
-
                 for (int i = lowRowValue; i <= highRowValue; i++)
                 {
                     for (int j = lowColValue; j <= highColValue; j++)
                     {
-                        string mRowItem = itemSource[i].values[j];
+                        string mRowItem = itemSource.CreateAndGetCell(i, j).Data.ToString();
                         mDouble[i - lowRowValue, j - lowColValue] = mRowItem;
 
                         if (double.TryParse(mRowItem, out tempHolder))

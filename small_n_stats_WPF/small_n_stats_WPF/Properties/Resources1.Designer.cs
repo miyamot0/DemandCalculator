@@ -61,296 +61,82 @@ namespace small_n_stats_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string ExponentialDemandScoring {
+        internal static System.Drawing.Bitmap action_add_16xLG {
             get {
-                return ResourceManager.GetString("ExponentialDemandScoring", resourceCulture);
+                object obj = ResourceManager.GetObject("action_add_16xLG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string ExponentialDemandScoringFitted {
+        internal static System.Drawing.Bitmap book_Open_16xLG {
             get {
-                return ResourceManager.GetString("ExponentialDemandScoringFitted", resourceCulture);
+                object obj = ResourceManager.GetObject("book_Open_16xLG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string ExponentialDemandScoringSet {
+        internal static System.Drawing.Bitmap Component_16xLG {
             get {
-                return ResourceManager.GetString("ExponentialDemandScoringSet", resourceCulture);
+                object obj = ResourceManager.GetObject("Component_16xLG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string ExponentiatedDemandScoring {
+        internal static System.Drawing.Bitmap CopyHS {
             get {
-                return ResourceManager.GetString("ExponentiatedDemandScoring", resourceCulture);
+                object obj = ResourceManager.GetObject("CopyHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string ExponentiatedDemandScoringFitted {
+        internal static System.Drawing.Bitmap CutHS {
             get {
-                return ResourceManager.GetString("ExponentiatedDemandScoringFitted", resourceCulture);
+                object obj = ResourceManager.GetObject("CutHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string ExponentiatedDemandScoringSet {
+        internal static System.Drawing.Bitmap Edit_RedoHS {
             get {
-                return ResourceManager.GetString("ExponentiatedDemandScoringSet", resourceCulture);
+                object obj = ResourceManager.GetObject("Edit_RedoHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string GraphingAggregateExponentialBasic {
+        internal static System.Drawing.Bitmap Edit_UndoHS {
             get {
-                return ResourceManager.GetString("GraphingAggregateExponentialBasic", resourceCulture);
+                object obj = ResourceManager.GetObject("Edit_UndoHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string GraphingAggregateExponentialFaceted {
+        internal static System.Drawing.Bitmap Files_7954 {
             get {
-                return ResourceManager.GetString("GraphingAggregateExponentialFaceted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingAggregateExponentiatedBasic {
-            get {
-                return ResourceManager.GetString("GraphingAggregateExponentiatedBasic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingAggregateExponentiatedFaceted {
-            get {
-                return ResourceManager.GetString("GraphingAggregateExponentiatedFaceted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingExponential {
-            get {
-                return ResourceManager.GetString("GraphingExponential", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingExponentialFaceted {
-            get {
-                return ResourceManager.GetString("GraphingExponentialFaceted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingExponentiated {
-            get {
-                return ResourceManager.GetString("GraphingExponentiated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GraphingExponentiatedFaceted {
-            get {
-                return ResourceManager.GetString("GraphingExponentiatedFaceted", resourceCulture);
+                object obj = ResourceManager.GetObject("Files_7954", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -390,27 +176,6 @@ namespace small_n_stats_WPF.Properties {
         ///freedom to share and change it.  By contrast, the GNU General Public
         ///License is intended to guara [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string License_base64enc {
-            get {
-                return ResourceManager.GetString("License_base64enc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 		    GNU GENERAL PUBLIC LICENSE
-        ///		       Version 2, June 1991
-        ///
-        /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
-        ///                       59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-        /// Everyone is permitted to copy and distribute verbatim copies
-        /// of this license document, but changing it is not allowed.
-        ///
-        ///			    Preamble
-        ///
-        ///  The licenses for most software are designed to take away your
-        ///freedom to share and change it.  By contrast, the GNU General Public
-        ///License is intended to guara [rest of string was truncated]&quot;;.
-        /// </summary>
         internal static string License_Beezdemand {
             get {
                 return ResourceManager.GetString("License_Beezdemand", resourceCulture);
@@ -432,9 +197,9 @@ namespace small_n_stats_WPF.Properties {
         ///freedom to share and change it.  By contrast, the GNU General Public
         ///License is intended to guara [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string License_EPPlus {
+        internal static string License_Devtools {
             get {
-                return ResourceManager.GetString("License_EPPlus", resourceCulture);
+                return ResourceManager.GetString("License_Devtools", resourceCulture);
             }
         }
         
@@ -443,7 +208,7 @@ namespace small_n_stats_WPF.Properties {
         ///		       Version 2, June 1991
         ///
         /// Copyright (C) 1989, 1991 Free Software Foundation, Inc.
-        ///                       51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+        ///                       59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
         /// Everyone is permitted to copy and distribute verbatim copies
         /// of this license document, but changing it is not allowed.
         ///
@@ -451,11 +216,11 @@ namespace small_n_stats_WPF.Properties {
         ///
         ///  The licenses for most software are designed to take away your
         ///freedom to share and change it.  By contrast, the GNU General Public
-        ///License is intended to guar [rest of string was truncated]&quot;;.
+        ///License is intended to guara [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string License_ggplot2 {
+        internal static string License_Digest {
             get {
-                return ResourceManager.GetString("License_ggplot2", resourceCulture);
+                return ResourceManager.GetString("License_Digest", resourceCulture);
             }
         }
         
@@ -561,39 +326,156 @@ namespace small_n_stats_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright (c) 2010, SharpVectorGraphics
-        ///All rights reserved.
+        ///   Looks up a localized string similar to MIT License
         ///
-        ///Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+        ///Copyright (c) 2013-2016 Jing &lt;lujing@unvell.com&gt;
+        ///Copyright (c) 2013-2016 unvel.com, All rights reserved.
         ///
-        ///* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-        ///
-        ///* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other material [rest of string was truncated]&quot;;.
+        ///Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string License_SharpVectorGraphics {
+        internal static string License_Reogrid {
             get {
-                return ResourceManager.GetString("License_SharpVectorGraphics", resourceCulture);
+                return ResourceManager.GetString("License_Reogrid", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to # 
-        ///#    Copyright 2016 Shawn Gilroy
-        ///#
-        ///#    This file is part of Demand Analysis.
-        ///#
-        ///#    Demand Analysis is free software: you can redistribute it and/or modify
-        ///#    it under the terms of the GNU General Public License as published by
-        ///#    the Free Software Foundation, version 2.
-        ///#
-        ///#    Demand Analysis is distributed in the hope that it will be useful,
-        ///#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-        ///#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        ///#    GNU Ge [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string SteinSystematicCheck {
+        internal static System.Drawing.Bitmap NewDocumentHS {
             get {
-                return ResourceManager.GetString("SteinSystematicCheck", resourceCulture);
+                object obj = ResourceManager.GetObject("NewDocumentHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Offline_16xLG {
+            get {
+                object obj = ResourceManager.GetObject("Offline_16xLG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OpenFile {
+            get {
+                object obj = ResourceManager.GetObject("OpenFile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap openHS {
+            get {
+                object obj = ResourceManager.GetObject("openHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PasteHS {
+            get {
+                object obj = ResourceManager.GetObject("PasteHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Procedure_8937 {
+            get {
+                object obj = ResourceManager.GetObject("Procedure_8937", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ProcedureMissing_8939 {
+            get {
+                object obj = ResourceManager.GetObject("ProcedureMissing_8939", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PropertiesHS {
+            get {
+                object obj = ResourceManager.GetObject("PropertiesHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RepeatHS {
+            get {
+                object obj = ResourceManager.GetObject("RepeatHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap saveHS {
+            get {
+                object obj = ResourceManager.GetObject("saveHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ScriptFile_452 {
+            get {
+                object obj = ResourceManager.GetObject("ScriptFile_452", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SNS {
+            get {
+                object obj = ResourceManager.GetObject("SNS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Textfile_818_16x {
+            get {
+                object obj = ResourceManager.GetObject("Textfile_818_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WorkItemQueryNodeOffline_11949 {
+            get {
+                object obj = ResourceManager.GetObject("WorkItemQueryNodeOffline_11949", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
