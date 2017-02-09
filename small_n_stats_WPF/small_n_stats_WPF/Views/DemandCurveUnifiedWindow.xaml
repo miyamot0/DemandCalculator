@@ -11,14 +11,14 @@
         WindowStartupLocation="CenterOwner"
         Title="Demand Curve Fitting" 
         ResizeMode="NoResize"
-        Height="560"
-        Width="410">
+        Height="500"
+        Width="415">
 
     <Window.Style>
         <Style TargetType="Window">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding AdvancedMenu}"  Value="True">
-                    <Setter Property="MinWidth" Value="850"/>
+                    <Setter Property="MinWidth" Value="900"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -134,31 +134,7 @@
                 MouseUp="yRange_MouseUp">
             </TextBox>
 
-            <Button x:Name="gRangeButton"
-                    Grid.Row="3" 
-                    Grid.Column="0"
-                    Margin="10"
-                    Content="Groupings"
-                    Command="{Binding GetGRangeCommand}">
-            </Button>
-
-            <TextBox
-                x:Name="gRange"
-                Grid.Row="3" 
-                Grid.Column="1"
-                Grid.ColumnSpan="3"
-                IsReadOnly="True"
-                Focusable="False"
-                AcceptsTab="False"
-                CharacterCasing="Upper" 
-                Margin="10"
-                VerticalContentAlignment="Center"
-                Text="{Binding GRangeValues}"
-                Background="{Binding Path=GBrush}"
-                MouseUp="gRange_MouseUp">
-            </TextBox>            
-            
-            <Grid Grid.Row="4"
+            <Grid Grid.Row="3"
                   Grid.Column="0"
                   Grid.ColumnSpan="4"
                   HorizontalAlignment="Stretch"
@@ -188,20 +164,8 @@
                     IsChecked="{Binding Path=ColumnModeRadio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 </RadioButton>
             </Grid>            
-            
-            <Grid Grid.Row="5"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="4"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Center">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-            </Grid>
-
-            <Grid Grid.Row="5"
+            <Grid Grid.Row="4"
                   Grid.Column="0"
                   Grid.ColumnSpan="4"
                   HorizontalAlignment="Stretch"
@@ -249,7 +213,7 @@
             <FlowDocumentScrollViewer
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
-                Grid.Row="6"
+                Grid.Row="5"
                 Grid.RowSpan="3"
                 IsSelectionEnabled="False"
                 VerticalScrollBarVisibility="Hidden">
@@ -311,10 +275,9 @@
             </Grid.Style>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-                <ColumnDefinition Width="50"></ColumnDefinition>
                 <ColumnDefinition Width="150"></ColumnDefinition>
-                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -322,7 +285,7 @@
                 <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition Height="80"></RowDefinition>
-                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="55"></RowDefinition>
@@ -445,10 +408,10 @@
             </StackPanel>
 
             <StackPanel
-                Grid.Row="5"
+                Grid.Row="3"
                 Grid.RowSpan="3"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
+                Grid.Column="2"
+                Grid.ColumnSpan="1"
                 HorizontalAlignment="Left"
                 Margin="15,5,5,5">
 
@@ -493,9 +456,9 @@
             </StackPanel>
 
             <StackPanel
-                Grid.Row="8"
-                Grid.RowSpan="2"
-                Grid.Column="0"
+                Grid.Row="3"
+                Grid.RowSpan="3"
+                Grid.Column="1"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Left"
                 Margin="15,5,5,5">
@@ -536,12 +499,13 @@
             </StackPanel>
 
             <FlowDocumentScrollViewer
-                Grid.Column="2"
-                Grid.ColumnSpan="2"
-                Grid.Row="3"
-                Grid.RowSpan="7"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Grid.Row="5"
+                Grid.RowSpan="4"
                 IsSelectionEnabled="False"
-                VerticalScrollBarVisibility="Hidden">
+                VerticalScrollBarVisibility="Hidden"
+                VerticalAlignment="Top">
                 <FlowDocument>
                     <FlowDocument.Resources>
                         <Style TargetType="{x:Type Paragraph}">
@@ -549,7 +513,7 @@
                             <Setter Property="Padding" Value="0"/>
                         </Style>
                     </FlowDocument.Resources>
-                    <Paragraph FontSize="12" FontFamily="Segoe UI">
+                    <Paragraph FontSize="12" FontFamily="Segoe UI" Padding="0,0,0,0">
                         <Bold>Notes:</Bold>
                     </Paragraph>
                     <Paragraph FontSize="12" FontFamily="Segoe UI" Padding="0,5,0,0">
