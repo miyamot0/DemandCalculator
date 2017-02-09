@@ -56,13 +56,11 @@ using small_n_stats_WPF.Views;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using System.Windows.Forms;
 using System.Windows.Media;
 
 namespace small_n_stats_WPF.ViewModels
@@ -384,6 +382,15 @@ namespace small_n_stats_WPF.ViewModels
             }
         }
 
+        private string figureDestination = string.Empty;
+        private string FigureDestination
+        {
+            get
+            {
+                return string.IsNullOrEmpty(figureDestination) ? Conventions.RNull : figureDestination.Replace("\\", "/");
+            }
+        }
+
         private bool outputFigures = false;
         public bool OutputFigures
         {
@@ -392,6 +399,26 @@ namespace small_n_stats_WPF.ViewModels
             {
                 outputFigures = value;
                 OnPropertyChanged("OutputFigures");
+
+                if (value)
+                {
+                    FolderBrowserDialog mDialog = new FolderBrowserDialog();
+
+                    if (mDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        figureDestination = mDialog.SelectedPath + "\\";
+                    }
+                    else
+                    {
+                        figureDestination = string.Empty;
+                        outputFigures = false;
+                        OnPropertyChanged("OutputFigures");
+                    }
+                }
+                else
+                {
+                    figureDestination = string.Empty;
+                }
             }
         }
 
@@ -692,7 +719,7 @@ namespace small_n_stats_WPF.ViewModels
                         }
                         else
                         {
-                            MessageBox.Show("Please ensure that only a single row is selected");
+                            System.Windows.MessageBox.Show("Please ensure that only a single row is selected");
                         }
                     }
                     else if (ColumnModeRadio)
@@ -714,13 +741,13 @@ namespace small_n_stats_WPF.ViewModels
                         }
                         else
                         {
-                            MessageBox.Show("Please ensure that only a single column is selected");
+                            System.Windows.MessageBox.Show("Please ensure that only a single column is selected");
                         }
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Parse error!");
+                    System.Windows.MessageBox.Show("Parse error!");
                 }
             }
         }
@@ -810,7 +837,7 @@ namespace small_n_stats_WPF.ViewModels
                 }
                 else
                 {
-                    MessageBox.Show("Parse error!");
+                    System.Windows.MessageBox.Show("Parse error!");
                 }
             }
         }
@@ -865,7 +892,7 @@ namespace small_n_stats_WPF.ViewModels
                 mWindow.OutputEvents("");
                 mWindow.OutputEvents("");
 
-                MessageBox.Show("Modules for R were not found.  Please connect to the internet and restart the program.");
+                System.Windows.MessageBox.Show("Modules for R were not found.  Please connect to the internet and restart the program.");
             }
             else
             {
@@ -942,7 +969,7 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     if (range.Cols < 1)
                     {
-                        MessageBox.Show("Please add at least 3 series to the batch");
+                        System.Windows.MessageBox.Show("Please add at least 3 series to the batch");
 
                         lowColX = -1;
                         lowRowX = -1;
@@ -961,7 +988,7 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     if (range.Rows < 1)
                     {
-                        MessageBox.Show("Please add at least 3 series to the batch");
+                        System.Windows.MessageBox.Show("Please add at least 3 series to the batch");
 
                         lowColX = -1;
                         lowRowX = -1;
@@ -991,7 +1018,7 @@ namespace small_n_stats_WPF.ViewModels
 
                 return true;
 
-            }, Cursors.Hand);
+            }, System.Windows.Input.Cursors.Hand);
             
             DefaultFieldsToGray();
 
@@ -1017,7 +1044,7 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     if (range.Cols < 1)
                     {
-                        MessageBox.Show("Please add at least 3 series to the batch");
+                        System.Windows.MessageBox.Show("Please add at least 3 series to the batch");
 
                         lowColY = -1;
                         lowRowY = -1;
@@ -1036,7 +1063,7 @@ namespace small_n_stats_WPF.ViewModels
                 {
                     if (range.Rows < 1)
                     {
-                        MessageBox.Show("Please add at least 3 series to the batch");
+                        System.Windows.MessageBox.Show("Please add at least 3 series to the batch");
 
                         lowColY = -1;
                         lowRowY = -1;
@@ -1066,7 +1093,7 @@ namespace small_n_stats_WPF.ViewModels
 
                 return true;
 
-            }, Cursors.Hand);
+            }, System.Windows.Input.Cursors.Hand);
 
             DefaultFieldsToGray();
 
@@ -1319,7 +1346,7 @@ namespace small_n_stats_WPF.ViewModels
 
             if (AdvancedMenu)
             {
-                evaluateString = string.Format("{0} <- FitCurves(dat = {1}, equation = {2}, k = {3}, remq0e = {4}, replfree = {5}, rem0 = {6}, nrepl = {7}, replnum = {8}, plotcurves = {9}, vartext = {10})",
+                evaluateString = string.Format("{0} <- FitCurves(dat = {1}, equation = {2}, k = {3}, remq0e = {4}, replfree = {5}, rem0 = {6}, nrepl = {7}, replnum = {8}, plotcurves = {9}, vartext = {10}, plotcurves = {11}, plotdestination = '{12}')",
                     Conventions.FittedDataFrame,
                     Conventions.NamedDataFrame,
                     ModelCodes,
@@ -1330,18 +1357,24 @@ namespace small_n_stats_WPF.ViewModels
                     Conventions.RNull,
                     ReplaceNumberTag,
                     FigureTag,
-                    Conventions.RNull);
+                    Conventions.RNull,
+                    FigureTag,
+                    FigureDestination);
             }
             else
             {
-                evaluateString = string.Format("{0} <- FitCurves({1}, {2})",
+                evaluateString = string.Format("{0} <- FitCurves({1}, {2}, plotcurves = {3}, plotdestination = '{4}')",
                     Conventions.FittedDataFrame,
                     Conventions.NamedDataFrame,
-                    ModelCodes);
+                    ModelCodes,
+                    FigureTag,
+                    FigureDestination);
             }
 
             try
             {
+                mWindow.OutputEvents(">>>" + evaluateString);
+
                 engine.Evaluate(evaluateString);
 
                 DataFrame fittedDataFrame = engine.Evaluate(Conventions.FittedDataFrame).AsDataFrame();
@@ -1352,9 +1385,11 @@ namespace small_n_stats_WPF.ViewModels
                 var mResultsWindow = new ResultsGridWindow();
                 var mResultsVM = new ViewModelResultsWindow
                 {
-                    ResultsBook = mResultsWindow.reoGridControl
+                    ResultsBook = mResultsWindow.reoGridControl,
                 };
                 mResultsWindow.DataContext = mResultsVM;
+                mResultsWindow.Width = 800;
+                mResultsWindow.Height = 600;
 
                 mResultsVM.ResultsBook.CurrentWorksheet.AppendRows(nRows + 10);
                 mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(0, 0).Data = "Results of Fitting";
@@ -1374,18 +1409,40 @@ namespace small_n_stats_WPF.ViewModels
                     }
                 }
 
-                // Output stein metrics (optionally?)
+                // Output stein metrics, skip redundant participant field
 
-                for (int i=0; i < sColNames.Length; i++)
+                for (int i=1; i < sColNames.Length; i++)
                 {
                     mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(1, i + rColNames.Length).Data = sColNames[i].Trim();
                 }
 
                 for (int i = 0; i < sRowNames.Length; i++)
                 {
-                    for (int j = 0; j < sColNames.Length; j++)
+                    for (int j = 1; j < sColNames.Length; j++)
                     {
-                        mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(2 + i, j + rColNames.Length + 1).Data = steinMetrics[i, j].ToString().Trim();
+                        mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(2 + i, j + rColNames.Length - 1).Data = steinMetrics[i, j].ToString().Trim();
+                    }
+                }
+
+                // Output descriptives
+
+                for (int i = 0; i < dColNames.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(2 + sRowNames.Length + 1, 0).Data = "Unit Price Point";
+                    }
+
+                    mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(2 + sRowNames.Length + 1, i + 1).Data = dColNames[i].Trim();
+                }
+
+                for (int i = 0; i < dRowNames.Length; i++)
+                {
+                    mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(2 + sRowNames.Length + 2 + i, 0).Data = dRowNames[i].Trim();
+
+                    for (int j = 0; j < dColNames.Length; j++)
+                    {
+                        mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(2 + sRowNames.Length + 2 + i, j + 1).Data = descriptiveMetrics[i, j].ToString().Trim();
                     }
                 }
 
