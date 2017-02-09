@@ -1411,16 +1411,16 @@ namespace small_n_stats_WPF.ViewModels
 
                 // Output stein metrics, skip redundant participant field
 
-                for (int i=1; i < sColNames.Length; i++)
+                for (int i=0; i < sColNames.Length; i++)
                 {
                     mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(1, i + rColNames.Length).Data = sColNames[i].Trim();
                 }
 
                 for (int i = 0; i < sRowNames.Length; i++)
                 {
-                    for (int j = 1; j < sColNames.Length; j++)
+                    for (int j = 0; j < sColNames.Length; j++)
                     {
-                        mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(2 + i, j + rColNames.Length - 1).Data = steinMetrics[i, j].ToString().Trim();
+                        mResultsVM.ResultsBook.CurrentWorksheet.CreateAndGetCell(2 + i, j + rColNames.Length).Data = steinMetrics[i, j].ToString().Trim();
                     }
                 }
 
