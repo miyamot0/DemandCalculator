@@ -387,7 +387,7 @@ namespace small_n_stats_WPF.ViewModels
         {
             get
             {
-                return string.IsNullOrEmpty(figureDestination) ? Conventions.RNull : figureDestination.Replace("\\", "/");
+                return string.IsNullOrEmpty(figureDestination) ? Conventions.RNull : "'" + figureDestination.Replace("\\", "/") + "'";
             }
         }
 
@@ -1346,7 +1346,7 @@ namespace small_n_stats_WPF.ViewModels
 
             if (AdvancedMenu)
             {
-                evaluateString = string.Format("{0} <- FitCurves(dat = {1}, equation = {2}, k = {3}, remq0e = {4}, replfree = {5}, rem0 = {6}, nrepl = {7}, replnum = {8}, plotcurves = {9}, vartext = {10}, plotcurves = {11}, plotdestination = '{12}')",
+                evaluateString = string.Format("{0} <- FitCurves(dat = {1}, equation = {2}, k = {3}, remq0e = {4}, replfree = {5}, rem0 = {6}, nrepl = {7}, replnum = {8}, plotcurves = {9}, vartext = {10}, plotdestination = {11})",
                     Conventions.FittedDataFrame,
                     Conventions.NamedDataFrame,
                     ModelCodes,
@@ -1358,12 +1358,11 @@ namespace small_n_stats_WPF.ViewModels
                     ReplaceNumberTag,
                     FigureTag,
                     Conventions.RNull,
-                    FigureTag,
                     FigureDestination);
             }
             else
             {
-                evaluateString = string.Format("{0} <- FitCurves({1}, {2}, plotcurves = {3}, plotdestination = '{4}')",
+                evaluateString = string.Format("{0} <- FitCurves({1}, {2}, plotcurves = {3}, plotdestination = {4})",
                     Conventions.FittedDataFrame,
                     Conventions.NamedDataFrame,
                     ModelCodes,
