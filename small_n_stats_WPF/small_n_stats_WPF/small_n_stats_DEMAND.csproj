@@ -246,7 +246,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\License_Beezdemand.txt" />
-    <None Include="Resources\License_EPPlus.txt" />
     <None Include="AUTHORS" />
     <None Include="Resources\License_Devtools.txt" />
     <None Include="Resources\License_Digest.txt" />
@@ -272,6 +271,7 @@
     <Resource Include="Resources\CopyHS.png" />
     <Resource Include="Resources\CutHS.png" />
     <Resource Include="Resources\Edit_RedoHS.png" />
+    <None Include="Resources\License_Reogrid.txt" />
     <Content Include="Source\DemandCalculator-master.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

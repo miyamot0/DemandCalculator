@@ -47,22 +47,32 @@
     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
     OF SUCH DAMAGE.
 
-    ============================================================================
-    EPPlus is distributed under this license:
+ Demand Calculator utilizes Reogrid to leverage to load, save, and display data
 
-    Copyright (c) 2016 Jan Källman
+    Reogrid is distributed under this license:
 
-    EPPlus is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, version 2.
-
-    EPPlus is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with EPPlus.  If not, see <http://epplus.codeplex.com/license>.
+    MIT License
+    
+    Copyright(c) 2013-2016 Jing<lujing at unvell.com>
+    Copyright(c) 2013-2016 unvell.com, All rights reserved.
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
 
 */
 
@@ -272,7 +282,7 @@ namespace small_n_stats_WPF.ViewModels
             NlmrtLicenseWindowCommand = new RelayCommand(param => NlmrtLicenseInformationWindow(), param => true);
             NlstoolsLicenseWindowCommand = new RelayCommand(param => NlsToolsLicenseInformationWindow(), param => true);
             RLicenseWindowCommand = new RelayCommand(param => RLicenseInformationWindow(), param => true);
-            ReogridLicenseWindowCommand = new RelayCommand(param => EPPLicenseWindow(), param => true);
+            ReogridLicenseWindowCommand = new RelayCommand(param => ReogridLicenseWindow(), param => true);
             BeezdemandLicenseWindowCommand = new RelayCommand(param => BeezdemandLicenseInformationWindow(), param => true);
 
             DevtoolsLicenseWindowCommand = new RelayCommand(param => DevtoolsLicenseInformationWindow(), param => true);
@@ -739,24 +749,19 @@ namespace small_n_stats_WPF.ViewModels
                 SendMessageToOutput("R Statistical Package - GPL v2 Licensed. Copyright (C) 2000-16. The R Core Team");
                 SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation()$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
-
                 SendMessageToOutput("nlmrt R Package - GPLv2 Licensed. Copyright (C) 2016. John C. Nash.");
                 SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('nlmrt')$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
-
                 SendMessageToOutput("nlstools R Package - GPLv2 Licensed. Copyright(C) 2015 Florent Baty and Marie-Laure Delignette - Muller, with contributions from Sandrine Charles, Jean - Pierre Flandrois, and Christian Ritz.");
                 SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('nlstools')$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
-
                 SendMessageToOutput("beezdemand R Package - GPLv2+ Licensed. Copyright (c) 2015, Brent Kaplan.");
                 SendMessageToOutput("Citation:: " + string.Join("", engine.Evaluate("citation('beezdemand')$textVersion").AsCharacter().ToArray()));
                 SendMessageToOutput("");
-
-                SendMessageToOutput("EPPlus - GPLv2 Licensed. Copyright (c) 2016 Jan Källman.");
+                SendMessageToOutput("Reogrid - MIT Licensed. Copyright(c) 2013-2016 Jing {lujing at unvell.com}, Copyright(c) 2013-2016 unvell.com. ");
                 SendMessageToOutput("RdotNet: Interface for the R Statistical Package - New BSD License (BSD 2-Clause). Copyright(c) 2010, RecycleBin. All rights reserved.");
                 SendMessageToOutput("SharpVectors: Library for rendering SVG - New BSD License (BSD 3-Clause). Copyright(c) 2010, SharpVectorGraphics. All rights reserved.");
                 SendMessageToOutput("");
-
                 SendMessageToOutput("License information is also provided in Information > Licenses > ... as well as in the install directory of this program (under Resources).");
             }
 
@@ -851,13 +856,13 @@ namespace small_n_stats_WPF.ViewModels
         /// <summary>
         /// License window
         /// </summary>
-        private void EPPLicenseWindow()
+        private void ReogridLicenseWindow()
         {
             var window = new License();
             window.DataContext = new LicenseViewModel
             {
-                licenseTitle = "License (GPLv2) - EPPlus",
-                licenseText = Properties.Resources.License_EPPlus
+                licenseTitle = "License - Reogrid",
+                licenseText = Properties.Resources.License_Reogrid
             };
             window.Owner = App.ApplicationWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;

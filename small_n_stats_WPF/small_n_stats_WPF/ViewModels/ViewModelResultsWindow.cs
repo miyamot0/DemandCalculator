@@ -52,7 +52,7 @@
 //    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 //    OF SUCH DAMAGE.
 //
-// Discounting Model Selector utilizes Reogrid to leverage to load, save, and display data
+// Demand Calculator utilizes Reogrid to leverage to load, save, and display data
 //
 //    Reogrid is distributed under this license:
 //
