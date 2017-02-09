@@ -34,9 +34,9 @@ The Small N Stats Demand Calculator uses a number of open source projects to wor
 * ExponentialDemandFunction R script - GPLv2 Licensed. Copyright (c) 2016. Shawn Gilroy [Github](https://github.com/miyamot0/ExponentialDemandFitting)
 * ExponentiatedDemandFunction R script - GPLv2 Licensed. Copyright (c) 2016. Shawn Gilroy [Github](https://github.com/miyamot0/ExponentiatedDemandFitting)
 * nlstools R Package - GPLv2 Licensed. Copyright(C) 2015 Florent Baty and Marie-Laure Delignette - Muller, with contributions from Sandrine Charles, Jean - Pierre Flandrois, and Christian Ritz
-* ggplot2 R Package - GPLv2 Licensed. Copyright (c) 2016, Hadley Wickham
-* reshape2 R Package - MIT Licensed. Copyright (c) 2014, Hadley Wickham
-* beezdemand Package R package - GPLv2 Licensed. Copyright (c) 2016, Brent Kaplan [Github](https://github.com/brentkaplan/beezdemand)
+* devtools R package - GPLv2 Licensed. Copyright (c) 2016, Hadley Wickham, Winston Chang, R Core Team [Github](https://github.com/hadley/devtools)
+* digest R package - GPLv2 Licensed. Copyright (c) 2016, Dirk Eddelbuettel with contributions by Antoine Lucas, Jarek Tuszynski, Henrik Bengtsson, Simon Urbanek, Mario Frasca, Bryan Lewis, Murray Stokely, Hannes Muehleisen, Duncan Murdoch, Jim Hester, Wush Wu, Qiang Kou, Thierry Onkelinx, Michel Lang and Viliam Simko [Github](https://github.com/eddelbuettel/digest)
+* beezdemand R package - GPLv2 Licensed. Copyright (c) 2016, Brent Kaplan [Github](https://github.com/brentkaplan/beezdemand)
 
 ### Referenced Works (academic works)
 The Small N Stats Demand Calculator is based on the following academic works:
