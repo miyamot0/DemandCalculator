@@ -70,6 +70,8 @@ namespace small_n_stats_WPF.ViewModels
         public MainWindow mWindow { get; set; }
         public DemandCurveUnifiedWindow windowRef { get; set; }
 
+        private Timer timer = null;
+
         #region DataModes
 
         private bool rowModeRadio = false;
@@ -507,7 +509,18 @@ namespace small_n_stats_WPF.ViewModels
         #endregion
 
         #region UIBindings   
-  
+
+        private bool canLaunch = true;
+        public bool CanLaunch
+        {
+            get { return canLaunch; }
+            set
+            {
+                canLaunch = value;
+                OnPropertyChanged("CanLaunch");
+            }
+        }
+
         private bool advancedMenu = false;
         public bool AdvancedMenu
         {
@@ -1130,15 +1143,42 @@ namespace small_n_stats_WPF.ViewModels
             return engine.CreateDataFrame(columns, columnNames: columnNames);
         }
 
+        private void MentionActivity()
+        {
+            mWindow.OutputEvents("Calculating...");
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            MentionActivity();
+        }
+
         /// <summary>
         /// Command-call to calculate based on supplied ranges and reference values (max value).
         /// Will reference user-selected options (figures, outputs, etc.) throughout calls to R
         /// </summary>
         private void CalculateScores()
         {
-            if (failed) return;
+            CanLaunch = false;
 
-            if (lowColX < 0 || lowColY < 0) return;
+            if (timer == null)
+            {
+                timer = new Timer();
+                timer.Interval = 2000; 
+                timer.Tick += timer_Tick; 
+            }
+
+            if (failed)
+            {
+                CanLaunch = true;
+                return;
+            } 
+
+            if (lowColX < 0 || lowColY < 0)
+            {
+                CanLaunch = true;
+                return;
+            }
 
             int nRows = -1;
 
@@ -1339,6 +1379,7 @@ namespace small_n_stats_WPF.ViewModels
 
             if (steinWindow.MessageOptions.SelectedValue.ToString().Contains("review") || !steinWindow.GotClicked)
             {
+                CanLaunch = true;
                 return;
             }
 
@@ -1373,6 +1414,9 @@ namespace small_n_stats_WPF.ViewModels
             try
             {
                 mWindow.OutputEvents(">>>" + evaluateString);
+
+                timer.Enabled = true;
+                MentionActivity();
 
                 engine.Evaluate(evaluateString);
 
@@ -1455,6 +1499,12 @@ namespace small_n_stats_WPF.ViewModels
             catch (Exception e)
             {
                 mWindow.OutputEvents(e.ToString());
+            }
+            finally
+            {
+                CanLaunch = true;
+                timer.Enabled = false;
+                mWindow.OutputEvents("Calculations complete! Outputting results...");
             }
         }
     }

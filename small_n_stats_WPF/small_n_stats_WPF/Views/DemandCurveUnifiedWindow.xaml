@@ -246,6 +246,7 @@
                     Grid.ColumnSpan="4"
                     Margin="10"
                     Content="Calculate"
+                    IsEnabled="{Binding CanLaunch}"
                     Command="{Binding CalculateScoresCommand}">
             </Button>
         </Grid>
