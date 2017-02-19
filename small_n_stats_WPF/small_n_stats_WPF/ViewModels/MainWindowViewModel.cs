@@ -1251,7 +1251,7 @@ namespace small_n_stats_WPF.ViewModels
                         }
                         else
                         {
-                            title = "Discounting Model Selection - New File";
+                            title = "Demand Modeling - New File";
                         }
 
                         SendMessageToOutput("Opened: " + @openFileDialog1.FileName);
